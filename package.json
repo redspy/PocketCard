@@ -7,7 +7,7 @@
     "dev": "vite",
     "dev:lan": "vite --host",
     "server": "node server/main.ts",
-    "test": "node --test tests/game/*.test.ts tests/server/*.test.ts",
+    "test": "node --test --test-concurrency=1 tests/game/*.test.ts tests/server/*.test.ts",
     "selfplay": "node scripts/selfplay.ts",
     "engine-compare": "node scripts/engine-compare.ts",
     "build": "tsc --noEmit && vite build",

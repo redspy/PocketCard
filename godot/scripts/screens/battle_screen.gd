@@ -28,6 +28,7 @@ var notice_label: Label
 var chips: Label
 var end_btn: TapArea
 var stadium_btn: TapArea
+var use_btn: TapArea               # 대상이 없는 카드(아이템·서포트 등)를 고르면 뜨는 [사용]
 var toast: Label
 
 # 조작 상태
@@ -177,6 +178,11 @@ func _build_static() -> void:
 	end_btn = UI.button("턴 종료", 26, true, true)
 	end_btn.tapped.connect(tap_end_turn)
 	hud.add_child(end_btn)
+	use_btn = UI.button("사용", 28, true, true)
+	use_btn.set_meta("use", true)
+	use_btn.tapped.connect(tap_zone)
+	use_btn.visible = false
+	hud.add_child(use_btn)
 	stadium_btn = UI.button("스타디움 효과", 20, true)
 	stadium_btn.tapped.connect(tap_stadium_effect)
 	hud.add_child(stadium_btn)
@@ -434,7 +440,8 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	if st_move:
 		stadium_btn.position = L.end_turn.position - Vector2(220, 0)
 	toast.size = Vector2(size.x * 0.84, 0)
-	toast.position = Vector2(size.x * 0.08, L.bar.position.y + L.bar.size.y + 10)
+	var ty: float = (L.center.position.y + 10) if mode == "hand" else (L.bar.position.y + L.bar.size.y + 10)
+	toast.position = Vector2(size.x * 0.08, ty)
 
 func _btn_box(on: bool) -> StyleBoxFlat:
 	var sb := UI.box(UI.ACCENT if on else UI.PANEL_HI, 16, 0)
@@ -506,6 +513,13 @@ func _apply_marks() -> void:
 			elif key.begins_with("my:") and key != "my:0" and rk == "chooseBench":
 				e2.set_mark("target")
 	var zone := targets.has("zone")
+	# 고른 카드에 대상 없는 쓰기가 있으면 손패 위에 [사용] (끌어 올려도 됨)
+	use_btn.visible = zone and sel_card != ""
+	if use_btn.visible:
+		var lab := str(targets.zone.label)
+		(use_btn.get_meta("label") as Label).text = "사용: " + (lab.trim_suffix(" 사용") if not lab.ends_with("벤치에 내기") else lab)
+		var w := use_btn.get_combined_minimum_size().x
+		use_btn.position = Vector2((size.x - w) / 2, hand.position.y - use_btn.get_combined_minimum_size().y - 64)
 	var sb := mid.get_theme_stylebox("panel") as StyleBoxFlat
 	sb.set_border_width_all(4 if zone else 0)
 
@@ -545,9 +559,6 @@ func tap_hand(iid: String) -> void:
 			targets["zone"] = m
 		else:
 			targets["zone"] = m       # 아이템·서포트·스타디움: 가운데(또는 위로 밀기)
-	if mode == "hand" and targets.has("zone") and targets.size() == 1:
-		# 손패 모드에는 가운데 줄이 없으니 바로 확인 버튼
-		_toast("한 번 더 누르거나 위로 밀면 사용: %s" % str(targets.zone.label))
 	_place_hand(_me())
 	_apply_marks()
 
