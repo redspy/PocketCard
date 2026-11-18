@@ -41,6 +41,14 @@ var picks: Dictionary = {}          # 요청 id -> Array
 var only_usable := false
 var last_sent: Dictionary = {}      # 테스트용: 마지막으로 보낸 입력
 var _confirm_end := 0
+var menu_btn: TapArea
+var speed_btn: TapArea
+var auto_btn: TapArea
+var auto_play := false              # 자동: 내 차례도 AI 가 둔다 (AI 연습)
+var _auto_ai: Callable
+var _auto_rng: Array = []
+var _auto_wait := -1.0
+var _auto_ver := -1
 var _toast_tw: Tween
 
 func _init(m := "") -> void:
@@ -142,6 +150,15 @@ func _build_static() -> void:
 	hud.add_child(bar)
 	bar_title = UI.label("", 26, UI.TEXT)
 	hud.add_child(bar_title)
+	menu_btn = UI.button("☰", 30)
+	menu_btn.tapped.connect(open_menu)
+	hud.add_child(menu_btn)
+	speed_btn = UI.button("AI", 20)
+	speed_btn.tapped.connect(func(): Net.cycle_ai_speed())
+	hud.add_child(speed_btn)
+	auto_btn = UI.button("자동", 20)
+	auto_btn.tapped.connect(toggle_auto)
+	hud.add_child(auto_btn)
 	status_label = UI.label("", 22, UI.TEXT)
 	hud.add_child(status_label)
 	notice_label = UI.label("", 21, UI.TEXT_DIM, HORIZONTAL_ALIGNMENT_LEFT, true)
@@ -187,6 +204,10 @@ func _my_turn() -> bool:
 # ───────────────────────── 갱신 ─────────────────────────
 
 func _refresh() -> void:
+	# AI 연습에서 다시 하기 → 대전 준비 화면으로
+	if Net.solo and str(Net.lobby.get("phase", "game")) != "game" and Nav.current() == self:
+		Nav.pop()
+		return
 	if not is_inside_tree() or Net.view.is_empty() or Net.seat < 0:
 		return
 	var v: Dictionary = Net.view
@@ -321,7 +342,20 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	var phase := str(v.phase)
 	var t := "게임 준비 중" if phase == "setup" else ("게임 종료" if phase == "ended" else "턴 %d · %s" % [int(v.turnNumber), "내 차례" if _my_turn() else "상대 차례"])
 	bar_title.text = t
-	bar_title.position = Vector2(84, L.bar.position.y + 14)
+	var by: float = L.bar.position.y
+	menu_btn.position = Vector2(8, by + 4)
+	bar_title.position = Vector2(84, by + 14)
+	var solo := Net.solo
+	speed_btn.visible = solo
+	auto_btn.visible = solo
+	if solo:
+		(speed_btn.get_meta("label") as Label).text = "AI %s" % Net.ai_speed_name()
+		(auto_btn.get_meta("label") as Label).text = "자동 켜짐" if auto_play else "자동"
+		(auto_btn.get_meta("panel") as PanelContainer).add_theme_stylebox_override("panel", _btn_box(auto_play))
+		var aw: float = auto_btn.get_combined_minimum_size().x
+		var sw: float = speed_btn.get_combined_minimum_size().x
+		auto_btn.position = Vector2(size.x - aw - 10, by + 6)
+		speed_btn.position = Vector2(auto_btn.position.x - sw - 8, by + 6)
 	status_label.visible = mode == "hand"
 	notice_label.visible = mode == "hand"
 	if mode == "hand":
@@ -338,14 +372,24 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 		chips.text = ""
 	end_btn.position = L.end_turn.position
 	var can_end := actions().any(func(m): return m.kind == "endTurn")
-	end_btn.visible = phase != "ended"
-	UI.set_enabled(end_btn, can_end)
+	var ended := phase == "ended"
+	(end_btn.get_meta("label") as Label).text = "다시 하기" if (ended and Net.solo) else "턴 종료"
+	end_btn.visible = not ended or Net.solo
+	UI.set_enabled(end_btn, can_end or (ended and Net.solo))
 	var st_move := actions().any(func(m): return m.kind == "stadium")
 	stadium_btn.visible = st_move
 	if st_move:
 		stadium_btn.position = L.end_turn.position - Vector2(220, 0)
 	toast.size = Vector2(size.x * 0.84, 0)
 	toast.position = Vector2(size.x * 0.08, L.bar.position.y + L.bar.size.y + 10)
+
+func _btn_box(on: bool) -> StyleBoxFlat:
+	var sb := UI.box(UI.ACCENT if on else UI.PANEL_HI, 16, 0)
+	sb.content_margin_left = 22
+	sb.content_margin_right = 22
+	sb.content_margin_top = 14
+	sb.content_margin_bottom = 14
+	return sb
 
 static func bench_slots(p: Dictionary) -> int:
 	return maxi(int(p.benchMax), (p.bench as Array).size())
@@ -643,6 +687,10 @@ func start_retreat() -> void:
 # ───────────────────────── 턴 종료·스타디움 ─────────────────────────
 
 func tap_end_turn() -> void:
+	if str(Net.view.get("phase")) == "ended":
+		if Net.solo:
+			Net.send({ "t": "rematch" })
+		return
 	if not UI.is_enabled(end_btn) or my_request() != null:
 		return
 	var others := actions().any(func(m): return not (m.kind in ["endTurn", "concede"]))
@@ -885,3 +933,124 @@ func _why_not(iid: String) -> String:
 	if not names.is_empty():
 		return "여기에는 놓을 수 없습니다. 놓을 수 있는 포켓몬: %s" % ", ".join(names)
 	return "여기에는 놓을 수 없습니다."
+
+# ───────────────────────── 메뉴 · 로그 · 항복 ─────────────────────────
+
+var menu: Control = null
+var _concede_armed := 0
+
+func _sheet_panel(title: String) -> VBoxContainer:
+	close_menu()
+	var root := PanelContainer.new()
+	root.add_theme_stylebox_override("panel", UI.box(Color(0.04, 0.09, 0.07, 0.97), 22, 3, UI.ACCENT))
+	var mm := UI.margin(18)
+	root.add_child(mm)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 12)
+	mm.add_child(col)
+	var head := HBoxContainer.new()
+	var tl := UI.label(title, 30, UI.ACCENT)
+	tl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	head.add_child(tl)
+	var x := UI.button("닫기", 22)
+	x.set_meta("close", true)
+	x.tapped.connect(close_menu)
+	head.add_child(x)
+	col.add_child(head)
+	hud.add_child(root)
+	menu = root
+	root.position = Vector2(16, L.bar.position.y + L.bar.size.y + 8)
+	root.size = Vector2(size.x - 32, 0)
+	return col
+
+func close_menu() -> void:
+	if menu:
+		menu.queue_free()
+	menu = null
+
+func open_menu() -> void:
+	var col := _sheet_panel("메뉴")
+	var items := [
+		["로그 보기", open_log],
+		["내 트래쉬 (%d장)" % (_me().discard as Array).size(), func():
+			close_menu()
+			open_discard("my")],
+		["상대 트래쉬 (%d장)" % (_opp().discard as Array).size(), func():
+			close_menu()
+			open_discard("opp")],
+	]
+	for it in items:
+		var b := UI.button(it[0], 26)
+		b.set_meta("item", it[0])
+		b.tapped.connect(it[1])
+		col.add_child(b)
+	if actions().any(func(m): return m.kind == "concede"):
+		var cb := UI.button("항복", 26)
+		cb.set_meta("item", "항복")
+		cb.tapped.connect(func(): tap_concede(cb))
+		col.add_child(cb)
+
+## 항복: 두 번 눌러야 (첫 번째는 확인 문구)
+func tap_concede(b: TapArea) -> void:
+	var now := Time.get_ticks_msec()
+	if now - _concede_armed > 3000:
+		_concede_armed = now
+		(b.get_meta("label") as Label).text = "정말 항복할까요? 한 번 더 누르세요"
+		(b.get_meta("panel") as PanelContainer).add_theme_stylebox_override("panel", UI.box(Color(0.75, 0.22, 0.2), 16))
+		return
+	_concede_armed = 0
+	close_menu()
+	var m = GCore.find_first(actions(), func(x): return x.kind == "concede")
+	if m != null:
+		_send_move(m)
+
+func open_log() -> void:
+	var col := _sheet_panel("로그")
+	var sc := ScrollContainer.new()
+	sc.custom_minimum_size = Vector2(0, size.y * 0.6)
+	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	var lines := VBoxContainer.new()
+	lines.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sc.add_child(lines)
+	for l in BLog.recent(Net.events_log, Net.seat, 200):
+		var lab := UI.label(l, 22, UI.TEXT if not l.begins_with(" ") else UI.TEXT_DIM, HORIZONTAL_ALIGNMENT_LEFT, true)
+		lab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		lines.add_child(lab)
+	col.add_child(sc)
+	menu.set_meta("log_lines", lines.get_child_count())
+
+# ───────────────────────── 자동 진행 (AI 연습) ─────────────────────────
+
+func toggle_auto() -> void:
+	auto_play = not auto_play
+	if auto_play and not _auto_ai.is_valid():
+		var d := LocalGame.data()
+		_auto_ai = GBot.makeAiBot(d.cat, d.info.db)
+		_auto_rng = GRng.seedRng("%08x" % (randi() & 0xFFFFFFFF))
+	_auto_ver = -1
+	_toast("자동 진행 켜짐 — 내 차례도 AI 가 둡니다." if auto_play else "자동 진행 꺼짐")
+	_refresh()
+
+func _process(delta: float) -> void:
+	# AI 연습 다시 하기 → 대전 준비 (화면 전환 중에 신호가 오면 놓칠 수 있어 매 프레임 확인)
+	if Net.solo and str(Net.lobby.get("phase", "game")) != "game" and Nav.current() == self and not Nav._busy:
+		Nav.pop()
+		return
+	if not auto_play or Net.view.is_empty():
+		return
+	var v: Dictionary = Net.view
+	if v.get("result") != null or not GBot.botHasWork(v):
+		_auto_wait = -1.0
+		return
+	if int(v.version) == _auto_ver:
+		return
+	if _auto_wait < 0.0:
+		_auto_wait = maxf(0.25, Net.ai_delay() / 1000.0)
+	_auto_wait -= delta
+	if _auto_wait > 0.0:
+		return
+	_auto_wait = -1.0
+	_auto_ver = int(v.version)
+	var inp = _auto_ai.call(v.duplicate(true), _auto_rng)
+	if inp != null:
+		send_input(inp)

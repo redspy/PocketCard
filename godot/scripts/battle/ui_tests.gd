@@ -38,6 +38,12 @@ static func run_all(host: Node) -> Array:
 			fails.append_array(await run_play(host, m))
 	if only.has("dragdbg"):
 		await drag_debug(host)
+	if want.call("menu"):
+		fails.append_array(await run_menu(host))
+	if want.call("auto"):
+		fails.append_array(await run_auto(host))
+	if want.call("flow"):
+		fails.append_array(await run_flow(host))
 	if want.call("drag"):
 		for m in ["table", "hand"]:
 			fails.append_array(await run_play(host, m, "charizard", "gardevoir", "d2a9", true))
@@ -477,3 +483,134 @@ static func drag_debug(host: Node) -> void:
 	_press(to, false)
 	await _frames(host, 2)
 	print("[ui-tests] dbg end: dragging %s last_sent %s dbg %s" % [c.dragging, JSON.stringify(s.last_sent), JSON.stringify(s.dbg_drag)])
+
+# ───────────────────────── 5단계: 메뉴·항복·자동·앱 흐름 ─────────────────────────
+
+static func _until_my_turn(host: Node, s: BattleScreen) -> void:
+	for i in 400:
+		await _frames(host, 1)
+		var v: Dictionary = Net.view
+		if v.is_empty():
+			continue
+		var r = s.my_request()
+		if r != null:
+			Net.input({ "type": "choice", "requestId": r.id, "picks": (r.options as Array).slice(0, maxi(1, int(r.min)) if int(r.max) > 0 else 0) })
+			await _frames(host, 3)
+			continue
+		if s._my_turn():
+			return
+
+static func run_menu(host: Node) -> Array:
+	var fails: Array = []
+	await start_offline(host)
+	var s := attach(host, BattleScreen.new("table")) as BattleScreen
+	await _until_my_turn(host, s)
+	s.menu_btn.tapped.emit()
+	await _frames(host, 2)
+	if s.menu == null:
+		fails.append("메뉴가 안 열림")
+		return fails
+	var log_btn = _find_meta(s.menu, "item", "로그 보기")
+	if log_btn == null:
+		fails.append("메뉴에 로그 없음")
+	else:
+		log_btn.tapped.emit()
+		await _frames(host, 2)
+		if s.menu == null or int(s.menu.get_meta("log_lines", 0)) < 3:
+			fails.append("로그 줄이 없음")
+	if s.menu:
+		_find_meta(s.menu, "close").tapped.emit()
+		await _frames(host, 2)
+	if s.menu != null:
+		fails.append("메뉴가 안 닫힘")
+	# 항복: 한 번 누르면 확인 문구, 두 번째에 항복
+	s.open_menu()
+	await _frames(host, 2)
+	var cb = _find_meta(s.menu, "item", "항복")
+	if cb == null:
+		fails.append("메뉴에 항복 없음")
+		return fails
+	cb.tapped.emit()
+	await _frames(host, 3)
+	if Net.view.get("result") != null:
+		fails.append("한 번 눌렀는데 항복됨")
+	cb.tapped.emit()
+	await _frames(host, 6)
+	var res = Net.view.get("result")
+	if res == null or int(res.winner) == Net.seat:
+		fails.append("두 번 눌러도 항복 안 됨: %s" % str(res))
+	print("[ui-tests] 메뉴: 로그·닫기·항복 2단계 %s" % ("정상" if fails.is_empty() else "문제"))
+	s.queue_free()
+	await _frames(host)
+	return fails
+
+## 자동 진행만으로 한 판 끝까지 (내 손 안 대고)
+static func run_auto(host: Node) -> Array:
+	var fails: Array = []
+	await start_offline(host)
+	var s := attach(host, BattleScreen.new("table")) as BattleScreen
+	s.auto_btn.tapped.emit()
+	await _frames(host, 2)
+	if not s.auto_play:
+		fails.append("자동 버튼이 안 켜짐")
+	var t0 := Time.get_ticks_msec()
+	for i in 40000:
+		await _frames(host, 1)
+		if Net.view.get("result") != null:
+			break
+		if i % 20 == 0:
+			for p in check_render(s):
+				if fails.size() < 6:
+					fails.append("자동 그리기: " + p)
+		if Time.get_ticks_msec() - t0 > 300000:
+			break
+	var res = Net.view.get("result")
+	if res == null:
+		fails.append("자동 진행으로 게임이 끝나지 않음 (턴 %s)" % str(Net.view.get("turnNumber")))
+	print("[ui-tests] 자동 진행: %s (%.0f초)" % [str(res.get("reason")) if res != null else "끝나지 않음", (Time.get_ticks_msec() - t0) / 1000.0])
+	s.queue_free()
+	await _frames(host)
+	return fails
+
+## 앱 흐름: 대전 준비 → (AI 연습) 새 탁자 화면 → 항복 → 다시 하기 → 대전 준비
+static func run_flow(host: Node) -> Array:
+	var fails: Array = []
+	Net.leave()
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(LocalGame.SAVE_PATH))
+	Net.start_offline()
+	Nav.push(LobbyScreen.new(), false)
+	Net.send({ "t": "aiSpeed", "ms": 0 })
+	Net.send({ "t": "chooseDeck", "deckId": "gardevoir", "prints": {} })
+	await _frames(host, 3)
+	Net.send({ "t": "ready", "ready": true })
+	for i in 40:
+		await host.get_tree().create_timer(0.1).timeout
+		if Nav.current() is BattleScreen:
+			break
+	if not (Nav.current() is BattleScreen):
+		fails.append("AI 연습이 새 탁자 화면으로 안 열림 (%s)" % str(Nav.current()))
+		return fails
+	var s := Nav.current() as BattleScreen
+	if s.mode != "table":
+		fails.append("AI 연습인데 모드가 %s" % s.mode)
+	Net.input({ "type": "concede" })
+	for i in 60:
+		await _frames(host, 1)
+		if Net.view.get("result") != null:
+			break
+	await _frames(host, 3)
+	if (s.end_btn.get_meta("label") as Label).text != "다시 하기":
+		fails.append("끝난 뒤 다시 하기 버튼이 없음")
+	s.end_btn.tapped.emit()
+	for i in 40:
+		await host.get_tree().create_timer(0.1).timeout
+		if Nav.current() is LobbyScreen:
+			break
+	if not (Nav.current() is LobbyScreen):
+		var cur = Nav.current()
+		fails.append("다시 하기 → 대전 준비로 안 돌아감 (맨 위 %s, 깊이 %d, 바쁨 %s, 로비 단계 %s, 결과 %s, 버튼 %s)" % [cur.get_script().get_global_name() if cur and cur.get_script() else str(cur), Nav.depth(), Nav._busy, str(Net.lobby.get("phase")), str(Net.view.get("result")), (s.end_btn.get_meta("label") as Label).text])
+	print("[ui-tests] 앱 흐름: 대전 준비 → 탁자 → 항복 → 다시 하기 → 대전 준비 %s" % ("정상" if fails.is_empty() else "문제"))
+	while Nav.depth() > 1:
+		Nav.pop()
+		await host.get_tree().create_timer(0.4).timeout
+	return fails

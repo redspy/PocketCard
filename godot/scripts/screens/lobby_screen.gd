@@ -132,7 +132,8 @@ func _refresh() -> void:
 		_build_decks(my_deck, ready)
 	# 게임 시작 → 게임 화면
 	if Net.in_game() and Nav.current() == self:
-		Nav.push(GameScreen.new())
+		# AI 연습은 새 탁자 화면, 서버 대전은 (8단계 전까지) 기존 화면
+		Nav.push(BattleScreen.new() if Net.solo else GameScreen.new())
 
 func _build_decks(selected: String, locked: bool) -> void:
 	for c in _decks.get_children():
