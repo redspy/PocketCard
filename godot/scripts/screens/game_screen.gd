@@ -28,6 +28,7 @@ var _built: Dictionary = {}       # 부분별로 마지막에 그린 내용 (같
 var _confirm_end := 0
 var _confirm_concede := 0
 var _hscroll: Dictionary = {}     # 카드 줄 이름 → 가로 스크롤 위치 (다시 그려도 보던 자리 유지)
+var _only_usable := false         # 카드 고르기·패: 고를 수 있는(쓸 수 있는) 카드만 보기 (기본: 전체)
 var _strip_key := ""
 var _strip_swipe := Callable()     # 다음 _strip 의 카드 스와이프 처리 (idx, delta)
 var _last_seq := -1               # 스포트라이트로 이미 보여준 마지막 사건
@@ -213,11 +214,11 @@ func _refresh() -> void:
 	# 누르고 있던 카드가 사라져 길게 누르기·밀기가 끊긴다
 	var acts_json := JSON.stringify(_actions())
 	var keys := {
-		"req": "%s|%s|%s" % [JSON.stringify(v["requests"]), JSON.stringify(v["reveals"]), JSON.stringify(_picks)],
+		"req": "%s|%s|%s|%s" % [JSON.stringify(v["requests"]), JSON.stringify(v["reveals"]), JSON.stringify(_picks), _only_usable],
 		"field": "%s|%s|%s" % [JSON.stringify(v["players"]), JSON.stringify(v.get("stadium")), JSON.stringify(_opp_actions(2))] if Net.solo else "",
 		"bar": acts_json + JSON.stringify(v["requests"]),
 		"tabs": "%s|%d" % [_tab, int(me["handCount"])],
-		"content": "%s|%s|%s|%s" % [_tab, _selected, JSON.stringify(me.get("hand")), acts_json] + _content_extra(v),
+		"content": "%s|%s|%s|%s|%s" % [_tab, _selected, JSON.stringify(me.get("hand")), acts_json, _only_usable] + _content_extra(v),
 	}
 	if keys["req"] != _built.get("req"):
 		_build_requests(v, me)
@@ -354,12 +355,18 @@ func _request_panel(req: Dictionary, v: Dictionary, me: Dictionary) -> Control:
 			else:
 				for o in opts:
 					shown.append(str(o))
+			var usable: Array = shown.filter(func(x): return opts.has(x))
+			if usable.size() < shown.size():
+				var total := shown.size()
+				col.add_child(_usable_toggle("고를 수 있는", usable.size(), total))
+				if _only_usable:
+					shown = usable
 			var codes: Array = []
 			var states: Array = []
 			for iid in shown:
 				codes.append(code_of.get(iid, ""))
 				states.append("on" if picks.has(iid) else ("" if opts.has(iid) else "off"))
-			_strip_key = "req:" + id
+			_strip_key = "req:%s:%s" % [id, _only_usable]
 			col.add_child(_strip(codes, states, 0.36 if Net.solo else 0.42, func(i: int):
 				var iid: String = shown[i]
 				if opts.has(iid):
@@ -553,9 +560,28 @@ func _build_content(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 			if codes.is_empty():
 				_content.add_child(UI.label("패가 비어 있습니다.", 24, UI.TEXT_DIM))
 				return
-			# 안내는 늘 보인다 (고를 때 사라지면 패가 위로 움직임)
-			_content.add_child(UI.label("누르기: 고르기 · 길게 누르기: 크게 보기 · 위로 밀기: 바로 사용", 19, UI.TEXT_DIM))
-			_strip_key = "hand"
+			var usable_n := states.filter(func(x): return x != "off").size()
+			# 안내·전환 버튼은 늘 보인다 (고를 때 사라지면 패가 위로 움직임)
+			var head := HBoxContainer.new()
+			head.add_theme_constant_override("separation", 10)
+			var hint := UI.label("누르기: 고르기 · 길게: 크게 보기 · 위로 밀기: 사용", 18, UI.TEXT_DIM)
+			hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			hint.clip_text = true
+			head.add_child(hint)
+			head.add_child(_usable_toggle("쓸 수 있는", usable_n, codes.size()))
+			_content.add_child(head)
+			if _only_usable:
+				var keep: Array = []
+				for i in codes.size():
+					if states[i] != "off":
+						keep.append(i)
+				codes = keep.map(func(i): return codes[i])
+				iids = keep.map(func(i): return iids[i])
+				states = keep.map(func(i): return states[i])
+				if codes.is_empty():
+					_content.add_child(UI.label("지금 쓸 수 있는 카드가 없습니다.", 24, UI.TEXT_DIM))
+					return
+			_strip_key = "hand:%s" % _only_usable
 			_strip_swipe = func(i: int, d: Vector2): _hand_swipe(iids[i], d)
 			_content.add_child(_strip(codes, states, 0.36 if Net.solo else 0.42, func(i: int):
 				_selected = "" if _selected == iids[i] else iids[i]
@@ -1121,3 +1147,11 @@ func _show_banner(title: String, sub: String) -> void:
 	tw.tween_interval(1.6 if sub != "" else 1.0)
 	tw.tween_property(box, "modulate:a", 0.0, 0.3)
 	tw.tween_callback(box.queue_free)
+## "고를 수 있는(쓸 수 있는) 카드만" ↔ "전체" 전환 버튼 (패와 카드 고르기 공용, 기본은 전체)
+func _usable_toggle(word: String, usable: int, total: int) -> TapArea:
+	var text := ("✔ %s 카드만 %d/%d" % [word, usable, total]) if _only_usable else ("%s 카드만 보기 %d/%d" % [word, usable, total])
+	var b := UI.button(text, 20, _only_usable, _only_usable)
+	b.tapped.connect(func():
+		_only_usable = not _only_usable
+		_refresh())
+	return b

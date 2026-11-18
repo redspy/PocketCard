@@ -334,7 +334,23 @@ func _gesture_check(gs: GameScreen) -> void:
 	print("[solotest] 동작: 짧게 누르기 → 고름 %s, 크게 보기 안 열림 %s" % [gs._selected != "", _overlay_of(gs) == null])
 	gs._selected = ""
 	gs._refresh()
-	# 붙은 카드가 있는 포켓몬 크게 보기 (아래에 작은 카드 줄)
+	# 쓸 수 있는 카드만 보기 전환
+	var count_cells := func() -> int:
+		for c in gs._content.get_children():
+			if c is ScrollContainer:
+				return (c as ScrollContainer).get_child(0).get_child_count()
+		return 0
+	var all_n: int = count_cells.call()
+	gs._only_usable = true
+	gs._refresh()
+	await get_tree().create_timer(0.3).timeout
+	var use_n: int = count_cells.call()
+	if DisplayServer.get_name() != "headless":
+		get_viewport().get_texture().get_image().save_png("user://solotest_usable.png")
+	gs._only_usable = false
+	gs._refresh()
+	await get_tree().create_timer(0.2).timeout
+	print("[solotest] 동작: 쓸 수 있는 카드만 — 전체 %d장 → %d장 → 다시 전체 %d장" % [all_n, use_n, count_cells.call()])	# 붙은 카드가 있는 포켓몬 크게 보기 (아래에 작은 카드 줄)
 	var best = null
 	for pl in Net.view.players:
 		for sl in ([pl.active] if pl.active != null else []) + (pl.bench as Array):
