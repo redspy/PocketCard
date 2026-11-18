@@ -164,3 +164,37 @@ battle/fx_queue.gd  사건 순서 재생, 배속, 건너뛰기
 - Claude 조사: [Pratt IxD 디자인 비평](https://ixd.prattsi.org/2025/09/design-critique-pokemon-tcg-pocket-android-app/), [Serebii Battles](https://serebii.net/tcgpocket/battles.shtml), [GameWith 에너지](https://gamewith.net/pokemon-tcg-pocket/48566), [BlueStacks 배틀 가이드(한국어)](https://www.bluestacks.com/ko/blog/game-guides/pokemon-tcg-pocket/ptcg-battle-system-guide-ko.html), [Pokémon Zone 타이머](https://pokemon-zone.com/articles/tcg-pocket-timer), [CardGamer 대전 가이드](https://cardgamer.com/guides/battle-and-build-decks-in-pokemon-tcg-pocket/), 리뷰([The Sixth Axis](https://www.thesixthaxis.com/2025/03/04/pokemon-tcg-pocket-review/), [Nintendo Life](https://www.nintendolife.com/reviews/mobile/pokemon-trading-card-game-pocket))
 - Fable 조사(원문 `ui-pocket-review-fable.md`): TheGamer How To Battle, Pokémon GO Hub 입문 가이드, 나무위키, Serebii Preview, natalie.tf 리뷰, Wikipedia 등
 - 공식 사이트(tcgpocket.pokemon.com)에는 대전 화면 설명이 없음 (두 조사 모두 확인)
+
+---
+
+# 개정 (v2) — 모드별 적용: AI 연습 = 탁자, 서버 대전 = 개인 손패
+
+**원칙:** 서버(게임판) 대전에서는 "게임판(필드·연출)은 웹, 폰은 비공개 손패와 내 조작"이라는 처음 콘셉트를 그대로 지킨다.
+탁자 화면(위 1~9장)은 **AI 연습(게임판 없음)** 에만 쓴다.
+
+| 요소 | AI 연습 (탁자 모드) | 서버 대전 (손패 모드) |
+|---|---|---|
+| 상대 필드·상대 벤치·사이드 더미 | 탁자에 늘 표시 | **없음** (웹 게임판이 보여줌) |
+| 내 필드 | 탁자 아래 절반 (크게) | **작은 "내 포켓몬" 줄** — 끌어 놓기 대상·기술 말풍선 열기용 |
+| 손패 | 아래 부채, 끌어 놓기·탭 대상 | 같음 (부채를 더 크게: 화면의 주인공) |
+| 기술·특성·후퇴 | 내 배틀 포켓몬 탭 → 말풍선 | 같음 (작은 줄의 배틀 포켓몬 탭) |
+| 선택 요청 | 포켓몬 고르기는 탁자에서 직접, 카드는 시트 | **모두 시트** (포켓몬 고르기 시트에 양쪽 필드를 작게 — 상대 포켓몬을 고르는 효과 때문) |
+| 연출 | 전체 (드로우·이동·데미지·기절·코인·배너) | **최소** — 내 행동 확인 진동, 차례 배너, 상대 행동은 한 줄 알림 (큰 연출은 웹 게임판) |
+| 상단 바 | ☰ · 턴 · 배속 · 🤖 자동 | ☰ · 턴 · 상태(재접속 등). 배속·자동 없음 |
+| 트래쉬·로그·항복 | ☰ 메뉴 / 더미 탭 | ☰ 메뉴 (내·상대 트래쉬 시트, 로그, 항복) |
+
+구현은 한 화면(`BattleScreen`)에 `mode = "table" | "hand"` 를 두고 부품(손패 부채, 포켓몬 칸, 말풍선, 시트, 연출 큐)을 함께 쓴다.
+`Net.solo` 이면 탁자, 아니면 손패. 기존 `game_screen.gd` 는 설정 토글로 남겨 두는 대체 화면.
+
+### 단계 (v2, 각 단계 = 테스트 통과 → 커밋·푸시)
+1. 배치 계산(`layout.gd`, 두 모드) + 탁자 그리기(포켓몬 칸·더미·상대 패·스타디움·상단 바) — 배치 단언 테스트, 실제 게임 화면 그리기 테스트
+2. 손패 부채 + 탭 선택·길게 누르기 + 탭→대상 탭으로 쓰기 + 기술 말풍선 + 턴 종료 → 탁자로 끝까지 플레이 가능 — UI 함수로 AI 와 끝까지 대전하는 자동 테스트
+3. 끌어 놓기 — 합성 터치로 끌기 시나리오 테스트
+4. 선택 요청 (탁자 고르기·카드 시트·사이드·값 대화상자·공개 확인) — 자동 대전 테스트(요청 포함)
+5. ☰ 메뉴(로그·트래쉬·항복 2단계), 🤖 자동 진행, 배속 → AI 연습 기본 화면을 새 화면으로
+6. 연출 큐(드로우·사용 이동·데미지 숫자·HP 지연 표시·기절·코인·공격 돌진·배너, 배속·건너뛰기) + 기절 사건 sid (TS·GD 엔진 같이, 엔진 비교 테스트) — "연출이 끝나면 화면 == 상태" 불변식 테스트
+7. 준비 단계·결과 패널
+8. 서버 대전 손패 모드 — 서버 + 웹 없는 봇 상대(LAN 봇 스크립트)로 앱이 끝까지 대전하는 테스트
+9. 마무리: 벤치 8칸, 작은 화면·태블릿 배치 테스트, 진동, APK
+
+## 진행 기록 (v2)
