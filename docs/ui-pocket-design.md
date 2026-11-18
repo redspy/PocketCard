@@ -198,3 +198,4 @@ battle/fx_queue.gd  사건 순서 재생, 배속, 건너뛰기
 9. 마무리: 벤치 8칸, 작은 화면·태블릿 배치 테스트, 진동, APK
 
 ## 진행 기록 (v2)
+- **1단계 완료** — `battle/layout.gd`(두 모드 배치, 화면 5종 × 벤치 5·8칸 30가지 단언 통과), `battle/slot_view.gd`(HP 숫자·막대, 에너지 점, 도구, 특수상태 기울임·배지, 배틀 포켓몬 약점·저항 상시 표시), `battle/pile_view.gd`, `screens/battle_screen.gd`(그리기). 테스트: 오프라인 게임 한 판을 끝까지 두며 탁자·손패 화면이 매 순간 상태와 일치(칸 수·위치·HP·덱·트래쉬·사이드). `sh scripts/godot-ui-tests.sh` (npm test 에도 포함).

@@ -21,6 +21,11 @@ func _ready() -> void:
 	var ni := args.find("--nettest")
 	if ni >= 0 and args.size() > ni + 2:
 		_nettest.call_deferred(args[ni + 1], args[ni + 2])
+	var shi := args.find("--battle-shot")
+	if shi >= 0:
+		_battle_shot.call_deferred(args[shi + 1] if args.size() > shi + 1 else "table")
+	if "--ui-tests" in args:
+		_ui_tests.call_deferred()
 	var ci := args.find("--engine-compare")
 	if ci >= 0 and args.size() > ci + 1:
 		_engine_compare.call_deferred(args[ci + 1])
@@ -371,3 +376,14 @@ func _gesture_check(gs: GameScreen) -> void:
 func _engine_compare(path: String) -> void:
 	var code := GCompare.run(path)
 	get_tree().quit(code)
+## 대전 화면 자동 테스트 (battle/ui_tests.gd)
+func _ui_tests() -> void:
+	var fails: Array = await BUiTests.run_all(self)
+	for f in fails.slice(0, 30):
+		print("[ui-tests] 실패: " + str(f))
+	print("[ui-tests] 결과: %s (실패 %d)" % ["통과" if fails.is_empty() else "실패", fails.size()])
+	get_tree().quit(0 if fails.is_empty() else 1)
+
+func _battle_shot(mode: String) -> void:
+	await BUiTests.shot(self, mode)
+	get_tree().quit()
