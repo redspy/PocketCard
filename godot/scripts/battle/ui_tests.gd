@@ -46,6 +46,10 @@ static func run_all(host: Node) -> Array:
 		fails.append_array(await run_flow(host))
 	if want.call("sizes"):
 		fails.append_array(await run_sizes(host))
+	if want.call("hints"):
+		fails.append_array(run_hint_units())
+		for m in ["table", "hand"]:
+			fails.append_array(await run_hints(host, m))
 	if want.call("fx"):
 		fails.append_array(await run_fx(host))
 	if only.has("lan"):
@@ -53,6 +57,8 @@ static func run_all(host: Node) -> Array:
 		fails.append_array(await run_lan(host, str(only[li + 1]), str(only[li + 2])))
 	if only.has("setupshot"):
 		await setup_shots(host)
+	if only.has("hintshot"):
+		await hint_shots(host)
 	if only.has("fxshot"):
 		await fx_shots(host)
 	if want.call("drag"):
@@ -921,3 +927,197 @@ static func _abs_z(n: CanvasItem) -> int:
 			break
 		c = c.get_parent()
 	return z
+
+# ───────────────────── 하스스톤식 안내: 턴 종료 강조·준비된 포켓몬·못 쓰는 이유·판 보기 ─────────────────────
+
+## 판정 함수 단위 검사 (가짜 보기)
+static func run_hint_units() -> Array:
+	var fails: Array = []
+	var A := func(kinds: Array) -> Array: return kinds.map(func(k): return { "kind": k })
+	if not BHint.only_end_left(A.call(["concede", "endTurn"])):
+		fails.append("턴 종료만 남았는데 강조 안 함")
+	if not BHint.only_end_left(A.call(["concede", "retreat", "endTurn"])):
+		fails.append("후퇴만 남았는데 강조 안 함")
+	if BHint.only_end_left(A.call(["concede", "attack", "endTurn"])):
+		fails.append("기술이 남았는데 강조함")
+	if BHint.only_end_left(A.call(["concede"])):
+		fails.append("상대 차례(턴 종료 없음)인데 강조함")
+	var acts := [{ "kind": "ability", "target": "b1" }, { "kind": "attack" }]
+	if not BHint.slot_ready(acts, "a1", "a1") or not BHint.slot_ready(acts, "b1", "a1") or BHint.slot_ready(acts, "b2", "a1"):
+		fails.append("준비된 포켓몬 판정 틀림")
+	# 못 쓰는 이유: 카드 종류별 대표 코드를 데이터에서 찾는다
+	var pick := func(test: Callable) -> String:
+		var d := LocalGame.data()
+		for code in GBot.codeIndex(d.cat, d.info.db):
+			if test.call(BData.card(code)):
+				return str(code)
+		return ""
+	var energy: String = pick.call(func(c): return c.get("kind") == "energy")
+	var supporter: String = pick.call(func(c): return c.get("kind") == "trainer" and c.get("trainer") == "supporter")
+	var stage1: String = pick.call(func(c): return c.get("kind") == "pokemon" and int(c.pokemon.get("stage", 0)) == 1)
+	var basic: String = pick.call(func(c): return c.get("kind") == "pokemon" and int(c.pokemon.get("stage", 0)) == 0)
+	var me := { "flags": { "energy": true, "supporter": false, "retreat": false, "stadium": false }, "turns": 1, "benchMax": 5, "active": null, "bench": [], "effects": [] }
+	var v := { "phase": "playing", "turnPlayer": 0, "firstPlayer": 0, "players": [me, {}], "stadium": null }
+	var cases := [
+		[energy, "이미 붙였습니다"], [supporter, "선공 플레이어는 첫 턴"], [stage1, "필드에 없습니다"], [basic, "벤치가 가득"],
+	]
+	for c in cases:
+		if c[0] == "":
+			fails.append("검사용 카드 없음: %s" % c[1])
+			continue
+		var why := BHint.why_unusable(v, 0, c[0])
+		if not why.contains(c[1]):
+			fails.append("못 쓰는 이유 %s: '%s' 에 '%s' 없음" % [BData.name_of(c[0]), why, c[1]])
+	me.flags.supporter = true
+	me.turns = 3
+	if not BHint.why_unusable(v, 0, supporter).contains("이미 썼습니다"):
+		fails.append("서포트 사용 후 이유 틀림")
+	v.turnPlayer = 1
+	if BHint.why_unusable(v, 0, energy) != "상대 차례입니다.":
+		fails.append("상대 차례 이유 틀림")
+	print("[ui-tests] 안내 판정 단위 검사 %s" % ("정상" if fails.is_empty() else "문제"))
+	return fails
+
+## 실제 게임(봇이 둠): 멈춰 있을 때마다 화면 안내 == 판정, 못 쓰는 카드 탭 → 이유 토스트, 선택 창 [판 보기] 왕복
+static func run_hints(host: Node, mode: String) -> Array:
+	var fails: Array = []
+	await start_offline(host)
+	var s := attach(host, BattleScreen.new(mode)) as BattleScreen
+	var d := LocalGame.data()
+	var bot: Callable = GBot.makeAiBot(d.cat, d.info.db)
+	var rng := GRng.seedRng("41a7" if mode == "table" else "41a8")
+	var last := -1
+	var n := { "end_hint": 0, "ready": 0, "why": 0, "why_generic": 0, "peek": 0, "checks": 0, "usable_on": 0 }
+	var generic: Array = []
+	var add := func(msg: String) -> void:
+		if fails.size() < 12:
+			fails.append("%s: %s" % [mode, msg])
+	for i in 6000:
+		await _frames(host, 2)
+		var v: Dictionary = Net.view
+		if v.is_empty():
+			continue
+		if v.get("result") != null:
+			break
+		if int(v.version) == last or not GBot.botHasWork(v):
+			continue
+		await _frames(host, 2)
+		v = Net.view
+		var mine := s._my_turn() and s.my_request() == null
+		if mine:
+			n.checks += 1
+			# "고를 수 있는 카드만"은 그 선택에만: 선택이 끝난 뒤 손패는 전부
+			var hand_n: int = (v.players[Net.seat].hand as Array).size()
+			if s.only_usable or s.hand.order.size() != hand_n:
+				add.call("턴 %d: 선택 후에도 고를 수 있는 카드만 (켜짐 %s, 손패 %d/%d)" % [int(v.turnNumber), s.only_usable, s.hand.order.size(), hand_n])
+			# 1) 턴 종료 강조 == 남은 수가 턴 종료뿐
+			var want := BHint.only_end_left(s.actions())
+			if s.end_hint != want:
+				add.call("턴 %d: 턴 종료 강조 %s, 판정 %s" % [int(v.turnNumber), s.end_hint, want])
+			if want:
+				n.end_hint += 1
+			# 2) 준비된 포켓몬 틀 == 판정
+			var me: Dictionary = v.players[Net.seat]
+			var act_sid := str(me.active.sid) if me.get("active") != null else ""
+			for sid in s.slots:
+				if not s._is_mine(sid):
+					continue
+				var r := BHint.slot_ready(s.actions(), sid, act_sid)
+				var mk: String = s.slots[sid].mark()
+				if (mk == "ready") != r:
+					add.call("턴 %d: %s 표시 %s, 판정 %s" % [int(v.turnNumber), sid, mk, r])
+				if r:
+					n.ready += 1
+			# 3) 못 쓰는 카드 탭 → 이유 토스트 (선택은 안 됨)
+			for iid in s.hand.order:
+				if s._moves_for_card(iid).is_empty():
+					s.tap_hand(iid)
+					var t: String = s.toast.text
+					if s.sel_card != "" or t == "":
+						add.call("못 쓰는 카드 탭: 선택 %s, 안내 '%s'" % [s.sel_card, t])
+					n.why += 1
+					if t.begins_with("지금은"):
+						n.why_generic += 1
+						var gn := BData.name_of(str(s.hand.codes.get(iid, "")))
+						if not generic.has(gn):
+							generic.append(gn)
+					s._clear_select()
+					break
+		if s.my_request() != null and s.board_pick.get("kind") == "handpick" and not s.only_usable:
+			s.only_usable = true
+			s._build_request()
+			n.usable_on += 1
+		# 4) 선택 창이면 [판 보기] → 창 접힘·손패 보임 → [돌아가기] → 창 펼침
+		if s.my_request() != null and s.board_pick.is_empty() and is_instance_valid(s.sheet):
+			if not s.peek_btn.visible:
+				add.call("선택 창에 [판 보기]가 없음 (%s)" % str(s.my_request().kind))
+			else:
+				s.peek_btn.tapped.emit()
+				await _frames(host, 2)
+				if s.sheet.visible or not s.peek_back.visible or not s.hand.visible:
+					add.call("판 보기: 창 %s, 돌아가기 %s, 손패 %s" % [s.sheet.visible, s.peek_back.visible, s.hand.visible])
+				s.peek_back.tapped.emit()
+				await _frames(host, 2)
+				if not s.sheet.visible or s.peek_back.visible:
+					add.call("돌아가기 후 창이 안 펼쳐짐")
+				n.peek += 1
+				# 사용자가 "고를 수 있는 카드만"을 켠 상태로 답한다
+				s.only_usable = true
+				s._build_request()
+				n.usable_on += 1
+		last = int(v.version)
+		var inp = bot.call(v.duplicate(true), rng)
+		if inp != null:
+			Net.input(inp)
+	if Net.view.get("result") == null:
+		add.call("게임이 끝나지 않음")
+	# 턴 종료 강조는 게임에 따라 안 나올 수 있음 (판정 일치는 매번 검사, 강조 자체는 단위 검사)
+	if n.checks == 0 or n.ready == 0 or n.peek == 0:
+		add.call("검사가 충분히 안 됨 %s" % JSON.stringify(n))
+	print("[ui-tests] 안내(%s): %s, 일반 문구 카드 %s" % [mode, JSON.stringify(n), ", ".join(generic)])
+	s.queue_free()
+	await _frames(host)
+	return fails
+
+## 창 모드 화면 저장: 준비된 포켓몬 틀 + 못 쓰는 이유, 턴 종료 강조, 선택 창 [판 보기] / 판 보기 중
+static func hint_shots(host: Node) -> void:
+	await start_offline(host)
+	var s := attach(host, BattleScreen.new("table")) as BattleScreen
+	var d := LocalGame.data()
+	var bot: Callable = GBot.makeAiBot(d.cat, d.info.db)
+	var rng := GRng.seedRng("41a7")
+	var last := -1
+	var got := {}
+	var save := func(name: String) -> void:
+		await host.get_tree().create_timer(0.7).timeout
+		host.get_viewport().get_texture().get_image().save_png("user://shot_hint_%s.png" % name)
+		got[name] = true
+		print("[ui-tests] 화면 저장: shot_hint_%s.png" % name)
+	for i in 6000:
+		await _frames(host, 2)
+		var v: Dictionary = Net.view
+		if v.is_empty() or v.get("result") != null or got.size() >= 4:
+			break
+		if int(v.version) == last or not GBot.botHasWork(v):
+			continue
+		await _frames(host, 4)
+		if s._my_turn() and s.my_request() == null:
+			if s.end_hint and not got.has("end"):
+				await save.call("end")
+			elif not got.has("ready") and int(v.turnNumber) >= 5:
+				for iid in s.hand.order:
+					if s._moves_for_card(iid).is_empty():
+						s.tap_hand(iid)
+						await save.call("ready")
+						s._clear_select()
+						break
+		elif s.my_request() != null and s.board_pick.is_empty() and is_instance_valid(s.sheet) and not got.has("sheet") and s.sheet.has_meta("covers_hand"):
+			await save.call("sheet")
+			s.peek_btn.tapped.emit()
+			await save.call("peek")
+			s.peek_back.tapped.emit()
+		last = int(Net.view.version)
+		var inp = bot.call(Net.view.duplicate(true), rng)
+		if inp != null:
+			Net.input(inp)
+	s.queue_free()

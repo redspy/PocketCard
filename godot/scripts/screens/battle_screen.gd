@@ -40,7 +40,8 @@ var popover_sid := ""
 var sheet: Control = null
 var sheet_key := ""
 var picks: Dictionary = {}          # 요청 id -> Array
-var only_usable := false
+var only_usable := false           # "고를 수 있는 카드만" — 지금 선택(요청) 하나에만 적용, 선택이 바뀌거나 끝나면 꺼짐
+var _usable_req := ""
 var last_sent: Dictionary = {}      # 테스트용: 마지막으로 보낸 입력
 var _confirm_end := 0
 var fx: BFx
@@ -54,6 +55,11 @@ var _auto_rng: Array = []
 var _auto_wait := -1.0
 var _auto_ver := -1
 var _toast_tw: Tween
+var end_hint := false               # 남은 수가 턴 종료뿐 → [턴 종료] 맥동 (하스스톤식)
+var _end_tw: Tween
+var peek_btn: TapArea               # 선택 창 위 [판 보기]: 창을 잠깐 접고 판을 본다 (취소는 아님)
+var peek_back: TapArea              # 판 보기 중 아래 [선택으로 돌아가기]
+var peeking := false
 
 func _init(m := "") -> void:
 	mode = m
@@ -91,6 +97,9 @@ func _exit_tree() -> void:
 
 ## 게임 중 뒤로 가기: 열린 것 닫기 → 그다음은 막음(항복은 메뉴에서)
 func on_back() -> bool:
+	if peeking:
+		set_peek(false)
+		return true
 	if popover or sel_card != "" or retreat_mode:
 		_clear_select()
 		return true
@@ -189,6 +198,14 @@ func _build_static() -> void:
 	stadium_btn = UI.button("스타디움 효과", 20, true)
 	stadium_btn.tapped.connect(tap_stadium_effect)
 	hud.add_child(stadium_btn)
+	peek_btn = UI.button("판 보기", 20)
+	peek_btn.tapped.connect(func(): set_peek(true))
+	peek_btn.visible = false
+	sheet_layer.add_child(peek_btn)
+	peek_back = UI.button("▲ 선택으로 돌아가기", 24, true, true)
+	peek_back.tapped.connect(func(): set_peek(false))
+	peek_back.visible = false
+	sheet_layer.add_child(peek_back)
 	toast = UI.label("", 24, Color.WHITE, HORIZONTAL_ALIGNMENT_CENTER, true)
 	toast.add_theme_stylebox_override("normal", UI.box(Color(0, 0, 0, 0.82), 14))
 	toast.modulate.a = 0.0
@@ -380,7 +397,7 @@ func _place_hand(me: Dictionary) -> void:
 		hp_picks = picks.get(str(board_pick.req.id), [])
 		for c in h:
 			use[str(c.iid)] = hp_opts.has(str(c.iid))
-	if only_usable:
+	if only_usable and board_pick.get("kind") == "handpick":
 		h = h.filter(func(c): return use.get(str(c.iid), false) or str(c.iid) == sel_card)
 	hand.set_hand(h, use, sel_card, L.card)
 	for iid in hp_picks:
@@ -390,7 +407,7 @@ func _place_hand(me: Dictionary) -> void:
 		for c in h:
 			if hp_opts.has(str(c.iid)) and not hp_picks.has(str(c.iid)):
 				hand.cards[str(c.iid)].set_mark("target")
-	hand.visible = sheet == null or not sheet.has_meta("covers_hand")
+	hand.visible = sheet == null or not sheet.has_meta("covers_hand") or peeking
 
 func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	var bar: Control = hud.get_node("Bar")
@@ -438,6 +455,7 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	(end_btn.get_meta("label") as Label).text = "다시 하기" if (ended and Net.solo) else "턴 종료"
 	end_btn.visible = not ended or Net.solo
 	UI.set_enabled(end_btn, can_end or (ended and Net.solo))
+	_set_end_hint(can_end and _my_turn() and my_request() == null and BHint.only_end_left(actions()))
 	var st_move := actions().any(func(m): return m.kind == "stadium")
 	stadium_btn.visible = st_move
 	if st_move:
@@ -445,6 +463,25 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	toast.size = Vector2(size.x * 0.84, 0)
 	var ty: float = (L.center.position.y + 10) if mode == "hand" else (L.bar.position.y + L.bar.size.y + 10)
 	toast.position = Vector2(size.x * 0.08, ty)
+
+## 할 수 있는 게 턴 종료뿐이면 버튼이 천천히 맥동 (누르라고 알려 줄 뿐, 강제는 아님)
+func _set_end_hint(on: bool) -> void:
+	if on == end_hint:
+		return
+	end_hint = on
+	var p := end_btn.get_meta("panel") as Control
+	if _end_tw:
+		_end_tw.kill()
+		_end_tw = null
+	p.self_modulate = Color.WHITE
+	p.scale = Vector2.ONE
+	if on:
+		p.pivot_offset = p.size / 2
+		_end_tw = p.create_tween().set_loops().set_trans(Tween.TRANS_SINE)
+		_end_tw.tween_property(p, "scale", Vector2(1.08, 1.08), 0.55)
+		_end_tw.parallel().tween_property(p, "self_modulate", Color(1.25, 1.25, 1.1), 0.55)
+		_end_tw.tween_property(p, "scale", Vector2.ONE, 0.55)
+		_end_tw.parallel().tween_property(p, "self_modulate", Color.WHITE, 0.55)
 
 func _btn_box(on: bool) -> StyleBoxFlat:
 	var sb := UI.box(UI.ACCENT if on else UI.PANEL_HI, 16, 0)
@@ -490,8 +527,14 @@ func _apply_marks() -> void:
 	if not board_pick.is_empty():
 		bp_opts = board_pick.req.options
 		bp_picks = picks.get(str(board_pick.req.id), [])
+	var acts := actions()
+	var idle := board_pick.is_empty() and sel_card == "" and not retreat_mode and _my_turn() and my_request() == null
+	var me := _me()
+	var active_sid := str(me.active.sid) if not me.is_empty() and me.get("active") != null else ""
 	for sid in slots:
 		var mk := "target" if targets.has(sid) else ""
+		if mk == "" and idle and BHint.slot_ready(acts, sid, active_sid):
+			mk = "ready"     # 기술·특성·후퇴를 지금 쓸 수 있는 내 포켓몬 (하스스톤의 초록 틀)
 		if board_pick.get("kind") == "slots":
 			mk = "pick" if bp_picks.has(sid) else ("target" if bp_opts.has(sid) else "dim")
 		slots[sid].set_mark(mk)
@@ -549,7 +592,7 @@ func tap_hand(iid: String) -> void:
 	_clear_select(false)
 	var moves := _moves_for_card(iid)
 	if moves.is_empty():
-		_toast("지금은 쓸 수 없는 카드입니다." if _my_turn() else "상대 차례입니다.")
+		_toast(BHint.why_unusable(Net.view, Net.seat, str(hand.codes.get(iid, ""))))
 		_place_hand(_me())
 		return
 	sel_card = iid
@@ -600,6 +643,8 @@ func tap_slot(sid: String) -> void:
 		return
 	var req = my_request()
 	if req != null:
+		if peeking:
+			zoom_slot(sid)
 		return
 	if targets.has(sid):
 		_send_move(targets[sid])
@@ -788,7 +833,7 @@ func tap_end_turn() -> void:
 		return
 	if not UI.is_enabled(end_btn) or my_request() != null:
 		return
-	var others := actions().any(func(m): return not (m.kind in ["endTurn", "concede"]))
+	var others := not BHint.only_end_left(actions())
 	var now := Time.get_ticks_msec()
 	if others and now - _confirm_end > 2500:
 		_confirm_end = now
@@ -849,6 +894,13 @@ func _show_error() -> void:
 
 func _build_request() -> void:
 	var req = my_request()
+	var rid := str(req.id) if req != null else ""
+	if rid != _usable_req:
+		_usable_req = rid
+		if only_usable:
+			only_usable = false
+			# 손패는 이 함수보다 먼저 그려졌으므로 선택 정리가 끝난 뒤 한 번 더 (전체 손패로)
+			(func(): if is_inside_tree() and not Net.view.is_empty(): _place_hand(_me())).call_deferred()
 	var key := ""
 	if req != null:
 		key = "%s|%s|%s" % [str(req.id), JSON.stringify(picks.get(str(req.id), [])), only_usable]
@@ -859,6 +911,9 @@ func _build_request() -> void:
 		sheet.queue_free()
 		sheet = null
 	board_pick = {}
+	peeking = false
+	peek_btn.visible = false
+	peek_back.visible = false
 	if req == null:
 		hand.visible = true
 		_apply_marks()
@@ -888,13 +943,41 @@ func _build_request() -> void:
 		var w: float = minf(size.x - 40, 640)
 		sheet.size = Vector2(w, 0)
 		var h := sheet.get_combined_minimum_size().y
-		sheet.position = Vector2((size.x - w) / 2, clampf((size.y - h) / 2, top_y, size.y - h))
+		sheet.position = Vector2((size.x - w) / 2, clampf((size.y - h) / 2, top_y + 70, size.y - h))
 		hand.visible = true
+		_show_peek_btn()
 		return
 	sheet.set_meta("covers_hand", true)
 	hand.visible = false
-	sheet.position = Vector2(0, maxf(top_y, size.y * 0.42))
+	sheet.position = Vector2(0, maxf(top_y + 70, size.y * 0.42))
 	sheet.size = Vector2(size.x, size.y - sheet.position.y)
+	_show_peek_btn()
+
+## 선택 창 오른쪽 위에 [판 보기]
+func _show_peek_btn() -> void:
+	if not is_instance_valid(sheet):
+		return
+	var ms := peek_btn.get_combined_minimum_size()
+	peek_btn.position = Vector2(sheet.position.x + sheet.size.x - ms.x - 12, sheet.position.y - ms.y - 8)
+	peek_btn.visible = true
+	sheet_layer.move_child(peek_btn, -1)
+	sheet_layer.move_child(peek_back, -1)
+
+## 판 보기: 선택 창을 접어 판(과 손패)을 보이고, 아래 띠로 다시 펼친다. 선택은 그대로 남음
+func set_peek(on: bool) -> void:
+	if not is_instance_valid(sheet) or my_request() == null:
+		return
+	peeking = on
+	sheet.visible = not on
+	peek_btn.visible = not on
+	peek_back.visible = on
+	if sheet.get_meta("covers_hand", false):
+		hand.visible = on
+	if on:
+		var ms := peek_back.get_combined_minimum_size()
+		# 가운데 띠(스타디움 줄) 위에: 칸·손패·칩을 가리지 않음
+		var c: Vector2 = mid.position + mid.size / 2 if mid.visible and mid.size.y > 0 else Vector2(size.x / 2, size.y * 0.5)
+		peek_back.position = Vector2((size.x - ms.x) / 2, c.y - ms.y / 2)
 
 var board_pick: Dictionary = {}     # 탁자에서 고르는 중인 요청 { req, kind }
 
@@ -1035,7 +1118,7 @@ func _drag_end(iid: String, pos: Vector2) -> void:
 func _why_not(iid: String) -> String:
 	var moves := _moves_for_card(iid)
 	if moves.is_empty():
-		return "지금은 쓸 수 없는 카드입니다."
+		return BHint.why_unusable(Net.view, Net.seat, str(hand.codes.get(iid, "")))
 	var names: Array = []
 	for m in moves:
 		if m.get("target") != null:
