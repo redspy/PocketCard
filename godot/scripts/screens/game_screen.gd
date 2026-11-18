@@ -372,7 +372,7 @@ func _request_panel(req: Dictionary, v: Dictionary, me: Dictionary) -> Control:
 				var sid := str(o)
 				var tile := _slot_tile(slots[sid], 160.0, false)
 				if picks.has(sid):
-					tile.modulate = Color(1.0, 0.95, 0.6)
+					_mark_selected(tile)
 				elif not picks.is_empty():
 					tile.modulate = Color(1, 1, 1, 0.55)
 				tile.tapped.connect(func(): _toggle(id, sid, mx))
@@ -639,9 +639,7 @@ func _strip(codes: Array, states: Array, width_ratio: float, on_tap: Callable) -
 		var cell := _card_cell(str(codes[i]), w)
 		if st == "on":
 			cell.position.y = -14
-			var mark := UI.label("✔", 46, UI.ACCENT)
-			mark.position = Vector2(10, 4)
-			cell.add_child(mark)
+			_mark_selected(cell)
 		elif st == "off":
 			cell.modulate = Color(0.55, 0.55, 0.55)
 		cell.tapped.connect(func(): on_tap.call(idx))
@@ -674,6 +672,28 @@ func _keep_scroll(sc: ScrollContainer, key: String) -> void:
 			if s and not state["restored"]:
 				state["restored"] = true
 				s.scroll_horizontal = int(target))
+
+## 고른 카드 표시: 카드 테두리 전체를 굵은 강조색 틀로 + 왼쪽 위 ✔ 배지
+func _mark_selected(cell: Control) -> void:
+	var frame := Panel.new()
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0.96, 0.77, 0.26, 0.14)
+	sb.border_color = UI.ACCENT
+	sb.set_border_width_all(7)
+	sb.set_corner_radius_all(12)
+	frame.add_theme_stylebox_override("panel", sb)
+	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
+	frame.offset_left = -3
+	frame.offset_top = -3
+	frame.offset_right = 3
+	frame.offset_bottom = 3
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cell.add_child(frame)
+	var mark := UI.label(" ✔ ", 30, Color(0.1, 0.1, 0.1))
+	mark.add_theme_stylebox_override("normal", UI.box(UI.ACCENT, 10))
+	mark.position = Vector2(8, 8)
+	mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cell.add_child(mark)
 
 func _card_cell(code: String, w: float) -> TapArea:
 	var tap := TapArea.new()
@@ -739,10 +759,25 @@ func _slot_tile(slot: Dictionary, w: float, tap_zoom := true) -> TapArea:
 		tile.add_child(al)
 	if code != "":
 		var list := _slot_codes(slot)
-		tile.long_pressed.connect(func(): _zoom_list(list, 0))
+		var tags := _slot_tags(slot)
+		tile.long_pressed.connect(func(): _zoom_list(list, 0, tags))
 		if tap_zoom:
-			tile.tapped.connect(func(): _zoom_list(list, 0))
+			tile.tapped.connect(func(): _zoom_list(list, 0, tags))
 	return tile
+
+## _slot_codes 의 각 카드 설명
+func _slot_tags(slot: Dictionary) -> Array:
+	var out: Array = []
+	var st = slot.get("stack")
+	if st is Array:
+		for i in (st as Array).size():
+			out.append("지금 모습" if i == 0 else "진화 전")
+	var att = slot.get("attached")
+	if att is Array:
+		var n := (att as Array).size()
+		for i in n:
+			out.append("붙은 카드 %d/%d" % [i + 1, n])
+	return out
 
 ## 포켓몬 한 마리의 카드들: 맨 위(지금 모습) → 진화 전 → 붙은 카드
 func _slot_codes(slot: Dictionary) -> Array:
@@ -761,9 +796,15 @@ func _slot_codes(slot: Dictionary) -> Array:
 func _zoom(code: String) -> void:
 	_zoom_list([code], 0)
 
-## 카드 크게 보기: 좌우로 밀어 같은 줄의 다른 카드로, 위·아래로 밀거나 누르면 닫힘
-func _zoom_list(codes: Array, index: int) -> void:
-	var list: Array = codes.filter(func(c): return str(c) != "")
+## 카드 크게 보기: 좌우로 밀어 같은 줄의 다른 카드로, 위·아래로 밀거나 누르면 닫힘.
+## 여러 장이면 아래에 작은 카드 줄 (붙은 카드·진화 전 카드를 한눈에, 누르면 그 카드로). tags[i]: 카드 설명 ("붙은 카드" 등)
+func _zoom_list(codes: Array, index: int, tags: Array = []) -> void:
+	var list: Array = []
+	var tg: Array = []
+	for i in codes.size():
+		if str(codes[i]) != "":
+			list.append(str(codes[i]))
+			tg.append(str(tags[i]) if i < tags.size() else "")
 	if list.is_empty():
 		return
 	var state := { "i": clampi(index, 0, list.size() - 1) }
@@ -775,49 +816,87 @@ func _zoom_list(codes: Array, index: int) -> void:
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ov.add_child(dim)
+	var multi := list.size() > 1
+	var thumb_w := 84.0
+	var strip_h := thumb_w * UI.CARD_RATIO + 20.0 if multi else 0.0
 	var img := TextureRect.new()
 	img.set_anchors_preset(Control.PRESET_FULL_RECT)
 	img.offset_left = 24
 	img.offset_right = -24
 	img.offset_top = UI.safe_top(self) + 40
-	img.offset_bottom = -UI.safe_bottom(self) - 90
+	img.offset_bottom = -UI.safe_bottom(self) - 90 - strip_h
 	img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	img.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ov.add_child(img)
-	var info := UI.label("", 22, UI.TEXT_DIM, HORIZONTAL_ALIGNMENT_CENTER)
+	var info := UI.label("", 22, UI.TEXT, HORIZONTAL_ALIGNMENT_CENTER)
 	info.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 	info.offset_top = -UI.safe_bottom(self) - 80
 	info.offset_bottom = -UI.safe_bottom(self) - 20
 	info.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ov.add_child(info)
-	var ref: WeakRef = weakref(img)
-	var show := func():
-		var code := str(list[state["i"]])
-		var r0 = ref.get_ref()
-		if r0:
-			r0.texture = null
-		ImageCache.request("res://cards/thumb/%s.webp" % code, func(t):
-			var r = ref.get_ref()
-			if r and r.texture == null:
-				r.texture = t)
-		ImageCache.request("res://cards/full/%s.webp" % code, func(t):
-			var r = ref.get_ref()
-			if r and str(list[state["i"]]) == code:
-				r.texture = t)
-		if list.size() > 1:
-			info.text = "%d / %d  ·  ← → 밀어서 넘기기  ·  누르거나 아래로 밀면 닫기" % [state["i"] + 1, list.size()]
-		else:
-			info.text = "누르거나 아래로 밀면 닫기"
-	show.call()
+	# 아래 작은 카드 줄 (지금 보는 카드는 강조)
+	var cells: Array = []
+	if multi:
+		var sc := ScrollContainer.new()
+		sc.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+		sc.offset_top = -UI.safe_bottom(self) - 86 - strip_h
+		sc.offset_bottom = -UI.safe_bottom(self) - 86
+		sc.offset_left = 16
+		sc.offset_right = -16
+		sc.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 8)
+		row.alignment = BoxContainer.ALIGNMENT_CENTER
+		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		sc.add_child(row)
+		for i in list.size():
+			var k := i
+			var c := _card_cell(list[i], thumb_w)
+			c.mouse_filter = Control.MOUSE_FILTER_STOP   # 눌러도 크게 보기가 닫히지 않게
+			c.tapped.connect(func():
+				state["i"] = k
+				GameScreen._zoom_show(state, list, tg, ref_holder(img), info, cells))
+			row.add_child(c)
+			cells.append(c)
+		ov.add_child(sc)
+	_zoom_show(state, list, tg, ref_holder(img), info, cells)
 	ov.tapped.connect(func(): ov.queue_free())
 	ov.swiped.connect(func(d: Vector2):
 		if absf(d.x) > absf(d.y) and list.size() > 1:
 			state["i"] = (state["i"] + (1 if d.x < 0 else -1) + list.size()) % list.size()
-			show.call()
+			GameScreen._zoom_show(state, list, tg, ref_holder(img), info, cells)
 		elif absf(d.y) >= absf(d.x):
 			ov.queue_free())
 	add_child(ov)
+
+static func ref_holder(img: TextureRect) -> WeakRef:
+	return weakref(img)
+
+## 크게 보기에서 state.i 번째 카드를 보여주고 설명·아래 줄 강조를 갱신
+static func _zoom_show(state: Dictionary, list: Array, tg: Array, ref: WeakRef, info: Label, cells: Array) -> void:
+	var i: int = state["i"]
+	var code := str(list[i])
+	var r0 = ref.get_ref()
+	if r0:
+		r0.texture = null
+	ImageCache.request("res://cards/thumb/%s.webp" % code, func(t):
+		var r = ref.get_ref()
+		if r and r.texture == null:
+			r.texture = t)
+	ImageCache.request("res://cards/full/%s.webp" % code, func(t):
+		var r = ref.get_ref()
+		if r and str(list[state["i"]]) == code:
+			r.texture = t)
+	var tag := str(tg[i]) if i < tg.size() else ""
+	if list.size() > 1:
+		info.text = "%s%d / %d  ·  좌우로 밀거나 아래 카드를 눌러 넘기기 · 누르면 닫기" % [(tag + "  ·  ") if tag != "" else "", i + 1, list.size()]
+	else:
+		info.text = (tag + "  ·  " if tag != "" else "") + "누르거나 아래로 밀면 닫기"
+	for k in cells.size():
+		if is_instance_valid(cells[k]):
+			(cells[k] as Control).modulate = Color.WHITE if k == i else Color(0.55, 0.55, 0.55)
 # ───────────────────────── 버튼 ─────────────────────────
 
 func _end_turn() -> void:
@@ -926,9 +1005,34 @@ func _check_spot() -> void:
 			break
 		if newest < 0 and str(e.get("type", "")) in ["play", "attack", "ability"] and int(e.get("player", -1)) != Net.seat and str(e.get("what", "")) != "에너지 붙이기":
 			newest = i
+	# 차례가 바뀌면 크게 알림 (AI 가 아무것도 안 하고 넘긴 턴도 알 수 있게)
+	var turn_ev := -1
+	for i in range(Net.events_log.size() - 1, -1, -1):
+		var e: Dictionary = Net.events_log[i]
+		if int(e.get("seq", -1)) <= _last_seq:
+			break
+		if str(e.get("type", "")) == "turnStart":
+			turn_ev = i
+			break
 	_last_seq = maxi(_last_seq, _max_seq())
 	if newest >= 0:
 		_show_spot(newest)
+	if turn_ev >= 0:
+		var te: Dictionary = Net.events_log[turn_ev]
+		if int(te.player) == Net.seat:
+			# 바로 앞 AI 턴에 한 일이 있었나
+			var did := false
+			for j in range(turn_ev - 1, -1, -1):
+				var x: Dictionary = Net.events_log[j]
+				var xt := str(x.get("type", ""))
+				if xt == "turnStart":
+					break
+				if xt in ["play", "attack", "ability", "retreat"] or (xt == "switch" and int(x.get("player", -1)) != Net.seat):
+					did = true
+					break
+			_show_banner("내 차례 (턴 %d)" % int(te.turnNumber), "" if did else "AI는 지난 턴에 아무것도 하지 않고 넘겼습니다")
+		else:
+			_show_banner("AI 차례 (턴 %d)" % int(te.turnNumber), "")
 
 func _show_spot(i: int) -> void:
 	var e: Dictionary = Net.events_log[i]
@@ -983,3 +1087,37 @@ func _hand_swipe(iid: String, d: Vector2) -> void:
 			_err.add_theme_color_override("font_color", Color(1, 0.55, 0.5))
 			_err.text = "지금은 쓸 수 없는 카드입니다."
 		_refresh()
+var _banner: Control
+
+## 차례 전환 알림 (화면 가운데, 누름은 통과, 잠깐 뒤 사라짐)
+func _show_banner(title: String, sub: String) -> void:
+	if is_instance_valid(_banner):
+		_banner.queue_free()
+	var w := (size.x if size.x > 0 else 720.0)
+	var box := PanelContainer.new()
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_theme_stylebox_override("panel", UI.box(Color(0.06, 0.09, 0.08, 0.92), 20, 3, UI.ACCENT))
+	var mm := UI.margin(18)
+	mm.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(mm)
+	var col := VBoxContainer.new()
+	col.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	mm.add_child(col)
+	var t := UI.label(title, 40, UI.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
+	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	col.add_child(t)
+	if sub != "":
+		var s2 := UI.label(sub, 24, UI.TEXT, HORIZONTAL_ALIGNMENT_CENTER, true)
+		s2.custom_minimum_size.x = w * 0.7
+		s2.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		col.add_child(s2)
+	box.custom_minimum_size.x = w * 0.8
+	box.position = Vector2(w * 0.1, (size.y if size.y > 0 else 1580.0) * 0.42)
+	add_child(box)
+	_banner = box
+	box.modulate.a = 0.0
+	var tw := box.create_tween()
+	tw.tween_property(box, "modulate:a", 1.0, 0.15)
+	tw.tween_interval(1.6 if sub != "" else 1.0)
+	tw.tween_property(box, "modulate:a", 0.0, 0.3)
+	tw.tween_callback(box.queue_free)

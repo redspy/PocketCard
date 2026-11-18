@@ -132,14 +132,14 @@ static func frameSource(ctx: Dictionary, fr: Dictionary):
 	if data.get("src") is String:
 		return data.src
 	if fr.kind == "trainerRun":
-		return "트레이너스 「" + _nz(data.get("name")) + "」"
+		return "트레이너스 [" + _nz(data.get("name")) + "]"
 	if fr.kind == "trigger":
 		# 조건이 되면 발동하는 특성 (진화했을 때 등)
 		var found = GCore.findSlot(ctx.s, _nz(data.get("sid")))
 		var names := { "infernalReign": "연옥 지배", "jewelSeeker": "보석 찾기", "flyingEntry": "플라잉엔트리", "rapidVernier": "래피드 버니어" }
 		var name: String = names.get(str(data.get("effect")), "")
 		var who: String = GCore.slotName(ctx, found.slot) if found != null else "포켓몬"
-		return who + "의 특성" + ((" 「" + name + "」") if name != "" else "") + " (조건이 되어 발동)"
+		return who + "의 특성" + ((" [" + name + "]") if name != "" else "") + " (조건이 되어 발동)"
 	if fr.kind == "abilityRun" or fr.kind == "attack" or fr.kind == "attackEffect":
 		var found = GCore.findSlot(ctx.s, _nz(data.get("sid")))
 		var who: String = GCore.slotName(ctx, found.slot) if found != null else "포켓몬"
@@ -148,11 +148,11 @@ static func frameSource(ctx: Dictionary, fr: Dictionary):
 			var abj = data.get("ab")
 			var ab = GCore.find_first(pk.abilities, func(a): return a.nameJa == abj) if pk != null else null
 			var abn: String = ab.name if (ab != null and GCore.truthy(ab.name)) else _nz(abj)
-			return who + "의 특성 「" + abn + "」"
+			return who + "의 특성 [" + abn + "]"
 		var atj = data.get("attackJa")
 		var at = GCore.find_first(pk.attacks, func(a): return a.nameJa == atj) if pk != null else null
 		var atn: String = at.name if (at != null and GCore.truthy(at.name)) else _nz(atj)
-		return who + "의 기술 「" + atn + "」"
+		return who + "의 기술 [" + atn + "]"
 	return null
 
 ## 지금 처리 중인 효과의 출처 (스택을 위에서부터 보고 가장 가까운 카드·특성·기술)
@@ -187,7 +187,7 @@ static func revealReason(ctx: Dictionary, d: Dictionary) -> String:
 		why = "트래쉬에서 가져가는 카드는 무엇인지 상대에게 보여줍니다."
 	else:
 		why = "효과로 고른 카드를 상대에게 보여줍니다."
-	return effectSource(ctx) + ": " + from_s + "에서 「" + what + "」 → " + str(TO_KO.get(d["to"], "사용합니다")) + "\n" + why
+	return effectSource(ctx) + ": " + from_s + "에서 [" + what + "] → " + str(TO_KO.get(d["to"], "사용합니다")) + "\n" + why
 
 # ───────────────────────── 트레이너스 도우미 ─────────────────────────
 

@@ -83,12 +83,12 @@ export const FRAMES: Record<string, Handler> = {};
 /** 이 프레임이 나타내는 카드·특성·기술 이름 (없으면 null) */
 export function frameSource(ctx: Ctx, fr: Frame): string | null {
   if (typeof fr.data.src === 'string') return fr.data.src;
-  if (fr.kind === 'trainerRun') return `트레이너스 「${String(fr.data.name ?? '')}」`;
+  if (fr.kind === 'trainerRun') return `트레이너스 [${String(fr.data.name ?? '')}]`;
   if (fr.kind === 'trigger') {
     // 조건이 되면 발동하는 특성 (진화했을 때 등)
     const found = findSlot(ctx.s, String(fr.data.sid ?? ''));
     const name = { infernalReign: '연옥 지배', jewelSeeker: '보석 찾기', flyingEntry: '플라잉엔트리', rapidVernier: '래피드 버니어' }[String(fr.data.effect)] ?? '';
-    return `${found ? slotName(ctx, found.slot) : '포켓몬'}의 특성${name ? ` 「${name}」` : ''} (조건이 되어 발동)`;
+    return `${found ? slotName(ctx, found.slot) : '포켓몬'}의 특성${name ? ` [${name}]` : ''} (조건이 되어 발동)`;
   }
   if (fr.kind === 'abilityRun' || fr.kind === 'attack' || fr.kind === 'attackEffect') {
     const found = findSlot(ctx.s, String(fr.data.sid ?? ''));
@@ -96,10 +96,10 @@ export function frameSource(ctx: Ctx, fr: Frame): string | null {
     const pk = found ? slotData(ctx, found.slot).pokemon : undefined;
     if (fr.kind === 'abilityRun') {
       const ab = pk?.abilities.find((a) => a.nameJa === fr.data.ab);
-      return `${who}의 특성 「${ab?.name || String(fr.data.ab ?? '')}」`;
+      return `${who}의 특성 [${ab?.name || String(fr.data.ab ?? '')}]`;
     }
     const at = pk?.attacks.find((a) => a.nameJa === fr.data.attackJa);
-    return `${who}의 기술 「${at?.name || String(fr.data.attackJa ?? '')}」`;
+    return `${who}의 기술 [${at?.name || String(fr.data.attackJa ?? '')}]`;
   }
   return null;
 }
@@ -124,7 +124,7 @@ function revealReason(ctx: Ctx, d: { from: string; to: string; prompt?: string; 
     : d.from === 'discard'
       ? '트래쉬에서 가져가는 카드는 무엇인지 상대에게 보여줍니다.'
       : '효과로 고른 카드를 상대에게 보여줍니다.';
-  return `${effectSource(ctx)}: ${from}에서 「${what}」 → ${TO_KO[d.to] ?? '사용합니다'}\n${why}`;
+  return `${effectSource(ctx)}: ${from}에서 [${what}] → ${TO_KO[d.to] ?? '사용합니다'}\n${why}`;
 }
 
 FRAMES.search = (ctx, f) => {

@@ -200,7 +200,7 @@ func _solotest(addr: String) -> void:
 			var pick := {}
 			for a in acts:
 				var k := str(a["kind"])
-				if k in ["play", "attach", "evolve", "bench"] and pick.is_empty() and str(a["label"]).find("붙") >= 0:
+				if k == "attach" and pick.is_empty():
 					pick = a
 			for a in acts:
 				if str(a["kind"]) == "attack" and pick.is_empty():
@@ -277,7 +277,16 @@ func _gesture_check(gs: GameScreen) -> void:
 	# 내 차례(AI 가 두지 않아 화면이 멈춘 때)까지 기다린다
 	for k in 100:
 		var v: Dictionary = Net.view
-		if v.get("turnPlayer") == Net.seat and not (v.get("requests", []) as Array).any(func(r): return r.player == Net.seat):
+		var mine_req = null
+		for r in v.get("requests", []):
+			if r.player == Net.seat and r.has("options"):
+				mine_req = r
+		if mine_req != null:
+			var opts: Array = mine_req.options
+			Net.input({ "type": "choice", "requestId": mine_req.id, "picks": opts.slice(0, maxi(int(mine_req.min), 1) if int(mine_req.max) > 0 else 0) })
+			await get_tree().create_timer(0.3).timeout
+			continue
+		if v.get("turnPlayer") == Net.seat:
 			break
 		await get_tree().create_timer(0.1).timeout
 	gs._tab = "hand"
@@ -325,7 +334,24 @@ func _gesture_check(gs: GameScreen) -> void:
 	print("[solotest] 동작: 짧게 누르기 → 고름 %s, 크게 보기 안 열림 %s" % [gs._selected != "", _overlay_of(gs) == null])
 	gs._selected = ""
 	gs._refresh()
-## 엔진 비교 (TS ↔ GDScript): scripts/engine-compare.ts 가 부른다
+	# 붙은 카드가 있는 포켓몬 크게 보기 (아래에 작은 카드 줄)
+	var best = null
+	for pl in Net.view.players:
+		for sl in ([pl.active] if pl.active != null else []) + (pl.bench as Array):
+			if sl != null and sl.get("attached") is Array and (sl.attached as Array).size() > 0 and (best == null or (sl.attached as Array).size() > (best.attached as Array).size()):
+				best = sl
+	if best != null:
+		gs._zoom_list(gs._slot_codes(best), 0, gs._slot_tags(best))
+		await get_tree().create_timer(0.6).timeout
+		var ov2 := _overlay_of(gs)
+		print("[solotest] 동작: 붙은 카드 보기 — %s" % ((ov2.get_child(2) as Label).text if ov2 else "열리지 않음"))
+		if DisplayServer.get_name() != "headless":
+			get_viewport().get_texture().get_image().save_png("user://solotest_attached.png")
+		if ov2:
+			ov2.queue_free()
+		await get_tree().process_frame
+	else:
+		print("[solotest] 동작: 붙은 카드가 있는 포켓몬 없음")## 엔진 비교 (TS ↔ GDScript): scripts/engine-compare.ts 가 부른다
 func _engine_compare(path: String) -> void:
 	var code := GCompare.run(path)
 	get_tree().quit(code)
