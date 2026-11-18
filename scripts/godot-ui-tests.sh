@@ -16,6 +16,6 @@ if [ $# -gt 0 ]; then
   OUT=$(timeout "${UI_TEST_TIMEOUT:-1500}" "$G" --headless --path . -- --ui-tests "$@" 2>&1); check "$OUT" $? || exit 1
   exit 0
 fi
-OUT=$(timeout "${UI_TEST_TIMEOUT:-1500}" "$G" --headless --path . -- --ui-tests layout render play menu auto flow fx 2>&1); check "$OUT" $? || exit 1
+OUT=$(timeout "${UI_TEST_TIMEOUT:-1500}" "$G" --headless --path . -- --ui-tests layout render play menu auto flow fx sizes 2>&1); check "$OUT" $? || exit 1
 [ -n "$UI_TEST_NO_WINDOW" ] && exit 0
 OUT=$(timeout "${UI_TEST_TIMEOUT:-1500}" "$G" --path . --resolution 720x1560 -- --ui-tests drag 2>&1); check "$OUT" $? || exit 1

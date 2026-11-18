@@ -75,6 +75,15 @@ func pop() -> void:
 		_busy = false
 		_shown(prev))
 
+## 첫 화면으로: 사이 화면들은 바로 없애고 맨 위 화면만 밀어내는 전환
+func pop_to_root() -> void:
+	if _busy:
+		await get_tree().create_timer(DURATION + 0.05).timeout
+	while _stack.size() > 2:
+		var mid: Control = _stack.pop_at(_stack.size() - 2)
+		mid.queue_free()
+	pop()
+
 func back() -> void:
 	var cur := current()
 	if cur and cur.has_method("on_back") and cur.on_back():

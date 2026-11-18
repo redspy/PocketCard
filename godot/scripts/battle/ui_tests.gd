@@ -44,8 +44,13 @@ static func run_all(host: Node) -> Array:
 		fails.append_array(await run_auto(host))
 	if want.call("flow"):
 		fails.append_array(await run_flow(host))
+	if want.call("sizes"):
+		fails.append_array(await run_sizes(host))
 	if want.call("fx"):
 		fails.append_array(await run_fx(host))
+	if only.has("lan"):
+		var li: int = only.find("lan")
+		fails.append_array(await run_lan(host, str(only[li + 1]), str(only[li + 2])))
 	if only.has("setupshot"):
 		await setup_shots(host)
 	if only.has("fxshot"):
@@ -177,7 +182,7 @@ static func shot(host: Node, mode: String, turn := 6, name := "") -> void:
 	var s := attach(host, BattleScreen.new(mode)) as BattleScreen
 	var d := LocalGame.data()
 	var bot: Callable = GBot.makeAiBot(d.cat, d.info.db)
-	var rng := GRng.seedRng("5h07")
+	var rng := GRng.seedRng("5a07")
 	var last := -1
 	for i in 3000:
 		await host.get_tree().process_frame
@@ -757,3 +762,140 @@ static func setup_shots(host: Node) -> void:
 	await host.get_tree().create_timer(1.2).timeout
 	host.get_viewport().get_texture().get_image().save_png("user://result.png")
 	print("[ui-tests] 결과 화면 저장")
+
+# ───────────────────────── 8단계: 서버 대전 (손패 모드) ─────────────────────────
+
+## 실제 서버에 참가해 상대(TS AI)와 끝까지: scripts/lan-e2e.ts 가 서버·상대를 띄우고 부른다
+static func run_lan(host: Node, addr: String, code: String) -> Array:
+	var fails: Array = []
+	Net.leave()
+	Net.join(addr, code)
+	for i in 100:
+		await host.get_tree().create_timer(0.1).timeout
+		if Net.seat >= 0 and not Net.lobby.is_empty():
+			break
+	if Net.seat < 0:
+		fails.append("서버 참가 실패: %s" % JSON.stringify(Net.last_error))
+		return fails
+	Nav.push(LobbyScreen.new(), false)
+	Net.send({ "t": "chooseDeck", "deckId": "gardevoir", "prints": {} })
+	await host.get_tree().create_timer(0.3).timeout
+	Net.send({ "t": "ready", "ready": true })
+	for i in 200:
+		await host.get_tree().create_timer(0.1).timeout
+		if Nav.current() is BattleScreen:
+			break
+	if not (Nav.current() is BattleScreen):
+		fails.append("게임 화면이 안 열림 (%s, 로비 %s)" % [str(Nav.current()), str(Net.lobby.get("phase"))])
+		return fails
+	var s := Nav.current() as BattleScreen
+	if s.mode != "hand":
+		fails.append("서버 대전인데 모드가 %s" % s.mode)
+	await host.get_tree().create_timer(0.5).timeout
+	var d := LocalGame.data()
+	var bot: Callable = GBot.makeAiBot(d.cat, d.info.db)
+	var rng := GRng.seedRng("1a2b")
+	var last := -1
+	var steps := 0
+	var kinds := {}
+	var t0 := Time.get_ticks_msec()
+	while Time.get_ticks_msec() - t0 < 600000:
+		await host.get_tree().create_timer(0.05).timeout
+		var v: Dictionary = Net.view
+		if v.is_empty():
+			continue
+		if v.get("result") != null:
+			break
+		if int(v.version) == last or not GBot.botHasWork(v):
+			continue
+		last = int(v.version)
+		var inp = bot.call(v.duplicate(true), rng)
+		if inp == null:
+			continue
+		s.last_sent = {}
+		var err: String = await ui_do(host, s, inp)
+		kinds[str(inp.type)] = int(kinds.get(str(inp.type), 0)) + 1
+		steps += 1
+		if err != "":
+			fails.append("서버 대전 조작 %d (턴 %d): %s" % [steps, int(v.turnNumber), err])
+			if fails.size() > 8:
+				break
+			if s.last_sent.is_empty():
+				Net.input(inp)
+		for p in check_render(s):
+			if fails.size() < 12:
+				fails.append("서버 대전 그리기: " + p)
+	var res = Net.view.get("result")
+	if res == null:
+		fails.append("서버 대전: 게임이 끝나지 않음")
+	print("[ui-tests] 서버 대전(손패 모드): %d번 %s, 결과 %s" % [steps, JSON.stringify(kinds), str(res.get("reason")) if res != null else "-"])
+	# 결과 화면 → 나가기 → 첫 화면
+	for i in 60:
+		await host.get_tree().create_timer(0.1).timeout
+		if s.result_panel != null:
+			break
+	if s.result_panel == null:
+		fails.append("서버 대전: 결과 화면이 안 뜸")
+		return fails
+	var out = _find_meta(s.result_panel, "result", "leave")
+	if out == null:
+		fails.append("서버 대전 결과에 나가기 없음")
+		return fails
+	out.tapped.emit()
+	for i in 40:
+		await host.get_tree().create_timer(0.1).timeout
+		if Nav.depth() == 1:
+			break
+	if Nav.depth() != 1 or Net.seat != -1:
+		fails.append("나가기 후 첫 화면으로 안 돌아감 (깊이 %d, 자리 %d)" % [Nav.depth(), Net.seat])
+	print("[ui-tests] 서버 대전 결과 → 나가기 → 첫 화면 %s" % ("정상" if fails.is_empty() else "문제"))
+	return fails
+
+# ───────────────────────── 9단계: 화면 크기 ─────────────────────────
+
+## 작은 폰·태블릿 크기에서 실제 게임: 칸·손패·버튼이 화면 안, 상태와 일치
+static func run_sizes(host: Node) -> Array:
+	var fails: Array = []
+	for sz in [Vector2(720, 1280), Vector2(1100, 1560), Vector2(720, 1700)]:
+		for mode in ["table", "hand"]:
+			await start_offline(host)
+			var box := Control.new()
+			box.size = sz
+			box.clip_contents = true
+			host.add_child(box)
+			var s := BattleScreen.new(mode)
+			s.set_anchors_preset(Control.PRESET_FULL_RECT)
+			box.add_child(s)
+			var d := LocalGame.data()
+			var bot: Callable = GBot.makeAiBot(d.cat, d.info.db)
+			var rng := GRng.seedRng("51fe")
+			var last := -1
+			var checks := 0
+			for i in 3000:
+				await _frames(host, 1)
+				var v: Dictionary = Net.view
+				if v.is_empty():
+					continue
+				if v.get("result") != null or int(v.turnNumber) >= 12:
+					break
+				for p in check_render(s):
+					if fails.size() < 12:
+						fails.append("%s %s: %s" % [mode, sz, p])
+				var screen := Rect2(Vector2.ZERO, sz)
+				for n in s.slots.values():
+					if (n as Control).visible and not screen.encloses((n as Control).get_rect().grow(-1)):
+						if fails.size() < 12:
+							fails.append("%s %s: 칸이 화면 밖 %s" % [mode, sz, (n as Control).get_rect()])
+				if not screen.encloses(Rect2(s.end_btn.position, s.end_btn.get_combined_minimum_size()).grow(-1)):
+					if fails.size() < 12:
+						fails.append("%s %s: 턴 종료 버튼이 화면 밖" % [mode, sz])
+				checks += 1
+				if int(v.version) != last and GBot.botHasWork(v):
+					last = int(v.version)
+					var inp = bot.call(v.duplicate(true), rng)
+					if inp != null:
+						Net.input(inp)
+			print("[ui-tests] 화면 크기 %s %s: 검사 %d번" % [mode, sz, checks])
+			box.queue_free()
+			await _frames(host)
+	return fails

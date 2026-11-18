@@ -132,8 +132,8 @@ func _refresh() -> void:
 		_build_decks(my_deck, ready)
 	# 게임 시작 → 게임 화면
 	if Net.in_game() and Nav.current() == self:
-		# AI 연습은 새 탁자 화면, 서버 대전은 (8단계 전까지) 기존 화면
-		Nav.push(BattleScreen.new() if Net.solo else GameScreen.new())
+		# 새 대전 화면: AI 연습 = 탁자, 서버 대전 = 손패 (게임판은 웹). 예전 화면은 classic_ui 설정일 때만
+		Nav.push(GameScreen.new() if LobbyScreen.classic_ui() else BattleScreen.new())
 
 func _build_decks(selected: String, locked: bool) -> void:
 	for c in _decks.get_children():
@@ -200,3 +200,11 @@ func _toggle_ready() -> void:
 	if not UI.is_enabled(_ready_btn):
 		return
 	Net.send({ "t": "ready", "ready": not bool(_me().get("ready", false)) })
+
+## 예전 대전 화면을 쓰는가 (user://ui.json {"classic": true}) — 문제가 생겼을 때 되돌리는 용도
+static func classic_ui() -> bool:
+	if not FileAccess.file_exists("user://ui.json"):
+		return false
+	var f := FileAccess.open("user://ui.json", FileAccess.READ)
+	var d = JSON.parse_string(f.get_as_text()) if f else null
+	return d is Dictionary and bool(d.get("classic", false))

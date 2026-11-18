@@ -18,6 +18,7 @@ var empties: Dictionary = {}        # "my:3" -> BSlot (빈 벤치 칸)
 var piles: Dictionary = {}          # "my_deck" 등 -> BPile
 var prize_cards: Dictionary = {}    # "my"/"opp" -> Array[BCard]
 var stadium: BCard
+var stadium_name: Label
 var hand: BHand
 var mid: Panel
 var opp_hand: Label
@@ -117,6 +118,8 @@ func _build_static() -> void:
 	stadium.tapped.connect(func(): if stadium.code != "": BZoom.open(sheet_layer, [stadium.code]))
 	stadium.long_pressed.connect(func(): if stadium.code != "": BZoom.open(sheet_layer, [stadium.code]))
 	board.add_child(stadium)
+	stadium_name = UI.label("", 20, UI.TEXT_DIM)
+	board.add_child(stadium_name)
 	for side in ["my", "opp"]:
 		for k in ["deck", "discard"]:
 			var p := BPile.new()
@@ -313,10 +316,18 @@ func _place_board(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 		mid.size = L.mid.size
 	var st = v.get("stadium")
 	stadium.visible = table and st != null
+	stadium_name.visible = false
 	if stadium.visible:
-		stadium.position = L.stadium.position
-		stadium.size = L.stadium.size
+		# 스타디움은 가운데 줄에 가로로 눕혀 (탁자 위 실물처럼) + 이름
+		var r: Rect2 = L.stadium
+		stadium.size = Vector2(r.size.y, r.size.x)
+		stadium.pivot_offset = stadium.size / 2
+		stadium.rotation_degrees = 90
+		stadium.position = r.position + (r.size - stadium.size) / 2
 		stadium.set_card(str(st.code))
+		stadium_name.visible = true
+		stadium_name.text = "스타디움: %s" % BData.name_of(str(st.code))
+		stadium_name.position = Vector2(r.position.x + r.size.x + 14, r.position.y + r.size.y / 2 - 14)
 	for side in ["my", "opp"]:
 		var p := me if side == "my" else opp
 		for k in ["deck", "discard"]:
@@ -397,7 +408,12 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	notice_label.visible = mode == "hand"
 	if mode == "hand":
 		status_label.position = L.status.position
-		status_label.text = "덱 %d · 사이드 %d · 트래쉬 %d\n상대: 패 %d · 사이드 %d" % [int(me.deckCount), _count_true(me.prizes), (me.discard as Array).size(), int(opp.handCount), _count_true(opp.prizes)]
+		var conn := ""
+		if Net.status != "open":
+			conn = "  · 재접속 중…"
+		elif bool(Net.lobby.get("paused", false)):
+			conn = "  · 상대 재접속 대기"
+		status_label.text = "덱 %d · 사이드 %d · 트래쉬 %d%s\n상대: 패 %d · 사이드 %d · 큰 화면은 게임판에서" % [int(me.deckCount), _count_true(me.prizes), (me.discard as Array).size(), conn, int(opp.handCount), _count_true(opp.prizes)]
 		notice_label.position = L.notice.position
 		notice_label.size = L.notice.size
 	# 이번 턴 사용 칩 + 턴 종료
@@ -1222,6 +1238,4 @@ static func my_words(t: String) -> String:
 ## 서버 대전이 끝난 뒤 나가기: 참가 정보 지우고 첫 화면으로
 func _leave_to_root() -> void:
 	Net.leave()
-	while Nav.depth() > 1:
-		Nav.pop()
-		await get_tree().create_timer(0.36).timeout
+	Nav.pop_to_root()   # 이 화면은 곧 사라지므로 이어지는 처리는 Nav 가 한다

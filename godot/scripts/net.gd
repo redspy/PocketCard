@@ -205,7 +205,8 @@ func _process(_delta: float) -> void:
 		var text := _ws.get_packet().get_string_from_utf8()
 		var parsed = JSON.parse_string(text)
 		if typeof(parsed) == TYPE_DICTIONARY:
-			_on_message(parsed)
+			# JSON 숫자는 모두 float 로 읽힘 → 정수로 (자리 번호·버전 비교, 오프라인 엔진·AI 와 같은 자료형)
+			_on_message(GCore.intify(parsed))
 
 func _notification(what: int) -> void:
 	# 앱이 다시 앞으로 오면 기다리지 않고 재접속
