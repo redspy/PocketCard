@@ -1,0 +1,2817 @@
+{
+  "generated": "2026-11-16T21:56:35.725Z",
+  "allowed": [
+    "G",
+    "H",
+    "I"
+  ],
+  "prints": {
+    "SV7_076": [
+      {
+        "code": "M2a_137",
+        "reg": "H",
+        "jp": "M2a-137",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "MC_572",
+        "reg": "H",
+        "jp": "MC-572",
+        "special": false,
+        "d": 26
+      },
+      {
+        "code": "SV7_076",
+        "reg": "H",
+        "jp": "SV7-76",
+        "special": false
+      }
+    ],
+    "SV7_114": [
+      {
+        "code": "M2a_138",
+        "reg": "H",
+        "jp": "M2a-138",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "MC_573",
+        "reg": "H",
+        "jp": "MC-573",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "SV7_077",
+        "reg": "H",
+        "jp": "SV7-77",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SV8a_128",
+        "reg": "H",
+        "jp": "SV8a-128",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SV7_114",
+        "reg": "H",
+        "jp": "SV7-114",
+        "special": true
+      }
+    ],
+    "SV8a_131": [
+      {
+        "code": "M2a_139",
+        "reg": "H",
+        "jp": "M2a-139",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SV7_080",
+        "reg": "H",
+        "jp": "SV7-80",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SV8a_131",
+        "reg": "H",
+        "jp": "SV8a-131",
+        "special": false
+      },
+      {
+        "code": "M2a_213",
+        "reg": "H",
+        "jp": "M2a-213",
+        "special": true,
+        "d": 19
+      }
+    ],
+    "SV8a_125": [
+      {
+        "code": "MC_565",
+        "reg": "H",
+        "jp": "MC-565",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SV8a_125",
+        "reg": "H",
+        "jp": "SV8a-125",
+        "special": false
+      },
+      {
+        "code": "MC_755",
+        "reg": "H",
+        "jp": "MC-755",
+        "special": true,
+        "d": 10
+      }
+    ],
+    "SV8a_224": [
+      {
+        "code": "MC_566",
+        "reg": "H",
+        "jp": "MC-566",
+        "special": false,
+        "d": 24
+      },
+      {
+        "code": "SV8a_126",
+        "reg": "H",
+        "jp": "SV8a-126",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "SV8a_224",
+        "reg": "H",
+        "jp": "SV8a-224",
+        "special": true
+      }
+    ],
+    "SV8a_202": [
+      {
+        "code": "MC_094",
+        "reg": "H",
+        "jp": "MC-94",
+        "special": false,
+        "d": 27
+      },
+      {
+        "code": "SV8a_022",
+        "reg": "H",
+        "jp": "SV8a-22",
+        "special": false,
+        "d": 31
+      },
+      {
+        "code": "SV8a_202",
+        "reg": "H",
+        "jp": "SV8a-202",
+        "special": true
+      }
+    ],
+    "SV8a_200": [
+      {
+        "code": "MC_038",
+        "reg": "H",
+        "jp": "MC-38",
+        "special": false,
+        "d": 32
+      },
+      {
+        "code": "SV8a_200",
+        "reg": "H",
+        "jp": "SV8a-200",
+        "special": true
+      }
+    ],
+    "SV6_127": [
+      {
+        "code": "MC_224",
+        "reg": "H",
+        "jp": "MC-224",
+        "special": false,
+        "d": 26
+      },
+      {
+        "code": "SV6_038",
+        "reg": "H",
+        "jp": "SV6-38",
+        "special": false,
+        "d": 24
+      },
+      {
+        "code": "SV8a_050",
+        "reg": "H",
+        "jp": "SV8a-50",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "SV6_117",
+        "reg": "H",
+        "jp": "SV6-117",
+        "special": true,
+        "d": 27
+      },
+      {
+        "code": "SV6_127",
+        "reg": "H",
+        "jp": "SV6-127",
+        "special": true
+      },
+      {
+        "code": "SV8a_208",
+        "reg": "H",
+        "jp": "SV8a-208",
+        "special": true,
+        "d": 34
+      }
+    ],
+    "SV7_130": [
+      {
+        "code": "M2a_145",
+        "reg": "H",
+        "jp": "M2a-145",
+        "special": false,
+        "d": 32
+      },
+      {
+        "code": "MC_630",
+        "reg": "H",
+        "jp": "MC-630",
+        "special": false,
+        "d": 32
+      },
+      {
+        "code": "SV7_088",
+        "reg": "H",
+        "jp": "SV7-88",
+        "special": false,
+        "d": 30
+      },
+      {
+        "code": "SV8a_136",
+        "reg": "H",
+        "jp": "SV8a-136",
+        "special": false,
+        "d": 30
+      },
+      {
+        "code": "SV7_122",
+        "reg": "H",
+        "jp": "SV7-122",
+        "special": true,
+        "d": 32
+      },
+      {
+        "code": "SV7_130",
+        "reg": "H",
+        "jp": "SV7-130",
+        "special": true
+      },
+      {
+        "code": "SV8a_226",
+        "reg": "H",
+        "jp": "SV8a-226",
+        "special": true,
+        "d": 30
+      }
+    ],
+    "SV6a_089": [
+      {
+        "code": "M2a_114",
+        "reg": "H",
+        "jp": "M2a-114",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "MC_489",
+        "reg": "H",
+        "jp": "MC-489",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SV6a_038",
+        "reg": "H",
+        "jp": "SV6a-38",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SV8a_104",
+        "reg": "H",
+        "jp": "SV8a-104",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "M2a_244",
+        "reg": "H",
+        "jp": "M2a-244",
+        "special": true,
+        "d": 16
+      },
+      {
+        "code": "SV6a_081",
+        "reg": "H",
+        "jp": "SV6a-81",
+        "special": true,
+        "d": 24
+      },
+      {
+        "code": "SV6a_089",
+        "reg": "H",
+        "jp": "SV6a-89",
+        "special": true
+      }
+    ],
+    "SV4a_327": [
+      {
+        "code": "SV2a_151",
+        "reg": "G",
+        "jp": "SV2a-151",
+        "special": false,
+        "d": 24
+      },
+      {
+        "code": "SV4a_076",
+        "reg": "G",
+        "jp": "SV4a-76",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "SV2a_195",
+        "reg": "G",
+        "jp": "SV2a-195",
+        "special": true,
+        "d": 34
+      },
+      {
+        "code": "SV2a_208",
+        "reg": "G",
+        "jp": "SV2a-208",
+        "special": true,
+        "d": 34
+      },
+      {
+        "code": "SV4a_327",
+        "reg": "G",
+        "jp": "SV4a-327",
+        "special": true
+      }
+    ],
+    "MC_673": [
+      {
+        "code": "M6a_103",
+        "reg": "I",
+        "jp": "M6a-101",
+        "special": false,
+        "d": 26
+      },
+      {
+        "code": "MC_673",
+        "reg": "I",
+        "jp": "MC-651",
+        "special": false
+      },
+      {
+        "code": "M2a_217",
+        "reg": "I",
+        "jp": "M2a-216",
+        "special": true,
+        "d": 21
+      },
+      {
+        "code": "SV1V_072",
+        "reg": "G",
+        "jp": "SV1V-70",
+        "special": false,
+        "d": 16
+      }
+    ],
+    "M1S_083": [
+      {
+        "code": "M1S_083",
+        "reg": "I",
+        "jp": "M1S-81",
+        "special": true
+      },
+      {
+        "code": "M2a_155",
+        "reg": "H",
+        "jp": "M2a-153",
+        "special": false,
+        "d": 22
+      },
+      {
+        "code": "MC_657",
+        "reg": "H",
+        "jp": "MC-648",
+        "special": false,
+        "d": 20
+      },
+      {
+        "code": "SV5K_062",
+        "reg": "H",
+        "jp": "SV5K-63",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "SV8a_145",
+        "reg": "H",
+        "jp": "SV8a-147",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SV6_133",
+        "reg": "H",
+        "jp": "SV6-133",
+        "special": true,
+        "d": 17
+      }
+    ],
+    "SV8a_147": [
+      {
+        "code": "M2a_156",
+        "reg": "H",
+        "jp": "M2a-152",
+        "special": false,
+        "d": 22
+      },
+      {
+        "code": "SV8a_147",
+        "reg": "H",
+        "jp": "SV8a-145",
+        "special": false
+      }
+    ],
+    "SV4M_059": [
+      {
+        "code": "SV4M_059",
+        "reg": "G",
+        "jp": "SV4M-59",
+        "special": false
+      },
+      {
+        "code": "SV8a_146",
+        "reg": "G",
+        "jp": "SV8a-139",
+        "special": false,
+        "d": 5
+      }
+    ],
+    "M6a_101": [
+      {
+        "code": "M6a_101",
+        "reg": "I",
+        "jp": "M6a-103",
+        "special": false
+      },
+      {
+        "code": "MC_665",
+        "reg": "I",
+        "jp": "MC-663",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "M2_101",
+        "reg": "I",
+        "jp": "M2-102",
+        "special": true,
+        "d": 33
+      },
+      {
+        "code": "SV3a_054",
+        "reg": "G",
+        "jp": "SV3a-54",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SV5a_056",
+        "reg": "G",
+        "jp": "SV5a-56",
+        "special": false,
+        "d": 20
+      },
+      {
+        "code": "SV9a_058",
+        "reg": "G",
+        "jp": "SV9a-58",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SV2a_209",
+        "reg": "G",
+        "jp": "SV2a-209",
+        "special": true,
+        "d": 32
+      }
+    ],
+    "SV8a_144": [
+      {
+        "code": "M2a_154",
+        "reg": "H",
+        "jp": "M2a-149",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SV7_091",
+        "reg": "H",
+        "jp": "SV7-89",
+        "special": false,
+        "d": 10
+      },
+      {
+        "code": "SV8a_144",
+        "reg": "H",
+        "jp": "SV8a-140",
+        "special": false
+      },
+      {
+        "code": "M2a_216",
+        "reg": "H",
+        "jp": "M2a-215",
+        "special": true,
+        "d": 32
+      }
+    ],
+    "SV8a_157": [
+      {
+        "code": "MC_683",
+        "reg": "H",
+        "jp": "MC-680",
+        "special": false,
+        "d": 12
+      },
+      {
+        "code": "SV7_093",
+        "reg": "H",
+        "jp": "SV7-94",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "SV8a_157",
+        "reg": "H",
+        "jp": "SV8a-152",
+        "special": false
+      }
+    ],
+    "MC_689": [
+      {
+        "code": "M2a_166",
+        "reg": "I",
+        "jp": "M2a-165",
+        "special": false,
+        "d": 11
+      },
+      {
+        "code": "MC_689",
+        "reg": "I",
+        "jp": "MC-688",
+        "special": false
+      },
+      {
+        "code": "SV11B_082",
+        "reg": "I",
+        "jp": "SV11B-82",
+        "special": false,
+        "d": 14
+      }
+    ],
+    "SV8a_179": [
+      {
+        "code": "MC_735",
+        "reg": "H",
+        "jp": "MC-696",
+        "special": false,
+        "d": 12
+      },
+      {
+        "code": "SV7_100",
+        "reg": "H",
+        "jp": "SV7-97",
+        "special": false,
+        "d": 8
+      },
+      {
+        "code": "SV8a_179",
+        "reg": "H",
+        "jp": "SV8a-163",
+        "special": false
+      },
+      {
+        "code": "SV7_126",
+        "reg": "H",
+        "jp": "SV7-123",
+        "special": true,
+        "d": 18
+      },
+      {
+        "code": "SV8a_232",
+        "reg": "H",
+        "jp": "SV8a-227",
+        "special": true,
+        "d": 22
+      }
+    ],
+    "MC_709": [
+      {
+        "code": "MC_709",
+        "reg": "I",
+        "jp": "MC-724",
+        "special": false
+      },
+      {
+        "code": "MC_760",
+        "reg": "I",
+        "jp": "MC-760",
+        "special": true,
+        "d": 18
+      },
+      {
+        "code": "SV1a_066",
+        "reg": "G",
+        "jp": "SV1a-69",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "SV4a_176",
+        "reg": "G",
+        "jp": "SV4a-181",
+        "special": false,
+        "d": 23
+      }
+    ],
+    "SV2D_068": [
+      {
+        "code": "SV2D_068",
+        "reg": "G",
+        "jp": "SV2D-69",
+        "special": false
+      },
+      {
+        "code": "SV4a_173",
+        "reg": "G",
+        "jp": "SV4a-174",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SV4a_353",
+        "reg": "G",
+        "jp": "SV4a-350",
+        "special": true,
+        "d": 21
+      }
+    ],
+    "SV8_103": [
+      {
+        "code": "SV8_103",
+        "reg": "H",
+        "jp": "SV8-102",
+        "special": false
+      },
+      {
+        "code": "SV8_128",
+        "reg": "H",
+        "jp": "SV8-127",
+        "special": true,
+        "d": 31
+      }
+    ],
+    "SV4M_066": [
+      {
+        "code": "SV4M_066",
+        "reg": "G",
+        "jp": "SV4M-65",
+        "special": false
+      },
+      {
+        "code": "SV8a_177",
+        "reg": "G",
+        "jp": "SV8a-175",
+        "special": false,
+        "d": 22
+      },
+      {
+        "code": "SV4M_092",
+        "reg": "G",
+        "jp": "SV4M-91",
+        "special": true,
+        "d": 26
+      }
+    ],
+    "SV6_097": [
+      {
+        "code": "MC_727",
+        "reg": "H",
+        "jp": "MC-713",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "SV6_097",
+        "reg": "H",
+        "jp": "SV6-96",
+        "special": false
+      },
+      {
+        "code": "SV8a_174",
+        "reg": "H",
+        "jp": "SV8a-169",
+        "special": false,
+        "d": 22
+      },
+      {
+        "code": "SV6_123",
+        "reg": "H",
+        "jp": "SV6-122",
+        "special": true,
+        "d": 25
+      },
+      {
+        "code": "SV6_130",
+        "reg": "H",
+        "jp": "SV6-129",
+        "special": true,
+        "d": 14
+      },
+      {
+        "code": "SV8a_230",
+        "reg": "H",
+        "jp": "SV8a-230",
+        "special": true,
+        "d": 15
+      }
+    ],
+    "M2a_221": [
+      {
+        "code": "MC_732",
+        "reg": "H",
+        "jp": "MC-704",
+        "special": false,
+        "d": 31
+      },
+      {
+        "code": "M2a_221",
+        "reg": "H",
+        "jp": "M2a-220",
+        "special": true
+      }
+    ],
+    "SV8a_166": [
+      {
+        "code": "MC_710",
+        "reg": "H",
+        "jp": "MC-722",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SV7_098",
+        "reg": "H",
+        "jp": "SV7-100",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SV8a_166",
+        "reg": "H",
+        "jp": "SV8a-176",
+        "special": false
+      },
+      {
+        "code": "SV7_124",
+        "reg": "H",
+        "jp": "SV7-126",
+        "special": true,
+        "d": 22
+      },
+      {
+        "code": "SV7_131",
+        "reg": "H",
+        "jp": "SV7-132",
+        "special": true,
+        "d": 23
+      }
+    ],
+    "SV8a_183": [
+      {
+        "code": "M2a_188",
+        "reg": "H",
+        "jp": "M2a-184",
+        "special": false,
+        "d": 31
+      },
+      {
+        "code": "SV7_102",
+        "reg": "H",
+        "jp": "SV7-102",
+        "special": false,
+        "d": 27
+      },
+      {
+        "code": "SV8a_183",
+        "reg": "H",
+        "jp": "SV8a-182",
+        "special": false
+      }
+    ],
+    "SV6_099": [
+      {
+        "code": "SV6_099",
+        "reg": "H",
+        "jp": "SV6-100",
+        "special": false
+      },
+      {
+        "code": "SV8a_182",
+        "reg": "H",
+        "jp": "SV8a-181",
+        "special": false,
+        "d": 22
+      },
+      {
+        "code": "M2a_222",
+        "reg": "H",
+        "jp": "M2a-222",
+        "special": true,
+        "d": 33
+      },
+      {
+        "code": "SV10_132",
+        "reg": "H",
+        "jp": "SV10-132",
+        "special": true,
+        "d": 20
+      }
+    ],
+    "SV8_105": [
+      {
+        "code": "M2a_182",
+        "reg": "H",
+        "jp": "M2a-183",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "SV8_105",
+        "reg": "H",
+        "jp": "SV8-106",
+        "special": false
+      },
+      {
+        "code": "SV8_138",
+        "reg": "H",
+        "jp": "SV8-138",
+        "special": true,
+        "d": 30
+      }
+    ],
+    "SV2a_168": [
+      {
+        "code": "SV2a_004",
+        "reg": "G",
+        "jp": "SV2a-4",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "SV4a_025",
+        "reg": "G",
+        "jp": "SV4a-25",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SV2a_168",
+        "reg": "G",
+        "jp": "SV2a-168",
+        "special": true
+      },
+      {
+        "code": "SV4a_210",
+        "reg": "G",
+        "jp": "SV4a-210",
+        "special": true,
+        "d": 21
+      }
+    ],
+    "SV3_134": [
+      {
+        "code": "SV3_066",
+        "reg": "G",
+        "jp": "SV3-66",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "SV4a_115",
+        "reg": "G",
+        "jp": "SV4a-115",
+        "special": false,
+        "d": 30
+      },
+      {
+        "code": "SV3_125",
+        "reg": "G",
+        "jp": "SV3-125",
+        "special": true,
+        "d": 30
+      },
+      {
+        "code": "SV3_134",
+        "reg": "G",
+        "jp": "SV3-134",
+        "special": true
+      },
+      {
+        "code": "SV4a_331",
+        "reg": "G",
+        "jp": "SV4a-331",
+        "special": true,
+        "d": 27
+      },
+      {
+        "code": "SV4a_349",
+        "reg": "G",
+        "jp": "SV4a-349",
+        "special": true,
+        "d": 31
+      }
+    ],
+    "SV4a_349": [
+      {
+        "code": "SV3_066",
+        "reg": "G",
+        "jp": "SV3-66",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "SV4a_115",
+        "reg": "G",
+        "jp": "SV4a-115",
+        "special": false,
+        "d": 30
+      },
+      {
+        "code": "SV3_125",
+        "reg": "G",
+        "jp": "SV3-125",
+        "special": true,
+        "d": 30
+      },
+      {
+        "code": "SV3_134",
+        "reg": "G",
+        "jp": "SV3-134",
+        "special": true,
+        "d": 24
+      },
+      {
+        "code": "SV4a_331",
+        "reg": "G",
+        "jp": "SV4a-331",
+        "special": true,
+        "d": 27
+      },
+      {
+        "code": "SV4a_349",
+        "reg": "G",
+        "jp": "SV4a-349",
+        "special": true
+      }
+    ],
+    "SV3_118": [
+      {
+        "code": "SV3_087",
+        "reg": "G",
+        "jp": "SV3-87",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "SV3_118",
+        "reg": "G",
+        "jp": "SV3-118",
+        "special": true
+      }
+    ],
+    "SV3_119": [
+      {
+        "code": "SV3_088",
+        "reg": "G",
+        "jp": "SV3-88",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "SV3_119",
+        "reg": "G",
+        "jp": "SV3-119",
+        "special": true
+      }
+    ],
+    "SV3_136": [
+      {
+        "code": "SV3_089",
+        "reg": "G",
+        "jp": "SV3-89",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SV3_128",
+        "reg": "G",
+        "jp": "SV3-128",
+        "special": true,
+        "d": 27
+      },
+      {
+        "code": "SV3_136",
+        "reg": "G",
+        "jp": "SV3-136",
+        "special": true
+      },
+      {
+        "code": "SV4a_335",
+        "reg": "G",
+        "jp": "SV4a-335",
+        "special": true,
+        "d": 30
+      }
+    ],
+    "SV6a_068": [
+      {
+        "code": "M2a_072",
+        "reg": "H",
+        "jp": "M2a-72",
+        "special": false,
+        "d": 26
+      },
+      {
+        "code": "MC_308",
+        "reg": "H",
+        "jp": "MC-308",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "SV6a_018",
+        "reg": "H",
+        "jp": "SV6a-18",
+        "special": false,
+        "d": 28
+      },
+      {
+        "code": "SV8a_064",
+        "reg": "H",
+        "jp": "SV8a-64",
+        "special": false,
+        "d": 28
+      },
+      {
+        "code": "SV6a_068",
+        "reg": "H",
+        "jp": "SV6a-68",
+        "special": true
+      }
+    ],
+    "SV6a_069": [
+      {
+        "code": "M2a_073",
+        "reg": "H",
+        "jp": "M2a-73",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "MC_309",
+        "reg": "H",
+        "jp": "MC-309",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SV6a_019",
+        "reg": "H",
+        "jp": "SV6a-19",
+        "special": false,
+        "d": 12
+      },
+      {
+        "code": "SV8a_065",
+        "reg": "H",
+        "jp": "SV8a-65",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SV6a_069",
+        "reg": "H",
+        "jp": "SV6a-69",
+        "special": true
+      }
+    ],
+    "SV6a_070": [
+      {
+        "code": "M2a_074",
+        "reg": "H",
+        "jp": "M2a-74",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "MC_310",
+        "reg": "H",
+        "jp": "MC-310",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "SV6a_020",
+        "reg": "H",
+        "jp": "SV6a-20",
+        "special": false,
+        "d": 20
+      },
+      {
+        "code": "SV8a_066",
+        "reg": "H",
+        "jp": "SV8a-66",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SV6a_070",
+        "reg": "H",
+        "jp": "SV6a-70",
+        "special": true
+      }
+    ],
+    "SV8a_226": [
+      {
+        "code": "M2a_145",
+        "reg": "H",
+        "jp": "M2a-145",
+        "special": false,
+        "d": 32
+      },
+      {
+        "code": "MC_630",
+        "reg": "H",
+        "jp": "MC-630",
+        "special": false,
+        "d": 32
+      },
+      {
+        "code": "SV7_088",
+        "reg": "H",
+        "jp": "SV7-88",
+        "special": false,
+        "d": 30
+      },
+      {
+        "code": "SV8a_136",
+        "reg": "H",
+        "jp": "SV8a-136",
+        "special": false,
+        "d": 30
+      },
+      {
+        "code": "SV7_122",
+        "reg": "H",
+        "jp": "SV7-122",
+        "special": true,
+        "d": 32
+      },
+      {
+        "code": "SV8a_226",
+        "reg": "H",
+        "jp": "SV8a-226",
+        "special": true
+      }
+    ],
+    "SV4a_087": [
+      {
+        "code": "SV1V_045",
+        "reg": "G",
+        "jp": "SV1V-45",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SV4a_087",
+        "reg": "G",
+        "jp": "SV4a-87",
+        "special": false
+      },
+      {
+        "code": "SV4a_264",
+        "reg": "G",
+        "jp": "SV4a-264",
+        "special": true,
+        "d": 17
+      }
+    ],
+    "MC_656": [
+      {
+        "code": "MC_656",
+        "reg": "I",
+        "jp": "MC-655",
+        "special": false
+      },
+      {
+        "code": "M1S_082",
+        "reg": "I",
+        "jp": "M1S-82",
+        "special": true,
+        "d": 32
+      },
+      {
+        "code": "SV1V_069",
+        "reg": "G",
+        "jp": "SV1V-72",
+        "special": false,
+        "d": 22
+      },
+      {
+        "code": "SV3a_053",
+        "reg": "G",
+        "jp": "SV3a-53",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "SV1V_107",
+        "reg": "G",
+        "jp": "SV1V-107",
+        "special": true,
+        "d": 18
+      }
+    ],
+    "MC_670": [
+      {
+        "code": "MC_670",
+        "reg": "H",
+        "jp": "MC-656",
+        "special": false
+      },
+      {
+        "code": "SV5M_062",
+        "reg": "H",
+        "jp": "SV5M-62",
+        "special": false,
+        "d": 30
+      },
+      {
+        "code": "SV8a_151",
+        "reg": "H",
+        "jp": "SV8a-148",
+        "special": false,
+        "d": 26
+      }
+    ],
+    "M2_078": [
+      {
+        "code": "M2_078",
+        "reg": "I",
+        "jp": "M2-77",
+        "special": false
+      },
+      {
+        "code": "M2_107",
+        "reg": "I",
+        "jp": "M2-106",
+        "special": true,
+        "d": 27
+      },
+      {
+        "code": "M2_115",
+        "reg": "I",
+        "jp": "M2-115",
+        "special": true,
+        "d": 25
+      }
+    ],
+    "SV1a_073": [
+      {
+        "code": "SV1a_073",
+        "reg": "G",
+        "jp": "SV1a-72",
+        "special": false
+      },
+      {
+        "code": "SV8a_187",
+        "reg": "G",
+        "jp": "SV8a-185",
+        "special": false,
+        "d": 12
+      }
+    ],
+    "SV3a_050": [
+      {
+        "code": "SV3a_050",
+        "reg": "G",
+        "jp": "SV3a-50",
+        "special": false
+      },
+      {
+        "code": "SV8a_117",
+        "reg": "G",
+        "jp": "SV8a-117",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SV3a_079",
+        "reg": "G",
+        "jp": "SV3a-79",
+        "special": true,
+        "d": 30
+      },
+      {
+        "code": "SV3a_087",
+        "reg": "G",
+        "jp": "SV3a-87",
+        "special": true,
+        "d": 16
+      },
+      {
+        "code": "SV8a_220",
+        "reg": "G",
+        "jp": "SV8a-220",
+        "special": true,
+        "d": 25
+      }
+    ],
+    "M1L_027": [
+      {
+        "code": "M1L_027",
+        "reg": "I",
+        "jp": "M1L-27",
+        "special": false
+      },
+      {
+        "code": "M2a_087",
+        "reg": "I",
+        "jp": "M2a-87",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "MC_372",
+        "reg": "I",
+        "jp": "MC-372",
+        "special": false,
+        "d": 23
+      }
+    ],
+    "M1L_026": [
+      {
+        "code": "M1L_026",
+        "reg": "I",
+        "jp": "M1L-26",
+        "special": false
+      },
+      {
+        "code": "M2a_086",
+        "reg": "I",
+        "jp": "M2a-86",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "MC_371",
+        "reg": "I",
+        "jp": "MC-371",
+        "special": false,
+        "d": 25
+      }
+    ],
+    "SV8a_104": [
+      {
+        "code": "M2a_114",
+        "reg": "H",
+        "jp": "M2a-114",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "MC_489",
+        "reg": "H",
+        "jp": "MC-489",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SV6a_038",
+        "reg": "H",
+        "jp": "SV6a-38",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SV8a_104",
+        "reg": "H",
+        "jp": "SV8a-104",
+        "special": false
+      },
+      {
+        "code": "M2a_244",
+        "reg": "H",
+        "jp": "M2a-244",
+        "special": true,
+        "d": 16
+      },
+      {
+        "code": "SV6a_081",
+        "reg": "H",
+        "jp": "SV6a-81",
+        "special": true,
+        "d": 24
+      },
+      {
+        "code": "SV6a_089",
+        "reg": "H",
+        "jp": "SV6a-89",
+        "special": true,
+        "d": 31
+      }
+    ],
+    "SV11B_069": [
+      {
+        "code": "M2a_119",
+        "reg": "I",
+        "jp": "M2a-119",
+        "special": false,
+        "d": 22
+      },
+      {
+        "code": "MC_512",
+        "reg": "I",
+        "jp": "MC-512",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SV11B_069",
+        "reg": "I",
+        "jp": "SV11B-69",
+        "special": false
+      },
+      {
+        "code": "SV11B_164",
+        "reg": "I",
+        "jp": "SV11B-164",
+        "special": true,
+        "d": 15
+      },
+      {
+        "code": "SV11B_172",
+        "reg": "I",
+        "jp": "SV11B-172",
+        "special": true,
+        "d": 19
+      }
+    ],
+    "SV8a_075": [
+      {
+        "code": "M2a_081",
+        "reg": "H",
+        "jp": "M2a-81",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "MC_358",
+        "reg": "H",
+        "jp": "MC-358",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "SV6_055",
+        "reg": "H",
+        "jp": "SV6-55",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SV8a_075",
+        "reg": "H",
+        "jp": "SV8a-75",
+        "special": false
+      },
+      {
+        "code": "SV6_107",
+        "reg": "H",
+        "jp": "SV6-107",
+        "special": true,
+        "d": 17
+      }
+    ],
+    "M1L_060": [
+      {
+        "code": "M1L_060",
+        "reg": "I",
+        "jp": "M1L-59",
+        "special": false
+      },
+      {
+        "code": "M2a_159",
+        "reg": "I",
+        "jp": "M2a-155",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "MC_662",
+        "reg": "I",
+        "jp": "MC-654",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "M1L_083",
+        "reg": "I",
+        "jp": "M1L-82",
+        "special": true,
+        "d": 29
+      }
+    ],
+    "SV6a_093": [
+      {
+        "code": "SV4K_059",
+        "reg": "G",
+        "jp": "SV4K-60",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SV8a_140",
+        "reg": "G",
+        "jp": "SV8a-143",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "SV6a_093",
+        "reg": "G",
+        "jp": "SV6a-93",
+        "special": true
+      }
+    ],
+    "SV1a_064": [
+      {
+        "code": "SV1a_064",
+        "reg": "G",
+        "jp": "SV1a-64",
+        "special": false
+      },
+      {
+        "code": "SV8a_143",
+        "reg": "G",
+        "jp": "SV8a-141",
+        "special": false,
+        "d": 11
+      }
+    ],
+    "SV1S_072": [
+      {
+        "code": "SV1S_072",
+        "reg": "G",
+        "jp": "SV1S-73",
+        "special": false
+      },
+      {
+        "code": "SV4a_167",
+        "reg": "G",
+        "jp": "SV4a-168",
+        "special": false,
+        "d": 14
+      }
+    ],
+    "SV1V_077": [
+      {
+        "code": "SV1V_077",
+        "reg": "G",
+        "jp": "SV1V-76",
+        "special": false
+      },
+      {
+        "code": "SV4a_182",
+        "reg": "G",
+        "jp": "SV4a-180",
+        "special": false,
+        "d": 12
+      },
+      {
+        "code": "SV1V_100",
+        "reg": "G",
+        "jp": "SV1V-99",
+        "special": true,
+        "d": 27
+      },
+      {
+        "code": "SV1V_105",
+        "reg": "G",
+        "jp": "SV1V-104",
+        "special": true,
+        "d": 27
+      },
+      {
+        "code": "SV4a_354",
+        "reg": "G",
+        "jp": "SV4a-353",
+        "special": true,
+        "d": 13
+      }
+    ],
+    "SV5M_069": [
+      {
+        "code": "MC_719",
+        "reg": "H",
+        "jp": "MC-698",
+        "special": false,
+        "d": 31
+      },
+      {
+        "code": "SV5M_069",
+        "reg": "H",
+        "jp": "SV5M-67",
+        "special": false
+      },
+      {
+        "code": "SV8a_170",
+        "reg": "H",
+        "jp": "SV8a-165",
+        "special": false,
+        "d": 31
+      },
+      {
+        "code": "SV5M_092",
+        "reg": "H",
+        "jp": "SV5M-90",
+        "special": true,
+        "d": 23
+      }
+    ],
+    "SV8a_167": [
+      {
+        "code": "MC_714",
+        "reg": "H",
+        "jp": "MC-712",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "SV5a_063",
+        "reg": "H",
+        "jp": "SV5a-64",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SV8a_167",
+        "reg": "H",
+        "jp": "SV8a-168",
+        "special": false
+      }
+    ],
+    "SV1a_071": [
+      {
+        "code": "SV1a_071",
+        "reg": "G",
+        "jp": "SV1a-70",
+        "special": false
+      },
+      {
+        "code": "SV4a_185",
+        "reg": "G",
+        "jp": "SV4a-185",
+        "special": false,
+        "d": 28
+      }
+    ],
+    "SV8a_118": [
+      {
+        "code": "M2a_132",
+        "reg": "H",
+        "jp": "M2a-132",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "MC_546",
+        "reg": "H",
+        "jp": "MC-546",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SV6_079",
+        "reg": "H",
+        "jp": "SV6-79",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "SV8a_118",
+        "reg": "H",
+        "jp": "SV8a-118",
+        "special": false
+      },
+      {
+        "code": "M2a_211",
+        "reg": "H",
+        "jp": "M2a-211",
+        "special": true,
+        "d": 22
+      }
+    ],
+    "SV8a_119": [
+      {
+        "code": "M2a_133",
+        "reg": "H",
+        "jp": "M2a-133",
+        "special": false,
+        "d": 22
+      },
+      {
+        "code": "MC_547",
+        "reg": "H",
+        "jp": "MC-547",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "SV6_080",
+        "reg": "H",
+        "jp": "SV6-80",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "SV8a_119",
+        "reg": "H",
+        "jp": "SV8a-119",
+        "special": false
+      },
+      {
+        "code": "M2a_212",
+        "reg": "H",
+        "jp": "M2a-212",
+        "special": true,
+        "d": 18
+      }
+    ],
+    "SV6_120": [
+      {
+        "code": "M2a_134",
+        "reg": "H",
+        "jp": "M2a-134",
+        "special": false,
+        "d": 22
+      },
+      {
+        "code": "MC_548",
+        "reg": "H",
+        "jp": "MC-548",
+        "special": false,
+        "d": 20
+      },
+      {
+        "code": "SV6_081",
+        "reg": "H",
+        "jp": "SV6-81",
+        "special": false,
+        "d": 20
+      },
+      {
+        "code": "SV8a_120",
+        "reg": "H",
+        "jp": "SV8a-120",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SV6_120",
+        "reg": "H",
+        "jp": "SV6-120",
+        "special": true
+      },
+      {
+        "code": "SV8a_221",
+        "reg": "H",
+        "jp": "SV8a-221",
+        "special": true,
+        "d": 24
+      }
+    ],
+    "SV8a_064": [
+      {
+        "code": "M2a_072",
+        "reg": "H",
+        "jp": "M2a-72",
+        "special": false,
+        "d": 26
+      },
+      {
+        "code": "MC_308",
+        "reg": "H",
+        "jp": "MC-308",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "SV6a_018",
+        "reg": "H",
+        "jp": "SV6a-18",
+        "special": false,
+        "d": 28
+      },
+      {
+        "code": "SV8a_064",
+        "reg": "H",
+        "jp": "SV8a-64",
+        "special": false
+      },
+      {
+        "code": "SV6a_068",
+        "reg": "H",
+        "jp": "SV6a-68",
+        "special": true,
+        "d": 14
+      }
+    ],
+    "SV8a_065": [
+      {
+        "code": "M2a_073",
+        "reg": "H",
+        "jp": "M2a-73",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "MC_309",
+        "reg": "H",
+        "jp": "MC-309",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SV6a_019",
+        "reg": "H",
+        "jp": "SV6a-19",
+        "special": false,
+        "d": 12
+      },
+      {
+        "code": "SV8a_065",
+        "reg": "H",
+        "jp": "SV8a-65",
+        "special": false
+      },
+      {
+        "code": "SV6a_069",
+        "reg": "H",
+        "jp": "SV6a-69",
+        "special": true,
+        "d": 24
+      }
+    ],
+    "SV8a_066": [
+      {
+        "code": "M2a_074",
+        "reg": "H",
+        "jp": "M2a-74",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "MC_310",
+        "reg": "H",
+        "jp": "MC-310",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "SV6a_020",
+        "reg": "H",
+        "jp": "SV6a-20",
+        "special": false,
+        "d": 20
+      },
+      {
+        "code": "SV8a_066",
+        "reg": "H",
+        "jp": "SV8a-66",
+        "special": false
+      },
+      {
+        "code": "SV6a_070",
+        "reg": "H",
+        "jp": "SV6a-70",
+        "special": true,
+        "d": 16
+      }
+    ],
+    "SV8a_001": [
+      {
+        "code": "M2a_011",
+        "reg": "H",
+        "jp": "M2a-11",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SV8a_001",
+        "reg": "H",
+        "jp": "SV8a-1",
+        "special": false
+      },
+      {
+        "code": "M2a_196",
+        "reg": "H",
+        "jp": "M2a-196",
+        "special": true,
+        "d": 28
+      }
+    ],
+    "SV8a_084": [
+      {
+        "code": "SV1S_045",
+        "reg": "G",
+        "jp": "SV1S-45",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "SV4a_106",
+        "reg": "G",
+        "jp": "SV4a-106",
+        "special": false,
+        "d": 22
+      },
+      {
+        "code": "SV8a_084",
+        "reg": "G",
+        "jp": "SV8a-84",
+        "special": false
+      },
+      {
+        "code": "SV4a_282",
+        "reg": "G",
+        "jp": "SV4a-282",
+        "special": true,
+        "d": 17
+      }
+    ],
+    "SV8a_225": [
+      {
+        "code": "MC_625",
+        "reg": "H",
+        "jp": "MC-625",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SV5a_052",
+        "reg": "H",
+        "jp": "SV5a-52",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SV8a_134",
+        "reg": "H",
+        "jp": "SV8a-134",
+        "special": false,
+        "d": 11
+      },
+      {
+        "code": "SV8a_225",
+        "reg": "H",
+        "jp": "SV8a-225",
+        "special": true
+      }
+    ],
+    "SV7a_019": [
+      {
+        "code": "M2a_075",
+        "reg": "H",
+        "jp": "M2a-75",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "MC_312",
+        "reg": "H",
+        "jp": "MC-312",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SV7a_019",
+        "reg": "H",
+        "jp": "SV7a-19",
+        "special": false
+      }
+    ],
+    "MC_706": [
+      {
+        "code": "M1L_061",
+        "reg": "I",
+        "jp": "M1L-62",
+        "special": false,
+        "d": 22
+      },
+      {
+        "code": "M2a_173",
+        "reg": "I",
+        "jp": "M2a-175",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "MC_706",
+        "reg": "I",
+        "jp": "MC-729",
+        "special": false
+      },
+      {
+        "code": "M1L_085",
+        "reg": "I",
+        "jp": "M1L-86",
+        "special": true,
+        "d": 21
+      }
+    ],
+    "SV11W_085": [
+      {
+        "code": "M2a_180",
+        "reg": "I",
+        "jp": "M2a-172",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "MC_733",
+        "reg": "I",
+        "jp": "MC-718",
+        "special": false,
+        "d": 10
+      },
+      {
+        "code": "SV11W_085",
+        "reg": "I",
+        "jp": "SV11W-85",
+        "special": false
+      },
+      {
+        "code": "SV11W_166",
+        "reg": "I",
+        "jp": "SV11W-166",
+        "special": true,
+        "d": 28
+      },
+      {
+        "code": "SV11W_173",
+        "reg": "I",
+        "jp": "SV11W-173",
+        "special": true,
+        "d": 14
+      }
+    ],
+    "SV4a_188": [
+      {
+        "code": "SV1a_072",
+        "reg": "G",
+        "jp": "SV1a-73",
+        "special": false,
+        "d": 10
+      },
+      {
+        "code": "SV4a_188",
+        "reg": "G",
+        "jp": "SV4a-190",
+        "special": false
+      }
+    ],
+    "M1S_040": [
+      {
+        "code": "M1S_040",
+        "reg": "I",
+        "jp": "M1S-40",
+        "special": false
+      },
+      {
+        "code": "M2a_069",
+        "reg": "I",
+        "jp": "M2a-69",
+        "special": false,
+        "d": 24
+      }
+    ],
+    "M1S_041": [
+      {
+        "code": "M1S_041",
+        "reg": "I",
+        "jp": "M1S-41",
+        "special": false
+      },
+      {
+        "code": "M2a_070",
+        "reg": "I",
+        "jp": "M2a-70",
+        "special": false,
+        "d": 15
+      }
+    ],
+    "SV1S_028": [
+      {
+        "code": "SV1S_028",
+        "reg": "G",
+        "jp": "SV1S-28",
+        "special": false
+      },
+      {
+        "code": "SV4a_082",
+        "reg": "G",
+        "jp": "SV4a-82",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SV4a_328",
+        "reg": "G",
+        "jp": "SV4a-328",
+        "special": true,
+        "d": 19
+      },
+      {
+        "code": "SV4a_348",
+        "reg": "G",
+        "jp": "SV4a-348",
+        "special": true,
+        "d": 17
+      }
+    ],
+    "SV6_055": [
+      {
+        "code": "M2a_081",
+        "reg": "H",
+        "jp": "M2a-81",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "MC_358",
+        "reg": "H",
+        "jp": "MC-358",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "SV6_055",
+        "reg": "H",
+        "jp": "SV6-55",
+        "special": false
+      },
+      {
+        "code": "SV8a_075",
+        "reg": "H",
+        "jp": "SV8a-75",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SV6_107",
+        "reg": "H",
+        "jp": "SV6-107",
+        "special": true,
+        "d": 17
+      }
+    ],
+    "SV11W_041": [
+      {
+        "code": "SV11W_041",
+        "reg": "I",
+        "jp": "SV11W-41",
+        "special": false
+      },
+      {
+        "code": "SV11W_124",
+        "reg": "I",
+        "jp": "SV11W-124",
+        "special": true,
+        "d": 19
+      }
+    ],
+    "SV4K_032": [
+      {
+        "code": "SV4K_032",
+        "reg": "G",
+        "jp": "SV4K-32",
+        "special": false
+      },
+      {
+        "code": "SV8a_071",
+        "reg": "G",
+        "jp": "SV8a-71",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SV4K_071",
+        "reg": "G",
+        "jp": "SV4K-71",
+        "special": true,
+        "d": 26
+      }
+    ],
+    "M2a_227": [
+      {
+        "code": "M2a_227",
+        "reg": "I",
+        "jp": "M2a-227",
+        "special": true
+      },
+      {
+        "code": "M2a_238",
+        "reg": "I",
+        "jp": "M2a-238",
+        "special": true,
+        "d": 23
+      }
+    ],
+    "SV2a_151": [
+      {
+        "code": "SV2a_151",
+        "reg": "G",
+        "jp": "SV2a-151",
+        "special": false
+      },
+      {
+        "code": "SV4a_076",
+        "reg": "G",
+        "jp": "SV4a-76",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "SV2a_195",
+        "reg": "G",
+        "jp": "SV2a-195",
+        "special": true,
+        "d": 34
+      },
+      {
+        "code": "SV2a_208",
+        "reg": "G",
+        "jp": "SV2a-208",
+        "special": true,
+        "d": 34
+      },
+      {
+        "code": "SV4a_327",
+        "reg": "G",
+        "jp": "SV4a-327",
+        "special": true,
+        "d": 23
+      }
+    ],
+    "SV9_033": [
+      {
+        "code": "M2a_060",
+        "reg": "I",
+        "jp": "M2a-60",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "MC_287",
+        "reg": "I",
+        "jp": "MC-287",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SV9_033",
+        "reg": "I",
+        "jp": "SV9-33",
+        "special": false
+      },
+      {
+        "code": "MC_765",
+        "reg": "I",
+        "jp": "MC-765",
+        "special": true,
+        "d": 23
+      }
+    ],
+    "SV6a_038": [
+      {
+        "code": "M2a_114",
+        "reg": "H",
+        "jp": "M2a-114",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "MC_489",
+        "reg": "H",
+        "jp": "MC-489",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SV6a_038",
+        "reg": "H",
+        "jp": "SV6a-38",
+        "special": false
+      },
+      {
+        "code": "SV8a_104",
+        "reg": "H",
+        "jp": "SV8a-104",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "M2a_244",
+        "reg": "H",
+        "jp": "M2a-244",
+        "special": true,
+        "d": 16
+      },
+      {
+        "code": "SV6a_081",
+        "reg": "H",
+        "jp": "SV6a-81",
+        "special": true,
+        "d": 24
+      },
+      {
+        "code": "SV6a_089",
+        "reg": "H",
+        "jp": "SV6a-89",
+        "special": true,
+        "d": 31
+      }
+    ],
+    "SV4M_061": [
+      {
+        "code": "SV4M_061",
+        "reg": "G",
+        "jp": "SV4M-63",
+        "special": false
+      },
+      {
+        "code": "SV8a_153",
+        "reg": "G",
+        "jp": "SV8a-160",
+        "special": false,
+        "d": 17
+      }
+    ],
+    "SV7_032": [
+      {
+        "code": "MC_254",
+        "reg": "H",
+        "jp": "MC-254",
+        "special": false,
+        "d": 27
+      },
+      {
+        "code": "SV7_032",
+        "reg": "H",
+        "jp": "SV7-32",
+        "special": false
+      },
+      {
+        "code": "SV7_108",
+        "reg": "H",
+        "jp": "SV7-108",
+        "special": true,
+        "d": 24
+      }
+    ],
+    "SV6a_002": [
+      {
+        "code": "MC_050",
+        "reg": "H",
+        "jp": "MC-50",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SV6a_002",
+        "reg": "H",
+        "jp": "SV6a-2",
+        "special": false
+      }
+    ],
+    "SV1V_037": [
+      {
+        "code": "SV1V_037",
+        "reg": "G",
+        "jp": "SV1V-37",
+        "special": false
+      },
+      {
+        "code": "SV4a_071",
+        "reg": "G",
+        "jp": "SV4a-71",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SV1V_094",
+        "reg": "G",
+        "jp": "SV1V-94",
+        "special": true,
+        "d": 21
+      },
+      {
+        "code": "SV1V_102",
+        "reg": "G",
+        "jp": "SV1V-102",
+        "special": true,
+        "d": 27
+      },
+      {
+        "code": "SV1V_106",
+        "reg": "G",
+        "jp": "SV1V-106",
+        "special": true,
+        "d": 9
+      }
+    ],
+    "SV1V_094": [
+      {
+        "code": "SV1V_037",
+        "reg": "G",
+        "jp": "SV1V-37",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SV4a_071",
+        "reg": "G",
+        "jp": "SV4a-71",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SV1V_094",
+        "reg": "G",
+        "jp": "SV1V-94",
+        "special": true
+      },
+      {
+        "code": "SV1V_102",
+        "reg": "G",
+        "jp": "SV1V-102",
+        "special": true,
+        "d": 27
+      },
+      {
+        "code": "SV1V_106",
+        "reg": "G",
+        "jp": "SV1V-106",
+        "special": true,
+        "d": 9
+      }
+    ],
+    "SV4M_027": [
+      {
+        "code": "SV4M_027",
+        "reg": "G",
+        "jp": "SV4M-27",
+        "special": false
+      },
+      {
+        "code": "SV8a_054",
+        "reg": "G",
+        "jp": "SV8a-54",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SV4M_079",
+        "reg": "G",
+        "jp": "SV4M-79",
+        "special": true,
+        "d": 28
+      },
+      {
+        "code": "SV4M_088",
+        "reg": "G",
+        "jp": "SV4M-88",
+        "special": true,
+        "d": 25
+      },
+      {
+        "code": "SV8a_210",
+        "reg": "G",
+        "jp": "SV8a-210",
+        "special": true,
+        "d": 27
+      }
+    ],
+    "SV4M_079": [
+      {
+        "code": "SV4M_027",
+        "reg": "G",
+        "jp": "SV4M-27",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "SV8a_054",
+        "reg": "G",
+        "jp": "SV8a-54",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SV4M_079",
+        "reg": "G",
+        "jp": "SV4M-79",
+        "special": true
+      },
+      {
+        "code": "SV4M_088",
+        "reg": "G",
+        "jp": "SV4M-88",
+        "special": true,
+        "d": 25
+      },
+      {
+        "code": "SV8a_210",
+        "reg": "G",
+        "jp": "SV8a-210",
+        "special": true,
+        "d": 27
+      }
+    ],
+    "SV8_033": [
+      {
+        "code": "M2a_044",
+        "reg": "H",
+        "jp": "M2a-44",
+        "special": false,
+        "d": 28
+      },
+      {
+        "code": "SV8_033",
+        "reg": "H",
+        "jp": "SV8-33",
+        "special": false
+      },
+      {
+        "code": "M2a_234",
+        "reg": "H",
+        "jp": "M2a-234",
+        "special": true,
+        "d": 25
+      },
+      {
+        "code": "SV8_122",
+        "reg": "H",
+        "jp": "SV8-122",
+        "special": true,
+        "d": 21
+      },
+      {
+        "code": "SV8_132",
+        "reg": "H",
+        "jp": "SV8-132",
+        "special": true,
+        "d": 27
+      },
+      {
+        "code": "SV8_136",
+        "reg": "H",
+        "jp": "SV8-136",
+        "special": true,
+        "d": 23
+      }
+    ],
+    "SV8_122": [
+      {
+        "code": "M2a_044",
+        "reg": "H",
+        "jp": "M2a-44",
+        "special": false,
+        "d": 28
+      },
+      {
+        "code": "SV8_033",
+        "reg": "H",
+        "jp": "SV8-33",
+        "special": false,
+        "d": 31
+      },
+      {
+        "code": "M2a_234",
+        "reg": "H",
+        "jp": "M2a-234",
+        "special": true,
+        "d": 25
+      },
+      {
+        "code": "SV8_122",
+        "reg": "H",
+        "jp": "SV8-122",
+        "special": true
+      },
+      {
+        "code": "SV8_132",
+        "reg": "H",
+        "jp": "SV8-132",
+        "special": true,
+        "d": 27
+      },
+      {
+        "code": "SV8_136",
+        "reg": "H",
+        "jp": "SV8-136",
+        "special": true,
+        "d": 23
+      }
+    ],
+    "SV5a_052": [
+      {
+        "code": "MC_625",
+        "reg": "H",
+        "jp": "MC-625",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SV5a_052",
+        "reg": "H",
+        "jp": "SV5a-52",
+        "special": false
+      },
+      {
+        "code": "SV8a_134",
+        "reg": "H",
+        "jp": "SV8a-134",
+        "special": false,
+        "d": 11
+      },
+      {
+        "code": "SV8a_225",
+        "reg": "H",
+        "jp": "SV8a-225",
+        "special": true,
+        "d": 16
+      }
+    ],
+    "SV2a_195": [
+      {
+        "code": "SV2a_151",
+        "reg": "G",
+        "jp": "SV2a-151",
+        "special": false,
+        "d": 24
+      },
+      {
+        "code": "SV4a_076",
+        "reg": "G",
+        "jp": "SV4a-76",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "SV2a_195",
+        "reg": "G",
+        "jp": "SV2a-195",
+        "special": true
+      },
+      {
+        "code": "SV2a_208",
+        "reg": "G",
+        "jp": "SV2a-208",
+        "special": true,
+        "d": 34
+      },
+      {
+        "code": "SV4a_327",
+        "reg": "G",
+        "jp": "SV4a-327",
+        "special": true,
+        "d": 23
+      }
+    ],
+    "M1L_080": [
+      {
+        "code": "M1L_046",
+        "reg": "I",
+        "jp": "M1L-46",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "M1L_080",
+        "reg": "I",
+        "jp": "M1L-80",
+        "special": true
+      }
+    ],
+    "MC_312": [
+      {
+        "code": "M2a_075",
+        "reg": "H",
+        "jp": "M2a-75",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "MC_312",
+        "reg": "H",
+        "jp": "MC-312",
+        "special": false
+      },
+      {
+        "code": "SV7a_019",
+        "reg": "H",
+        "jp": "SV7a-19",
+        "special": false,
+        "d": 16
+      }
+    ],
+    "MC_664": [
+      {
+        "code": "MC_664",
+        "reg": "I",
+        "jp": "MC-660",
+        "special": false
+      },
+      {
+        "code": "SV11B_081",
+        "reg": "I",
+        "jp": "SV11B-81",
+        "special": false,
+        "d": 18
+      }
+    ],
+    "SV5M_064": [
+      {
+        "code": "SV5M_064",
+        "reg": "H",
+        "jp": "SV5M-65",
+        "special": false
+      },
+      {
+        "code": "SV4M_062",
+        "reg": "G",
+        "jp": "SV4M-62",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "SV8a_159",
+        "reg": "G",
+        "jp": "SV8a-158",
+        "special": false,
+        "d": 18
+      }
+    ],
+    "MC_735": [
+      {
+        "code": "MC_735",
+        "reg": "H",
+        "jp": "MC-696",
+        "special": false
+      },
+      {
+        "code": "SV7_100",
+        "reg": "H",
+        "jp": "SV7-97",
+        "special": false,
+        "d": 8
+      },
+      {
+        "code": "SV7_126",
+        "reg": "H",
+        "jp": "SV7-123",
+        "special": true,
+        "d": 18
+      },
+      {
+        "code": "SV8a_232",
+        "reg": "H",
+        "jp": "SV8a-227",
+        "special": true,
+        "d": 22
+      }
+    ]
+  }
+}

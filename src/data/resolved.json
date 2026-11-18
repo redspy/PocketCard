@@ -1,0 +1,2708 @@
+{
+  "decks": [
+    {
+      "id": "flareon",
+      "name": "부스터 ex",
+      "note": "2026 코리안리그 시즌1 마스터 우승 (덱 코드 B2yr-pSTh-U1Do-eefS)",
+      "cards": [
+        {
+          "count": 4,
+          "nameEn": "부우부",
+          "ref": "ko:SV7_076"
+        },
+        {
+          "count": 4,
+          "nameEn": "야부엉",
+          "ref": "ko:SV7_114"
+        },
+        {
+          "count": 2,
+          "nameEn": "스핀로토무",
+          "ref": "ko:SV8a_131"
+        },
+        {
+          "count": 1,
+          "nameEn": "이브이",
+          "ref": "ko:SV8a_125"
+        },
+        {
+          "count": 1,
+          "nameEn": "이브이",
+          "ref": "ko:SV2a_133"
+        },
+        {
+          "count": 1,
+          "nameEn": "이브이 ex",
+          "ref": "ko:SV8a_224"
+        },
+        {
+          "count": 2,
+          "nameEn": "부스터 ex",
+          "ref": "ko:SV8a_202"
+        },
+        {
+          "count": 1,
+          "nameEn": "리피아 ex",
+          "ref": "ko:SV8a_200"
+        },
+        {
+          "count": 1,
+          "nameEn": "오거폰 우물의가면 ex",
+          "ref": "ko:SV6_127"
+        },
+        {
+          "count": 1,
+          "nameEn": "테라파고스 ex",
+          "ref": "ko:SV7_130"
+        },
+        {
+          "count": 1,
+          "nameEn": "기로치 ex",
+          "ref": "ko:SV6a_089"
+        },
+        {
+          "count": 1,
+          "nameEn": "뮤 ex",
+          "ref": "ko:SV4a_327"
+        },
+        {
+          "count": 4,
+          "nameEn": "네스트볼",
+          "ref": "ko:SV1S_069"
+        },
+        {
+          "count": 3,
+          "nameEn": "하이퍼볼",
+          "ref": "ko:MC_673"
+        },
+        {
+          "count": 2,
+          "nameEn": "절친 포핀",
+          "ref": "ko:M1S_083"
+        },
+        {
+          "count": 1,
+          "nameEn": "테라스탈오브",
+          "ref": "ko:SV8a_147"
+        },
+        {
+          "count": 2,
+          "nameEn": "카운터 캐처",
+          "ref": "ko:SV4M_059"
+        },
+        {
+          "count": 1,
+          "nameEn": "밤의 들것",
+          "ref": "ko:MC_643"
+        },
+        {
+          "count": 2,
+          "nameEn": "포켓몬 교체",
+          "ref": "ko:M6a_101"
+        },
+        {
+          "count": 1,
+          "nameEn": "유리나팔",
+          "ref": "ko:SV8a_144"
+        },
+        {
+          "count": 1,
+          "nameEn": "반짝이는 결정",
+          "ref": "ko:SV8a_157"
+        },
+        {
+          "count": 1,
+          "nameEn": "풍선",
+          "ref": "ko:MC_689"
+        },
+        {
+          "count": 3,
+          "nameEn": "하솔",
+          "ref": "ko:SV8a_179"
+        },
+        {
+          "count": 2,
+          "nameEn": "보스의 지령",
+          "ref": "ko:MC_709"
+        },
+        {
+          "count": 1,
+          "nameEn": "모야모",
+          "ref": "ko:SV2D_068"
+        },
+        {
+          "count": 1,
+          "nameEn": "시아노",
+          "ref": "ko:SV8_103"
+        },
+        {
+          "count": 1,
+          "nameEn": "투로박사의 시나리오",
+          "ref": "ko:SV4M_066"
+        },
+        {
+          "count": 1,
+          "nameEn": "카지",
+          "ref": "ko:SV6_097"
+        },
+        {
+          "count": 1,
+          "nameEn": "태권왕의 수련",
+          "ref": "ko:M2a_221"
+        },
+        {
+          "count": 1,
+          "nameEn": "브라이어",
+          "ref": "ko:SV8a_166"
+        },
+        {
+          "count": 2,
+          "nameEn": "제로의 대공동",
+          "ref": "ko:SV8a_183"
+        },
+        {
+          "count": 1,
+          "nameEn": "재밍타워",
+          "ref": "ko:SV6_099"
+        },
+        {
+          "count": 1,
+          "nameEn": "그래비티 마운틴",
+          "ref": "ko:SV8_105"
+        },
+        {
+          "count": 2,
+          "nameEn": "기본 불꽃 에너지",
+          "ref": "ko:SV3_141"
+        },
+        {
+          "count": 2,
+          "nameEn": "기본 물 에너지",
+          "ref": "ko:SV2P_099"
+        },
+        {
+          "count": 2,
+          "nameEn": "기본 번개 에너지",
+          "ref": "ko:SV1V_108"
+        },
+        {
+          "count": 1,
+          "nameEn": "기본 풀 에너지",
+          "ref": "ko:SV2D_099"
+        }
+      ]
+    },
+    {
+      "id": "charizard",
+      "name": "리자몽 ex",
+      "note": "2026 코리안리그 시즌2 마스터 우승 (덱 코드 Hxf6-RWG3-3kCe-4H68)",
+      "cards": [
+        {
+          "count": 1,
+          "nameEn": "파이리",
+          "ref": "ko:M2_011"
+        },
+        {
+          "count": 2,
+          "nameEn": "파이리",
+          "ref": "ko:SV2a_168"
+        },
+        {
+          "count": 1,
+          "nameEn": "리자드",
+          "ref": "ko:M2_012"
+        },
+        {
+          "count": 1,
+          "nameEn": "리자몽 ex",
+          "ref": "ko:SV3_134"
+        },
+        {
+          "count": 1,
+          "nameEn": "리자몽 ex",
+          "ref": "ko:SV4a_349"
+        },
+        {
+          "count": 2,
+          "nameEn": "구구",
+          "ref": "ko:SV3_118"
+        },
+        {
+          "count": 1,
+          "nameEn": "피죤",
+          "ref": "ko:SV3_119"
+        },
+        {
+          "count": 2,
+          "nameEn": "피죤투 ex",
+          "ref": "ko:SV3_136"
+        },
+        {
+          "count": 3,
+          "nameEn": "부우부",
+          "ref": "ko:SV7_076"
+        },
+        {
+          "count": 3,
+          "nameEn": "야부엉",
+          "ref": "ko:SV7_114"
+        },
+        {
+          "count": 2,
+          "nameEn": "해골몽",
+          "ref": "ko:SV6a_068"
+        },
+        {
+          "count": 1,
+          "nameEn": "미라몽",
+          "ref": "ko:SV6a_069"
+        },
+        {
+          "count": 1,
+          "nameEn": "야느와르몽",
+          "ref": "ko:SV6a_070"
+        },
+        {
+          "count": 1,
+          "nameEn": "스핀로토무",
+          "ref": "ko:SV8a_131"
+        },
+        {
+          "count": 1,
+          "nameEn": "테라파고스 ex",
+          "ref": "ko:SV8a_226"
+        },
+        {
+          "count": 1,
+          "nameEn": "테라파고스 ex",
+          "ref": "ko:SV7_130"
+        },
+        {
+          "count": 1,
+          "nameEn": "기로치 ex",
+          "ref": "ko:SV6a_089"
+        },
+        {
+          "count": 1,
+          "nameEn": "클레피",
+          "ref": "ko:SV4a_087"
+        },
+        {
+          "count": 4,
+          "nameEn": "절친 포핀",
+          "ref": "ko:M1S_083"
+        },
+        {
+          "count": 4,
+          "nameEn": "네스트볼",
+          "ref": "ko:SV1S_069"
+        },
+        {
+          "count": 1,
+          "nameEn": "하이퍼볼",
+          "ref": "ko:MC_673"
+        },
+        {
+          "count": 4,
+          "nameEn": "이상한사탕",
+          "ref": "ko:MC_656"
+        },
+        {
+          "count": 1,
+          "nameEn": "대단한낚싯대",
+          "ref": "ko:SV2P_066"
+        },
+        {
+          "count": 1,
+          "nameEn": "밤의 들것",
+          "ref": "ko:MC_643"
+        },
+        {
+          "count": 1,
+          "nameEn": "프라임 캐처",
+          "ref": "ko:MC_670"
+        },
+        {
+          "count": 4,
+          "nameEn": "빛나",
+          "ref": "ko:M2_078"
+        },
+        {
+          "count": 2,
+          "nameEn": "모야모",
+          "ref": "ko:SV2D_068"
+        },
+        {
+          "count": 2,
+          "nameEn": "보스의 지령",
+          "ref": "ko:MC_709"
+        },
+        {
+          "count": 1,
+          "nameEn": "브라이어",
+          "ref": "ko:SV8a_166"
+        },
+        {
+          "count": 2,
+          "nameEn": "제로의 대공동",
+          "ref": "ko:SV8a_183"
+        },
+        {
+          "count": 5,
+          "nameEn": "기본 불꽃 에너지",
+          "ref": "ko:SV3_141"
+        },
+        {
+          "count": 2,
+          "nameEn": "제트 에너지",
+          "ref": "ko:SV1a_073"
+        }
+      ]
+    },
+    {
+      "id": "gholdengo",
+      "name": "타부자고 ex",
+      "note": "2026 코리안리그 시즌2 시니어 우승 (덱 코드 KEeS-EVmb-anDO-zl0P)",
+      "cards": [
+        {
+          "count": 4,
+          "nameEn": "모으령",
+          "ref": "ko:SV7a_024"
+        },
+        {
+          "count": 3,
+          "nameEn": "타부자고 ex",
+          "ref": "ko:SV3a_050"
+        },
+        {
+          "count": 3,
+          "nameEn": "솔록",
+          "ref": "ko:M1L_027"
+        },
+        {
+          "count": 2,
+          "nameEn": "루나톤",
+          "ref": "ko:M1L_026"
+        },
+        {
+          "count": 1,
+          "nameEn": "기로치 ex",
+          "ref": "ko:SV8a_104"
+        },
+        {
+          "count": 1,
+          "nameEn": "게노세크트 ex",
+          "ref": "ko:SV11B_069"
+        },
+        {
+          "count": 1,
+          "nameEn": "이야후",
+          "ref": "ko:SV8a_075"
+        },
+        {
+          "count": 4,
+          "nameEn": "파이팅공",
+          "ref": "ko:M1L_060"
+        },
+        {
+          "count": 3,
+          "nameEn": "네스트볼",
+          "ref": "ko:SV1S_069"
+        },
+        {
+          "count": 1,
+          "nameEn": "절친 포핀",
+          "ref": "ko:M1S_083"
+        },
+        {
+          "count": 3,
+          "nameEn": "대지의 그릇",
+          "ref": "ko:SV6a_093"
+        },
+        {
+          "count": 4,
+          "nameEn": "수퍼 에너지 회수",
+          "ref": "ko:SV1a_064"
+        },
+        {
+          "count": 2,
+          "nameEn": "풍선",
+          "ref": "ko:MC_689"
+        },
+        {
+          "count": 1,
+          "nameEn": "오기머리띠",
+          "ref": "ko:SV1S_072"
+        },
+        {
+          "count": 1,
+          "nameEn": "용기의부적",
+          "ref": "ko:SV2D_067"
+        },
+        {
+          "count": 1,
+          "nameEn": "프라임 캐처",
+          "ref": "ko:MC_670"
+        },
+        {
+          "count": 4,
+          "nameEn": "페퍼",
+          "ref": "ko:SV1V_077"
+        },
+        {
+          "count": 3,
+          "nameEn": "보스의 지령",
+          "ref": "ko:MC_709"
+        },
+        {
+          "count": 2,
+          "nameEn": "암호마니아의 해독",
+          "ref": "ko:SV5M_069"
+        },
+        {
+          "count": 2,
+          "nameEn": "투로박사의 시나리오",
+          "ref": "ko:SV4M_066"
+        },
+        {
+          "count": 1,
+          "nameEn": "수련의 돌봄",
+          "ref": "ko:SV8a_167"
+        },
+        {
+          "count": 2,
+          "nameEn": "보물마을",
+          "ref": "ko:SV1a_071"
+        },
+        {
+          "count": 3,
+          "nameEn": "기본 강철 에너지",
+          "ref": "ko:SV4M_095"
+        },
+        {
+          "count": 7,
+          "nameEn": "기본 격투 에너지",
+          "ref": "ko:SV1S_108"
+        },
+        {
+          "count": 1,
+          "nameEn": "기본 악 에너지",
+          "ref": "ko:SV4K_095"
+        }
+      ]
+    },
+    {
+      "id": "dragapult",
+      "name": "드래펄트 ex",
+      "note": "2026 코리안리그 시즌1 시니어 우승 (덱 코드 gPDw-ki7S-nSTc-dRC4)",
+      "cards": [
+        {
+          "count": 4,
+          "nameEn": "드라꼰",
+          "ref": "ko:SV8a_118"
+        },
+        {
+          "count": 4,
+          "nameEn": "드래런치",
+          "ref": "ko:SV8a_119"
+        },
+        {
+          "count": 3,
+          "nameEn": "드래펄트 ex",
+          "ref": "ko:SV6_120"
+        },
+        {
+          "count": 2,
+          "nameEn": "해골몽",
+          "ref": "ko:SV8a_064"
+        },
+        {
+          "count": 2,
+          "nameEn": "미라몽",
+          "ref": "ko:SV8a_065"
+        },
+        {
+          "count": 1,
+          "nameEn": "야느와르몽",
+          "ref": "ko:SV8a_066"
+        },
+        {
+          "count": 2,
+          "nameEn": "꼬몽울",
+          "ref": "ko:SV8a_001"
+        },
+        {
+          "count": 1,
+          "nameEn": "이야후",
+          "ref": "ko:SV8a_075"
+        },
+        {
+          "count": 1,
+          "nameEn": "루차불",
+          "ref": "ko:SV8a_084"
+        },
+        {
+          "count": 1,
+          "nameEn": "다투곰 붉은 달 ex",
+          "ref": "ko:SV8a_225"
+        },
+        {
+          "count": 1,
+          "nameEn": "라티아스 ex",
+          "ref": "ko:SV7a_019"
+        },
+        {
+          "count": 1,
+          "nameEn": "기로치 ex",
+          "ref": "ko:SV6a_089"
+        },
+        {
+          "count": 4,
+          "nameEn": "하이퍼볼",
+          "ref": "ko:MC_673"
+        },
+        {
+          "count": 4,
+          "nameEn": "절친 포핀",
+          "ref": "ko:M1S_083"
+        },
+        {
+          "count": 3,
+          "nameEn": "밤의 들것",
+          "ref": "ko:MC_643"
+        },
+        {
+          "count": 3,
+          "nameEn": "카운터 캐처",
+          "ref": "ko:SV4M_059"
+        },
+        {
+          "count": 1,
+          "nameEn": "이상한사탕",
+          "ref": "ko:MC_656"
+        },
+        {
+          "count": 4,
+          "nameEn": "릴리에의 결심",
+          "ref": "ko:MC_706"
+        },
+        {
+          "count": 4,
+          "nameEn": "모야모",
+          "ref": "ko:SV2D_068"
+        },
+        {
+          "count": 2,
+          "nameEn": "보스의 지령",
+          "ref": "ko:MC_709"
+        },
+        {
+          "count": 2,
+          "nameEn": "투희",
+          "ref": "ko:SV11W_085"
+        },
+        {
+          "count": 1,
+          "nameEn": "투로박사의 시나리오",
+          "ref": "ko:SV4M_066"
+        },
+        {
+          "count": 2,
+          "nameEn": "재밍타워",
+          "ref": "ko:SV6_099"
+        },
+        {
+          "count": 2,
+          "nameEn": "기본 초 에너지",
+          "ref": "ko:SV2a_210"
+        },
+        {
+          "count": 1,
+          "nameEn": "기본 불꽃 에너지",
+          "ref": "ko:SV3_141"
+        },
+        {
+          "count": 1,
+          "nameEn": "네오 어퍼 에너지",
+          "ref": "ko:SV5K_071"
+        },
+        {
+          "count": 3,
+          "nameEn": "루미너스 에너지",
+          "ref": "ko:SV4a_188"
+        }
+      ]
+    },
+    {
+      "id": "gardevoir",
+      "name": "가디안 ex",
+      "note": "2026 코리안리그 시즌3 마스터 우승 (덱 코드 vqvQ-LtHf-zBuI-kt8B)",
+      "cards": [
+        {
+          "count": 1,
+          "nameEn": "꼬몽울",
+          "ref": "ko:SV8a_001"
+        },
+        {
+          "count": 3,
+          "nameEn": "랄토스",
+          "ref": "ko:M1S_040"
+        },
+        {
+          "count": 2,
+          "nameEn": "킬리아",
+          "ref": "ko:M1S_041"
+        },
+        {
+          "count": 2,
+          "nameEn": "가디안 ex",
+          "ref": "ko:SV1S_028"
+        },
+        {
+          "count": 3,
+          "nameEn": "이야후",
+          "ref": "ko:SV6_055"
+        },
+        {
+          "count": 1,
+          "nameEn": "탱그릴",
+          "ref": "ko:SV11W_041"
+        },
+        {
+          "count": 1,
+          "nameEn": "우렁찬꼬리",
+          "ref": "ko:SV4K_032"
+        },
+        {
+          "count": 1,
+          "nameEn": "메가디안시 ex",
+          "ref": "ko:M2a_227"
+        },
+        {
+          "count": 1,
+          "nameEn": "뮤 ex",
+          "ref": "ko:SV2a_151"
+        },
+        {
+          "count": 1,
+          "nameEn": "릴리에의 삐삐 ex",
+          "ref": "ko:SV9_033"
+        },
+        {
+          "count": 1,
+          "nameEn": "기로치 ex",
+          "ref": "ko:SV6a_038"
+        },
+        {
+          "count": 2,
+          "nameEn": "용기의부적",
+          "ref": "ko:SV2D_067"
+        },
+        {
+          "count": 1,
+          "nameEn": "기술머신 에볼루션",
+          "ref": "ko:SV4M_061"
+        },
+        {
+          "count": 1,
+          "nameEn": "시크릿박스",
+          "ref": "ko:SV6_092"
+        },
+        {
+          "count": 4,
+          "nameEn": "하이퍼볼",
+          "ref": "ko:MC_673"
+        },
+        {
+          "count": 2,
+          "nameEn": "네스트볼",
+          "ref": "ko:SV1S_069"
+        },
+        {
+          "count": 3,
+          "nameEn": "대지의 그릇",
+          "ref": "ko:SV6a_093"
+        },
+        {
+          "count": 3,
+          "nameEn": "이상한사탕",
+          "ref": "ko:MC_656"
+        },
+        {
+          "count": 2,
+          "nameEn": "밤의 들것",
+          "ref": "ko:MC_643"
+        },
+        {
+          "count": 1,
+          "nameEn": "대단한낚싯대",
+          "ref": "ko:SV2P_066"
+        },
+        {
+          "count": 1,
+          "nameEn": "카운터 캐처",
+          "ref": "ko:SV4M_059"
+        },
+        {
+          "count": 4,
+          "nameEn": "모야모",
+          "ref": "ko:SV2D_068"
+        },
+        {
+          "count": 4,
+          "nameEn": "릴리에의 결심",
+          "ref": "ko:MC_706"
+        },
+        {
+          "count": 1,
+          "nameEn": "페퍼",
+          "ref": "ko:SV1V_077"
+        },
+        {
+          "count": 1,
+          "nameEn": "투로박사의 시나리오",
+          "ref": "ko:SV4M_066"
+        },
+        {
+          "count": 2,
+          "nameEn": "보물마을",
+          "ref": "ko:SV1a_071"
+        },
+        {
+          "count": 8,
+          "nameEn": "기본 초 에너지",
+          "ref": "ko:SV2a_210"
+        },
+        {
+          "count": 3,
+          "nameEn": "기본 악 에너지",
+          "ref": "ko:SV4K_095"
+        }
+      ]
+    },
+    {
+      "id": "pachirisu",
+      "name": "파쪼옥",
+      "note": "2026 코리안리그 시즌3 시니어 우승 (덱 코드 L19C-IPqM-aQOr-P4Pd)",
+      "cards": [
+        {
+          "count": 2,
+          "nameEn": "파쪼옥",
+          "ref": "ko:SV7_032"
+        },
+        {
+          "count": 1,
+          "nameEn": "전툴라",
+          "ref": "ko:SV6a_002"
+        },
+        {
+          "count": 1,
+          "nameEn": "미라이돈 ex",
+          "ref": "ko:SV1V_037"
+        },
+        {
+          "count": 1,
+          "nameEn": "미라이돈 ex",
+          "ref": "ko:SV1V_094"
+        },
+        {
+          "count": 1,
+          "nameEn": "무쇠손 ex",
+          "ref": "ko:SV4M_027"
+        },
+        {
+          "count": 1,
+          "nameEn": "무쇠손 ex",
+          "ref": "ko:SV4M_079"
+        },
+        {
+          "count": 1,
+          "nameEn": "피카츄 ex",
+          "ref": "ko:SV8_033"
+        },
+        {
+          "count": 1,
+          "nameEn": "피카츄 ex",
+          "ref": "ko:SV8_122"
+        },
+        {
+          "count": 1,
+          "nameEn": "기로치 ex",
+          "ref": "ko:SV8a_104"
+        },
+        {
+          "count": 1,
+          "nameEn": "다투곰 붉은 달 ex",
+          "ref": "ko:SV5a_052"
+        },
+        {
+          "count": 1,
+          "nameEn": "무쇠잎새 ex",
+          "ref": "ko:SV5M_084"
+        },
+        {
+          "count": 1,
+          "nameEn": "뮤 ex",
+          "ref": "ko:SV2a_195"
+        },
+        {
+          "count": 1,
+          "nameEn": "메가입치트 ex",
+          "ref": "ko:M1L_080"
+        },
+        {
+          "count": 1,
+          "nameEn": "게노세크트",
+          "ref": "ko:SV6a_040"
+        },
+        {
+          "count": 1,
+          "nameEn": "라티아스 ex",
+          "ref": "ko:MC_312"
+        },
+        {
+          "count": 4,
+          "nameEn": "네스트볼",
+          "ref": "ko:SV1S_069"
+        },
+        {
+          "count": 4,
+          "nameEn": "하이퍼볼",
+          "ref": "ko:MC_673"
+        },
+        {
+          "count": 3,
+          "nameEn": "포켓기어3.0",
+          "ref": "ko:MC_664"
+        },
+        {
+          "count": 1,
+          "nameEn": "에너지 갈아 달기",
+          "ref": "ko:MC_649"
+        },
+        {
+          "count": 1,
+          "nameEn": "대지의 그릇",
+          "ref": "ko:SV6a_093"
+        },
+        {
+          "count": 1,
+          "nameEn": "풍선",
+          "ref": "ko:MC_689"
+        },
+        {
+          "count": 1,
+          "nameEn": "용기의부적",
+          "ref": "ko:SV2D_067"
+        },
+        {
+          "count": 1,
+          "nameEn": "학습장치",
+          "ref": "ko:SV1S_073"
+        },
+        {
+          "count": 1,
+          "nameEn": "부스트에너지 미래",
+          "ref": "ko:SV5M_064"
+        },
+        {
+          "count": 1,
+          "nameEn": "프라임 캐처",
+          "ref": "ko:MC_670"
+        },
+        {
+          "count": 4,
+          "nameEn": "하솔",
+          "ref": "ko:MC_735"
+        },
+        {
+          "count": 4,
+          "nameEn": "페퍼",
+          "ref": "ko:SV1V_077"
+        },
+        {
+          "count": 4,
+          "nameEn": "보스의 지령",
+          "ref": "ko:MC_709"
+        },
+        {
+          "count": 5,
+          "nameEn": "기본 번개 에너지",
+          "ref": "ko:SV1V_108"
+        },
+        {
+          "count": 5,
+          "nameEn": "기본 풀 에너지",
+          "ref": "ko:SV2D_099"
+        },
+        {
+          "count": 4,
+          "nameEn": "기본 강철 에너지",
+          "ref": "ko:SV4M_095"
+        }
+      ]
+    },
+    {
+      "id": "dragapult_gdansk",
+      "name": "드래펄트 ex (국제)",
+      "note": "Regional Gdańsk 2026-10-31 3위",
+      "cards": [
+        {
+          "count": 4,
+          "nameEn": "Dreepy",
+          "ref": "TWM-128"
+        },
+        {
+          "count": 4,
+          "nameEn": "Drakloak",
+          "ref": "TWM-129"
+        },
+        {
+          "count": 3,
+          "nameEn": "Dragapult ex",
+          "ref": "TWM-130"
+        },
+        {
+          "count": 2,
+          "nameEn": "Munkidori",
+          "ref": "TWM-95"
+        },
+        {
+          "count": 2,
+          "nameEn": "Budew",
+          "ref": "ASC-16"
+        },
+        {
+          "count": 1,
+          "nameEn": "Dunsparce",
+          "ref": "TEF-128"
+        },
+        {
+          "count": 1,
+          "nameEn": "Dudunsparce",
+          "ref": "TEF-129"
+        },
+        {
+          "count": 1,
+          "nameEn": "Meowth ex",
+          "ref": "POR-62"
+        },
+        {
+          "count": 1,
+          "nameEn": "Fezandipiti ex",
+          "ref": "ASC-142"
+        },
+        {
+          "count": 4,
+          "nameEn": "Lillie's Determination",
+          "ref": "MEG-119"
+        },
+        {
+          "count": 3,
+          "nameEn": "Boss's Orders",
+          "ref": "MEG-114"
+        },
+        {
+          "count": 2,
+          "nameEn": "Crispin",
+          "ref": "SCR-133"
+        },
+        {
+          "count": 1,
+          "nameEn": "Rosa's Encouragement",
+          "ref": "POR-84"
+        },
+        {
+          "count": 1,
+          "nameEn": "Judge",
+          "ref": "POR-76"
+        },
+        {
+          "count": 4,
+          "nameEn": "Buddy-Buddy Poffin",
+          "ref": "TEF-144"
+        },
+        {
+          "count": 4,
+          "nameEn": "Poké Pad",
+          "ref": "POR-81"
+        },
+        {
+          "count": 4,
+          "nameEn": "Crushing Hammer",
+          "ref": "POR-71"
+        },
+        {
+          "count": 3,
+          "nameEn": "Ultra Ball",
+          "ref": "MEG-131"
+        },
+        {
+          "count": 3,
+          "nameEn": "Night Stretcher",
+          "ref": "ASC-196"
+        },
+        {
+          "count": 1,
+          "nameEn": "Unfair Stamp",
+          "ref": "TWM-165"
+        },
+        {
+          "count": 2,
+          "nameEn": "Risky Ruins",
+          "ref": "MEG-127"
+        },
+        {
+          "count": 3,
+          "nameEn": "Fire Energy",
+          "ref": "MEE-10"
+        },
+        {
+          "count": 3,
+          "nameEn": "Psychic Energy",
+          "ref": "MEE-13"
+        },
+        {
+          "count": 3,
+          "nameEn": "Darkness Energy",
+          "ref": "MEE-15"
+        }
+      ]
+    },
+    {
+      "id": "crustle",
+      "name": "암팰리스",
+      "note": "Regional Gdańsk 2026-10-31 4위",
+      "cards": [
+        {
+          "count": 4,
+          "nameEn": "Mega Kangaskhan ex",
+          "ref": "MEG-104"
+        },
+        {
+          "count": 3,
+          "nameEn": "Dwebble",
+          "ref": "DRI-11"
+        },
+        {
+          "count": 3,
+          "nameEn": "Crustle",
+          "ref": "DRI-12"
+        },
+        {
+          "count": 4,
+          "nameEn": "Boss's Orders",
+          "ref": "MEG-114"
+        },
+        {
+          "count": 4,
+          "nameEn": "Team Rocket's Petrel",
+          "ref": "DRI-176"
+        },
+        {
+          "count": 3,
+          "nameEn": "Lillie's Determination",
+          "ref": "MEG-119"
+        },
+        {
+          "count": 3,
+          "nameEn": "Crispin",
+          "ref": "SCR-133"
+        },
+        {
+          "count": 2,
+          "nameEn": "Eri",
+          "ref": "TEF-146"
+        },
+        {
+          "count": 2,
+          "nameEn": "Hilda",
+          "ref": "WHT-84"
+        },
+        {
+          "count": 1,
+          "nameEn": "Xerosic's Machinations",
+          "ref": "SFA-64"
+        },
+        {
+          "count": 1,
+          "nameEn": "Pokémon Center Lady",
+          "ref": "MEG-123"
+        },
+        {
+          "count": 4,
+          "nameEn": "Jumbo Ice Cream",
+          "ref": "PFL-91"
+        },
+        {
+          "count": 3,
+          "nameEn": "Pokégear 3.0",
+          "ref": "SVI-186"
+        },
+        {
+          "count": 2,
+          "nameEn": "Buddy-Buddy Poffin",
+          "ref": "TEF-144"
+        },
+        {
+          "count": 1,
+          "nameEn": "Switch",
+          "ref": "MEG-130"
+        },
+        {
+          "count": 1,
+          "nameEn": "Ultra Ball",
+          "ref": "MEG-131"
+        },
+        {
+          "count": 1,
+          "nameEn": "Hero's Cape",
+          "ref": "TEF-152"
+        },
+        {
+          "count": 1,
+          "nameEn": "Lumiose City",
+          "ref": "POR-77"
+        },
+        {
+          "count": 1,
+          "nameEn": "Festival Grounds",
+          "ref": "TWM-149"
+        },
+        {
+          "count": 1,
+          "nameEn": "Prism Tower",
+          "ref": "CRI-80"
+        },
+        {
+          "count": 4,
+          "nameEn": "Mist Energy",
+          "ref": "TEF-161"
+        },
+        {
+          "count": 4,
+          "nameEn": "Growing Grass Energy",
+          "ref": "POR-86"
+        },
+        {
+          "count": 2,
+          "nameEn": "Spiky Energy",
+          "ref": "JTG-159"
+        },
+        {
+          "count": 1,
+          "nameEn": "Psychic Energy",
+          "ref": "MEE-13"
+        },
+        {
+          "count": 1,
+          "nameEn": "Darkness Energy",
+          "ref": "MEE-15"
+        },
+        {
+          "count": 1,
+          "nameEn": "Fighting Energy",
+          "ref": "MEE-14"
+        },
+        {
+          "count": 1,
+          "nameEn": "Fire Energy",
+          "ref": "MEE-10"
+        },
+        {
+          "count": 1,
+          "nameEn": "Grass Energy",
+          "ref": "MEE-9"
+        }
+      ]
+    }
+  ],
+  "cards": {
+    "ko:SV7_076": {
+      "nameEn": "부우부",
+      "ko": "SV7_076",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV7_114": {
+      "nameEn": "야부엉",
+      "ko": "SV7_114",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_131": {
+      "nameEn": "스핀로토무",
+      "ko": "SV8a_131",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_125": {
+      "nameEn": "이브이",
+      "ko": "SV8a_125",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV2a_133": {
+      "nameEn": "이브이",
+      "ko": "SV2a_133",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_224": {
+      "nameEn": "이브이 ex",
+      "ko": "SV8a_224",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_202": {
+      "nameEn": "부스터 ex",
+      "ko": "SV8a_202",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_200": {
+      "nameEn": "리피아 ex",
+      "ko": "SV8a_200",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV6_127": {
+      "nameEn": "오거폰 우물의가면 ex",
+      "ko": "SV6_127",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV7_130": {
+      "nameEn": "테라파고스 ex",
+      "ko": "SV7_130",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV6a_089": {
+      "nameEn": "기로치 ex",
+      "ko": "SV6a_089",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV4a_327": {
+      "nameEn": "뮤 ex",
+      "ko": "SV4a_327",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1S_069": {
+      "nameEn": "네스트볼",
+      "ko": "SV1S_069",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:MC_673": {
+      "nameEn": "하이퍼볼",
+      "ko": "MC_673",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:M1S_083": {
+      "nameEn": "절친 포핀",
+      "ko": "M1S_083",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_147": {
+      "nameEn": "테라스탈오브",
+      "ko": "SV8a_147",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV4M_059": {
+      "nameEn": "카운터 캐처",
+      "ko": "SV4M_059",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:MC_643": {
+      "nameEn": "밤의 들것",
+      "ko": "MC_643",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:M6a_101": {
+      "nameEn": "포켓몬 교체",
+      "ko": "M6a_101",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_144": {
+      "nameEn": "유리나팔",
+      "ko": "SV8a_144",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_157": {
+      "nameEn": "반짝이는 결정",
+      "ko": "SV8a_157",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:MC_689": {
+      "nameEn": "풍선",
+      "ko": "MC_689",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_179": {
+      "nameEn": "하솔",
+      "ko": "SV8a_179",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:MC_709": {
+      "nameEn": "보스의 지령",
+      "ko": "MC_709",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV2D_068": {
+      "nameEn": "모야모",
+      "ko": "SV2D_068",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8_103": {
+      "nameEn": "시아노",
+      "ko": "SV8_103",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV4M_066": {
+      "nameEn": "투로박사의 시나리오",
+      "ko": "SV4M_066",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV6_097": {
+      "nameEn": "카지",
+      "ko": "SV6_097",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:M2a_221": {
+      "nameEn": "태권왕의 수련",
+      "ko": "M2a_221",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_166": {
+      "nameEn": "브라이어",
+      "ko": "SV8a_166",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_183": {
+      "nameEn": "제로의 대공동",
+      "ko": "SV8a_183",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV6_099": {
+      "nameEn": "재밍타워",
+      "ko": "SV6_099",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8_105": {
+      "nameEn": "그래비티 마운틴",
+      "ko": "SV8_105",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV3_141": {
+      "nameEn": "기본 불꽃 에너지",
+      "ko": "SV3_141",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV2P_099": {
+      "nameEn": "기본 물 에너지",
+      "ko": "SV2P_099",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1V_108": {
+      "nameEn": "기본 번개 에너지",
+      "ko": "SV1V_108",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV2D_099": {
+      "nameEn": "기본 풀 에너지",
+      "ko": "SV2D_099",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:M2_011": {
+      "nameEn": "파이리",
+      "ko": "M2_011",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV2a_168": {
+      "nameEn": "파이리",
+      "ko": "SV2a_168",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:M2_012": {
+      "nameEn": "리자드",
+      "ko": "M2_012",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV3_134": {
+      "nameEn": "리자몽 ex",
+      "ko": "SV3_134",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV4a_349": {
+      "nameEn": "리자몽 ex",
+      "ko": "SV4a_349",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV3_118": {
+      "nameEn": "구구",
+      "ko": "SV3_118",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV3_119": {
+      "nameEn": "피죤",
+      "ko": "SV3_119",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV3_136": {
+      "nameEn": "피죤투 ex",
+      "ko": "SV3_136",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV6a_068": {
+      "nameEn": "해골몽",
+      "ko": "SV6a_068",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV6a_069": {
+      "nameEn": "미라몽",
+      "ko": "SV6a_069",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV6a_070": {
+      "nameEn": "야느와르몽",
+      "ko": "SV6a_070",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_226": {
+      "nameEn": "테라파고스 ex",
+      "ko": "SV8a_226",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV4a_087": {
+      "nameEn": "클레피",
+      "ko": "SV4a_087",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:MC_656": {
+      "nameEn": "이상한사탕",
+      "ko": "MC_656",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV2P_066": {
+      "nameEn": "대단한낚싯대",
+      "ko": "SV2P_066",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:MC_670": {
+      "nameEn": "프라임 캐처",
+      "ko": "MC_670",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:M2_078": {
+      "nameEn": "빛나",
+      "ko": "M2_078",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1a_073": {
+      "nameEn": "제트 에너지",
+      "ko": "SV1a_073",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV7a_024": {
+      "nameEn": "모으령",
+      "ko": "SV7a_024",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV3a_050": {
+      "nameEn": "타부자고 ex",
+      "ko": "SV3a_050",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:M1L_027": {
+      "nameEn": "솔록",
+      "ko": "M1L_027",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:M1L_026": {
+      "nameEn": "루나톤",
+      "ko": "M1L_026",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_104": {
+      "nameEn": "기로치 ex",
+      "ko": "SV8a_104",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV11B_069": {
+      "nameEn": "게노세크트 ex",
+      "ko": "SV11B_069",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_075": {
+      "nameEn": "이야후",
+      "ko": "SV8a_075",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:M1L_060": {
+      "nameEn": "파이팅공",
+      "ko": "M1L_060",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV6a_093": {
+      "nameEn": "대지의 그릇",
+      "ko": "SV6a_093",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1a_064": {
+      "nameEn": "수퍼 에너지 회수",
+      "ko": "SV1a_064",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1S_072": {
+      "nameEn": "오기머리띠",
+      "ko": "SV1S_072",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV2D_067": {
+      "nameEn": "용기의부적",
+      "ko": "SV2D_067",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1V_077": {
+      "nameEn": "페퍼",
+      "ko": "SV1V_077",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV5M_069": {
+      "nameEn": "암호마니아의 해독",
+      "ko": "SV5M_069",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_167": {
+      "nameEn": "수련의 돌봄",
+      "ko": "SV8a_167",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1a_071": {
+      "nameEn": "보물마을",
+      "ko": "SV1a_071",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV4M_095": {
+      "nameEn": "기본 강철 에너지",
+      "ko": "SV4M_095",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1S_108": {
+      "nameEn": "기본 격투 에너지",
+      "ko": "SV1S_108",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV4K_095": {
+      "nameEn": "기본 악 에너지",
+      "ko": "SV4K_095",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_118": {
+      "nameEn": "드라꼰",
+      "ko": "SV8a_118",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_119": {
+      "nameEn": "드래런치",
+      "ko": "SV8a_119",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV6_120": {
+      "nameEn": "드래펄트 ex",
+      "ko": "SV6_120",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_064": {
+      "nameEn": "해골몽",
+      "ko": "SV8a_064",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_065": {
+      "nameEn": "미라몽",
+      "ko": "SV8a_065",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_066": {
+      "nameEn": "야느와르몽",
+      "ko": "SV8a_066",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_001": {
+      "nameEn": "꼬몽울",
+      "ko": "SV8a_001",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_084": {
+      "nameEn": "루차불",
+      "ko": "SV8a_084",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8a_225": {
+      "nameEn": "다투곰 붉은 달 ex",
+      "ko": "SV8a_225",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV7a_019": {
+      "nameEn": "라티아스 ex",
+      "ko": "SV7a_019",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:MC_706": {
+      "nameEn": "릴리에의 결심",
+      "ko": "MC_706",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV11W_085": {
+      "nameEn": "투희",
+      "ko": "SV11W_085",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV2a_210": {
+      "nameEn": "기본 초 에너지",
+      "ko": "SV2a_210",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV5K_071": {
+      "nameEn": "네오 어퍼 에너지",
+      "ko": "SV5K_071",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV4a_188": {
+      "nameEn": "루미너스 에너지",
+      "ko": "SV4a_188",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:M1S_040": {
+      "nameEn": "랄토스",
+      "ko": "M1S_040",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:M1S_041": {
+      "nameEn": "킬리아",
+      "ko": "M1S_041",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1S_028": {
+      "nameEn": "가디안 ex",
+      "ko": "SV1S_028",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV6_055": {
+      "nameEn": "이야후",
+      "ko": "SV6_055",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV11W_041": {
+      "nameEn": "탱그릴",
+      "ko": "SV11W_041",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV4K_032": {
+      "nameEn": "우렁찬꼬리",
+      "ko": "SV4K_032",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:M2a_227": {
+      "nameEn": "메가디안시 ex",
+      "ko": "M2a_227",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV2a_151": {
+      "nameEn": "뮤 ex",
+      "ko": "SV2a_151",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV9_033": {
+      "nameEn": "릴리에의 삐삐 ex",
+      "ko": "SV9_033",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV6a_038": {
+      "nameEn": "기로치 ex",
+      "ko": "SV6a_038",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV4M_061": {
+      "nameEn": "기술머신 에볼루션",
+      "ko": "SV4M_061",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV6_092": {
+      "nameEn": "시크릿박스",
+      "ko": "SV6_092",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV7_032": {
+      "nameEn": "파쪼옥",
+      "ko": "SV7_032",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV6a_002": {
+      "nameEn": "전툴라",
+      "ko": "SV6a_002",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1V_037": {
+      "nameEn": "미라이돈 ex",
+      "ko": "SV1V_037",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1V_094": {
+      "nameEn": "미라이돈 ex",
+      "ko": "SV1V_094",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV4M_027": {
+      "nameEn": "무쇠손 ex",
+      "ko": "SV4M_027",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV4M_079": {
+      "nameEn": "무쇠손 ex",
+      "ko": "SV4M_079",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8_033": {
+      "nameEn": "피카츄 ex",
+      "ko": "SV8_033",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV8_122": {
+      "nameEn": "피카츄 ex",
+      "ko": "SV8_122",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV5a_052": {
+      "nameEn": "다투곰 붉은 달 ex",
+      "ko": "SV5a_052",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV5M_084": {
+      "nameEn": "무쇠잎새 ex",
+      "ko": "SV5M_084",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV2a_195": {
+      "nameEn": "뮤 ex",
+      "ko": "SV2a_195",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:M1L_080": {
+      "nameEn": "메가입치트 ex",
+      "ko": "M1L_080",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV6a_040": {
+      "nameEn": "게노세크트",
+      "ko": "SV6a_040",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:MC_312": {
+      "nameEn": "라티아스 ex",
+      "ko": "MC_312",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:MC_664": {
+      "nameEn": "포켓기어3.0",
+      "ko": "MC_664",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:MC_649": {
+      "nameEn": "에너지 갈아 달기",
+      "ko": "MC_649",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1S_073": {
+      "nameEn": "학습장치",
+      "ko": "SV1S_073",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV5M_064": {
+      "nameEn": "부스트에너지 미래",
+      "ko": "SV5M_064",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:MC_735": {
+      "nameEn": "하솔",
+      "ko": "MC_735",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "TWM-128": {
+      "nameEn": "Dreepy",
+      "ko": "SV6_079",
+      "score": 14,
+      "tried": [
+        "SV6_079:14"
+      ]
+    },
+    "TWM-129": {
+      "nameEn": "Drakloak",
+      "ko": "SV6_080",
+      "score": 23,
+      "tried": [
+        "SV6_080:23"
+      ]
+    },
+    "TWM-130": {
+      "nameEn": "Dragapult ex",
+      "ko": "SV6_081",
+      "score": 20,
+      "tried": [
+        "SV6_081:20"
+      ]
+    },
+    "TWM-95": {
+      "nameEn": "Munkidori",
+      "ko": "SV6_055",
+      "score": 16,
+      "tried": [
+        "SV6_055:16"
+      ]
+    },
+    "ASC-16": {
+      "nameEn": "Budew",
+      "ko": "SV8a_001",
+      "score": 21,
+      "tried": [
+        "SV8a_001:21"
+      ]
+    },
+    "TEF-128": {
+      "nameEn": "Dunsparce",
+      "ko": "SV5K_056",
+      "score": 14,
+      "tried": [
+        "SV5K_056:14"
+      ]
+    },
+    "TEF-129": {
+      "nameEn": "Dudunsparce",
+      "ko": "SV5K_057",
+      "score": 22,
+      "tried": [
+        "SV5K_057:22"
+      ]
+    },
+    "POR-62": {
+      "nameEn": "Meowth ex",
+      "ko": "M3_061",
+      "score": 17,
+      "tried": [
+        "M3_061:17"
+      ]
+    },
+    "ASC-142": {
+      "nameEn": "Fezandipiti ex",
+      "ko": "SV6a_038",
+      "score": 18,
+      "tried": [
+        "SV6a_038:18"
+      ]
+    },
+    "MEG-119": {
+      "nameEn": "Lillie's Determination",
+      "ko": "M1L_061",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "MEG-114": {
+      "nameEn": "Boss's Orders",
+      "ko": "SJ_026",
+      "score": 23,
+      "tried": [
+        "S2_092:132",
+        "S2_106:95",
+        "S4a_176:49",
+        "SEF_018:없음",
+        "SEK_017:없음",
+        "SF_020:없음",
+        "SGG_016:없음",
+        "SGI_019:없음",
+        "SH_051:없음",
+        "SJ_026:23"
+      ]
+    },
+    "SCR-133": {
+      "nameEn": "Crispin",
+      "ko": "SV7_100",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "POR-84": {
+      "nameEn": "Rosa's Encouragement",
+      "ko": "M3_115",
+      "score": 16,
+      "tried": [
+        "M3_075:133",
+        "M3_107:123",
+        "M3_115:16"
+      ]
+    },
+    "POR-76": {
+      "nameEn": "Judge",
+      "ko": "SV9a_063",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "TEF-144": {
+      "nameEn": "Buddy-Buddy Poffin",
+      "ko": "SV6_133",
+      "score": 17,
+      "tried": [
+        "SV5K_063:130",
+        "SV6_133:17"
+      ]
+    },
+    "POR-81": {
+      "nameEn": "Poké Pad",
+      "ko": "M6a_102",
+      "score": 17,
+      "tried": [
+        "MP1_015:없음",
+        "M3_070:142",
+        "M3_103:115",
+        "MEE_013:131",
+        "MEM_012:132",
+        "MEZ_013:131",
+        "M6a_102:17"
+      ]
+    },
+    "POR-71": {
+      "nameEn": "Crushing Hammer",
+      "ko": "MEZ_011",
+      "score": 20,
+      "tried": [
+        "MDB_027:없음",
+        "MGm_009:없음",
+        "SM1S_053:없음",
+        "SMA_040:없음",
+        "SMD_021:없음",
+        "SM5M_054:없음",
+        "SMH_108:없음",
+        "SMN_004:없음",
+        "SML_040:없음",
+        "SAr_012:없음",
+        "SAw_013:없음",
+        "SD_089:없음",
+        "SEK_012:없음",
+        "SH_041:없음",
+        "SI_372:104",
+        "SVAW_013:없음",
+        "SVD_116:135",
+        "SVI_051:없음",
+        "M5_104:120",
+        "MEZ_011:20"
+      ]
+    },
+    "MEG-131": {
+      "nameEn": "Ultra Ball",
+      "ko": "S9_089",
+      "score": 16,
+      "tried": [
+        "SZD_010:없음",
+        "MDB_030:없음",
+        "MMBp_028:없음",
+        "MMBs_030:없음",
+        "SMA_044:없음",
+        "SMB_002:없음",
+        "SM1p_045:없음",
+        "SMC_013:없음",
+        "SM3p_064:없음",
+        "SME_012:없음",
+        "SM5M_056:없음",
+        "SMF_003:없음",
+        "SMG_003:없음",
+        "SM6_079:없음",
+        "SM7_081:없음",
+        "SM7a_049:없음",
+        "SMH_111:없음",
+        "SM8_078:없음",
+        "SMI_025:없음",
+        "SM9_080:없음",
+        "SMJ_018:없음",
+        "SMK_018:없음",
+        "SM9b_051:없음",
+        "SM10_081:없음",
+        "SMN_008:없음",
+        "SMM_017:없음",
+        "SI_375:112",
+        "S9_089:16"
+      ]
+    },
+    "ASC-196": {
+      "nameEn": "Night Stretcher",
+      "ko": "SV8_137",
+      "score": 16,
+      "tried": [
+        "SV6a_056:132",
+        "SV8_137:16"
+      ]
+    },
+    "TWM-165": {
+      "nameEn": "Unfair Stamp",
+      "ko": "SV5a_055",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "MEG-127": {
+      "nameEn": "Risky Ruins",
+      "ko": "M1L_063",
+      "score": 22,
+      "tried": [
+        "M1L_063:22"
+      ]
+    },
+    "MEE-10": {
+      "nameEn": "Fire Energy",
+      "ko": "SV3_141",
+      "score": 23,
+      "tried": [
+        "SV3_141:23"
+      ]
+    },
+    "MEE-13": {
+      "nameEn": "Psychic Energy",
+      "ko": "SV2a_210",
+      "score": 21,
+      "tried": [
+        "SV2a_210:21"
+      ]
+    },
+    "MEE-15": {
+      "nameEn": "Darkness Energy",
+      "ko": "SV4K_095",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "MEG-104": {
+      "nameEn": "Mega Kangaskhan ex",
+      "ko": "M1S_051",
+      "score": 22,
+      "tried": [
+        "M1S_051:22"
+      ]
+    },
+    "DRI-11": {
+      "nameEn": "Dwebble",
+      "ko": "SV9a_007",
+      "score": 17,
+      "tried": [
+        "SV9a_007:17"
+      ]
+    },
+    "DRI-12": {
+      "nameEn": "Crustle",
+      "ko": "SV9a_008",
+      "score": 18,
+      "tried": [
+        "SV9a_008:18"
+      ]
+    },
+    "DRI-176": {
+      "nameEn": "Team Rocket's Petrel",
+      "ko": "SV10_091",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "TEF-146": {
+      "nameEn": "Eri",
+      "ko": "SV5K_096",
+      "score": 33,
+      "tried": [
+        "SV5K_068:118",
+        "SV5K_091:102",
+        "SV5K_096:33",
+        "SV8a_197:110"
+      ]
+    },
+    "WHT-84": {
+      "nameEn": "Hilda",
+      "ko": "SV11W_085",
+      "score": 13,
+      "tried": [
+        "SV11W_085:13"
+      ]
+    },
+    "SFA-64": {
+      "nameEn": "Xerosic's Machinations",
+      "ko": "SV6a_062",
+      "score": 14,
+      "tried": [
+        "SV6a_062:14"
+      ]
+    },
+    "MEG-123": {
+      "nameEn": "Pokémon Center Lady",
+      "ko": null,
+      "score": null,
+      "tried": [
+        "SMK_027:없음",
+        "SML_050:없음",
+        "SAf_022:없음",
+        "SAg_021:없음",
+        "SD_116:없음",
+        "SP_069:없음",
+        "SVP_239:없음",
+        "SVP_250:없음"
+      ]
+    },
+    "PFL-91": {
+      "nameEn": "Jumbo Ice Cream",
+      "ko": "M2_073",
+      "score": 11,
+      "tried": [
+        "M2_073:11"
+      ]
+    },
+    "SVI-186": {
+      "nameEn": "Pokégear 3.0",
+      "ko": "SV11B_081",
+      "score": 18,
+      "tried": [
+        "SM9a_045:없음",
+        "SM11_092:없음",
+        "SMM_019:없음",
+        "SM12a_129:없음",
+        "SM12a_130:없음",
+        "SAf_016:없음",
+        "SAg_015:없음",
+        "SAl_015:없음",
+        "SAr_016:없음",
+        "SAw_016:없음",
+        "SB_006:36",
+        "SCd_013:없음",
+        "SCr_013:없음",
+        "SD_096:없음",
+        "SC2_013:없음",
+        "SEF_014:없음",
+        "SEK_014:없음",
+        "SGG_011:없음",
+        "SGI_014:없음",
+        "SJ_021:120",
+        "SLD_014:없음",
+        "SVAL_015:없음",
+        "SVAM_017:없음",
+        "SVAW_016:없음",
+        "SVB_004:122",
+        "SVC_015:119",
+        "SVD_121:123",
+        "SVEL_014:124",
+        "SVEM_014:122",
+        "SV11B_081:18"
+      ]
+    },
+    "MEG-130": {
+      "nameEn": "Switch",
+      "ko": "S11a_061",
+      "score": 24,
+      "tried": [
+        "MGg_011:없음",
+        "MGm_011:없음",
+        "MMBp_032:없음",
+        "MMBs_034:없음",
+        "SM1M_056:없음",
+        "SMA_046:없음",
+        "SMC_015:없음",
+        "SMD_022:없음",
+        "SM3p_065:없음",
+        "SME_014:없음",
+        "SM6_081:없음",
+        "SM6b_059:없음",
+        "SM7_083:없음",
+        "SM7a_050:없음",
+        "SMH_113:없음",
+        "SM8_080:없음",
+        "SMI_027:없음",
+        "SMJ_022:없음",
+        "SMK_019:없음",
+        "SMN_012:없음",
+        "SML_043:없음",
+        "SMM_020:없음",
+        "SM11a_053:없음",
+        "SAf_017:없음",
+        "SAg_016:없음",
+        "SAl_016:없음",
+        "SAr_017:없음",
+        "SAw_017:없음",
+        "SB_007:28",
+        "SCd_014:없음",
+        "SCr_014:없음",
+        "S3a_065:137",
+        "SD_097:없음",
+        "SC2_014:없음",
+        "SEF_015:없음",
+        "SEK_015:없음",
+        "SF_014:없음",
+        "SGG_012:없음",
+        "SGI_015:없음",
+        "S7R_059:없음",
+        "SH_043:없음",
+        "SJ_022:25",
+        "SI_377:115",
+        "SK_018:없음",
+        "SLD_015:없음",
+        "SLL_014:없음",
+        "SN_017:25",
+        "SPD_011:없음",
+        "SPZ_010:없음",
+        "S11a_061:24"
+      ]
+    },
+    "TEF-152": {
+      "nameEn": "Hero's Cape",
+      "ko": "SV5M_066",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "POR-77": {
+      "nameEn": "Lumiose City",
+      "ko": "M3_077",
+      "score": 25,
+      "tried": [
+        "M3_077:25",
+        "M3_110:125"
+      ]
+    },
+    "TWM-149": {
+      "nameEn": "Festival Grounds",
+      "ko": "SV6_100",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "CRI-80": {
+      "nameEn": "Prism Tower",
+      "ko": "M4_113",
+      "score": 27,
+      "tried": [
+        "M4_080:32",
+        "M4_113:27"
+      ]
+    },
+    "TEF-161": {
+      "nameEn": "Mist Energy",
+      "ko": "SV5M_071",
+      "score": 10,
+      "tried": [
+        "SV5M_071:10"
+      ]
+    },
+    "POR-86": {
+      "nameEn": "Growing Grass Energy",
+      "ko": "M3_078",
+      "score": 13,
+      "tried": [
+        "M3_078:13"
+      ]
+    },
+    "JTG-159": {
+      "nameEn": "Spiky Energy",
+      "ko": "SV9_100",
+      "score": 13,
+      "tried": [
+        "SV9_100:13"
+      ]
+    },
+    "MEE-14": {
+      "nameEn": "Fighting Energy",
+      "ko": "SV1S_108",
+      "score": 19,
+      "tried": [
+        "SV1S_108:19"
+      ]
+    },
+    "MEE-9": {
+      "nameEn": "Grass Energy",
+      "ko": "SV2D_099",
+      "score": 28,
+      "tried": [
+        "SV2D_099:28",
+        "SMP_128:없음",
+        "SMP_170:없음",
+        "SMP_171:없음",
+        "SMP_182:없음",
+        "SMP_344:없음",
+        "SP_009:없음",
+        "SP_090:없음",
+        "SP_246:없음",
+        "MP_009:없음",
+        "MP_023:없음",
+        "MP_035:없음",
+        "MP_087:없음",
+        "MP_156:없음",
+        "SVP_037:없음",
+        "SVP_079:없음",
+        "SVP_100:없음",
+        "SVP_175:없음",
+        "SVP_202:없음",
+        "SVP_280:없음"
+      ]
+    }
+  }
+}

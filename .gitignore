@@ -1,0 +1,26 @@
+# 의존성·빌드 결과
+node_modules/
+dist/
+build/
+*.apk
+*.exe
+
+# 로컬 캐시·서버 저장 파일
+.cache/
+.data/
+
+# Godot 임시 파일
+godot/.godot/
+godot/android/
+
+# 카드 이미지 (용량이 크고 공식 카드 이미지라 저장소에 넣지 않음 — 로컬에서 생성·보관)
+godot/cards/
+public/**/*.png
+public/**/*.webp
+public/**/*.jpg
+*.lnk
+
+# 기타
+.DS_Store
+Thumbs.db
+*.log

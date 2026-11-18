@@ -1,0 +1,44 @@
+{
+  "name": "pocketcard",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:lan": "vite --host",
+    "server": "node server/main.ts",
+    "test": "node --test tests/game/*.test.ts tests/server/*.test.ts",
+    "selfplay": "node scripts/selfplay.ts",
+    "engine-compare": "node scripts/engine-compare.ts",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "fetch-set": "node scripts/fetch-set.mjs",
+    "resolve-ko": "node scripts/resolve-ko.mjs",
+    "import-ko": "node scripts/import-ko.mjs",
+    "export-godot": "node scripts/export-godot.mjs",
+    "godot-icons": "node scripts/make-godot-icons.mjs",
+    "app": "node scripts/build-app.mjs",
+    "app:win": "node scripts/build-app.mjs --win",
+    "render-guides": "node scripts/render-guides.mjs",
+    "upgrade-reg": "node scripts/upgrade-regulation.mjs",
+    "find-prints": "node scripts/find-prints.mjs",
+    "card-survey": "node scripts/card-rules-survey.mjs"
+  },
+  "dependencies": {
+    "framer-motion": "^11.11.17",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "ws": "^8.18.0",
+    "zustand": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/ws": "^8.5.13",
+    "@vitejs/plugin-react": "^4.3.4",
+    "sharp": "^0.33.5",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  }
+}

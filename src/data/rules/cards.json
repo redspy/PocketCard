@@ -1,0 +1,2983 @@
+{
+ "version": 1,
+ "generated": "2026-11-17T16:24:54.236Z",
+ "cards": {
+  "SV7_076": {
+   "id": "SV7_076",
+   "name": "부우부",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 70,
+    "type": "C",
+    "weak": "L",
+    "resist": "F",
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "세번찌르기",
+      "nameJa": "さんどづき",
+      "cost": [
+       "C"
+      ],
+      "damage": 10,
+      "op": "×",
+      "text": "コインを3回投げ、オモテの数×10ダメージ。"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV7_114": {
+   "id": "SV7_114",
+   "name": "야부엉",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "부우부",
+    "hp": 100,
+    "type": "C",
+    "weak": "L",
+    "resist": "F",
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "스피드윙",
+      "nameJa": "スピードウイング",
+      "cost": [
+       "C",
+       "C"
+      ],
+      "damage": 60,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": [
+     {
+      "name": "보석 찾기",
+      "nameJa": "ほうせきさがし",
+      "text": "自分の番に、このカードを手札から出して進化させたとき、自分の場に「テラスタル」のポケモンがいるなら、1回使える。自分の山札からトレーナーズを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。"
+     }
+    ]
+   }
+  },
+  "SV8a_131": {
+   "id": "SV8a_131",
+   "name": "스핀로토무",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 70,
+    "type": "C",
+    "weak": "L",
+    "resist": "F",
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "돌격랜딩",
+      "nameJa": "とつげきランディング",
+      "cost": [
+       "C"
+      ],
+      "damage": 70,
+      "op": "",
+      "text": "場にスタジアムが出ていないなら、このワザは失敗。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "팬 콜",
+      "nameJa": "ファンコール",
+      "text": "最初の自分の番にだけ1回使える。自分の山札から、HPが「100」以下のポケモンを3枚まで選び、相手に見せて、手札に加える。そして山札を切る。この番、すでに別の「ファンコール」を使っていたなら、この特性は使えない。"
+     }
+    ]
+   }
+  },
+  "SV8a_125": {
+   "id": "SV8a_125",
+   "name": "이브이",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 50,
+    "type": "C",
+    "weak": "F",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "돌격",
+      "nameJa": "とつげき",
+      "cost": [
+       "C",
+       "C"
+      ],
+      "damage": 30,
+      "op": "",
+      "text": "このポケモンにも10ダメージ。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "부스트 진화",
+      "nameJa": "ブーストしんか",
+      "text": "このポケモンは、バトル場にいるかぎり、最初の自分の番や、出したばかりの番でも進化できる。"
+     }
+    ]
+   }
+  },
+  "SV2a_133": {
+   "id": "SV2a_133",
+   "name": "이브이",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 70,
+    "type": "C",
+    "weak": "F",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "컬러풀프렌즈",
+      "nameJa": "カラフルフレンズ",
+      "cost": [
+       "C"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "自分の山札から、それぞれちがうタイプのポケモンを3枚まで選び、相手に見せて、手札に加える。そして山札を切る。"
+     },
+     {
+      "name": "스킵",
+      "nameJa": "スキップ",
+      "cost": [
+       "C"
+      ],
+      "damage": 10,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV8a_224": {
+   "id": "SV8a_224",
+   "name": "이브이 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 200,
+    "type": "C",
+    "weak": "F",
+    "resist": null,
+    "retreat": 1,
+    "rule": "ex",
+    "tera": true,
+    "future": false,
+    "attacks": [
+     {
+      "name": "쿼츠샤인",
+      "nameJa": "クォーツシャイン",
+      "cost": [
+       "R",
+       "W",
+       "L"
+      ],
+      "damage": 200,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": [
+     {
+      "name": "무지갯빛DNA",
+      "nameJa": "にじいろDNA",
+      "text": "このポケモンは、「イーブイ」から進化する「ポケモンex」を手札から出して、このポケモンにのせて進化できる。（最初の自分の番や、出したばかりの番には進化できない。）"
+     }
+    ]
+   }
+  },
+  "SV8a_202": {
+   "id": "SV8a_202",
+   "name": "부스터 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "이브이",
+    "hp": 270,
+    "type": "R",
+    "weak": "W",
+    "resist": null,
+    "retreat": 2,
+    "rule": "ex",
+    "tera": true,
+    "future": false,
+    "attacks": [
+     {
+      "name": "버닝차지",
+      "nameJa": "バーニングチャージ",
+      "cost": [
+       "R",
+       "C"
+      ],
+      "damage": 130,
+      "op": "",
+      "text": "自分の山札から基本エネルギーを2枚まで選び、自分のポケモン1匹につける。そして山札を切る。"
+     },
+     {
+      "name": "카닐리언",
+      "nameJa": "カーネリアン",
+      "cost": [
+       "R",
+       "W",
+       "L"
+      ],
+      "damage": 280,
+      "op": "",
+      "text": "次の自分の番、このポケモンはワザが使えない。"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV8a_200": {
+   "id": "SV8a_200",
+   "name": "리피아 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "이브이",
+    "hp": 270,
+    "type": "G",
+    "weak": "R",
+    "resist": null,
+    "retreat": 2,
+    "rule": "ex",
+    "tera": true,
+    "future": false,
+    "attacks": [
+     {
+      "name": "신록의폭풍",
+      "nameJa": "あおばのあらし",
+      "cost": [
+       "G",
+       "C"
+      ],
+      "damage": 60,
+      "op": "×",
+      "text": "相手のポケモン全員についているエネルギーの数×60ダメージ。"
+     },
+     {
+      "name": "모스아게이트",
+      "nameJa": "モスアゲート",
+      "cost": [
+       "G",
+       "R",
+       "W"
+      ],
+      "damage": 230,
+      "op": "",
+      "text": "自分のベンチポケモン全員のHPを、それぞれ「100」回復する。"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV6_127": {
+   "id": "SV6_127",
+   "name": "오거폰 우물의가면 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 210,
+    "type": "W",
+    "weak": "L",
+    "resist": null,
+    "retreat": 1,
+    "rule": "ex",
+    "tera": true,
+    "future": false,
+    "attacks": [
+     {
+      "name": "흐느껴울기",
+      "nameJa": "すすりなく",
+      "cost": [
+       "C"
+      ],
+      "damage": 20,
+      "op": "",
+      "text": "次の相手の番、このワザを受けたポケモンは、にげられない。"
+     },
+     {
+      "name": "급류펌프",
+      "nameJa": "げきりゅうポンプ",
+      "cost": [
+       "W",
+       "C",
+       "C"
+      ],
+      "damage": 100,
+      "op": "",
+      "text": "のぞむなら、このポケモンについているエネルギーを3個選び、山札にもどして切る。その場合、相手のベンチポケモン1匹にも、120ダメージ。［ベンチは弱点・抵抗力を計算しない。］"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV7_130": {
+   "id": "SV7_130",
+   "name": "테라파고스 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 230,
+    "type": "C",
+    "weak": "F",
+    "resist": null,
+    "retreat": 2,
+    "rule": "ex",
+    "tera": true,
+    "future": false,
+    "attacks": [
+     {
+      "name": "유니언비트",
+      "nameJa": "ユニオンビート",
+      "cost": [
+       "C",
+       "C"
+      ],
+      "damage": 30,
+      "op": "×",
+      "text": "このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×30ダメージ。"
+     },
+     {
+      "name": "크라운오팔",
+      "nameJa": "クラウンオパール",
+      "cost": [
+       "G",
+       "W",
+       "L"
+      ],
+      "damage": 180,
+      "op": "",
+      "text": "次の相手の番、このポケモンはたねポケモン（ポケモンをのぞく）からワザのダメージを受けない。"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV6a_089": {
+   "id": "SV6a_089",
+   "name": "기로치 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 210,
+    "type": "D",
+    "weak": "F",
+    "resist": null,
+    "retreat": 1,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "크루얼애로",
+      "nameJa": "クルーエルアロー",
+      "cost": [
+       "C",
+       "C",
+       "C"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "相手のポケモン1匹に、100ダメージ。［ベンチは弱点・抵抗力を計算しない。］"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "역이용",
+      "nameJa": "さかてにとる",
+      "text": "前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。"
+     }
+    ]
+   }
+  },
+  "SV4a_327": {
+   "id": "SV4a_327",
+   "name": "뮤 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 180,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 0,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "게놈핵",
+      "nameJa": "ゲノムハック",
+      "cost": [
+       "C",
+       "C",
+       "C"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "相手のバトルポケモンが持っているワザを1つ選び、このワザとして使う。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "리스타트",
+      "nameJa": "リスタート",
+      "text": "自分の番に1回使える。自分の手札が3枚になるように、山札を引く。"
+     }
+    ]
+   }
+  },
+  "SV1S_069": {
+   "id": "SV1S_069",
+   "name": "네스트볼",
+   "kind": "trainer",
+   "text": "自分の山札からたねポケモンを1枚選び、ベンチに出す。そして山札を切る。",
+   "trainer": "item"
+  },
+  "MC_673": {
+   "id": "MC_673",
+   "name": "하이퍼볼",
+   "kind": "trainer",
+   "text": "このカードは、自分の手札を2枚トラッシュしなければ使えない。自分の山札からポケモンを1枚選び、相手に見せてから、手札に加える。そして山札を切る。",
+   "trainer": "item"
+  },
+  "M1S_083": {
+   "id": "M1S_083",
+   "name": "절친 포핀",
+   "kind": "trainer",
+   "text": "自分の山札から、HPが「70」以下のたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
+   "trainer": "item"
+  },
+  "SV8a_147": {
+   "id": "SV8a_147",
+   "name": "테라스탈오브",
+   "kind": "trainer",
+   "text": "自分の山札から「テラスタル」のポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
+   "trainer": "item"
+  },
+  "SV4M_059": {
+   "id": "SV4M_059",
+   "name": "카운터 캐처",
+   "kind": "trainer",
+   "text": "このカードは、自分のサイドの残り枚数が、相手のサイドの残り枚数より多いときにしか使えない。\n\n相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。",
+   "trainer": "item"
+  },
+  "MC_643": {
+   "id": "MC_643",
+   "name": "밤의 들것",
+   "kind": "trainer",
+   "text": "자신의 트래쉬에서 포켓몬 또는 기본 에너지를 1장 골라, 상대에게 보여주고 패로 가져온다.",
+   "trainer": "item"
+  },
+  "M6a_101": {
+   "id": "M6a_101",
+   "name": "포켓몬 교체",
+   "kind": "trainer",
+   "text": "自分のバトルポケモンをベンチポケモンと入れ替える。",
+   "trainer": "item"
+  },
+  "SV8a_144": {
+   "id": "SV8a_144",
+   "name": "유리나팔",
+   "kind": "trainer",
+   "text": "このカードは、自分の場に「テラスタル」のポケモンがいるときにしか使えない。\n\n自分のベンチのポケモンを2匹まで選び、トラッシュから基本エネルギーを1枚ずつつける。",
+   "trainer": "item"
+  },
+  "SV8a_157": {
+   "id": "SV8a_157",
+   "name": "반짝이는 결정",
+   "kind": "trainer",
+   "text": "このカードをつけている「テラスタル」のポケモンがワザを使うとき、そのワザを使うためのエネルギーは、1個ぶん少なくなる。（少なくなるのは、どのタイプのエネルギーでもよい。）",
+   "trainer": "tool",
+   "ace": true
+  },
+  "MC_689": {
+   "id": "MC_689",
+   "name": "풍선",
+   "kind": "trainer",
+   "text": "このカードをつけているポケモンは、にげるためのエネルギーが2個ぶん少なくなる。",
+   "trainer": "tool"
+  },
+  "SV8a_179": {
+   "id": "SV8a_179",
+   "name": "하솔",
+   "kind": "trainer",
+   "text": "自分の山札から、それぞれちがうタイプの基本エネルギーを2枚まで選び、相手に見せて、どちらか1枚を手札に加え、残りのエネルギーを自分のポケモンにつける。そして山札を切る。",
+   "trainer": "supporter"
+  },
+  "MC_709": {
+   "id": "MC_709",
+   "name": "보스의 지령",
+   "kind": "trainer",
+   "text": "相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。",
+   "trainer": "supporter"
+  },
+  "SV2D_068": {
+   "id": "SV2D_068",
+   "name": "모야모",
+   "kind": "trainer",
+   "text": "おたがいのプレイヤーは、それぞれ自分の手札をすべてウラにして切り、山札の下にもどす。その後、それぞれ自分のサイドの残り枚数ぶん、山札を引く。",
+   "trainer": "supporter"
+  },
+  "SV8_103": {
+   "id": "SV8_103",
+   "name": "시아노",
+   "kind": "trainer",
+   "text": "自分の山札から「ポケモンex」を3枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
+   "trainer": "supporter"
+  },
+  "SV4M_066": {
+   "id": "SV4M_066",
+   "name": "투로박사의 시나리오",
+   "kind": "trainer",
+   "text": "自分の場のポケモンを1匹選び、手札にもどす。（ポケモン以外のカードは、すべてトラッシュする。）",
+   "trainer": "supporter"
+  },
+  "SV6_097": {
+   "id": "SV6_097",
+   "name": "카지",
+   "kind": "trainer",
+   "text": "このカードは、2つの効果から1つを選んで使う。◆自分のバトルポケモンをベンチポケモンと入れ替える。◆この番、自分のポケモンが使うワザの、相手のバトル場の「ポケモンex・V」へのダメージは「+30」される。",
+   "trainer": "supporter"
+  },
+  "M2a_221": {
+   "id": "M2a_221",
+   "name": "태권왕의 수련",
+   "kind": "trainer",
+   "text": "この番、自分のポケモンが使うワザの、相手のバトル場の「ポケモンex」へのダメージは「+40」される。",
+   "trainer": "supporter"
+  },
+  "SV8a_166": {
+   "id": "SV8a_166",
+   "name": "브라이어",
+   "kind": "trainer",
+   "text": "このカードは、相手のサイドの残り枚数が2枚のときにしか使えない。\n\nこの番、自分の「テラスタル」のポケモンが使うワザのダメージで、相手のバトルポケモンがきぜつしたなら、サイドを1枚多くとる。",
+   "trainer": "supporter"
+  },
+  "SV8a_183": {
+   "id": "SV8a_183",
+   "name": "제로의 대공동",
+   "kind": "trainer",
+   "text": "自分の場に「テラスタル」のポケモンがいるプレイヤーが、ベンチに出せるポケモンの数は8匹になる。\n\n（このカードがトラッシュされたときか、自分の場に「テラスタル」のポケモンがいなくなったとき、ベンチが5匹になるまでトラッシュする。おたがいにトラッシュするなら、このカードの持ち主から行う。）",
+   "trainer": "stadium"
+  },
+  "SV6_099": {
+   "id": "SV6_099",
+   "name": "재밍타워",
+   "kind": "trainer",
+   "text": "おたがいのポケモン全員についている「ポケモンのどうぐ」の効果は、すべてなくなる。",
+   "trainer": "stadium"
+  },
+  "SV8_105": {
+   "id": "SV8_105",
+   "name": "그래비티 마운틴",
+   "kind": "trainer",
+   "text": "おたがいの場の2進化ポケモン全員の最大HPは、それぞれ「-30」される。",
+   "trainer": "stadium"
+  },
+  "SV3_141": {
+   "id": "SV3_141",
+   "name": "기본 불꽃 에너지",
+   "kind": "energy",
+   "text": "",
+   "energy": {
+    "basic": true,
+    "type": "R"
+   }
+  },
+  "SV2P_099": {
+   "id": "SV2P_099",
+   "name": "기본 물 에너지",
+   "kind": "energy",
+   "text": "",
+   "energy": {
+    "basic": true,
+    "type": "W"
+   }
+  },
+  "SV1V_108": {
+   "id": "SV1V_108",
+   "name": "기본 번개 에너지",
+   "kind": "energy",
+   "text": "",
+   "energy": {
+    "basic": true,
+    "type": "L"
+   }
+  },
+  "SV2D_099": {
+   "id": "SV2D_099",
+   "name": "기본 풀 에너지",
+   "kind": "energy",
+   "text": "",
+   "energy": {
+    "basic": true,
+    "type": "G"
+   }
+  },
+  "SV8a_118": {
+   "id": "SV8a_118",
+   "name": "드라꼰",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 70,
+    "type": "N",
+    "weak": null,
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "조금원망하기",
+      "nameJa": "ちょっとうらむ",
+      "cost": [
+       "P"
+      ],
+      "damage": 10,
+      "op": "",
+      "text": ""
+     },
+     {
+      "name": "물기",
+      "nameJa": "かみつく",
+      "cost": [
+       "R",
+       "P"
+      ],
+      "damage": 40,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV8a_119": {
+   "id": "SV8a_119",
+   "name": "드래런치",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "드라꼰",
+    "hp": 90,
+    "type": "N",
+    "weak": null,
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "드래곤헤드",
+      "nameJa": "リューズヘッド",
+      "cost": [
+       "R",
+       "P"
+      ],
+      "damage": 70,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": [
+     {
+      "name": "정찰 지령",
+      "nameJa": "ていさつしれい",
+      "text": "自分の番に1回使える。自分の山札を上から2枚見て、どちらか1枚を選び、手札に加える。残りのカードは、山札の下にもどす。"
+     }
+    ]
+   }
+  },
+  "SV6_120": {
+   "id": "SV6_120",
+   "name": "드래펄트 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 2,
+    "from": "드래런치",
+    "hp": 320,
+    "type": "N",
+    "weak": null,
+    "resist": null,
+    "retreat": 1,
+    "rule": "ex",
+    "tera": true,
+    "future": false,
+    "attacks": [
+     {
+      "name": "제트헤드",
+      "nameJa": "ジェットヘッド",
+      "cost": [
+       "C"
+      ],
+      "damage": 70,
+      "op": "",
+      "text": ""
+     },
+     {
+      "name": "스펙터다이브",
+      "nameJa": "ファントムダイブ",
+      "cost": [
+       "R",
+       "P"
+      ],
+      "damage": 200,
+      "op": "",
+      "text": "ダメカン6個を、相手のベンチポケモンに好きなようにのせる。"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV8a_064": {
+   "id": "SV8a_064",
+   "name": "해골몽",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 60,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "마중나가기",
+      "nameJa": "むかえにいく",
+      "cost": [
+       "P"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "自分のトラッシュから「ヨマワル」を3枚まで選び、ベンチに出す。"
+     },
+     {
+      "name": "중얼거리기",
+      "nameJa": "つぶやく",
+      "cost": [
+       "P",
+       "P"
+      ],
+      "damage": 30,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV8a_065": {
+   "id": "SV8a_065",
+   "name": "미라몽",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "해골몽",
+    "hp": 90,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 2,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "도깨비불",
+      "nameJa": "おにび",
+      "cost": [
+       "P",
+       "P"
+      ],
+      "damage": 50,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": [
+     {
+      "name": "커스 봄",
+      "nameJa": "カースドボム",
+      "text": "自分の番に1回使えて、使ったなら、このポケモンをきぜつさせる。相手のポケモン1匹に、ダメカンを5個のせる。"
+     }
+    ]
+   }
+  },
+  "SV8a_066": {
+   "id": "SV8a_066",
+   "name": "야느와르몽",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 2,
+    "from": "미라몽",
+    "hp": 160,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 3,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "그림자묶기",
+      "nameJa": "かげしばり",
+      "cost": [
+       "P",
+       "P",
+       "C"
+      ],
+      "damage": 150,
+      "op": "",
+      "text": "次の相手の番、このワザを受けたポケモンは、にげられない。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "커스 봄",
+      "nameJa": "カースドボム",
+      "text": "自分の番に1回使えて、使ったなら、このポケモンをきぜつさせる。相手のポケモン1匹に、ダメカンを13個のせる。"
+     }
+    ]
+   }
+  },
+  "SV8a_001": {
+   "id": "SV8a_001",
+   "name": "꼬몽울",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 30,
+    "type": "G",
+    "weak": "R",
+    "resist": null,
+    "retreat": 0,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "근질근질 꽃가루",
+      "nameJa": "むずむずかふん",
+      "cost": [],
+      "damage": 10,
+      "op": "",
+      "text": "次の相手の番、相手は手札からグッズを出して使えない。"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV8a_075": {
+   "id": "SV8a_075",
+   "name": "이야후",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 110,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "사이코트립",
+      "nameJa": "サイコトリップ",
+      "cost": [
+       "P",
+       "C"
+      ],
+      "damage": 60,
+      "op": "",
+      "text": "相手のバトルポケモンをこんらんにする。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "아드레나 브레인",
+      "nameJa": "アドレナブレイン",
+      "text": "このポケモンに[D]エネルギーがついているなら、自分の番に1回使える。自分の場のポケモン1匹にのっているダメカンを3個まで選び、相手の場のポケモン1匹にのせ替える。"
+     }
+    ]
+   }
+  },
+  "SV8a_084": {
+   "id": "SV8a_084",
+   "name": "루차불",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 70,
+    "type": "F",
+    "weak": "P",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "날개치기",
+      "nameJa": "つばさでうつ",
+      "cost": [
+       "F",
+       "C",
+       "C"
+      ],
+      "damage": 70,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": [
+     {
+      "name": "플라잉엔트리",
+      "nameJa": "フライングエントリー",
+      "text": "自分の番に、このカードを手札からベンチに出したとき、1回使える。相手のベンチポケモン2匹に、それぞれダメカンを1個のせる。"
+     }
+    ]
+   }
+  },
+  "SV8a_225": {
+   "id": "SV8a_225",
+   "name": "다투곰 붉은 달 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 260,
+    "type": "C",
+    "weak": "F",
+    "resist": null,
+    "retreat": 3,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "블러드문",
+      "nameJa": "ブラッドムーン",
+      "cost": [
+       "C",
+       "C",
+       "C",
+       "C",
+       "C"
+      ],
+      "damage": 240,
+      "op": "",
+      "text": "次の自分の番、このポケモンはワザが使えない。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "노련한 기술",
+      "nameJa": "ろうれんのわざ",
+      "text": "相手がすでにとったサイドの枚数ぶん、このポケモンが「ブラッドムーン」を使うためのエネルギーは少なくなる。"
+     }
+    ]
+   }
+  },
+  "SV7a_019": {
+   "id": "SV7a_019",
+   "name": "라티아스 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 210,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 2,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "무한의칼날",
+      "nameJa": "むげんのやいば",
+      "cost": [
+       "P",
+       "P",
+       "C"
+      ],
+      "damage": 200,
+      "op": "",
+      "text": "次の自分の番、このポケモンはワザが使えない。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "스카이라인",
+      "nameJa": "スカイライン",
+      "text": "このポケモンがいるかぎり、自分のたねポケモン全員のにげるためのエネルギーは、すべてなくなる。"
+     }
+    ]
+   }
+  },
+  "MC_656": {
+   "id": "MC_656",
+   "name": "이상한사탕",
+   "kind": "trainer",
+   "text": "自分のたねポケモン1匹から進化する1進化の上の2進化ポケモンを、手札から1枚選び、そのたねポケモンにのせて進化させる。[最初の自分の番と、この番出したばかりのたねポケモンには使えない。]",
+   "trainer": "item"
+  },
+  "MC_706": {
+   "id": "MC_706",
+   "name": "릴리에의 결심",
+   "kind": "trainer",
+   "text": "自分の手札をすべて山札にもどして切る。その後、山札を6枚引く。自分のサイドの残り枚数が6枚なら、引く枚数は8枚になる。",
+   "trainer": "supporter"
+  },
+  "SV11W_085": {
+   "id": "SV11W_085",
+   "name": "투희",
+   "kind": "trainer",
+   "text": "自分の山札から進化ポケモンとエネルギーを1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。 サポートは、自分の番に1枚しか使えない。",
+   "trainer": "supporter"
+  },
+  "SV2a_210": {
+   "id": "SV2a_210",
+   "name": "기본 초 에너지",
+   "kind": "energy",
+   "text": "",
+   "energy": {
+    "basic": true,
+    "type": "P"
+   }
+  },
+  "SV5K_071": {
+   "id": "SV5K_071",
+   "name": "네오 어퍼 에너지",
+   "kind": "energy",
+   "text": "このカードは、ポケモンについているかぎり、[C]エネルギー1個ぶんとしてはたらく。2進化ポケモンについているなら、すべてのタイプのエネルギー2個ぶんとしてはたらく。",
+   "energy": {
+    "basic": false,
+    "type": null
+   },
+   "ace": true
+  },
+  "SV4a_188": {
+   "id": "SV4a_188",
+   "name": "루미너스 에너지",
+   "kind": "energy",
+   "text": "このカードは、ポケモンについているかぎり、すべてのタイプのエネルギー1個ぶんとしてはたらく。\n\nこのカードをつけているポケモンに、このカード以外の特殊エネルギーがついているなら、エネルギー1個ぶんとしてはたらく。",
+   "energy": {
+    "basic": false,
+    "type": null
+   }
+  },
+  "M2_011": {
+   "id": "M2_011",
+   "name": "파이리",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 80,
+    "type": "R",
+    "weak": "W",
+    "resist": null,
+    "retreat": 2,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "불씨",
+      "nameJa": "ひだね",
+      "cost": [
+       "R"
+      ],
+      "damage": 20,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": [
+     {
+      "name": "날램",
+      "nameJa": "みがる",
+      "text": "このポケモンにエネルギーがついていないなら、このポケモンはにげるためのエネルギーが、すべてなくなる。"
+     }
+    ]
+   }
+  },
+  "SV2a_168": {
+   "id": "SV2a_168",
+   "name": "파이리",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 70,
+    "type": "R",
+    "weak": "W",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "통째로태우기",
+      "nameJa": "まるやけ",
+      "cost": [
+       "R"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "場に出ているスタジアムをトラッシュする。"
+     },
+     {
+      "name": "불토하기",
+      "nameJa": "ひをはく",
+      "cost": [
+       "R",
+       "R"
+      ],
+      "damage": 30,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "M2_012": {
+   "id": "M2_012",
+   "name": "리자드",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "파이리",
+    "hp": 110,
+    "type": "R",
+    "weak": "W",
+    "resist": null,
+    "retreat": 2,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "불토하기",
+      "nameJa": "ひをはく",
+      "cost": [
+       "R"
+      ],
+      "damage": 40,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV3_134": {
+   "id": "SV3_134",
+   "name": "리자몽 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 2,
+    "from": "리자드",
+    "hp": 330,
+    "type": "D",
+    "weak": "G",
+    "resist": null,
+    "retreat": 2,
+    "rule": "ex",
+    "tera": true,
+    "future": false,
+    "attacks": [
+     {
+      "name": "버닝다크",
+      "nameJa": "バーニングダーク",
+      "cost": [
+       "R",
+       "R"
+      ],
+      "damage": 180,
+      "op": "+",
+      "text": "相手がすでにとったサイドの枚数×30ダメージ追加。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "연옥 지배",
+      "nameJa": "れんごくしはい",
+      "text": "自分の番に、このカードを手札から出して進化させたとき、1回使える。自分の山札から「基本エネルギー」を3枚まで選び、自分のポケモンに好きなようにつける。そして山札を切る。"
+     }
+    ]
+   }
+  },
+  "SV4a_349": {
+   "id": "SV4a_349",
+   "name": "리자몽 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 2,
+    "from": "리자드",
+    "hp": 330,
+    "type": "D",
+    "weak": "G",
+    "resist": null,
+    "retreat": 2,
+    "rule": "ex",
+    "tera": true,
+    "future": false,
+    "attacks": [
+     {
+      "name": "버닝다크",
+      "nameJa": "バーニングダーク",
+      "cost": [
+       "R",
+       "R"
+      ],
+      "damage": 180,
+      "op": "+",
+      "text": "相手がすでにとったサイドの枚数×30ダメージ追加。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "연옥 지배",
+      "nameJa": "れんごくしはい",
+      "text": "自分の番に、このカードを手札から出して進化させたとき、1回使える。自分の山札から「基本エネルギー」を3枚まで選び、自分のポケモンに好きなようにつける。そして山札を切る。"
+     }
+    ]
+   }
+  },
+  "SV3_118": {
+   "id": "SV3_118",
+   "name": "구구",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 60,
+    "type": "C",
+    "weak": "L",
+    "resist": "F",
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "바람일으키기",
+      "nameJa": "かぜおこし",
+      "cost": [
+       "C"
+      ],
+      "damage": 20,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV3_119": {
+   "id": "SV3_119",
+   "name": "피죤",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "구구",
+    "hp": 90,
+    "type": "C",
+    "weak": "L",
+    "resist": "F",
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "날개치기",
+      "nameJa": "つばさでうつ",
+      "cost": [
+       "C",
+       "C"
+      ],
+      "damage": 40,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV3_136": {
+   "id": "SV3_136",
+   "name": "피죤투 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 2,
+    "from": "피죤",
+    "hp": 280,
+    "type": "C",
+    "weak": "L",
+    "resist": "F",
+    "retreat": 0,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "몰아치기",
+      "nameJa": "ふきすさぶ",
+      "cost": [
+       "C",
+       "C"
+      ],
+      "damage": 120,
+      "op": "",
+      "text": "のぞむなら、場に出ているスタジアムをトラッシュする。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "마하 서치",
+      "nameJa": "マッハサーチ",
+      "text": "自分の番に1回使える。自分の山札から好きなカードを1枚選び、手札に加える。そして山札を切る。この番、すでに別の「マッハサーチ」を使っていたなら、この特性は使えない。"
+     }
+    ]
+   }
+  },
+  "SV6a_068": {
+   "id": "SV6a_068",
+   "name": "해골몽",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 60,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "마중나가기",
+      "nameJa": "むかえにいく",
+      "cost": [
+       "P"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "自分のトラッシュから「ヨマワル」を3枚まで選び、ベンチに出す。"
+     },
+     {
+      "name": "중얼거리기",
+      "nameJa": "つぶやく",
+      "cost": [
+       "P",
+       "P"
+      ],
+      "damage": 30,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV6a_069": {
+   "id": "SV6a_069",
+   "name": "미라몽",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "해골몽",
+    "hp": 90,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 2,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "도깨비불",
+      "nameJa": "おにび",
+      "cost": [
+       "P",
+       "P"
+      ],
+      "damage": 50,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": [
+     {
+      "name": "커스 봄",
+      "nameJa": "カースドボム",
+      "text": "自分の番に1回使えて、使ったなら、このポケモンをきぜつさせる。相手のポケモン1匹に、ダメカンを5個のせる。"
+     }
+    ]
+   }
+  },
+  "SV6a_070": {
+   "id": "SV6a_070",
+   "name": "야느와르몽",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 2,
+    "from": "미라몽",
+    "hp": 160,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 3,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "그림자묶기",
+      "nameJa": "かげしばり",
+      "cost": [
+       "P",
+       "P",
+       "C"
+      ],
+      "damage": 150,
+      "op": "",
+      "text": "次の相手の番、このワザを受けたポケモンは、にげられない。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "커스 봄",
+      "nameJa": "カースドボム",
+      "text": "自分の番に1回使えて、使ったなら、このポケモンをきぜつさせる。相手のポケモン1匹に、ダメカンを13個のせる。"
+     }
+    ]
+   }
+  },
+  "SV8a_226": {
+   "id": "SV8a_226",
+   "name": "테라파고스 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 230,
+    "type": "C",
+    "weak": "F",
+    "resist": null,
+    "retreat": 2,
+    "rule": "ex",
+    "tera": true,
+    "future": false,
+    "attacks": [
+     {
+      "name": "유니언비트",
+      "nameJa": "ユニオンビート",
+      "cost": [
+       "C",
+       "C"
+      ],
+      "damage": 30,
+      "op": "×",
+      "text": "このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×30ダメージ。"
+     },
+     {
+      "name": "크라운오팔",
+      "nameJa": "クラウンオパール",
+      "cost": [
+       "G",
+       "W",
+       "L"
+      ],
+      "damage": 180,
+      "op": "",
+      "text": "次の相手の番、このポケモンはたねポケモン（ポケモンをのぞく）からワザのダメージを受けない。"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV4a_087": {
+   "id": "SV4a_087",
+   "name": "클레피",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 70,
+    "type": "P",
+    "weak": "M",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "노려떨구기",
+      "nameJa": "ねらいおとす",
+      "cost": [
+       "C"
+      ],
+      "damage": 10,
+      "op": "",
+      "text": "ダメージを与える前に、相手のバトルポケモンについている「ポケモンのどうぐ」をトラッシュする。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "짓궂은 록",
+      "nameJa": "いたずらロック",
+      "text": "このポケモンがバトル場にいるかぎり、おたがいの場のたねポケモンの特性（「いたずらロック」をのぞく）は、すべてなくなる。"
+     }
+    ]
+   }
+  },
+  "SV2P_066": {
+   "id": "SV2P_066",
+   "name": "대단한낚싯대",
+   "kind": "trainer",
+   "text": "自分のトラッシュからポケモンと基本エネルギーを合計3枚まで選び、相手に見せて、山札にもどして切る。",
+   "trainer": "item"
+  },
+  "MC_670": {
+   "id": "MC_670",
+   "name": "프라임 캐처",
+   "kind": "trainer",
+   "text": "相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。その後、自分のバトルポケモンをベンチポケモンと入れ替える。",
+   "trainer": "item",
+   "ace": true
+  },
+  "M2_078": {
+   "id": "M2_078",
+   "name": "빛나",
+   "kind": "trainer",
+   "text": "自分の山札から「たねポケモン」「1進化ポケモン」「2進化ポケモン」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。 サポートは、自分の番に1枚しか使えない。",
+   "trainer": "supporter"
+  },
+  "SV1a_073": {
+   "id": "SV1a_073",
+   "name": "제트 에너지",
+   "kind": "energy",
+   "text": "このカードは、ポケモンについているかぎり、エネルギー1個ぶんとしてはたらく。\n\nこのカードを手札からベンチポケモンにつけたとき、このカードをつけたポケモンを、バトルポケモンと入れ替える。",
+   "energy": {
+    "basic": false,
+    "type": null
+   }
+  },
+  "SV7a_024": {
+   "id": "SV7a_024",
+   "name": "모으령",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 70,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 2,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "작은 선물",
+      "nameJa": "ちいさなおつかい",
+      "cost": [
+       "C"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。"
+     },
+     {
+      "name": "몸통박치기",
+      "nameJa": "たいあたり",
+      "cost": [
+       "C",
+       "C",
+       "C"
+      ],
+      "damage": 50,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV3a_050": {
+   "id": "SV3a_050",
+   "name": "타부자고 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "모으령",
+    "hp": 260,
+    "type": "M",
+    "weak": "R",
+    "resist": "G",
+    "retreat": 2,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "골드러시",
+      "nameJa": "ゴールドラッシュ",
+      "cost": [
+       "M"
+      ],
+      "damage": 50,
+      "op": "×",
+      "text": "自分の手札から基本エネルギーを好きなだけトラッシュし、その枚数×50ダメージ。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "보너스 코인",
+      "nameJa": "ボーナスコイン",
+      "text": "自分の番に1回使える。自分の山札を1枚引く。このポケモンがバトル場にいるなら、さらに1枚引く。"
+     }
+    ]
+   }
+  },
+  "M1L_027": {
+   "id": "M1L_027",
+   "name": "솔록",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 110,
+    "type": "F",
+    "weak": "G",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "코스믹빔",
+      "nameJa": "コスモビーム",
+      "cost": [
+       "F"
+      ],
+      "damage": 70,
+      "op": "",
+      "text": "自分のベンチに「ルナトーン」がいないなら、このワザは失敗。このワザのダメージは弱点・抵抗力を計算しない。"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "M1L_026": {
+   "id": "M1L_026",
+   "name": "루나톤",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 110,
+    "type": "F",
+    "weak": "G",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "파워젬",
+      "nameJa": "パワージェム",
+      "cost": [
+       "F",
+       "F"
+      ],
+      "damage": 50,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": [
+     {
+      "name": "루나사이클",
+      "nameJa": "ルナサイクル",
+      "text": "自分の場に「ソルロック」がいて、自分の番に、自分の手札から「基本エネルギー」を1枚トラッシュするなら、1回使える。自分の山札を3枚引く。この特性は別の「ルナサイクル」を使った番は使えない。"
+     }
+    ]
+   }
+  },
+  "SV8a_104": {
+   "id": "SV8a_104",
+   "name": "기로치 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 210,
+    "type": "D",
+    "weak": "F",
+    "resist": null,
+    "retreat": 1,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "크루얼애로",
+      "nameJa": "クルーエルアロー",
+      "cost": [
+       "C",
+       "C",
+       "C"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "相手のポケモン1匹に、100ダメージ。［ベンチは弱点・抵抗力を計算しない。］"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "역이용",
+      "nameJa": "さかてにとる",
+      "text": "前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。"
+     }
+    ]
+   }
+  },
+  "SV11B_069": {
+   "id": "SV11B_069",
+   "name": "게노세크트 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 220,
+    "type": "M",
+    "weak": "R",
+    "resist": "G",
+    "retreat": 2,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "프로텍트차지",
+      "nameJa": "プロテクトチャージ",
+      "cost": [
+       "M",
+       "M",
+       "C"
+      ],
+      "damage": 150,
+      "op": "",
+      "text": "次の相手の番、このポケモンが受けるワザのダメージは「-30」される。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "메탈 시그널",
+      "nameJa": "メタルシグナル",
+      "text": "自分の番に1回使える。自分の山札から[M]タイプの進化ポケモンを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。"
+     }
+    ]
+   }
+  },
+  "M1L_060": {
+   "id": "M1L_060",
+   "name": "파이팅공",
+   "kind": "trainer",
+   "text": "自分の山札から[F]タイプのたねポケモンまたは「基本[F]エネルギー」を1枚選び、相手に見せて、手札に加える。そして山札を切る。",
+   "trainer": "item"
+  },
+  "SV6a_093": {
+   "id": "SV6a_093",
+   "name": "대지의 그릇",
+   "kind": "trainer",
+   "text": "このカードは、自分の手札を1枚トラッシュしなければ使えない。自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
+   "trainer": "item"
+  },
+  "SV1a_064": {
+   "id": "SV1a_064",
+   "name": "수퍼 에너지 회수",
+   "kind": "trainer",
+   "text": "このカードは、自分の手札を2枚トラッシュしなければ使えない。\n\n自分のトラッシュから基本エネルギーを4枚まで選び、相手に見せて、手札に加える。（このカードの効果でトラッシュしたエネルギーは選べない。）",
+   "trainer": "item"
+  },
+  "SV1S_072": {
+   "id": "SV1S_072",
+   "name": "오기머리띠",
+   "kind": "trainer",
+   "text": "自分のサイドの残り枚数が、相手のサイドの残り枚数より多いなら、このカードをつけているポケモンが使うワザの、相手のバトルポケモンへのダメージは「+30」される。",
+   "trainer": "tool"
+  },
+  "SV2D_067": {
+   "id": "SV2D_067",
+   "name": "용기의부적",
+   "kind": "trainer",
+   "text": "このカードをつけているたねポケモンの最大HPは「+50」される。",
+   "trainer": "tool"
+  },
+  "SV1V_077": {
+   "id": "SV1V_077",
+   "name": "페퍼",
+   "kind": "trainer",
+   "text": "自分の山札から「グッズ」と「ポケモンのどうぐ」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。",
+   "trainer": "supporter"
+  },
+  "SV5M_069": {
+   "id": "SV5M_069",
+   "name": "암호마니아의 해독",
+   "kind": "trainer",
+   "text": "自分の山札から好きなカードを2枚選ぶ。残りの山札を切り、選んだカードを好きな順番に入れ替えて、山札の上にもどす。",
+   "trainer": "supporter"
+  },
+  "SV8a_167": {
+   "id": "SV8a_167",
+   "name": "수련의 돌봄",
+   "kind": "trainer",
+   "text": "自分のトラッシュからポケモン（「ルールを持つポケモン」をのぞく）と基本エネルギーを合計3枚まで選び、相手に見せて、手札に加える。",
+   "trainer": "supporter"
+  },
+  "SV1a_071": {
+   "id": "SV1a_071",
+   "name": "보물마을",
+   "kind": "trainer",
+   "text": "おたがいのプレイヤーは、自分の番ごとに1回、自分の山札からたねポケモン（「ルールを持つポケモン」をのぞく）を1枚選び、ベンチに出してよい。そして山札を切る。",
+   "trainer": "stadium"
+  },
+  "SV4M_095": {
+   "id": "SV4M_095",
+   "name": "기본 강철 에너지",
+   "kind": "energy",
+   "text": "",
+   "energy": {
+    "basic": true,
+    "type": "M"
+   }
+  },
+  "SV1S_108": {
+   "id": "SV1S_108",
+   "name": "기본 격투 에너지",
+   "kind": "energy",
+   "text": "",
+   "energy": {
+    "basic": true,
+    "type": "F"
+   }
+  },
+  "SV4K_095": {
+   "id": "SV4K_095",
+   "name": "기본 악 에너지",
+   "kind": "energy",
+   "text": "",
+   "energy": {
+    "basic": true,
+    "type": "D"
+   }
+  },
+  "M1S_040": {
+   "id": "M1S_040",
+   "name": "랄토스",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 70,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "가져오기",
+      "nameJa": "もってくる",
+      "cost": [
+       "C"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "自分の山札を1枚引く。"
+     },
+     {
+      "name": "박치기",
+      "nameJa": "ずつき",
+      "cost": [
+       "P"
+      ],
+      "damage": 10,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "M1S_041": {
+   "id": "M1S_041",
+   "name": "킬리아",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "랄토스",
+    "hp": 100,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "콜사인",
+      "nameJa": "コールサイン",
+      "cost": [
+       "P"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "自分の山札からポケモンを3枚まで選び、相手に見せて、手札に加える。そして山札を切る。"
+     },
+     {
+      "name": "사이코숏",
+      "nameJa": "サイコショット",
+      "cost": [
+       "P"
+      ],
+      "damage": 30,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV1S_028": {
+   "id": "SV1S_028",
+   "name": "가디안 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 2,
+    "from": "킬리아",
+    "hp": 310,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 2,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "미라클포스",
+      "nameJa": "ミラクルフォース",
+      "cost": [
+       "P",
+       "P",
+       "C"
+      ],
+      "damage": 190,
+      "op": "",
+      "text": "このポケモンの特殊状態を、すべて回復する。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "사이코 임브레이스",
+      "nameJa": "サイコエンブレイス",
+      "text": "自分の番に何回でも使える。自分のトラッシュから「基本エネルギー」を1枚選び、自分のポケモンにつける。その後、つけたポケモンにダメカンを2個のせる。（きぜつするポケモンに、この特性は使えない。）"
+     }
+    ]
+   }
+  },
+  "SV6_055": {
+   "id": "SV6_055",
+   "name": "이야후",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 110,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "사이코트립",
+      "nameJa": "サイコトリップ",
+      "cost": [
+       "P",
+       "C"
+      ],
+      "damage": 60,
+      "op": "",
+      "text": "相手のバトルポケモンをこんらんにする。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "아드레나 브레인",
+      "nameJa": "アドレナブレイン",
+      "text": "このポケモンに[D]エネルギーがついているなら、自分の番に1回使える。自分の場のポケモン1匹にのっているダメカンを3個まで選び、相手の場のポケモン1匹にのせ替える。"
+     }
+    ]
+   }
+  },
+  "SV11W_041": {
+   "id": "SV11W_041",
+   "name": "탱그릴",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 80,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 3,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "바다의그림자",
+      "nameJa": "うみのかげ",
+      "cost": [
+       "P"
+      ],
+      "damage": 20,
+      "op": "",
+      "text": "次の相手の番、相手は手札からグッズを出して使えない。"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV4K_032": {
+   "id": "SV4K_032",
+   "name": "우렁찬꼬리",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 90,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "뺨치기",
+      "nameJa": "ビンタ",
+      "cost": [
+       "P"
+      ],
+      "damage": 30,
+      "op": "",
+      "text": ""
+     },
+     {
+      "name": "우렁찬 울부짖음",
+      "nameJa": "ほえさけぶ",
+      "cost": [
+       "P",
+       "C"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "相手のポケモン1匹に、このポケモンにのっているダメカンの数×20ダメージ。［ベンチは弱点・抵抗力を計算しない。］"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "M2a_227": {
+   "id": "M2a_227",
+   "name": "메가디안시 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 270,
+    "type": "P",
+    "weak": "M",
+    "resist": null,
+    "retreat": 1,
+    "rule": "mega",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "갈런드레이",
+      "nameJa": "ガーランドレイ",
+      "cost": [
+       "P",
+       "P"
+      ],
+      "damage": 120,
+      "op": "×",
+      "text": "このポケモンについているエネルギーを2枚までトラッシュし、その枚数×120ダメージ。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "다이아 코트",
+      "nameJa": "ダイヤコート",
+      "text": "このポケモンが受けるワザのダメージは「-30」される。"
+     }
+    ]
+   }
+  },
+  "SV2a_151": {
+   "id": "SV2a_151",
+   "name": "뮤 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 180,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 0,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "게놈핵",
+      "nameJa": "ゲノムハック",
+      "cost": [
+       "C",
+       "C",
+       "C"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "相手のバトルポケモンが持っているワザを1つ選び、このワザとして使う。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "리스타트",
+      "nameJa": "リスタート",
+      "text": "自分の番に1回使える。自分の手札が3枚になるように、山札を引く。"
+     }
+    ]
+   }
+  },
+  "SV9_033": {
+   "id": "SV9_033",
+   "name": "릴리에의 삐삐 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 190,
+    "type": "P",
+    "weak": "M",
+    "resist": null,
+    "retreat": 1,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "풀문론도",
+      "nameJa": "フルムーンロンド",
+      "cost": [
+       "P",
+       "C"
+      ],
+      "damage": 20,
+      "op": "+",
+      "text": "おたがいのベンチポケモンの数×20ダメージ追加。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "페어리존",
+      "nameJa": "フェアリーゾーン",
+      "text": "このポケモンがいるかぎり、相手の場のポケモン全員の弱点は、すべて[P]タイプになる。［弱点は「×2」で計算する。］"
+     }
+    ]
+   }
+  },
+  "SV6a_038": {
+   "id": "SV6a_038",
+   "name": "기로치 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 210,
+    "type": "D",
+    "weak": "F",
+    "resist": null,
+    "retreat": 1,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "크루얼애로",
+      "nameJa": "クルーエルアロー",
+      "cost": [
+       "C",
+       "C",
+       "C"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "相手のポケモン1匹に、100ダメージ。［ベンチは弱点・抵抗力を計算しない。］"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "역이용",
+      "nameJa": "さかてにとる",
+      "text": "前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。"
+     }
+    ]
+   }
+  },
+  "SV4M_061": {
+   "id": "SV4M_061",
+   "name": "기술머신 에볼루션",
+   "kind": "trainer",
+   "text": "このカードをつけているポケモンは、このカードに書かれているワザを使える。［ワザを使うためのエネルギーは必要。］\nポケモンについているこのカードは、自分の番の終わりにトラッシュする。",
+   "trainer": "tool"
+  },
+  "SV6_092": {
+   "id": "SV6_092",
+   "name": "시크릿박스",
+   "kind": "trainer",
+   "text": "このカードは、自分の手札を3枚トラッシュしなければ使えない。 自分の山札から「グッズ」「ポケモンのどうぐ」「サポート」「スタジアム」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。",
+   "trainer": "item",
+   "ace": true
+  },
+  "SV7_032": {
+   "id": "SV7_032",
+   "name": "파쪼옥",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 30,
+    "type": "L",
+    "weak": "F",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "파쪼차지",
+      "nameJa": "バチュチャージ",
+      "cost": [
+       "C"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "自分の山札から「基本[G]エネルギー」と「基本[L]エネルギー」をそれぞれ2枚まで選び、自分のポケモンに好きなようにつける。そして山札を切る。"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV6a_002": {
+   "id": "SV6a_002",
+   "name": "전툴라",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "파쪼옥",
+    "hp": 100,
+    "type": "G",
+    "weak": "R",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "찌리리웹",
+      "nameJa": "ビリビリウェブ",
+      "cost": [
+       "G",
+       "C"
+      ],
+      "damage": 50,
+      "op": "+",
+      "text": "このポケモンに[L]エネルギーがついているなら、80ダメージ追加。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "복안",
+      "nameJa": "ふくがん",
+      "text": "このポケモンが使うワザの、相手のバトル場の特性を持つポケモンへのダメージは「+50」される。"
+     }
+    ]
+   }
+  },
+  "SV1V_037": {
+   "id": "SV1V_037",
+   "name": "미라이돈 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 220,
+    "type": "L",
+    "weak": "F",
+    "resist": null,
+    "retreat": 1,
+    "rule": "ex",
+    "tera": false,
+    "future": true,
+    "attacks": [
+     {
+      "name": "포톤블래스터",
+      "nameJa": "フォトンブラスター",
+      "cost": [
+       "L",
+       "L",
+       "C"
+      ],
+      "damage": 220,
+      "op": "",
+      "text": "次の自分の番、このポケモンはワザが使えない。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "탠덤 유닛",
+      "nameJa": "タンデムユニット",
+      "text": "自分の番に1回使える。自分の山札から[L]タイプのたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。"
+     }
+    ]
+   }
+  },
+  "SV1V_094": {
+   "id": "SV1V_094",
+   "name": "미라이돈 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 220,
+    "type": "L",
+    "weak": "F",
+    "resist": null,
+    "retreat": 1,
+    "rule": "ex",
+    "tera": false,
+    "future": true,
+    "attacks": [
+     {
+      "name": "포톤블래스터",
+      "nameJa": "フォトンブラスター",
+      "cost": [
+       "L",
+       "L",
+       "C"
+      ],
+      "damage": 220,
+      "op": "",
+      "text": "次の自分の番、このポケモンはワザが使えない。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "탠덤 유닛",
+      "nameJa": "タンデムユニット",
+      "text": "自分の番に1回使える。自分の山札から[L]タイプのたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。"
+     }
+    ]
+   }
+  },
+  "SV4M_027": {
+   "id": "SV4M_027",
+   "name": "무쇠손 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 230,
+    "type": "L",
+    "weak": "F",
+    "resist": null,
+    "retreat": 4,
+    "rule": "ex",
+    "tera": false,
+    "future": true,
+    "attacks": [
+     {
+      "name": "암프레스",
+      "nameJa": "アームプレス",
+      "cost": [
+       "L",
+       "L",
+       "C"
+      ],
+      "damage": 160,
+      "op": "",
+      "text": ""
+     },
+     {
+      "name": "감사 앰플리파이",
+      "nameJa": "ごっつあんプリファイ",
+      "cost": [
+       "L",
+       "C",
+       "C",
+       "C"
+      ],
+      "damage": 120,
+      "op": "",
+      "text": "このワザのダメージで、相手のポケモンがきぜつしたなら、サイドを1枚多くとる。"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV4M_079": {
+   "id": "SV4M_079",
+   "name": "무쇠손 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 230,
+    "type": "L",
+    "weak": "F",
+    "resist": null,
+    "retreat": 4,
+    "rule": "ex",
+    "tera": false,
+    "future": true,
+    "attacks": [
+     {
+      "name": "암프레스",
+      "nameJa": "アームプレス",
+      "cost": [
+       "L",
+       "L",
+       "C"
+      ],
+      "damage": 160,
+      "op": "",
+      "text": ""
+     },
+     {
+      "name": "감사 앰플리파이",
+      "nameJa": "ごっつあんプリファイ",
+      "cost": [
+       "L",
+       "C",
+       "C",
+       "C"
+      ],
+      "damage": 120,
+      "op": "",
+      "text": "このワザのダメージで、相手のポケモンがきぜつしたなら、サイドを1枚多くとる。"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV8_033": {
+   "id": "SV8_033",
+   "name": "피카츄 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 200,
+    "type": "L",
+    "weak": "F",
+    "resist": null,
+    "retreat": 1,
+    "rule": "ex",
+    "tera": true,
+    "future": false,
+    "attacks": [
+     {
+      "name": "토파즈볼트",
+      "nameJa": "トパーズボルト",
+      "cost": [
+       "G",
+       "L",
+       "M"
+      ],
+      "damage": 300,
+      "op": "",
+      "text": "このポケモンについているエネルギーを3個選び、トラッシュする。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "노력 하트",
+      "nameJa": "がんばりハート",
+      "text": "このポケモンのHPがまんたんの状態で、このポケモンがワザのダメージを受けてきぜつするとき、きぜつせず、残りHPが「10」の状態で場に残る。"
+     }
+    ]
+   }
+  },
+  "SV8_122": {
+   "id": "SV8_122",
+   "name": "피카츄 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 200,
+    "type": "L",
+    "weak": "F",
+    "resist": null,
+    "retreat": 1,
+    "rule": "ex",
+    "tera": true,
+    "future": false,
+    "attacks": [
+     {
+      "name": "토파즈볼트",
+      "nameJa": "トパーズボルト",
+      "cost": [
+       "G",
+       "L",
+       "M"
+      ],
+      "damage": 300,
+      "op": "",
+      "text": "このポケモンについているエネルギーを3個選び、トラッシュする。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "노력 하트",
+      "nameJa": "がんばりハート",
+      "text": "このポケモンのHPがまんたんの状態で、このポケモンがワザのダメージを受けてきぜつするとき、きぜつせず、残りHPが「10」の状態で場に残る。"
+     }
+    ]
+   }
+  },
+  "SV5a_052": {
+   "id": "SV5a_052",
+   "name": "다투곰 붉은 달 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 260,
+    "type": "C",
+    "weak": "F",
+    "resist": null,
+    "retreat": 3,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "블러드문",
+      "nameJa": "ブラッドムーン",
+      "cost": [
+       "C",
+       "C",
+       "C",
+       "C",
+       "C"
+      ],
+      "damage": 240,
+      "op": "",
+      "text": "次の自分の番、このポケモンはワザが使えない。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "노련한 기술",
+      "nameJa": "ろうれんのわざ",
+      "text": "相手がすでにとったサイドの枚数ぶん、このポケモンが「ブラッドムーン」を使うためのエネルギーは少なくなる。"
+     }
+    ]
+   }
+  },
+  "SV5M_084": {
+   "id": "SV5M_084",
+   "name": "무쇠잎새 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 220,
+    "type": "G",
+    "weak": "R",
+    "resist": null,
+    "retreat": 2,
+    "rule": "ex",
+    "tera": false,
+    "future": true,
+    "attacks": [
+     {
+      "name": "프리즘에지",
+      "nameJa": "プリズムエッジ",
+      "cost": [
+       "G",
+       "G",
+       "C"
+      ],
+      "damage": 180,
+      "op": "",
+      "text": "次の自分の番、このポケモンはワザが使えない。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "래피드 버니어",
+      "nameJa": "ラピッドバーニア",
+      "text": "自分の番に、このカードを手札からベンチに出したとき、1回使える。このポケモンを、バトルポケモンと入れ替える。その後、好きなだけ、自分のベンチポケモンについているエネルギーを、このポケモンにつけ替える。"
+     }
+    ]
+   }
+  },
+  "SV2a_195": {
+   "id": "SV2a_195",
+   "name": "뮤 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 180,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 0,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "게놈핵",
+      "nameJa": "ゲノムハック",
+      "cost": [
+       "C",
+       "C",
+       "C"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "相手のバトルポケモンが持っているワザを1つ選び、このワザとして使う。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "리스타트",
+      "nameJa": "リスタート",
+      "text": "自分の番に1回使える。自分の手札が3枚になるように、山札を引く。"
+     }
+    ]
+   }
+  },
+  "M1L_080": {
+   "id": "M1L_080",
+   "name": "메가입치트 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 270,
+    "type": "M",
+    "weak": "R",
+    "resist": "G",
+    "retreat": 2,
+    "rule": "mega",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "걸신",
+      "nameJa": "がっつく",
+      "cost": [
+       "M",
+       "M"
+      ],
+      "damage": 80,
+      "op": "×",
+      "text": "自分がすでにとったサイドの枚数×80ダメージ。"
+     },
+     {
+      "name": "빅바이트",
+      "nameJa": "ビッグバイト",
+      "cost": [
+       "M",
+       "M",
+       "C"
+      ],
+      "damage": 260,
+      "op": "",
+      "text": "相手のバトルポケモンにダメカンがのっているなら、このワザのダメージは「30」になる。"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "SV6a_040": {
+   "id": "SV6a_040",
+   "name": "게노세크트",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 110,
+    "type": "M",
+    "weak": "R",
+    "resist": "G",
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "마그넷 블라스트",
+      "nameJa": "マグネブラスト",
+      "cost": [
+       "M",
+       "C",
+       "C"
+      ],
+      "damage": 100,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": [
+     {
+      "name": "에이스 캔슬러",
+      "nameJa": "エースキャンセラー",
+      "text": "このポケモンに「ポケモンのどうぐ」がついているなら、相手は手札から「ACE SPEC」のカードを出して使えない。"
+     }
+    ]
+   }
+  },
+  "MC_312": {
+   "id": "MC_312",
+   "name": "라티아스 ex",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 210,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 2,
+    "rule": "ex",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "무한의칼날",
+      "nameJa": "むげんのやいば",
+      "cost": [
+       "P",
+       "P",
+       "C"
+      ],
+      "damage": 200,
+      "op": "",
+      "text": "次の自分の番、このポケモンはワザが使えない。"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "스카이라인",
+      "nameJa": "スカイライン",
+      "text": "このポケモンがいるかぎり、自分のたねポケモン全員のにげるためのエネルギーは、すべてなくなる。"
+     }
+    ]
+   }
+  },
+  "MC_664": {
+   "id": "MC_664",
+   "name": "포켓기어3.0",
+   "kind": "trainer",
+   "text": "自分の山札を上から7枚見る。その中にあるサポートを1枚、相手に見せてから、手札に加えてよい。残りのカードは山札にもどして切る。",
+   "trainer": "item"
+  },
+  "MC_649": {
+   "id": "MC_649",
+   "name": "에너지 갈아 달기",
+   "kind": "trainer",
+   "text": "自分のポケモンについている基本エネルギーを1個、自分の別のポケモンにつけ替える。",
+   "trainer": "item"
+  },
+  "SV1S_073": {
+   "id": "SV1S_073",
+   "name": "학습장치",
+   "kind": "trainer",
+   "text": "自分のバトルポケモンが、相手のポケモンからワザのダメージを受けてきぜつするたび、そのポケモンについている基本エネルギーを1枚選び、このカードをつけているポケモンにつけ替えてよい。",
+   "trainer": "tool"
+  },
+  "SV5M_064": {
+   "id": "SV5M_064",
+   "name": "부스트에너지 미래",
+   "kind": "trainer",
+   "text": "このカードをつけている「未来」のポケモンは、にげるためのエネルギーがすべてなくなり、そのポケモンが使うワザの、相手のバトルポケモンへのダメージは「+20」される。",
+   "trainer": "tool"
+  },
+  "MC_735": {
+   "id": "MC_735",
+   "name": "하솔",
+   "kind": "trainer",
+   "text": "自分の山札から、それぞれちがうタイプの基本エネルギーを2枚まで選び、相手に見せて、どちらか1枚を手札に加え、残りのエネルギーを自分のポケモンにつける。そして山札を切る。",
+   "trainer": "supporter"
+  }
+ }
+}

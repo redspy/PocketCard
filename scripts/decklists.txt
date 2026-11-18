@@ -1,0 +1,256 @@
+# 덱 리스트
+# 형식: <매수> <이름> <영문세트> <번호> [ko=<한글판 코드>]   또는   <매수> <이름> ko=<한글판 코드>
+#       <매수> <이름> ko=?   (한글판 코드 미확인 — 이름만 표시, 찾으면 코드로 바꿀 것)
+# 사용: npm run resolve-ko  → src/data/resolved.json 생성 + 이미지 받기
+# 참고: 레시피 이미지에서 번호가 xx/043, xx/045 인 카드(스타터 세트판)는 세트코드를 몰라
+#       같은 카드의 다른 한글판 인쇄로 대체했다.
+
+## flareon | 부스터 ex | 2026 코리안리그 시즌1 마스터 우승 (덱 코드 B2yr-pSTh-U1Do-eefS)
+4 부우부 ko=SV7_076
+4 야부엉 ko=SV7_114
+2 스핀로토무 ko=SV8a_131
+1 이브이 ko=SV8a_125
+1 이브이 ko=SV2a_133
+1 이브이 ex ko=SV8a_224
+2 부스터 ex ko=SV8a_202
+1 리피아 ex ko=SV8a_200
+1 오거폰 우물의가면 ex ko=SV6_127
+1 테라파고스 ex ko=SV7_130
+1 기로치 ex ko=SV6a_089
+1 뮤 ex ko=SV4a_327
+4 네스트볼 ko=SV1S_069
+3 하이퍼볼 ko=MC_673
+2 절친 포핀 ko=M1S_083
+1 테라스탈오브 ko=SV8a_147
+2 카운터 캐처 ko=SV4M_059
+1 밤의 들것 ko=MC_643
+2 포켓몬 교체 ko=M6a_101
+1 유리나팔 ko=SV8a_144
+1 반짝이는 결정 ko=SV8a_157
+1 풍선 ko=MC_689
+3 하솔 ko=SV8a_179
+2 보스의 지령 ko=MC_709
+1 모야모 ko=SV2D_068
+1 시아노 ko=SV8_103
+1 투로박사의 시나리오 ko=SV4M_066
+1 카지 ko=SV6_097
+1 태권왕의 수련 ko=M2a_221
+1 브라이어 ko=SV8a_166
+2 제로의 대공동 ko=SV8a_183
+1 재밍타워 ko=SV6_099
+1 그래비티 마운틴 ko=SV8_105
+2 기본 불꽃 에너지 ko=SV3_141
+2 기본 물 에너지 ko=SV2P_099
+2 기본 번개 에너지 ko=SV1V_108
+1 기본 풀 에너지 ko=SV2D_099
+
+## charizard | 리자몽 ex | 2026 코리안리그 시즌2 마스터 우승 (덱 코드 Hxf6-RWG3-3kCe-4H68)
+1 파이리 ko=M2_011
+2 파이리 ko=SV2a_168
+1 리자드 ko=M2_012
+1 리자몽 ex ko=SV3_134
+1 리자몽 ex ko=SV4a_349
+2 구구 ko=SV3_118
+1 피죤 ko=SV3_119
+2 피죤투 ex ko=SV3_136
+3 부우부 ko=SV7_076
+3 야부엉 ko=SV7_114
+2 해골몽 ko=SV6a_068
+1 미라몽 ko=SV6a_069
+1 야느와르몽 ko=SV6a_070
+1 스핀로토무 ko=SV8a_131
+1 테라파고스 ex ko=SV8a_226
+1 테라파고스 ex ko=SV7_130
+1 기로치 ex ko=SV6a_089
+1 클레피 ko=SV4a_087
+4 절친 포핀 ko=M1S_083
+4 네스트볼 ko=SV1S_069
+1 하이퍼볼 ko=MC_673
+4 이상한사탕 ko=MC_656
+1 대단한낚싯대 ko=SV2P_066
+1 밤의 들것 ko=MC_643
+1 프라임 캐처 ko=MC_670
+4 빛나 ko=M2_078
+2 모야모 ko=SV2D_068
+2 보스의 지령 ko=MC_709
+1 브라이어 ko=SV8a_166
+2 제로의 대공동 ko=SV8a_183
+5 기본 불꽃 에너지 ko=SV3_141
+2 제트 에너지 ko=SV1a_073
+
+## gholdengo | 타부자고 ex | 2026 코리안리그 시즌2 시니어 우승 (덱 코드 KEeS-EVmb-anDO-zl0P)
+4 모으령 ko=SV7a_024
+3 타부자고 ex ko=SV3a_050
+3 솔록 ko=M1L_027
+2 루나톤 ko=M1L_026
+1 기로치 ex ko=SV8a_104
+1 게노세크트 ex ko=SV11B_069
+1 이야후 ko=SV8a_075
+4 파이팅공 ko=M1L_060
+3 네스트볼 ko=SV1S_069
+1 절친 포핀 ko=M1S_083
+3 대지의 그릇 ko=SV6a_093
+4 수퍼 에너지 회수 ko=SV1a_064
+2 풍선 ko=MC_689
+1 오기머리띠 ko=SV1S_072
+1 용기의부적 ko=SV2D_067
+1 프라임 캐처 ko=MC_670
+4 페퍼 ko=SV1V_077
+3 보스의 지령 ko=MC_709
+2 암호마니아의 해독 ko=SV5M_069
+2 투로박사의 시나리오 ko=SV4M_066
+1 수련의 돌봄 ko=SV8a_167
+2 보물마을 ko=SV1a_071
+3 기본 강철 에너지 ko=SV4M_095
+7 기본 격투 에너지 ko=SV1S_108
+1 기본 악 에너지 ko=SV4K_095
+
+## dragapult | 드래펄트 ex | 2026 코리안리그 시즌1 시니어 우승 (덱 코드 gPDw-ki7S-nSTc-dRC4)
+4 드라꼰 ko=SV8a_118
+4 드래런치 ko=SV8a_119
+3 드래펄트 ex ko=SV6_120
+2 해골몽 ko=SV8a_064
+2 미라몽 ko=SV8a_065
+1 야느와르몽 ko=SV8a_066
+2 꼬몽울 ko=SV8a_001
+1 이야후 ko=SV8a_075
+1 루차불 ko=SV8a_084
+1 다투곰 붉은 달 ex ko=SV8a_225
+1 라티아스 ex ko=SV7a_019
+1 기로치 ex ko=SV6a_089
+4 하이퍼볼 ko=MC_673
+4 절친 포핀 ko=M1S_083
+3 밤의 들것 ko=MC_643
+3 카운터 캐처 ko=SV4M_059
+1 이상한사탕 ko=MC_656
+4 릴리에의 결심 ko=MC_706
+4 모야모 ko=SV2D_068
+2 보스의 지령 ko=MC_709
+2 투희 ko=SV11W_085
+1 투로박사의 시나리오 ko=SV4M_066
+2 재밍타워 ko=SV6_099
+2 기본 초 에너지 ko=SV2a_210
+1 기본 불꽃 에너지 ko=SV3_141
+1 네오 어퍼 에너지 ko=SV5K_071
+3 루미너스 에너지 ko=SV4a_188
+
+## gardevoir | 가디안 ex | 2026 코리안리그 시즌3 마스터 우승 (덱 코드 vqvQ-LtHf-zBuI-kt8B)
+1 꼬몽울 ko=SV8a_001
+3 랄토스 ko=M1S_040
+2 킬리아 ko=M1S_041
+2 가디안 ex ko=SV1S_028
+3 이야후 ko=SV6_055
+1 탱그릴 ko=SV11W_041
+1 우렁찬꼬리 ko=SV4K_032
+1 메가디안시 ex ko=M2a_227
+1 뮤 ex ko=SV2a_151
+1 릴리에의 삐삐 ex ko=SV9_033
+1 기로치 ex ko=SV6a_038
+2 용기의부적 ko=SV2D_067
+1 기술머신 에볼루션 ko=SV4M_061
+1 시크릿박스 ko=SV6_092
+4 하이퍼볼 ko=MC_673
+2 네스트볼 ko=SV1S_069
+3 대지의 그릇 ko=SV6a_093
+3 이상한사탕 ko=MC_656
+2 밤의 들것 ko=MC_643
+1 대단한낚싯대 ko=SV2P_066
+1 카운터 캐처 ko=SV4M_059
+4 모야모 ko=SV2D_068
+4 릴리에의 결심 ko=MC_706
+1 페퍼 ko=SV1V_077
+1 투로박사의 시나리오 ko=SV4M_066
+2 보물마을 ko=SV1a_071
+8 기본 초 에너지 ko=SV2a_210
+3 기본 악 에너지 ko=SV4K_095
+
+## pachirisu | 파쪼옥 | 2026 코리안리그 시즌3 시니어 우승 (덱 코드 L19C-IPqM-aQOr-P4Pd)
+2 파쪼옥 ko=SV7_032
+1 전툴라 ko=SV6a_002
+1 미라이돈 ex ko=SV1V_037
+1 미라이돈 ex ko=SV1V_094
+1 무쇠손 ex ko=SV4M_027
+1 무쇠손 ex ko=SV4M_079
+1 피카츄 ex ko=SV8_033
+1 피카츄 ex ko=SV8_122
+1 기로치 ex ko=SV8a_104
+1 다투곰 붉은 달 ex ko=SV5a_052
+1 무쇠잎새 ex ko=SV5M_084
+1 뮤 ex ko=SV2a_195
+1 메가입치트 ex ko=M1L_080
+1 게노세크트 ko=SV6a_040
+1 라티아스 ex ko=MC_312
+4 네스트볼 ko=SV1S_069
+4 하이퍼볼 ko=MC_673
+3 포켓기어3.0 ko=MC_664
+1 에너지 갈아 달기 ko=MC_649
+1 대지의 그릇 ko=SV6a_093
+1 풍선 ko=MC_689
+1 용기의부적 ko=SV2D_067
+1 학습장치 ko=SV1S_073
+1 부스트에너지 미래 ko=SV5M_064
+1 프라임 캐처 ko=MC_670
+4 하솔 ko=MC_735
+4 페퍼 ko=SV1V_077
+4 보스의 지령 ko=MC_709
+5 기본 번개 에너지 ko=SV1V_108
+5 기본 풀 에너지 ko=SV2D_099
+4 기본 강철 에너지 ko=SV4M_095
+
+# ── 이하 참고용 (게임에서 사용 안 함) ──
+
+## dragapult_gdansk | 드래펄트 ex (국제) | Regional Gdańsk 2026-10-31 3위
+4 Dreepy TWM 128
+4 Drakloak TWM 129
+3 Dragapult ex TWM 130
+2 Munkidori TWM 95
+2 Budew ASC 16
+1 Dunsparce TEF 128
+1 Dudunsparce TEF 129
+1 Meowth ex POR 62
+1 Fezandipiti ex ASC 142
+4 Lillie's Determination MEG 119 ko=M1L_061
+3 Boss's Orders MEG 114
+2 Crispin SCR 133 ko=SV7_100
+1 Rosa's Encouragement POR 84
+1 Judge POR 76 ko=SV9a_063
+4 Buddy-Buddy Poffin TEF 144
+4 Poké Pad POR 81
+4 Crushing Hammer POR 71
+3 Ultra Ball MEG 131
+3 Night Stretcher ASC 196
+1 Unfair Stamp TWM 165 ko=SV5a_055
+2 Risky Ruins MEG 127
+3 Fire Energy MEE 10
+3 Psychic Energy MEE 13
+3 Darkness Energy MEE 15 ko=SV4K_095
+
+## crustle | 암팰리스 | Regional Gdańsk 2026-10-31 4위
+4 Mega Kangaskhan ex MEG 104
+3 Dwebble DRI 11
+3 Crustle DRI 12
+4 Boss's Orders MEG 114
+4 Team Rocket's Petrel DRI 176 ko=SV10_091
+3 Lillie's Determination MEG 119 ko=M1L_061
+3 Crispin SCR 133 ko=SV7_100
+2 Eri TEF 146
+2 Hilda WHT 84
+1 Xerosic's Machinations SFA 64
+1 Pokémon Center Lady MEG 123
+4 Jumbo Ice Cream PFL 91
+3 Pokégear 3.0 SVI 186
+2 Buddy-Buddy Poffin TEF 144
+1 Switch MEG 130
+1 Ultra Ball MEG 131
+1 Hero's Cape TEF 152 ko=SV5M_066
+1 Lumiose City POR 77
+1 Festival Grounds TWM 149 ko=SV6_100
+1 Prism Tower CRI 80
+4 Mist Energy TEF 161
+4 Growing Grass Energy POR 86
+2 Spiky Energy JTG 159
+1 Psychic Energy MEE 13
+1 Darkness Energy MEE 15 ko=SV4K_095
+1 Fighting Energy MEE 14
+1 Fire Energy MEE 10
+1 Grass Energy MEE 9

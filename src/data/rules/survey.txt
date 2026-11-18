@@ -1,0 +1,367 @@
+## SV7_076 부우부 [Pokemon/Basic] jp=SV7-076 (flareon×4,charizard×3)
+HP70 Colorless 진화전:- 약점:[{"type":"Lightning","value":"×2"}] 저항:[{"type":"Fighting","value":"－30"}] 후퇴:1
+  [기술] さんどづき (Colorless) 10×: コインを3回投げ、オモテの数×10ダメージ。
+## SV7_114 야부엉 [Pokemon/Stage1] jp=SV7-114 (flareon×4,charizard×3)
+HP100 Colorless 진화전:- 약점:[{"type":"Lightning","value":"×2"}] 저항:[{"type":"Fighting","value":"－30"}] 후퇴:1
+  [특성] ほうせきさがし: 自分の番に、このカードを手札から出して進化させたとき、自分の場に「テラスタル」のポケモンがいるなら、1回使える。自分の山札からトレーナーズを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。
+  [기술] スピードウイング (ColorlessColorless) 60: 
+## SV8a_131 스핀로토무 [Pokemon/Basic] jp=SV8a-131 (flareon×2,charizard×1)
+HP70 Colorless 진화전:- 약점:[{"type":"Lightning","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:1
+  [특성] ファンコール: 最初の自分の番にだけ1回使える。自分の山札から、HPが「100」以下のポケモンを3枚まで選び、相手に見せて、手札に加える。そして山札を切る。この番、すでに別の「ファンコール」を使っていたなら、この特性は使えない。
+  [기술] とつげきランディング (Colorless) 70: 場にスタジアムが出ていないなら、このワザは失敗。
+## SV8a_125 이브이 [Pokemon/Basic] jp=SV8a-125 (flareon×1)
+HP50 Colorless 진화전:- 약점:[{"type":"Fighting","value":"×2"}] 저항:null 후퇴:1
+  [특성] ブーストしんか: このポケモンは、バトル場にいるかぎり、最初の自分の番や、出したばかりの番でも進化できる。
+  [기술] とつげき (ColorlessColorless) 30: このポケモンにも10ダメージ。
+## SV2a_133 이브이 [Pokemon/Basic] jp=SV2a-133 (flareon×1)
+HP70 Colorless 진화전:- 약점:[{"type":"Fighting","value":"x2"}] 저항:[] 후퇴:1
+  [기술] カラフルフレンズ (Colorless) : 自分の山札から、それぞれちがうタイプのポケモンを3枚まで選び、相手に見せて、手札に加える。そして山札を切る。
+  [기술] スキップ (Colorless) 10: 
+## SV8a_224 이브이 ex [Pokemon/Basic/EX] jp=SV8a-224 (flareon×1)
+HP200 Colorless 진화전:- 약점:[{"type":"Fighting","value":"×2"}] 저항:null 후퇴:1
+  [특성] にじいろDNA: このポケモンは、「イーブイ」から進化する「ポケモンex」を手札から出して、このポケモンにのせて進化できる。（最初の自分の番や、出したばかりの番には進化できない。）
+  [기술] クォーツシャイン (FireWaterLightning) 200: 
+## SV8a_202 부스터 ex [Pokemon/Stage1/EX] jp=SV8a-202 (flareon×2)
+HP270 Fire 진화전:- 약점:[{"type":"Water","value":"×2"}] 저항:null 후퇴:2
+  [기술] バーニングチャージ (FireColorless) 130: 自分の山札から基本エネルギーを2枚まで選び、自分のポケモン1匹につける。そして山札を切る。
+  [기술] カーネリアン (FireWaterLightning) 280: 次の自分の番、このポケモンはワザが使えない。
+## SV8a_200 리피아 ex [Pokemon/Stage1/EX] jp=SV8a-200 (flareon×1)
+HP270 Grass 진화전:- 약점:[{"type":"Fire","value":"×2"}] 저항:null 후퇴:2
+  [기술] あおばのあらし (GrassColorless) 60×: 相手のポケモン全員についているエネルギーの数×60ダメージ。
+  [기술] モスアゲート (GrassFireWater) 230: 自分のベンチポケモン全員のHPを、それぞれ「100」回復する。
+## SV6_127 오거폰 우물의가면 ex [Pokemon/Basic/EX] jp=SV6-127 (flareon×1)
+HP210 Water 진화전:- 약점:[{"type":"Lightning","value":"x2"}] 저항:[] 후퇴:1
+  [기술] すすりなく (Colorless) 20: 次の相手の番、このワザを受けたポケモンは、にげられない。
+  [기술] げきりゅうポンプ (WaterColorlessColorless) 100: のぞむなら、このポケモンについているエネルギーを3個選び、山札にもどして切る。その場合、相手のベンチポケモン1匹にも、120ダメージ。［ベンチは弱点・抵抗力を計算しない。］
+## SV7_130 테라파고스 ex [Pokemon/Basic/EX] jp=SV7-130 (flareon×1,charizard×1)
+HP230 Colorless 진화전:- 약점:[{"type":"Fighting","value":"×2"}] 저항:null 후퇴:2
+  [기술] ユニオンビート (ColorlessColorless) 30×: このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×30ダメージ。
+  [기술] クラウンオパール (GrassWaterLightning) 180: 次の相手の番、このポケモンはたねポケモン（ポケモンをのぞく）からワザのダメージを受けない。
+## SV6a_089 기로치 ex [Pokemon/Basic/EX] jp=SV6a-089 (flareon×1,charizard×1,dragapult×1)
+HP210 Darkness 진화전:- 약점:[{"type":"Fighting","value":"x2"}] 저항:[] 후퇴:1
+  [특성] さかてにとる: 前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。
+  [기술] クルーエルアロー (ColorlessColorlessColorless) : 相手のポケモン1匹に、100ダメージ。［ベンチは弱点・抵抗力を計算しない。］
+## SV4a_327 뮤 ex [Pokemon/Basic/EX] jp=SV4a-327 (flareon×1)
+HP180 Psychic 진화전:- 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:0
+  [특성] リスタート: 自分の番に1回使える。自分の手札が3枚になるように、山札を引く。
+  [기술] ゲノムハック (ColorlessColorlessColorless) : 相手のバトルポケモンが持っているワザを1つ選び、このワザとして使う。
+## SV1S_069 네스트볼 [Trainer/Item] jp=SV1S-070 (flareon×4,charizard×4,gholdengo×3,gardevoir×2,pachirisu×4)
+  [효과] 自分の山札からたねポケモンを1枚選び、ベンチに出す。そして山札を切る。
+## MC_673 하이퍼볼 [Trainer/Item] jp=MC-651 (flareon×3,charizard×1,dragapult×4,gardevoir×4,pachirisu×4)
+  [효과] このカードは、自分の手札を2枚トラッシュしなければ使えない。自分の山札からポケモンを1枚選び、相手に見せてから、手札に加える。そして山札を切る。
+## M1S_083 절친 포핀 [Trainer/Item] jp=M1S-081 (flareon×2,charizard×4,gholdengo×1,dragapult×4)
+  [효과] 自分の山札から、HPが「70」以下のたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。
+## SV8a_147 테라스탈오브 [Trainer/Item] jp=SV8a-145 (flareon×1)
+  [효과] 自分の山札から「テラスタル」のポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。
+## SV4M_059 카운터 캐처 [Trainer/Item] jp=SV4M-059 (flareon×2,dragapult×3,gardevoir×1)
+  [효과] このカードは、自分のサイドの残り枚数が、相手のサイドの残り枚数より多いときにしか使えない。
+
+相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。
+## MC_643 밤의 들것 [trainer] (flareon×1,charizard×1,dragapult×3,gardevoir×2) — 데이터 없음
+## M6a_101 포켓몬 교체 [Trainer/Item] jp=M6a-103 (flareon×2)
+  [효과] 自分のバトルポケモンをベンチポケモンと入れ替える。
+## SV8a_144 유리나팔 [Trainer/Item] jp=SV8a-140 (flareon×1)
+  [효과] このカードは、自分の場に「テラスタル」のポケモンがいるときにしか使えない。
+
+自分のベンチのポケモンを2匹まで選び、トラッシュから基本エネルギーを1枚ずつつける。
+## SV8a_157 반짝이는 결정 [Trainer/Tool] jp=SV8a-152 (flareon×1)
+  [효과] このカードをつけている「テラスタル」のポケモンがワザを使うとき、そのワザを使うためのエネルギーは、1個ぶん少なくなる。（少なくなるのは、どのタイプのエネルギーでもよい。）
+## MC_689 풍선 [Trainer/Tool] jp=MC-688 (flareon×1,gholdengo×2,pachirisu×1)
+  [효과] このカードをつけているポケモンは、にげるためのエネルギーが2個ぶん少なくなる。
+## SV8a_179 하솔 [Trainer/Supporter] jp=SV8a-163 (flareon×3)
+  [효과] 自分の山札から、それぞれちがうタイプの基本エネルギーを2枚まで選び、相手に見せて、どちらか1枚を手札に加え、残りのエネルギーを自分のポケモンにつける。そして山札を切る。
+## MC_709 보스의 지령 [Trainer/Supporter] jp=MC-724 (flareon×2,charizard×2,gholdengo×3,dragapult×2,pachirisu×4)
+  [효과] 相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。
+## SV2D_068 모야모 [Trainer/Supporter] jp=SV2D-069 (flareon×1,charizard×2,dragapult×4,gardevoir×4)
+  [효과] おたがいのプレイヤーは、それぞれ自分の手札をすべてウラにして切り、山札の下にもどす。その後、それぞれ自分のサイドの残り枚数ぶん、山札を引く。
+## SV8_103 시아노 [Trainer/Supporter] jp=SV8-102 (flareon×1)
+  [효과] 自分の山札から「ポケモンex」を3枚まで選び、相手に見せて、手札に加える。そして山札を切る。
+## SV4M_066 투로박사의 시나리오 [Trainer/Supporter] jp=SV4M-065 (flareon×1,gholdengo×2,dragapult×1,gardevoir×1)
+  [효과] 自分の場のポケモンを1匹選び、手札にもどす。（ポケモン以外のカードは、すべてトラッシュする。）
+## SV6_097 카지 [Trainer/Supporter] jp=SV6-096 (flareon×1)
+  [효과] このカードは、2つの効果から1つを選んで使う。◆自分のバトルポケモンをベンチポケモンと入れ替える。◆この番、自分のポケモンが使うワザの、相手のバトル場の「ポケモンex・V」へのダメージは「+30」される。
+## M2a_221 태권왕의 수련 [Trainer/Supporter] jp=M2a-220 (flareon×1)
+  [효과] この番、自分のポケモンが使うワザの、相手のバトル場の「ポケモンex」へのダメージは「+40」される。
+## SV8a_166 브라이어 [Trainer/Supporter] jp=SV8a-176 (flareon×1,charizard×1)
+  [효과] このカードは、相手のサイドの残り枚数が2枚のときにしか使えない。
+
+この番、自分の「テラスタル」のポケモンが使うワザのダメージで、相手のバトルポケモンがきぜつしたなら、サイドを1枚多くとる。
+## SV8a_183 제로의 대공동 [Trainer/Stadium] jp=SV8a-182 (flareon×2,charizard×2)
+  [효과] 自分の場に「テラスタル」のポケモンがいるプレイヤーが、ベンチに出せるポケモンの数は8匹になる。
+
+（このカードがトラッシュされたときか、自分の場に「テラスタル」のポケモンがいなくなったとき、ベンチが5匹になるまでトラッシュする。おたがいにトラッシュするなら、このカードの持ち主から行う。）
+## SV6_099 재밍타워 [Trainer/Stadium] jp=SV6-100 (flareon×1,dragapult×2)
+  [효과] おたがいのポケモン全員についている「ポケモンのどうぐ」の効果は、すべてなくなる。
+## SV8_105 그래비티 마운틴 [Trainer/Stadium] jp=SV8-106 (flareon×1)
+  [효과] おたがいの場の2進化ポケモン全員の最大HPは、それぞれ「-30」される。
+## SV3_141 기본 불꽃 에너지 [energy] (flareon×2,charizard×5,dragapult×1) — 데이터 없음
+## SV2P_099 기본 물 에너지 [energy] (flareon×2) — 데이터 없음
+## SV1V_108 기본 번개 에너지 [energy] (flareon×2,pachirisu×5) — 데이터 없음
+## SV2D_099 기본 풀 에너지 [energy] (flareon×1,pachirisu×5) — 데이터 없음
+## M2_011 파이리 [Pokemon/Basic] jp=M2-011 (charizard×1)
+HP80 Fire 진화전:- 약점:[{"type":"Water","value":"x2"}] 저항:[] 후퇴:2
+  [특성] みがる: このポケモンにエネルギーがついていないなら、このポケモンはにげるためのエネルギーが、すべてなくなる。
+  [기술] ひだね (Fire) 20: 
+## SV2a_168 파이리 [Pokemon/Basic] jp=SV2a-168 (charizard×2)
+HP70 Fire 진화전:- 약점:[{"type":"Water","value":"x2"}] 저항:[] 후퇴:1
+  [기술] まるやけ (Fire) : 場に出ているスタジアムをトラッシュする。
+  [기술] ひをはく (FireFire) 30: 
+## M2_012 리자드 [Pokemon/Stage1] jp=M2-012 (charizard×1)
+HP110 Fire 진화전:ヒトカゲ 약점:[{"type":"Water","value":"x2"}] 저항:[] 후퇴:2
+  [기술] ひをはく (Fire) 40: 
+## SV3_134 리자몽 ex [Pokemon/Stage2/EX] jp=SV3-134 (charizard×1)
+HP330 Fire 진화전:- 약점:[{"type":"Water","value":"×2"}] 저항:null 후퇴:2
+  [특성] れんごくしはい: 自分の番に、このカードを手札から出して進化させたとき、1回使える。自分の山札から「基本エネルギー」を3枚まで選び、自分のポケモンに好きなようにつける。そして山札を切る。
+  [기술] バーニングダーク (FireFire) 180+: 相手がすでにとったサイドの枚数×30ダメージ追加。
+## SV4a_349 리자몽 ex [Pokemon/Stage2/EX] jp=SV4a-349 (charizard×1)
+HP330 Darkness 진화전:- 약점:[{"type":"Grass","value":"×2"}] 저항:null 후퇴:2
+  [특성] れんごくしはい: 自分の番に、このカードを手札から出して進化させたとき、1回使える。自分の山札から「基本エネルギー」を3枚まで選び、自分のポケモンに好きなようにつける。そして山札を切る。
+  [기술] バーニングダーク (FireFire) 180+: 相手がすでにとったサイドの枚数×30ダメージ追加。
+## SV3_118 구구 [Pokemon/Basic] jp=SV3-118 (charizard×2)
+HP60 Colorless 진화전:- 약점:[{"type":"Lightning","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:1
+  [기술] かぜおこし (Colorless) 20: 
+## SV3_119 피죤 [Pokemon/Stage1] jp=SV3-119 (charizard×1)
+HP90 Colorless 진화전:- 약점:[{"type":"Lightning","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:1
+  [기술] つばさでうつ (ColorlessColorless) 40: 
+## SV3_136 피죤투 ex [Pokemon/Stage2/EX] jp=SV3-136 (charizard×2)
+HP280 Colorless 진화전:- 약점:[{"type":"Lightning","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:0
+  [특성] マッハサーチ: 自分の番に1回使える。自分の山札から好きなカードを1枚選び、手札に加える。そして山札を切る。この番、すでに別の「マッハサーチ」を使っていたなら、この特性は使えない。
+  [기술] ふきすさぶ (ColorlessColorless) 120: のぞむなら、場に出ているスタジアムをトラッシュする。
+## SV6a_068 해골몽 [Pokemon/Basic] jp=SV6a-068 (charizard×2)
+HP60 Psychic 진화전:- 약점:[{"type":"Darkness","value":"x2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:1
+  [기술] むかえにいく (Psychic) : 自分のトラッシュから「ヨマワル」を3枚まで選び、ベンチに出す。
+  [기술] つぶやく (PsychicPsychic) 30: 
+## SV6a_069 미라몽 [Pokemon/Stage1] jp=SV6a-069 (charizard×1)
+HP90 Psychic 진화전:ヨマワル 약점:[{"type":"Darkness","value":"x2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:2
+  [특성] カースドボム: 自分の番に1回使えて、使ったなら、このポケモンをきぜつさせる。相手のポケモン1匹に、ダメカンを5個のせる。
+  [기술] おにび (PsychicPsychic) 50: 
+## SV6a_070 야느와르몽 [Pokemon/Stage2] jp=SV6a-070 (charizard×1)
+HP160 Psychic 진화전:サマヨール 약점:[{"type":"Darkness","value":"x2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:3
+  [특성] カースドボム: 自分の番に1回使えて、使ったなら、このポケモンをきぜつさせる。相手のポケモン1匹に、ダメカンを13個のせる。
+  [기술] かげしばり (PsychicPsychicColorless) 150: 次の相手の番、このワザを受けたポケモンは、にげられない。
+## SV8a_226 테라파고스 ex [Pokemon/Basic/EX] jp=SV8a-226 (charizard×1)
+HP230 Colorless 진화전:- 약점:[{"type":"Fighting","value":"×2"}] 저항:null 후퇴:2
+  [기술] ユニオンビート (ColorlessColorless) 30×: このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×30ダメージ。
+  [기술] クラウンオパール (GrassWaterLightning) 180: 次の相手の番、このポケモンはたねポケモン（ポケモンをのぞく）からワザのダメージを受けない。
+## SV4a_087 클레피 [Pokemon/Basic] jp=SV4a-087 (charizard×1)
+HP70 Psychic 진화전:- 약점:[{"type":"Metal","value":"×2"}] 저항:null 후퇴:1
+  [특성] いたずらロック: このポケモンがバトル場にいるかぎり、おたがいの場のたねポケモンの特性（「いたずらロック」をのぞく）は、すべてなくなる。
+  [기술] ねらいおとす (Colorless) 10: ダメージを与える前に、相手のバトルポケモンについている「ポケモンのどうぐ」をトラッシュする。
+## MC_656 이상한사탕 [Trainer/Item] jp=MC-655 (charizard×4,dragapult×1,gardevoir×3)
+  [효과] 自分のたねポケモン1匹から進化する1進化の上の2進化ポケモンを、手札から1枚選び、そのたねポケモンにのせて進化させる。[最初の自分の番と、この番出したばかりのたねポケモンには使えない。]
+## SV2P_066 대단한낚싯대 [Trainer/Item] jp=SV2P-066 (charizard×1,gardevoir×1)
+  [효과] 自分のトラッシュからポケモンと基本エネルギーを合計3枚まで選び、相手に見せて、山札にもどして切る。
+## MC_670 프라임 캐처 [Trainer/Item] jp=MC-656 (charizard×1,gholdengo×1,pachirisu×1)
+  [효과] 相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。その後、自分のバトルポケモンをベンチポケモンと入れ替える。
+## M2_078 빛나 [Trainer/Supporter] jp=M2-077 (charizard×4)
+  [효과] 自分の山札から「たねポケモン」「1進化ポケモン」「2進化ポケモン」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。 サポートは、自分の番に1枚しか使えない。
+## SV1a_073 제트 에너지 [Energy/Special] jp=SV1a-072 (charizard×2)
+  [효과] このカードは、ポケモンについているかぎり、エネルギー1個ぶんとしてはたらく。
+
+このカードを手札からベンチポケモンにつけたとき、このカードをつけたポケモンを、バトルポケモンと入れ替える。
+## SV7a_024 모으령 [Pokemon/Basic] jp=SV7a-024 (gholdengo×4)
+HP70 Psychic 진화전:- 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"type":"Fighting","value":"－30"}] 후퇴:2
+  [기술] ちいさなおつかい (Colorless) : 自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。
+  [기술] たいあたり (ColorlessColorlessColorless) 50: 
+## SV3a_050 타부자고 ex [Pokemon/Stage1/EX] jp=SV3a-050 (gholdengo×3)
+HP260 Metal 진화전:- 약점:[{"type":"Fire","value":"×2"}] 저항:[{"type":"Grass","value":"-30"}] 후퇴:2
+  [특성] ボーナスコイン: 自分の番に1回使える。自分の山札を1枚引く。このポケモンがバトル場にいるなら、さらに1枚引く。
+  [기술] ゴールドラッシュ (Metal) 50×: 自分の手札から基本エネルギーを好きなだけトラッシュし、その枚数×50ダメージ。
+## M1L_027 솔록 [Pokemon/Basic] jp=M1L-027 (gholdengo×3)
+HP110 Fighting 진화전:- 약점:[{"type":"Grass","value":"x2"}] 저항:[] 후퇴:1
+  [기술] コスモビーム (Fighting) 70: 自分のベンチに「ルナトーン」がいないなら、このワザは失敗。このワザのダメージは弱点・抵抗力を計算しない。
+## M1L_026 루나톤 [Pokemon/Basic] jp=M1L-026 (gholdengo×2)
+HP110 Fighting 진화전:- 약점:[{"type":"Grass","value":"x2"}] 저항:[] 후퇴:1
+  [특성] ルナサイクル: 自分の場に「ソルロック」がいて、自分の番に、自分の手札から「基本エネルギー」を1枚トラッシュするなら、1回使える。自分の山札を3枚引く。この特性は別の「ルナサイクル」を使った番は使えない。
+  [기술] パワージェム (FightingFighting) 50: 
+## SV8a_104 기로치 ex [Pokemon/Basic/EX] jp=SV8a-104 (gholdengo×1,pachirisu×1)
+HP210 Darkness 진화전:- 약점:[{"type":"Fighting","value":"×2"}] 저항:null 후퇴:1
+  [특성] さかてにとる: 前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。
+  [기술] クルーエルアロー (ColorlessColorlessColorless) : 相手のポケモン1匹に、100ダメージ。［ベンチは弱点・抵抗力を計算しない。］
+## SV11B_069 게노세크트 ex [Pokemon/Basic/EX] jp=SV11B-069 (gholdengo×1)
+HP220 Metal 진화전:- 약점:[{"type":"Fire","value":"x2"}] 저항:[{"type":"Grass","value":"-30"}] 후퇴:2
+  [특성] メタルシグナル: 自分の番に1回使える。自分の山札からタイプの進化ポケモンを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。
+  [기술] プロテクトチャージ (MetalMetalColorless) 150: 次の相手の番、このポケモンが受けるワザのダメージは「-30」される。
+## SV8a_075 이야후 [Pokemon/Basic] jp=SV8a-075 (gholdengo×1,dragapult×1)
+HP110 Psychic 진화전:- 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:1
+  [특성] アドレナブレイン: このポケモンにエネルギーがついているなら、自分の番に1回使える。自分の場のポケモン1匹にのっているダメカンを3個まで選び、相手の場のポケモン1匹にのせ替える。
+  [기술] サイコトリップ (PsychicColorless) 60: 相手のバトルポケモンをこんらんにする。
+## M1L_060 파이팅공 [Trainer/Item] jp=M1L-059 (gholdengo×4)
+  [효과] 自分の山札からタイプのたねポケモンまたは「基本エネルギー」を1枚選び、相手に見せて、手札に加える。そして山札を切る。
+## SV6a_093 대지의 그릇 [Trainer/Item] jp=SV6a-093 (gholdengo×3,gardevoir×3,pachirisu×1)
+  [효과] このカードは、自分の手札を1枚トラッシュしなければ使えない。自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。
+## SV1a_064 수퍼 에너지 회수 [Trainer/Item] jp=SV1a-064 (gholdengo×4)
+  [효과] このカードは、自分の手札を2枚トラッシュしなければ使えない。
+
+自分のトラッシュから基本エネルギーを4枚まで選び、相手に見せて、手札に加える。（このカードの効果でトラッシュしたエネルギーは選べない。）
+## SV1S_072 오기머리띠 [Trainer/Tool] jp=SV1S-073 (gholdengo×1)
+  [효과] 自分のサイドの残り枚数が、相手のサイドの残り枚数より多いなら、このカードをつけているポケモンが使うワザの、相手のバトルポケモンへのダメージは「+30」される。
+## SV2D_067 용기의부적 [Trainer/Tool] jp=SV2D-067 (gholdengo×1,gardevoir×2,pachirisu×1)
+  [효과] このカードをつけているたねポケモンの最大HPは「+50」される。
+## SV1V_077 페퍼 [Trainer/Supporter] jp=SV1V-076 (gholdengo×4,gardevoir×1,pachirisu×4)
+  [효과] 自分の山札から「グッズ」と「ポケモンのどうぐ」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。
+## SV5M_069 암호마니아의 해독 [Trainer/Supporter] jp=SV5M-067 (gholdengo×2)
+  [효과] 自分の山札から好きなカードを2枚選ぶ。残りの山札を切り、選んだカードを好きな順番に入れ替えて、山札の上にもどす。
+## SV8a_167 수련의 돌봄 [Trainer/Supporter] jp=SV8a-168 (gholdengo×1)
+  [효과] 自分のトラッシュからポケモン（「ルールを持つポケモン」をのぞく）と基本エネルギーを合計3枚まで選び、相手に見せて、手札に加える。
+## SV1a_071 보물마을 [Trainer/Stadium] jp=SV1a-070 (gholdengo×2,gardevoir×2)
+  [효과] おたがいのプレイヤーは、自分の番ごとに1回、自分の山札からたねポケモン（「ルールを持つポケモン」をのぞく）を1枚選び、ベンチに出してよい。そして山札を切る。
+## SV4M_095 기본 강철 에너지 [energy] (gholdengo×3,pachirisu×4) — 데이터 없음
+## SV1S_108 기본 격투 에너지 [energy] (gholdengo×7) — 데이터 없음
+## SV4K_095 기본 악 에너지 [energy] (gholdengo×1,gardevoir×3) — 데이터 없음
+## SV8a_118 드라꼰 [Pokemon/Basic] jp=SV8a-118 (dragapult×4)
+HP70 Dragon 진화전:- 약점:null 저항:null 후퇴:1
+  [기술] ちょっとうらむ (Psychic) 10: 
+  [기술] かみつく (FirePsychic) 40: 
+## SV8a_119 드래런치 [Pokemon/Stage1] jp=SV8a-119 (dragapult×4)
+HP90 Dragon 진화전:- 약점:null 저항:null 후퇴:1
+  [특성] ていさつしれい: 自分の番に1回使える。自分の山札を上から2枚見て、どちらか1枚を選び、手札に加える。残りのカードは、山札の下にもどす。
+  [기술] リューズヘッド (FirePsychic) 70: 
+## SV6_120 드래펄트 ex [Pokemon/Stage2/EX] jp=SV6-120 (dragapult×3)
+HP320 Dragon 진화전:ドロンチ 약점:[] 저항:[] 후퇴:1
+  [기술] ジェットヘッド (Colorless) 70: 
+  [기술] ファントムダイブ (FirePsychic) 200: ダメカン6個を、相手のベンチポケモンに好きなようにのせる。
+## SV8a_064 해골몽 [Pokemon/Basic] jp=SV8a-064 (dragapult×2)
+HP60 Psychic 진화전:- 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:1
+  [기술] むかえにいく (Psychic) : 自分のトラッシュから「ヨマワル」を3枚まで選び、ベンチに出す。
+  [기술] つぶやく (PsychicPsychic) 30: 
+## SV8a_065 미라몽 [Pokemon/Stage1] jp=SV8a-065 (dragapult×2)
+HP90 Psychic 진화전:- 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:2
+  [특성] カースドボム: 自分の番に1回使えて、使ったなら、このポケモンをきぜつさせる。相手のポケモン1匹に、ダメカンを5個のせる。
+  [기술] おにび (PsychicPsychic) 50: 
+## SV8a_066 야느와르몽 [Pokemon/Stage2] jp=SV8a-066 (dragapult×1)
+HP160 Psychic 진화전:- 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:3
+  [특성] カースドボム: 自分の番に1回使えて、使ったなら、このポケモンをきぜつさせる。相手のポケモン1匹に、ダメカンを13個のせる。
+  [기술] かげしばり (PsychicPsychicColorless) 150: 次の相手の番、このワザを受けたポケモンは、にげられない。
+## SV8a_001 꼬몽울 [Pokemon/Basic] jp=SV8a-001 (dragapult×2,gardevoir×1)
+HP30 Grass 진화전:- 약점:[{"type":"Fire","value":"×2"}] 저항:null 후퇴:0
+  [기술] むずむずかふん () 10: 次の相手の番、相手は手札からグッズを出して使えない。
+## SV8a_084 루차불 [Pokemon/Basic] jp=SV8a-084 (dragapult×1)
+HP70 Fighting 진화전:- 약점:[{"type":"Psychic","value":"×2"}] 저항:null 후퇴:1
+  [특성] フライングエントリー: 自分の番に、このカードを手札からベンチに出したとき、1回使える。相手のベンチポケモン2匹に、それぞれダメカンを1個のせる。
+  [기술] つばさでうつ (FightingColorlessColorless) 70: 
+## SV8a_225 다투곰 붉은 달 ex [Pokemon/Basic/EX] jp=SV8a-225 (dragapult×1)
+HP260 Colorless 진화전:- 약점:[{"type":"Fighting","value":"×2"}] 저항:null 후퇴:3
+  [특성] ろうれんのわざ: 相手がすでにとったサイドの枚数ぶん、このポケモンが「ブラッドムーン」を使うためのエネルギーは少なくなる。
+  [기술] ブラッドムーン (ColorlessColorlessColorlessColorlessColorless) 240: 次の自分の番、このポケモンはワザが使えない。
+## SV7a_019 라티아스 ex [Pokemon/Basic/EX] jp=SV7a-019 (dragapult×1)
+HP210 Psychic 진화전:- 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"type":"Fighting","value":"－30"}] 후퇴:2
+  [특성] スカイライン: このポケモンがいるかぎり、自分のたねポケモン全員のにげるためのエネルギーは、すべてなくなる。
+  [기술] むげんのやいば (PsychicPsychicColorless) 200: 次の自分の番、このポケモンはワザが使えない。
+## MC_706 릴리에의 결심 [Trainer/Supporter] jp=MC-729 (dragapult×4,gardevoir×4)
+  [효과] 自分の手札をすべて山札にもどして切る。その後、山札を6枚引く。自分のサイドの残り枚数が6枚なら、引く枚数は8枚になる。
+## SV11W_085 투희 [Trainer/Supporter] jp=SV11W-085 (dragapult×2)
+  [효과] 自分の山札から進化ポケモンとエネルギーを1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。 サポートは、自分の番に1枚しか使えない。
+## SV2a_210 기본 초 에너지 [energy] (dragapult×2,gardevoir×8) — 데이터 없음
+## SV5K_071 네오 어퍼 에너지 [Energy/Special] jp=SV5K-071 (dragapult×1)
+  [효과] このカードは、ポケモンについているかぎり、[C]エネルギー1個ぶんとしてはたらく。2進化ポケモンについているなら、すべてのタイプのエネルギー2個ぶんとしてはたらく。
+## SV4a_188 루미너스 에너지 [Energy/Special] jp=SV4a-190 (dragapult×3)
+  [효과] このカードは、ポケモンについているかぎり、すべてのタイプのエネルギー1個ぶんとしてはたらく。
+
+このカードをつけているポケモンに、このカード以外の特殊エネルギーがついているなら、エネルギー1個ぶんとしてはたらく。
+## M1S_040 랄토스 [Pokemon/Basic] jp=M1S-040 (gardevoir×3)
+HP70 Psychic 진화전:- 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:1
+  [기술] もってくる (Colorless) : 自分の山札を1枚引く。
+  [기술] ずつき (Psychic) 10: 
+## M1S_041 킬리아 [Pokemon/Stage1] jp=M1S-041 (gardevoir×2)
+HP100 Psychic 진화전:ラルトス 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:1
+  [기술] コールサイン (Psychic) : 自分の山札からポケモンを3枚まで選び、相手に見せて、手札に加える。そして山札を切る。
+  [기술] サイコショット (Psychic) 30: 
+## SV1S_028 가디안 ex [Pokemon/Stage2/EX] jp=SV1S-028 (gardevoir×2)
+HP310 Psychic 진화전:- 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:2
+  [특성] サイコエンブレイス: 自分の番に何回でも使える。自分のトラッシュから「基本エネルギー」を1枚選び、自分のポケモンにつける。その後、つけたポケモンにダメカンを2個のせる。（きぜつするポケモンに、この特性は使えない。）
+  [기술] ミラクルフォース (PsychicPsychicColorless) 190: このポケモンの特殊状態を、すべて回復する。
+## SV6_055 이야후 [Pokemon/Basic] jp=SV6-055 (gardevoir×3)
+HP110 Psychic 진화전:- 약점:[{"type":"Darkness","value":"x2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:1
+  [특성] アドレナブレイン: このポケモンに[D]エネルギーがついているなら、自分の番に1回使える。自分の場のポケモン1匹にのっているダメカンを3個まで選び、相手の場のポケモン1匹にのせ替える。
+  [기술] サイコトリップ (PsychicColorless) 60: 相手のバトルポケモンをこんらんにする。
+## SV11W_041 탱그릴 [Pokemon/Basic] jp=SV11W-041 (gardevoir×1)
+HP80 Psychic 진화전:- 약점:[{"type":"Darkness","value":"x2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:3
+  [기술] うみのかげ (Psychic) 20: 次の相手の番、相手は手札からグッズを出して使えない。
+## SV4K_032 우렁찬꼬리 [Pokemon/Basic] jp=SV4K-032 (gardevoir×1)
+HP90 Psychic 진화전:- 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:1
+  [기술] ビンタ (Psychic) 30: 
+  [기술] ほえさけぶ (PsychicColorless) : 相手のポケモン1匹に、このポケモンにのっているダメカンの数×20ダメージ。［ベンチは弱点・抵抗力を計算しない。］
+## M2a_227 메가디안시 ex [Pokemon/Basic/EX] jp=M2a-227 (gardevoir×1)
+HP270 Psychic 진화전:- 약점:[{"type":"Metal","value":"x2"}] 저항:[] 후퇴:1
+  [특성] ダイヤコート: このポケモンが受けるワザのダメージは「-30」される。
+  [기술] ガーランドレイ (PsychicPsychic) 120×: このポケモンについているエネルギーを2枚までトラッシュし、その枚数×120ダメージ。
+## SV2a_151 뮤 ex [Pokemon/Basic/EX] jp=SV2a-151 (gardevoir×1)
+HP180 Psychic 진화전:- 약점:[{"type":"Darkness","value":"x2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:0
+  [특성] リスタート: 自分の番に1回使える。自分の手札が3枚になるように、山札を引く。
+  [기술] ゲノムハック (ColorlessColorlessColorless) : 相手のバトルポケモンが持っているワザを1つ選び、このワザとして使う。
+## SV9_033 릴리에의 삐삐 ex [Pokemon/Basic/EX] jp=SV9-033 (gardevoir×1)
+HP190 Psychic 진화전:- 약점:[{"type":"Metal","value":"×2"}] 저항:null 후퇴:1
+  [특성] フェアリーゾーン: このポケモンがいるかぎり、相手の場のポケモン全員の弱点は、すべてタイプになる。［弱点は「×2」で計算する。］
+  [기술] フルムーンロンド (PsychicColorless) 20+: おたがいのベンチポケモンの数×20ダメージ追加。
+## SV6a_038 기로치 ex [Pokemon/Basic/EX] jp=SV6a-038 (gardevoir×1)
+HP210 Darkness 진화전:- 약점:[{"type":"Fighting","value":"x2"}] 저항:[] 후퇴:1
+  [특성] さかてにとる: 前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。
+  [기술] クルーエルアロー (ColorlessColorlessColorless) : 相手のポケモン1匹に、100ダメージ。［ベンチは弱点・抵抗力を計算しない。］
+## SV4M_061 기술머신 에볼루션 [Trainer/Tool] jp=SV4M-063 (gardevoir×1)
+  [효과] このカードをつけているポケモンは、このカードに書かれているワザを使える。［ワザを使うためのエネルギーは必要。］
+ポケモンについているこのカードは、自分の番の終わりにトラッシュする。
+## SV6_092 시크릿박스 [Trainer/Item] jp=SV6-092 (gardevoir×1)
+  [효과] このカードは、自分の手札を3枚トラッシュしなければ使えない。 自分の山札から「グッズ」「ポケモンのどうぐ」「サポート」「スタジアム」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。
+## SV7_032 파쪼옥 [Pokemon/Basic] jp=SV7-032 (pachirisu×2)
+HP30 Lightning 진화전:- 약점:[{"type":"Fighting","value":"×2"}] 저항:null 후퇴:1
+  [기술] バチュチャージ (Colorless) : 自分の山札から「基本エネルギー」と「基本エネルギー」をそれぞれ2枚まで選び、自分のポケモンに好きなようにつける。そして山札を切る。
+## SV6a_002 전툴라 [Pokemon/Stage1] jp=SV6a-002 (pachirisu×1)
+HP100 Grass 진화전:バチュル 약점:[{"type":"Fire","value":"x2"}] 저항:[] 후퇴:1
+  [특성] ふくがん: このポケモンが使うワザの、相手のバトル場の特性を持つポケモンへのダメージは「+50」される。
+  [기술] ビリビリウェブ (GrassColorless) 50+: このポケモンに[L]エネルギーがついているなら、80ダメージ追加。
+## SV1V_037 미라이돈 ex [Pokemon/Basic/EX] jp=SV1V-037 (pachirisu×1)
+HP220 Lightning 진화전:- 약점:[{"type":"Fighting","value":"×2"}] 저항:null 후퇴:1
+  [특성] タンデムユニット: 自分の番に1回使える。自分の山札からタイプのたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。
+  [기술] フォトンブラスター (LightningLightningColorless) 220: 次の自分の番、このポケモンはワザが使えない。
+## SV1V_094 미라이돈 ex [Pokemon/Basic/EX] jp=SV1V-094 (pachirisu×1)
+HP220 Lightning 진화전:- 약점:[{"type":"Fighting","value":"×2"}] 저항:null 후퇴:1
+  [특성] タンデムユニット: 自分の番に1回使える。自分の山札からタイプのたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。
+  [기술] フォトンブラスター (LightningLightningColorless) 220: 次の自分の番、このポケモンはワザが使えない。
+## SV4M_027 무쇠손 ex [Pokemon/Basic/EX] jp=SV4M-027 (pachirisu×1)
+HP230 Lightning 진화전:- 약점:[{"type":"Fighting","value":"×2"}] 저항:null 후퇴:4
+  [기술] アームプレス (LightningLightningColorless) 160: 
+  [기술] ごっつあんプリファイ (LightningColorlessColorlessColorless) 120: このワザのダメージで、相手のポケモンがきぜつしたなら、サイドを1枚多くとる。
+## SV4M_079 무쇠손 ex [Pokemon/Basic/EX] jp=SV4M-079 (pachirisu×1)
+HP230 Lightning 진화전:- 약점:[{"type":"Fighting","value":"×2"}] 저항:null 후퇴:4
+  [기술] アームプレス (LightningLightningColorless) 160: 
+  [기술] ごっつあんプリファイ (LightningColorlessColorlessColorless) 120: このワザのダメージで、相手のポケモンがきぜつしたなら、サイドを1枚多くとる。
+## SV8_033 피카츄 ex [Pokemon/Basic/EX] jp=SV8-033 (pachirisu×1)
+HP200 Lightning 진화전:- 약점:[{"type":"Fighting","value":"x2"}] 저항:[] 후퇴:1
+  [특성] がんばりハート: このポケモンのHPがまんたんの状態で、このポケモンがワザのダメージを受けてきぜつするとき、きぜつせず、残りHPが「10」の状態で場に残る。
+  [기술] トパーズボルト (GrassLightningMetal) 300: このポケモンについているエネルギーを3個選び、トラッシュする。
+## SV8_122 피카츄 ex [Pokemon/Basic/EX] jp=SV8-122 (pachirisu×1)
+HP200 Lightning 진화전:- 약점:[{"type":"Fighting","value":"x2"}] 저항:[] 후퇴:1
+  [특성] がんばりハート: このポケモンのHPがまんたんの状態で、このポケモンがワザのダメージを受けてきぜつするとき、きぜつせず、残りHPが「10」の状態で場に残る。
+  [기술] トパーズボルト (GrassLightningMetal) 300: このポケモンについているエネルギーを3個選び、トラッシュする。
+## SV5a_052 다투곰 붉은 달 ex [Pokemon/Basic/EX] jp=SV5a-052 (pachirisu×1)
+HP260 Colorless 진화전:- 약점:[{"type":"Fighting","value":"×2"}] 저항:null 후퇴:3
+  [특성] ろうれんのわざ: 相手がすでにとったサイドの枚数ぶん、このポケモンが「ブラッドムーン」を使うためのエネルギーは少なくなる。
+  [기술] ブラッドムーン (ColorlessColorlessColorlessColorlessColorless) 240: 次の自分の番、このポケモンはワザが使えない。
+## SV5M_084 무쇠잎새 ex [pokemon] (pachirisu×1) — 데이터 없음
+## SV2a_195 뮤 ex [Pokemon/Basic/EX] jp=SV2a-195 (pachirisu×1)
+HP180 Psychic 진화전:- 약점:[{"type":"Darkness","value":"x2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:0
+  [특성] リスタート: 自分の番に1回使える。自分の手札が3枚になるように、山札を引く。
+  [기술] ゲノムハック (ColorlessColorlessColorless) : 相手のバトルポケモンが持っているワザを1つ選び、このワザとして使う。
+## M1L_080 메가입치트 ex [Pokemon/Basic/EX] jp=M1L-080 (pachirisu×1)
+HP270 Metal 진화전:- 약점:[{"type":"Fire","value":"x2"}] 저항:[{"type":"Grass","value":"-30"}] 후퇴:2
+  [기술] がっつく (MetalMetal) 80x: 自分がすでにとったサイドの枚数×80ダメージ。
+  [기술] ビッグバイト (MetalMetalColorless) 260: 相手のバトルポケモンにダメカンがのっているなら、このワザのダメージは「30」になる。
+## SV6a_040 게노세크트 [Pokemon/Basic] jp=SV6a-040 (pachirisu×1)
+HP110 Metal 진화전:- 약점:[{"type":"Fire","value":"x2"}] 저항:[{"type":"Grass","value":"-30"}] 후퇴:1
+  [특성] エースキャンセラー: このポケモンに「ポケモンのどうぐ」がついているなら、相手は手札から「ACE SPEC」のカードを出して使えない。
+  [기술] マグネブラスト (MetalColorlessColorless) 100: 
+## MC_312 라티아스 ex [Pokemon/Basic/EX] jp=MC-312 (pachirisu×1)
+HP210 Psychic 진화전:- 약점:[{"type":"Darkness","value":"x2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:2
+  [특성] スカイライン: このポケモンがいるかぎり、自分のたねポケモン全員のにげるためのエネルギーは、すべてなくなる。
+  [기술] むげんのやいば (PsychicPsychicColorless) 200: 次の自分の番、このポケモンはワザが使えない。
+## MC_664 포켓기어3.0 [Trainer/Item] jp=MC-660 (pachirisu×3)
+  [효과] 自分の山札を上から7枚見る。その中にあるサポートを1枚、相手に見せてから、手札に加えてよい。残りのカードは山札にもどして切る。
+## MC_649 에너지 갈아 달기 [Trainer/Item] jp=MC-638 (pachirisu×1)
+  [효과] 自分のポケモンについている基本エネルギーを1個、自分の別のポケモンにつけ替える。
+## SV1S_073 학습장치 [Trainer/Tool] jp=SV1S-072 (pachirisu×1)
+  [효과] 自分のバトルポケモンが、相手のポケモンからワザのダメージを受けてきぜつするたび、そのポケモンについている基本エネルギーを1枚選び、このカードをつけているポケモンにつけ替えてよい。
+## SV5M_064 부스트에너지 미래 [Trainer/Tool] jp=SV5M-065 (pachirisu×1)
+  [효과] このカードをつけている「未来」のポケモンは、にげるためのエネルギーがすべてなくなり、そのポケモンが使うワザの、相手のバトルポケモンへのダメージは「+20」される。
+## MC_735 하솔 [Trainer/Supporter] jp=MC-696 (pachirisu×4)
+  [효과] 自分の山札から、それぞれちがうタイプの基本エネルギーを2枚まで選び、相手に見せて、どちらか1枚を手札に加え、残りのエネルギーを自分のポケモンにつける。そして山札を切る。

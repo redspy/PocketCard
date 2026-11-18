@@ -1,0 +1,1642 @@
+{
+  "generated": "2026-11-16T15:26:57.440Z",
+  "allowed": [
+    "G",
+    "H",
+    "I"
+  ],
+  "results": {
+    "SV7_076": {
+      "name": "부우부",
+      "decks": [
+        "flareon",
+        "charizard"
+      ],
+      "current": "SV7_076",
+      "currentReg": "H",
+      "jp": "SV7-76",
+      "choice": null,
+      "newCode": "SV7_076",
+      "status": "keep",
+      "note": ""
+    },
+    "SV7_114": {
+      "name": "야부엉",
+      "decks": [
+        "flareon",
+        "charizard"
+      ],
+      "current": "SV7_114",
+      "currentReg": "H",
+      "jp": "SV7-114",
+      "choice": null,
+      "newCode": "SV7_114",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_131": {
+      "name": "스핀로토무",
+      "decks": [
+        "flareon",
+        "charizard"
+      ],
+      "current": "SV8a_131",
+      "currentReg": "H",
+      "jp": "SV8a-131",
+      "choice": null,
+      "newCode": "SV8a_131",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_125": {
+      "name": "이브이",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SV8a_125",
+      "currentReg": "H",
+      "jp": "SV8a-125",
+      "choice": null,
+      "newCode": "SV8a_125",
+      "status": "keep",
+      "note": ""
+    },
+    "SV2a_133": {
+      "name": "이브이",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SV2a_133",
+      "currentReg": "G",
+      "jp": "SV2a-133",
+      "choice": null,
+      "newCode": "SV2a_133",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_224": {
+      "name": "이브이 ex",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SV8a_224",
+      "currentReg": "H",
+      "jp": "SV8a-224",
+      "choice": null,
+      "newCode": "SV8a_224",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_202": {
+      "name": "부스터 ex",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SV8a_202",
+      "currentReg": "H",
+      "jp": "SV8a-202",
+      "choice": null,
+      "newCode": "SV8a_202",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_200": {
+      "name": "리피아 ex",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SV8a_200",
+      "currentReg": "H",
+      "jp": "SV8a-200",
+      "choice": null,
+      "newCode": "SV8a_200",
+      "status": "keep",
+      "note": "수동 확인: 이미지 H 마크, G/H/I 중 I 재판 없음"
+    },
+    "SV6_127": {
+      "name": "오거폰 우물의가면 ex",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SV6_127",
+      "currentReg": "H",
+      "jp": "SV6-127",
+      "choice": null,
+      "newCode": "SV6_127",
+      "status": "keep",
+      "note": ""
+    },
+    "SV7_130": {
+      "name": "테라파고스 ex",
+      "decks": [
+        "flareon",
+        "charizard"
+      ],
+      "current": "SV7_130",
+      "currentReg": "H",
+      "jp": "SV7-130",
+      "choice": null,
+      "newCode": "SV7_130",
+      "status": "keep",
+      "note": "수동 확인: 이미지 H 마크, G/H/I 중 I 재판 없음"
+    },
+    "SV6a_089": {
+      "name": "기로치 ex",
+      "decks": [
+        "flareon",
+        "charizard",
+        "dragapult"
+      ],
+      "current": "SV6a_089",
+      "currentReg": "H",
+      "jp": "SV6a-89",
+      "choice": null,
+      "newCode": "SV6a_089",
+      "status": "keep",
+      "note": ""
+    },
+    "SV4a_327": {
+      "name": "뮤 ex",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SV4a_327",
+      "currentReg": "G",
+      "jp": "SV4a-327",
+      "choice": null,
+      "newCode": "SV4a_327",
+      "status": "keep",
+      "note": ""
+    },
+    "SV1S_069": {
+      "name": "네스트볼",
+      "decks": [
+        "flareon",
+        "charizard",
+        "gholdengo",
+        "gardevoir",
+        "pachirisu"
+      ],
+      "current": "SV1S_069",
+      "currentReg": "G",
+      "jp": "SV1S-70",
+      "choice": null,
+      "newCode": "SV1S_069",
+      "status": "keep",
+      "note": ""
+    },
+    "MC_673": {
+      "name": "하이퍼볼",
+      "decks": [
+        "flareon",
+        "charizard",
+        "dragapult",
+        "gardevoir",
+        "pachirisu"
+      ],
+      "current": "MC_673",
+      "currentReg": "I",
+      "jp": "MC-651",
+      "choice": null,
+      "newCode": "MC_673",
+      "status": "keep",
+      "note": ""
+    },
+    "SV6_133": {
+      "name": "절친 포핀",
+      "decks": [
+        "flareon",
+        "charizard",
+        "gholdengo",
+        "dragapult"
+      ],
+      "current": "SV6_133",
+      "currentReg": "H",
+      "jp": "SV6-133",
+      "choice": "M1S-81 (I, 특수 레어)",
+      "newCode": "M1S_083",
+      "status": "upgrade",
+      "note": "일본판 대응 차이 17, 한글판 대응 차이 23"
+    },
+    "SVLN_013": {
+      "name": "테라스탈오브",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SVLN_013",
+      "currentReg": null,
+      "jp": "SVLN-12",
+      "choice": "SV8a-145 (H)",
+      "newCode": "SV8a_147",
+      "status": "upgrade",
+      "note": "일본판 대응 차이 19, 한글판 대응 차이 20"
+    },
+    "SV4M_059": {
+      "name": "카운터 캐처",
+      "decks": [
+        "flareon",
+        "dragapult",
+        "gardevoir"
+      ],
+      "current": "SV4M_059",
+      "currentReg": "G",
+      "jp": "SV4M-59",
+      "choice": null,
+      "newCode": "SV4M_059",
+      "status": "keep",
+      "note": ""
+    },
+    "MC_643": {
+      "name": "밤의 들것",
+      "decks": [
+        "flareon",
+        "charizard",
+        "dragapult",
+        "gardevoir"
+      ],
+      "current": "MC_643",
+      "currentReg": null,
+      "jp": "MC-670",
+      "choice": null,
+      "newCode": "MC_643",
+      "status": "no-allowed-print",
+      "note": ""
+    },
+    "S11a_061": {
+      "name": "포켓몬 교체",
+      "decks": [
+        "flareon"
+      ],
+      "current": "S11a_061",
+      "currentReg": "F",
+      "jp": "S11a-61",
+      "choice": "M6a-103 (I)",
+      "newCode": "M6a_101",
+      "status": "upgrade",
+      "note": "일본판 대응 차이 24, 한글판 대응 차이 29"
+    },
+    "SV8a_144": {
+      "name": "유리나팔",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SV8a_144",
+      "currentReg": "H",
+      "jp": "SV8a-140",
+      "choice": null,
+      "newCode": "SV8a_144",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_157": {
+      "name": "반짝이는 결정",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SV8a_157",
+      "currentReg": "H",
+      "jp": "SV8a-152",
+      "choice": null,
+      "newCode": "SV8a_157",
+      "status": "keep",
+      "note": ""
+    },
+    "MC_689": {
+      "name": "풍선",
+      "decks": [
+        "flareon",
+        "gholdengo",
+        "pachirisu"
+      ],
+      "current": "MC_689",
+      "currentReg": "I",
+      "jp": "MC-688",
+      "choice": null,
+      "newCode": "MC_689",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_179": {
+      "name": "하솔",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SV8a_179",
+      "currentReg": "H",
+      "jp": "SV8a-163",
+      "choice": null,
+      "newCode": "SV8a_179",
+      "status": "keep",
+      "note": "수동 확인: 이미지 H 마크, G/H/I 중 I 재판 없음"
+    },
+    "SJ_026": {
+      "name": "보스의 지령",
+      "decks": [
+        "flareon",
+        "charizard",
+        "gholdengo",
+        "dragapult"
+      ],
+      "current": "SJ_026",
+      "currentReg": null,
+      "jp": "SJ-26",
+      "choice": "MC-724 (I)",
+      "newCode": "MC_709",
+      "status": "upgrade",
+      "note": "일본판 대응 차이 23, 한글판 대응 차이 25"
+    },
+    "SV2D_068": {
+      "name": "모야모",
+      "decks": [
+        "flareon",
+        "charizard",
+        "dragapult",
+        "gardevoir"
+      ],
+      "current": "SV2D_068",
+      "currentReg": "G",
+      "jp": "SV2D-69",
+      "choice": null,
+      "newCode": "SV2D_068",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8_103": {
+      "name": "시아노",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SV8_103",
+      "currentReg": "H",
+      "jp": "SV8-102",
+      "choice": null,
+      "newCode": "SV8_103",
+      "status": "keep",
+      "note": ""
+    },
+    "SV4M_066": {
+      "name": "투로박사의 시나리오",
+      "decks": [
+        "flareon",
+        "gholdengo",
+        "dragapult",
+        "gardevoir"
+      ],
+      "current": "SV4M_066",
+      "currentReg": "G",
+      "jp": "SV4M-65",
+      "choice": null,
+      "newCode": "SV4M_066",
+      "status": "keep",
+      "note": ""
+    },
+    "SV6_097": {
+      "name": "카지",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SV6_097",
+      "currentReg": "H",
+      "jp": "SV6-96",
+      "choice": null,
+      "newCode": "SV6_097",
+      "status": "keep",
+      "note": ""
+    },
+    "M2a_221": {
+      "name": "태권왕의 수련",
+      "decks": [
+        "flareon"
+      ],
+      "current": "M2a_221",
+      "currentReg": "H",
+      "jp": "M2a-220",
+      "choice": null,
+      "newCode": "M2a_221",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_166": {
+      "name": "브라이어",
+      "decks": [
+        "flareon",
+        "charizard"
+      ],
+      "current": "SV8a_166",
+      "currentReg": "H",
+      "jp": "SV8a-176",
+      "choice": null,
+      "newCode": "SV8a_166",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_183": {
+      "name": "제로의 대공동",
+      "decks": [
+        "flareon",
+        "charizard"
+      ],
+      "current": "SV8a_183",
+      "currentReg": "H",
+      "jp": "SV8a-182",
+      "choice": null,
+      "newCode": "SV8a_183",
+      "status": "keep",
+      "note": ""
+    },
+    "SV6_099": {
+      "name": "재밍타워",
+      "decks": [
+        "flareon",
+        "dragapult"
+      ],
+      "current": "SV6_099",
+      "currentReg": "H",
+      "jp": "SV6-100",
+      "choice": null,
+      "newCode": "SV6_099",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8_105": {
+      "name": "그래비티 마운틴",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SV8_105",
+      "currentReg": "H",
+      "jp": "SV8-106",
+      "choice": null,
+      "newCode": "SV8_105",
+      "status": "keep",
+      "note": ""
+    },
+    "SV3_141": {
+      "name": "기본 불꽃 에너지",
+      "decks": [
+        "flareon",
+        "charizard",
+        "dragapult"
+      ],
+      "current": "SV3_141",
+      "currentReg": null,
+      "jp": "SV3-141",
+      "choice": null,
+      "newCode": "SV3_141",
+      "status": "no-allowed-print",
+      "note": ""
+    },
+    "SV2P_099": {
+      "name": "기본 물 에너지",
+      "decks": [
+        "flareon"
+      ],
+      "current": "SV2P_099",
+      "currentReg": null,
+      "jp": "SV2P-99",
+      "choice": null,
+      "newCode": "SV2P_099",
+      "status": "no-allowed-print",
+      "note": ""
+    },
+    "SV1V_108": {
+      "name": "기본 번개 에너지",
+      "decks": [
+        "flareon",
+        "pachirisu"
+      ],
+      "current": "SV1V_108",
+      "currentReg": null,
+      "jp": null,
+      "choice": null,
+      "newCode": "SV1V_108",
+      "status": "jp-not-found",
+      "note": ""
+    },
+    "SV2D_099": {
+      "name": "기본 풀 에너지",
+      "decks": [
+        "flareon",
+        "pachirisu"
+      ],
+      "current": "SV2D_099",
+      "currentReg": null,
+      "jp": "SV2D-99",
+      "choice": null,
+      "newCode": "SV2D_099",
+      "status": "no-allowed-print",
+      "note": ""
+    },
+    "M2_011": {
+      "name": "파이리",
+      "decks": [
+        "charizard"
+      ],
+      "current": "M2_011",
+      "currentReg": "I",
+      "jp": "M2-11",
+      "choice": null,
+      "newCode": "M2_011",
+      "status": "keep",
+      "note": ""
+    },
+    "SV2a_168": {
+      "name": "파이리",
+      "decks": [
+        "charizard"
+      ],
+      "current": "SV2a_168",
+      "currentReg": "G",
+      "jp": "SV2a-168",
+      "choice": null,
+      "newCode": "SV2a_168",
+      "status": "keep",
+      "note": ""
+    },
+    "M2_012": {
+      "name": "리자드",
+      "decks": [
+        "charizard"
+      ],
+      "current": "M2_012",
+      "currentReg": "I",
+      "jp": "M2-12",
+      "choice": null,
+      "newCode": "M2_012",
+      "status": "keep",
+      "note": ""
+    },
+    "SV3_134": {
+      "name": "리자몽 ex",
+      "decks": [
+        "charizard"
+      ],
+      "current": "SV3_134",
+      "currentReg": "G",
+      "jp": "SV3-134",
+      "choice": null,
+      "newCode": "SV3_134",
+      "status": "keep",
+      "note": ""
+    },
+    "SV4a_349": {
+      "name": "리자몽 ex",
+      "decks": [
+        "charizard"
+      ],
+      "current": "SV4a_349",
+      "currentReg": "G",
+      "jp": "SV4a-349",
+      "choice": null,
+      "newCode": "SV4a_349",
+      "status": "keep",
+      "note": ""
+    },
+    "SV3_118": {
+      "name": "구구",
+      "decks": [
+        "charizard"
+      ],
+      "current": "SV3_118",
+      "currentReg": "G",
+      "jp": "SV3-118",
+      "choice": null,
+      "newCode": "SV3_118",
+      "status": "keep",
+      "note": ""
+    },
+    "SV3_119": {
+      "name": "피죤",
+      "decks": [
+        "charizard"
+      ],
+      "current": "SV3_119",
+      "currentReg": "G",
+      "jp": "SV3-119",
+      "choice": null,
+      "newCode": "SV3_119",
+      "status": "keep",
+      "note": ""
+    },
+    "SV3_136": {
+      "name": "피죤투 ex",
+      "decks": [
+        "charizard"
+      ],
+      "current": "SV3_136",
+      "currentReg": "G",
+      "jp": "SV3-136",
+      "choice": null,
+      "newCode": "SV3_136",
+      "status": "keep",
+      "note": ""
+    },
+    "SV6a_068": {
+      "name": "해골몽",
+      "decks": [
+        "charizard"
+      ],
+      "current": "SV6a_068",
+      "currentReg": "H",
+      "jp": "SV6a-68",
+      "choice": null,
+      "newCode": "SV6a_068",
+      "status": "keep",
+      "note": ""
+    },
+    "SV6a_069": {
+      "name": "미라몽",
+      "decks": [
+        "charizard"
+      ],
+      "current": "SV6a_069",
+      "currentReg": "H",
+      "jp": "SV6a-69",
+      "choice": null,
+      "newCode": "SV6a_069",
+      "status": "keep",
+      "note": ""
+    },
+    "SV6a_070": {
+      "name": "야느와르몽",
+      "decks": [
+        "charizard"
+      ],
+      "current": "SV6a_070",
+      "currentReg": "H",
+      "jp": "SV6a-70",
+      "choice": null,
+      "newCode": "SV6a_070",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_226": {
+      "name": "테라파고스 ex",
+      "decks": [
+        "charizard"
+      ],
+      "current": "SV8a_226",
+      "currentReg": "H",
+      "jp": "SV8a-226",
+      "choice": null,
+      "newCode": "SV8a_226",
+      "status": "keep",
+      "note": ""
+    },
+    "SV4a_087": {
+      "name": "클레피",
+      "decks": [
+        "charizard"
+      ],
+      "current": "SV4a_087",
+      "currentReg": "G",
+      "jp": "SV4a-87",
+      "choice": null,
+      "newCode": "SV4a_087",
+      "status": "keep",
+      "note": ""
+    },
+    "MC_656": {
+      "name": "이상한사탕",
+      "decks": [
+        "charizard",
+        "dragapult",
+        "gardevoir"
+      ],
+      "current": "MC_656",
+      "currentReg": "I",
+      "jp": "MC-655",
+      "choice": null,
+      "newCode": "MC_656",
+      "status": "keep",
+      "note": ""
+    },
+    "SVEL_010": {
+      "name": "대단한낚싯대",
+      "decks": [
+        "charizard",
+        "gardevoir"
+      ],
+      "current": "SVEL_010",
+      "currentReg": null,
+      "jp": "SVEL-10",
+      "choice": "SV2P-66 (G)",
+      "newCode": "SV2P_066",
+      "status": "upgrade",
+      "note": "일본판 대응 차이 18, 한글판 대응 차이 15"
+    },
+    "MC_670": {
+      "name": "프라임 캐처",
+      "decks": [
+        "charizard",
+        "gholdengo",
+        "pachirisu"
+      ],
+      "current": "MC_670",
+      "currentReg": "H",
+      "jp": "MC-656",
+      "choice": null,
+      "newCode": "MC_670",
+      "status": "keep",
+      "note": ""
+    },
+    "M2_078": {
+      "name": "빛나",
+      "decks": [
+        "charizard"
+      ],
+      "current": "M2_078",
+      "currentReg": "I",
+      "jp": "M2-77",
+      "choice": null,
+      "newCode": "M2_078",
+      "status": "keep",
+      "note": ""
+    },
+    "SV7a_094": {
+      "name": "제트 에너지",
+      "decks": [
+        "charizard"
+      ],
+      "current": "SV7a_094",
+      "currentReg": null,
+      "jp": "SV7a-94",
+      "choice": "SV1a-72 (G)",
+      "newCode": "SV1a_073",
+      "status": "upgrade",
+      "note": "일본판 대응 차이 20, 한글판 대응 차이 13"
+    },
+    "SV7a_024": {
+      "name": "모으령",
+      "decks": [
+        "gholdengo"
+      ],
+      "current": "SV7a_024",
+      "currentReg": "H",
+      "jp": "SV7a-24",
+      "choice": null,
+      "newCode": "SV7a_024",
+      "status": "keep",
+      "note": ""
+    },
+    "SV3a_050": {
+      "name": "타부자고 ex",
+      "decks": [
+        "gholdengo"
+      ],
+      "current": "SV3a_050",
+      "currentReg": "G",
+      "jp": "SV3a-50",
+      "choice": null,
+      "newCode": "SV3a_050",
+      "status": "keep",
+      "note": ""
+    },
+    "M1L_027": {
+      "name": "솔록",
+      "decks": [
+        "gholdengo"
+      ],
+      "current": "M1L_027",
+      "currentReg": "I",
+      "jp": "M1L-27",
+      "choice": null,
+      "newCode": "M1L_027",
+      "status": "keep",
+      "note": ""
+    },
+    "M1L_026": {
+      "name": "루나톤",
+      "decks": [
+        "gholdengo"
+      ],
+      "current": "M1L_026",
+      "currentReg": "I",
+      "jp": "M1L-26",
+      "choice": null,
+      "newCode": "M1L_026",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_104": {
+      "name": "기로치 ex",
+      "decks": [
+        "gholdengo",
+        "pachirisu"
+      ],
+      "current": "SV8a_104",
+      "currentReg": "H",
+      "jp": "SV8a-104",
+      "choice": null,
+      "newCode": "SV8a_104",
+      "status": "keep",
+      "note": ""
+    },
+    "SV11B_069": {
+      "name": "게노세크트 ex",
+      "decks": [
+        "gholdengo"
+      ],
+      "current": "SV11B_069",
+      "currentReg": "I",
+      "jp": "SV11B-69",
+      "choice": null,
+      "newCode": "SV11B_069",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_075": {
+      "name": "이야후",
+      "decks": [
+        "gholdengo",
+        "dragapult"
+      ],
+      "current": "SV8a_075",
+      "currentReg": "H",
+      "jp": "SV8a-75",
+      "choice": null,
+      "newCode": "SV8a_075",
+      "status": "keep",
+      "note": ""
+    },
+    "M1L_060": {
+      "name": "파이팅공",
+      "decks": [
+        "gholdengo"
+      ],
+      "current": "M1L_060",
+      "currentReg": "I",
+      "jp": "M1L-59",
+      "choice": null,
+      "newCode": "M1L_060",
+      "status": "keep",
+      "note": ""
+    },
+    "SV6a_093": {
+      "name": "대지의 그릇",
+      "decks": [
+        "gholdengo",
+        "gardevoir",
+        "pachirisu"
+      ],
+      "current": "SV6a_093",
+      "currentReg": "G",
+      "jp": "SV6a-93",
+      "choice": null,
+      "newCode": "SV6a_093",
+      "status": "keep",
+      "note": ""
+    },
+    "SV2D_098": {
+      "name": "수퍼 에너지 회수",
+      "decks": [
+        "gholdengo"
+      ],
+      "current": "SV2D_098",
+      "currentReg": null,
+      "jp": "SV2D-98",
+      "choice": "SV1a-64 (G)",
+      "newCode": "SV1a_064",
+      "status": "upgrade",
+      "note": "일본판 대응 차이 23, 한글판 대응 차이 9"
+    },
+    "SV1S_072": {
+      "name": "오기머리띠",
+      "decks": [
+        "gholdengo"
+      ],
+      "current": "SV1S_072",
+      "currentReg": "G",
+      "jp": "SV1S-73",
+      "choice": null,
+      "newCode": "SV1S_072",
+      "status": "keep",
+      "note": ""
+    },
+    "SV2D_067": {
+      "name": "용기의부적",
+      "decks": [
+        "gholdengo",
+        "gardevoir",
+        "pachirisu"
+      ],
+      "current": "SV2D_067",
+      "currentReg": "G",
+      "jp": "SV2D-67",
+      "choice": null,
+      "newCode": "SV2D_067",
+      "status": "keep",
+      "note": ""
+    },
+    "SVK_038": {
+      "name": "페퍼",
+      "decks": [
+        "gholdengo",
+        "gardevoir",
+        "pachirisu"
+      ],
+      "current": "SVK_038",
+      "currentReg": null,
+      "jp": "SVK-38",
+      "choice": "SV1V-76 (G)",
+      "newCode": "SV1V_077",
+      "status": "upgrade",
+      "note": "일본판 대응 차이 13, 한글판 대응 차이 17"
+    },
+    "SV5M_069": {
+      "name": "암호마니아의 해독",
+      "decks": [
+        "gholdengo"
+      ],
+      "current": "SV5M_069",
+      "currentReg": "H",
+      "jp": "SV5M-67",
+      "choice": null,
+      "newCode": "SV5M_069",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_167": {
+      "name": "수련의 돌봄",
+      "decks": [
+        "gholdengo"
+      ],
+      "current": "SV8a_167",
+      "currentReg": "H",
+      "jp": "SV8a-168",
+      "choice": null,
+      "newCode": "SV8a_167",
+      "status": "keep",
+      "note": ""
+    },
+    "SV3_140": {
+      "name": "보물마을",
+      "decks": [
+        "gholdengo",
+        "gardevoir"
+      ],
+      "current": "SV3_140",
+      "currentReg": null,
+      "jp": "SV3-140",
+      "choice": "SV1a-70 (G)",
+      "newCode": "SV1a_071",
+      "status": "upgrade",
+      "note": "일본판 대응 차이 33, 한글판 대응 차이 22"
+    },
+    "SV4M_095": {
+      "name": "기본 강철 에너지",
+      "decks": [
+        "gholdengo",
+        "pachirisu"
+      ],
+      "current": "SV4M_095",
+      "currentReg": null,
+      "jp": null,
+      "choice": null,
+      "newCode": "SV4M_095",
+      "status": "jp-not-found",
+      "note": ""
+    },
+    "SV1S_108": {
+      "name": "기본 격투 에너지",
+      "decks": [
+        "gholdengo"
+      ],
+      "current": "SV1S_108",
+      "currentReg": null,
+      "jp": "SV1S-108",
+      "choice": null,
+      "newCode": "SV1S_108",
+      "status": "no-allowed-print",
+      "note": ""
+    },
+    "SV4K_095": {
+      "name": "기본 악 에너지",
+      "decks": [
+        "gholdengo",
+        "gardevoir"
+      ],
+      "current": "SV4K_095",
+      "currentReg": null,
+      "jp": null,
+      "choice": null,
+      "newCode": "SV4K_095",
+      "status": "jp-not-found",
+      "note": ""
+    },
+    "SV8a_118": {
+      "name": "드라꼰",
+      "decks": [
+        "dragapult"
+      ],
+      "current": "SV8a_118",
+      "currentReg": "H",
+      "jp": "SV8a-118",
+      "choice": null,
+      "newCode": "SV8a_118",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_119": {
+      "name": "드래런치",
+      "decks": [
+        "dragapult"
+      ],
+      "current": "SV8a_119",
+      "currentReg": "H",
+      "jp": "SV8a-119",
+      "choice": null,
+      "newCode": "SV8a_119",
+      "status": "keep",
+      "note": ""
+    },
+    "SV6_120": {
+      "name": "드래펄트 ex",
+      "decks": [
+        "dragapult"
+      ],
+      "current": "SV6_120",
+      "currentReg": "H",
+      "jp": "SV6-120",
+      "choice": null,
+      "newCode": "SV6_120",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_064": {
+      "name": "해골몽",
+      "decks": [
+        "dragapult"
+      ],
+      "current": "SV8a_064",
+      "currentReg": "H",
+      "jp": "SV8a-64",
+      "choice": null,
+      "newCode": "SV8a_064",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_065": {
+      "name": "미라몽",
+      "decks": [
+        "dragapult"
+      ],
+      "current": "SV8a_065",
+      "currentReg": "H",
+      "jp": "SV8a-65",
+      "choice": null,
+      "newCode": "SV8a_065",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_066": {
+      "name": "야느와르몽",
+      "decks": [
+        "dragapult"
+      ],
+      "current": "SV8a_066",
+      "currentReg": "H",
+      "jp": "SV8a-66",
+      "choice": null,
+      "newCode": "SV8a_066",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_001": {
+      "name": "꼬몽울",
+      "decks": [
+        "dragapult",
+        "gardevoir"
+      ],
+      "current": "SV8a_001",
+      "currentReg": "H",
+      "jp": "SV8a-1",
+      "choice": null,
+      "newCode": "SV8a_001",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_084": {
+      "name": "루차불",
+      "decks": [
+        "dragapult"
+      ],
+      "current": "SV8a_084",
+      "currentReg": "G",
+      "jp": "SV8a-84",
+      "choice": null,
+      "newCode": "SV8a_084",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_225": {
+      "name": "다투곰 붉은 달 ex",
+      "decks": [
+        "dragapult"
+      ],
+      "current": "SV8a_225",
+      "currentReg": "H",
+      "jp": "SV8a-225",
+      "choice": null,
+      "newCode": "SV8a_225",
+      "status": "keep",
+      "note": ""
+    },
+    "SV7a_078": {
+      "name": "라티아스 ex",
+      "decks": [
+        "dragapult"
+      ],
+      "current": "SV7a_078",
+      "currentReg": null,
+      "jp": "SV7a-78",
+      "choice": "SV7a-19 (H)",
+      "newCode": "SV7a_019",
+      "status": "upgrade",
+      "note": "일본판 대응 차이 25, 한글판 대응 차이 16"
+    },
+    "MC_706": {
+      "name": "릴리에의 결심",
+      "decks": [
+        "dragapult",
+        "gardevoir"
+      ],
+      "current": "MC_706",
+      "currentReg": "I",
+      "jp": "MC-729",
+      "choice": null,
+      "newCode": "MC_706",
+      "status": "keep",
+      "note": ""
+    },
+    "SV11W_085": {
+      "name": "투희",
+      "decks": [
+        "dragapult"
+      ],
+      "current": "SV11W_085",
+      "currentReg": "I",
+      "jp": "SV11W-85",
+      "choice": null,
+      "newCode": "SV11W_085",
+      "status": "keep",
+      "note": ""
+    },
+    "SV2a_210": {
+      "name": "기본 초 에너지",
+      "decks": [
+        "dragapult",
+        "gardevoir"
+      ],
+      "current": "SV2a_210",
+      "currentReg": "G",
+      "jp": "SV2a-210",
+      "choice": null,
+      "newCode": "SV2a_210",
+      "status": "keep",
+      "note": ""
+    },
+    "SV5K_071": {
+      "name": "네오 어퍼 에너지",
+      "decks": [
+        "dragapult"
+      ],
+      "current": "SV5K_071",
+      "currentReg": "H",
+      "jp": "SV5K-71",
+      "choice": null,
+      "newCode": "SV5K_071",
+      "status": "keep",
+      "note": ""
+    },
+    "SV4a_188": {
+      "name": "루미너스 에너지",
+      "decks": [
+        "dragapult"
+      ],
+      "current": "SV4a_188",
+      "currentReg": "G",
+      "jp": "SV4a-190",
+      "choice": null,
+      "newCode": "SV4a_188",
+      "status": "keep",
+      "note": ""
+    },
+    "M1S_040": {
+      "name": "랄토스",
+      "decks": [
+        "gardevoir"
+      ],
+      "current": "M1S_040",
+      "currentReg": "I",
+      "jp": "M1S-40",
+      "choice": null,
+      "newCode": "M1S_040",
+      "status": "keep",
+      "note": ""
+    },
+    "M1S_041": {
+      "name": "킬리아",
+      "decks": [
+        "gardevoir"
+      ],
+      "current": "M1S_041",
+      "currentReg": "I",
+      "jp": "M1S-41",
+      "choice": null,
+      "newCode": "M1S_041",
+      "status": "keep",
+      "note": ""
+    },
+    "SV1S_028": {
+      "name": "가디안 ex",
+      "decks": [
+        "gardevoir"
+      ],
+      "current": "SV1S_028",
+      "currentReg": "G",
+      "jp": "SV1S-28",
+      "choice": null,
+      "newCode": "SV1S_028",
+      "status": "keep",
+      "note": ""
+    },
+    "SV6_055": {
+      "name": "이야후",
+      "decks": [
+        "gardevoir"
+      ],
+      "current": "SV6_055",
+      "currentReg": "H",
+      "jp": "SV6-55",
+      "choice": null,
+      "newCode": "SV6_055",
+      "status": "keep",
+      "note": ""
+    },
+    "SV11W_041": {
+      "name": "탱그릴",
+      "decks": [
+        "gardevoir"
+      ],
+      "current": "SV11W_041",
+      "currentReg": "I",
+      "jp": "SV11W-41",
+      "choice": null,
+      "newCode": "SV11W_041",
+      "status": "keep",
+      "note": ""
+    },
+    "SV4K_032": {
+      "name": "우렁찬꼬리",
+      "decks": [
+        "gardevoir"
+      ],
+      "current": "SV4K_032",
+      "currentReg": "G",
+      "jp": "SV4K-32",
+      "choice": null,
+      "newCode": "SV4K_032",
+      "status": "keep",
+      "note": ""
+    },
+    "MBD_005": {
+      "name": "메가디안시 ex",
+      "decks": [
+        "gardevoir"
+      ],
+      "current": "MBD_005",
+      "currentReg": null,
+      "jp": "MBD-5",
+      "choice": "M2a-227 (I, 특수 레어)",
+      "newCode": "M2a_227",
+      "status": "upgrade",
+      "note": "일본판 대응 차이 17, 한글판 대응 차이 25"
+    },
+    "SV2a_151": {
+      "name": "뮤 ex",
+      "decks": [
+        "gardevoir"
+      ],
+      "current": "SV2a_151",
+      "currentReg": "G",
+      "jp": "SV2a-151",
+      "choice": null,
+      "newCode": "SV2a_151",
+      "status": "keep",
+      "note": ""
+    },
+    "SV9_033": {
+      "name": "릴리에의 삐삐 ex",
+      "decks": [
+        "gardevoir"
+      ],
+      "current": "SV9_033",
+      "currentReg": "I",
+      "jp": "SV9-33",
+      "choice": null,
+      "newCode": "SV9_033",
+      "status": "keep",
+      "note": ""
+    },
+    "SV6a_038": {
+      "name": "기로치 ex",
+      "decks": [
+        "gardevoir"
+      ],
+      "current": "SV6a_038",
+      "currentReg": "H",
+      "jp": "SV6a-38",
+      "choice": null,
+      "newCode": "SV6a_038",
+      "status": "keep",
+      "note": ""
+    },
+    "SV4M_061": {
+      "name": "기술머신 에볼루션",
+      "decks": [
+        "gardevoir"
+      ],
+      "current": "SV4M_061",
+      "currentReg": "G",
+      "jp": "SV4M-63",
+      "choice": null,
+      "newCode": "SV4M_061",
+      "status": "keep",
+      "note": ""
+    },
+    "SV6_092": {
+      "name": "시크릿박스",
+      "decks": [
+        "gardevoir"
+      ],
+      "current": "SV6_092",
+      "currentReg": "H",
+      "jp": "SV6-92",
+      "choice": null,
+      "newCode": "SV6_092",
+      "status": "keep",
+      "note": ""
+    },
+    "SV7_032": {
+      "name": "파쪼옥",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "SV7_032",
+      "currentReg": "H",
+      "jp": "SV7-32",
+      "choice": null,
+      "newCode": "SV7_032",
+      "status": "keep",
+      "note": ""
+    },
+    "SV6a_002": {
+      "name": "전툴라",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "SV6a_002",
+      "currentReg": "H",
+      "jp": "SV6a-2",
+      "choice": null,
+      "newCode": "SV6a_002",
+      "status": "keep",
+      "note": ""
+    },
+    "SV1V_037": {
+      "name": "미라이돈 ex",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "SV1V_037",
+      "currentReg": "G",
+      "jp": "SV1V-37",
+      "choice": null,
+      "newCode": "SV1V_037",
+      "status": "keep",
+      "note": ""
+    },
+    "SV1V_094": {
+      "name": "미라이돈 ex",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "SV1V_094",
+      "currentReg": "G",
+      "jp": "SV1V-94",
+      "choice": null,
+      "newCode": "SV1V_094",
+      "status": "keep",
+      "note": ""
+    },
+    "SV4M_027": {
+      "name": "무쇠손 ex",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "SV4M_027",
+      "currentReg": "G",
+      "jp": "SV4M-27",
+      "choice": null,
+      "newCode": "SV4M_027",
+      "status": "keep",
+      "note": ""
+    },
+    "SV4M_079": {
+      "name": "무쇠손 ex",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "SV4M_079",
+      "currentReg": "G",
+      "jp": "SV4M-79",
+      "choice": null,
+      "newCode": "SV4M_079",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8_033": {
+      "name": "피카츄 ex",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "SV8_033",
+      "currentReg": "H",
+      "jp": "SV8-33",
+      "choice": null,
+      "newCode": "SV8_033",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8_122": {
+      "name": "피카츄 ex",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "SV8_122",
+      "currentReg": "H",
+      "jp": "SV8-122",
+      "choice": null,
+      "newCode": "SV8_122",
+      "status": "keep",
+      "note": ""
+    },
+    "SV5a_084": {
+      "name": "다투곰 붉은 달 ex",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "SV5a_084",
+      "currentReg": null,
+      "jp": "SV5a-84",
+      "choice": "SV5a-52 (H)",
+      "newCode": "SV5a_052",
+      "status": "upgrade",
+      "note": "일본판 대응 차이 18, 한글판 대응 차이 19"
+    },
+    "SV5M_084": {
+      "name": "무쇠잎새 ex",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "SV5M_084",
+      "currentReg": null,
+      "jp": "SV5M-84",
+      "choice": null,
+      "newCode": "SV5M_084",
+      "status": "no-allowed-print",
+      "note": ""
+    },
+    "SV2a_195": {
+      "name": "뮤 ex",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "SV2a_195",
+      "currentReg": "G",
+      "jp": "SV2a-195",
+      "choice": null,
+      "newCode": "SV2a_195",
+      "status": "keep",
+      "note": ""
+    },
+    "M1L_080": {
+      "name": "메가입치트 ex",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "M1L_080",
+      "currentReg": "I",
+      "jp": "M1L-80",
+      "choice": null,
+      "newCode": "M1L_080",
+      "status": "keep",
+      "note": ""
+    },
+    "SV6a_040": {
+      "name": "게노세크트",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "SV6a_040",
+      "currentReg": "H",
+      "jp": "SV6a-40",
+      "choice": null,
+      "newCode": "SV6a_040",
+      "status": "keep",
+      "note": ""
+    },
+    "MC_312": {
+      "name": "라티아스 ex",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "MC_312",
+      "currentReg": "H",
+      "jp": "MC-312",
+      "choice": null,
+      "newCode": "MC_312",
+      "status": "keep",
+      "note": ""
+    },
+    "MC_664": {
+      "name": "포켓기어3.0",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "MC_664",
+      "currentReg": "I",
+      "jp": "MC-660",
+      "choice": null,
+      "newCode": "MC_664",
+      "status": "keep",
+      "note": ""
+    },
+    "MC_649": {
+      "name": "에너지 갈아 달기",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "MC_649",
+      "currentReg": "I",
+      "jp": "MC-638",
+      "choice": null,
+      "newCode": "MC_649",
+      "status": "keep",
+      "note": ""
+    },
+    "SV1S_073": {
+      "name": "학습장치",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "SV1S_073",
+      "currentReg": "G",
+      "jp": "SV1S-72",
+      "choice": null,
+      "newCode": "SV1S_073",
+      "status": "keep",
+      "note": ""
+    },
+    "SV8a_159": {
+      "name": "부스트에너지 미래",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "SV8a_159",
+      "currentReg": "G",
+      "jp": "SV8a-158",
+      "choice": "SV5M-65 (H)",
+      "newCode": "SV5M_064",
+      "status": "upgrade",
+      "note": "일본판 대응 차이 18, 한글판 대응 차이 15"
+    },
+    "MC_735": {
+      "name": "하솔",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "MC_735",
+      "currentReg": "H",
+      "jp": "MC-696",
+      "choice": null,
+      "newCode": "MC_735",
+      "status": "keep",
+      "note": ""
+    },
+    "MC_709": {
+      "name": "보스의 지령",
+      "decks": [
+        "pachirisu"
+      ],
+      "current": "MC_709",
+      "currentReg": "I",
+      "jp": "MC-724",
+      "choice": null,
+      "newCode": "MC_709",
+      "status": "keep",
+      "note": ""
+    }
+  }
+}
