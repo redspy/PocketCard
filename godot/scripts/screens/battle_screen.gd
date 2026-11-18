@@ -247,6 +247,7 @@ func _refresh() -> void:
 	_apply_marks()
 	_build_request()
 	_show_error()
+	_update_result()
 
 func _hand_has(iid: String) -> bool:
 	var h = _me().get("hand")
@@ -352,9 +353,23 @@ func _place_hand(me: Dictionary) -> void:
 	for c in h:
 		var iid := str(c.iid)
 		use[iid] = acts.any(func(m): return m.get("card") != null and str(m.card) == iid)
+	var hp_opts: Array = []
+	var hp_picks: Array = []
+	if board_pick.get("kind") == "handpick":
+		hp_opts = board_pick.req.options
+		hp_picks = picks.get(str(board_pick.req.id), [])
+		for c in h:
+			use[str(c.iid)] = hp_opts.has(str(c.iid))
 	if only_usable:
 		h = h.filter(func(c): return use.get(str(c.iid), false) or str(c.iid) == sel_card)
 	hand.set_hand(h, use, sel_card, L.card)
+	for iid in hp_picks:
+		if hand.cards.has(iid):
+			hand.cards[iid].set_mark("pick")
+	if not hp_opts.is_empty():
+		for c in h:
+			if hp_opts.has(str(c.iid)) and not hp_picks.has(str(c.iid)):
+				hand.cards[str(c.iid)].set_mark("target")
 	hand.visible = sheet == null or not sheet.has_meta("covers_hand")
 
 func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
@@ -466,6 +481,14 @@ func _apply_marks() -> void:
 		var e: BSlot = empties[key]
 		var bkey := "bench:%s" % key.split(":")[1] if key.begins_with("my:") else ""
 		e.set_mark("target" if (bkey != "" and targets.has(bkey)) or (bkey != "" and targets.has("bench")) else "")
+	if board_pick.get("kind") == "handpick":
+		var rk := str(board_pick.req.kind)
+		for key in empties:
+			var e2: BSlot = empties[key]
+			if key == "my:0" and rk == "chooseActive":
+				e2.set_mark("target")
+			elif key.begins_with("my:") and key != "my:0" and rk == "chooseBench":
+				e2.set_mark("target")
 	var zone := targets.has("zone")
 	var sb := mid.get_theme_stylebox("panel") as StyleBoxFlat
 	sb.set_border_width_all(4 if zone else 0)
@@ -481,6 +504,9 @@ func _clear_select(refresh := true) -> void:
 
 ## 손패 카드 탭: 고르기 ↔ 해제. 고르면 놓을 곳이 맥동
 func tap_hand(iid: String) -> void:
+	if board_pick.get("kind") == "handpick":
+		board_pick_tap(iid)
+		return
 	if my_request() != null:
 		return
 	_close_popover()
@@ -787,7 +813,7 @@ func _show_error() -> void:
 	if e.is_empty() or int(e.get("at", 0)) == _shown_err:
 		return
 	_shown_err = int(e.get("at", 0))
-	_toast(str(e.get("message", "")))
+	_toast(my_words(str(e.get("message", ""))))
 
 # ───────────────────────── 선택 요청 (기본 시트 — 4단계에서 탁자 고르기로 확장) ─────────────────────────
 
@@ -810,9 +836,11 @@ func _build_request() -> void:
 	_clear_select(false)
 	var kind := BRequest.kind_of(self, req)
 	var top_y: float = L.bar.position.y + L.bar.size.y
-	if mode == "table" and (kind == "slots" or kind == "prizes"):
+	if kind == "handpick" or (mode == "table" and (kind == "slots" or kind == "prizes")):
 		# 탁자에서 직접 고르기: 후보가 맥동, 위에 안내 띠
 		board_pick = { "req": req, "kind": kind }
+		if kind == "handpick":
+			_place_hand(_me())
 		sheet = BRequest.pick_bar(self, req)
 		sheet_layer.add_child(sheet)
 		sheet.size = Vector2(size.x - 24, 0)
@@ -871,6 +899,8 @@ func toggle_pick(req: Dictionary, val: String) -> void:
 	picks[id] = p
 	_build_request()
 	_apply_marks()
+	if board_pick.get("kind") == "handpick":
+		_place_hand(_me())
 
 func confirm_request(req: Dictionary) -> void:
 	var id := str(req.id)
@@ -895,6 +925,9 @@ var dbg_drag: Dictionary = {}       # 테스트 진단: 마지막 끌기
 
 func _drag_start(iid: String, pos: Vector2) -> void:
 	dbg_drag = { "start": iid, "pos": pos }
+	if board_pick.get("kind") == "handpick":
+		board_pick_tap(iid)   # 준비 단계: 끌어 올려도 고르기
+		return
 	if my_request() != null:
 		dbg_drag["why"] = "request"
 		return
@@ -1103,3 +1136,92 @@ func _process(delta: float) -> void:
 	var inp = _auto_ai.call(v.duplicate(true), _auto_rng)
 	if inp != null:
 		send_input(inp)
+
+# ───────────────────────── 결과 화면 ─────────────────────────
+
+var result_panel: Control = null
+
+## 게임이 끝나고 마지막 연출이 끝나면 결과 (승패·이유·턴·사이드, 다시 하기·로그·나가기)
+func _update_result() -> void:
+	var res = Net.view.get("result")
+	if res == null:
+		if result_panel:
+			result_panel.queue_free()
+			result_panel = null
+		return
+	if result_panel or (fx and fx.busy()):
+		return
+	var win = res.get("winner")
+	var me := _me()
+	var opp := _opp()
+	var title := "무승부" if win == null else ("승리!" if int(win) == Net.seat else "패배")
+	var color := UI.TEXT if win == null else (UI.ACCENT if int(win) == Net.seat else Color(0.95, 0.5, 0.45))
+	var root := PanelContainer.new()
+	root.add_theme_stylebox_override("panel", UI.box(Color(0.04, 0.08, 0.06, 0.97), 26, 4, color))
+	var mm := UI.margin(26)
+	root.add_child(mm)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 14)
+	mm.add_child(col)
+	var t := UI.label(title, 64, color, HORIZONTAL_ALIGNMENT_CENTER)
+	col.add_child(t)
+	var why := UI.label(my_words(str(res.get("reason", ""))), 24, UI.TEXT, HORIZONTAL_ALIGNMENT_CENTER, true)
+	why.custom_minimum_size.x = minf(size.x - 120, 560)
+	col.add_child(why)
+	col.add_child(UI.label("턴 %d · 가져간 사이드 나 %d : 상대 %d" % [int(Net.view.turnNumber), _taken(opp), _taken(me)], 22, UI.TEXT_DIM, HORIZONTAL_ALIGNMENT_CENTER))
+	var row := HBoxContainer.new()
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 12)
+	col.add_child(row)
+	if Net.solo:
+		var again := UI.button("다시 하기", 28, true, true)
+		again.set_meta("result", "again")
+		again.tapped.connect(func(): Net.send({ "t": "rematch" }))
+		row.add_child(again)
+	var lg := UI.button("로그", 26)
+	lg.set_meta("result", "log")
+	lg.tapped.connect(open_log)
+	row.add_child(lg)
+	if not Net.solo:
+		var out := UI.button("나가기", 26, true)
+		out.set_meta("result", "leave")
+		out.tapped.connect(_leave_to_root)
+		row.add_child(out)
+	var close := UI.button("판 보기", 22)
+	close.set_meta("result", "board")
+	close.tapped.connect(func():
+		if result_panel:
+			result_panel.visible = false)
+	row.add_child(close)
+	hud.add_child(root)
+	result_panel = root
+	await get_tree().process_frame
+	if not is_instance_valid(root):
+		return
+	var w: float = minf(size.x - 40, 640)
+	root.size = Vector2(w, 0)
+	var h := root.get_combined_minimum_size().y
+	root.position = Vector2((size.x - w) / 2, (size.y - h) * 0.42)
+	root.pivot_offset = Vector2(w / 2, h / 2)
+	root.scale = Vector2(0.85, 0.85)
+	root.create_tween().tween_property(root, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	Input.vibrate_handheld(40)
+
+## 내가 가져간 사이드 = 상대 사이드 칸 중 빈 칸 수 (사이드를 깔기 전이면 0)
+static func _taken(p: Dictionary) -> int:
+	return (p.prizes as Array).size() - _count_true(p.prizes)
+
+## 엔진 문구의 "플레이어 1/2" 를 내 시점 "나/상대" 로
+static func my_words(t: String) -> String:
+	if Net.seat < 0:
+		return t
+	var me_n := "플레이어 %d" % (Net.seat + 1)
+	var op_n := "플레이어 %d" % (2 - Net.seat)
+	return t.replace(me_n + "이(가)", "내가").replace(op_n + "이(가)", "상대가").replace(me_n, "나").replace(op_n, "상대")
+
+## 서버 대전이 끝난 뒤 나가기: 참가 정보 지우고 첫 화면으로
+func _leave_to_root() -> void:
+	Net.leave()
+	while Nav.depth() > 1:
+		Nav.pop()
+		await get_tree().create_timer(0.36).timeout

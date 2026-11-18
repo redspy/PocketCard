@@ -10,6 +10,9 @@ static func kind_of(screen, req: Dictionary) -> String:
 		return "reveal"
 	if str(req.kind) == "takePrize":
 		return "prizes"
+	# 준비 단계(배틀·벤치 포켓몬 내기): 손패에서 바로 고른다
+	if str(req.kind) in ["chooseActive", "chooseBench"]:
+		return "handpick"
 	var opts: Array = req.options
 	if opts.is_empty():
 		return "values"

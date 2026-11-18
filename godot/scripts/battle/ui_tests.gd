@@ -46,6 +46,8 @@ static func run_all(host: Node) -> Array:
 		fails.append_array(await run_flow(host))
 	if want.call("fx"):
 		fails.append_array(await run_fx(host))
+	if only.has("setupshot"):
+		await setup_shots(host)
 	if only.has("fxshot"):
 		await fx_shots(host)
 	if want.call("drag"):
@@ -431,7 +433,11 @@ static func ui_choice(host: Node, s: BattleScreen, inp: Dictionary) -> String:
 	var single := int(req.min) == 1 and int(req.max) == 1
 	if not s.board_pick.is_empty():
 		for x in pk:
-			if kind == "slots":
+			if kind == "handpick":
+				if not s.hand.cards.has(str(x)):
+					return "준비 단계: 손패에 고를 카드 없음 %s" % str(x)
+				(s.hand.cards[str(x)] as BCard).tapped.emit()
+			elif kind == "slots":
 				if not s.slots.has(str(x)):
 					return "탁자에 고를 포켓몬이 없음 %s" % str(x)
 				(s.slots[str(x)] as BSlot).card.tapped.emit()
@@ -617,7 +623,18 @@ static func run_flow(host: Node) -> Array:
 	await _frames(host, 3)
 	if (s.end_btn.get_meta("label") as Label).text != "다시 하기":
 		fails.append("끝난 뒤 다시 하기 버튼이 없음")
-	s.end_btn.tapped.emit()
+	for i in 30:
+		await _frames(host, 2)
+		if s.result_panel != null:
+			break
+	if s.result_panel == null:
+		fails.append("결과 화면이 안 뜸")
+		s.end_btn.tapped.emit()
+	else:
+		var title: String = (s.result_panel.find_children("*", "Label", true, false)[0] as Label).text
+		if title != "패배":
+			fails.append("항복했는데 결과가 %s" % title)
+		_find_meta(s.result_panel, "result", "again").tapped.emit()
 	for i in 40:
 		await host.get_tree().create_timer(0.1).timeout
 		if Nav.current() is LobbyScreen:
@@ -720,3 +737,23 @@ static func fx_shots(host: Node) -> void:
 			host.get_viewport().get_texture().get_image().save_png("user://fx_%d_%s.png" % [n, kind])
 			print("[ui-tests] 연출 장면 저장: fx_%d_%s.png" % [n, kind])
 			n += 1
+
+## 창 모드: 준비 단계(손패에서 고르기) · 결과 화면 저장
+static func setup_shots(host: Node) -> void:
+	await start_offline(host)
+	var s := attach(host, BattleScreen.new("table")) as BattleScreen
+	for i in 200:
+		await _frames(host, 1)
+		var r = s.my_request()
+		if r != null and str(r.kind) == "chooseActive":
+			break
+		if r != null:
+			Net.input({ "type": "choice", "requestId": r.id, "picks": (r.options as Array).slice(0, maxi(1, int(r.min))) })
+			await _frames(host, 3)
+	await host.get_tree().create_timer(0.8).timeout
+	host.get_viewport().get_texture().get_image().save_png("user://setup_active.png")
+	print("[ui-tests] 준비 단계 화면 저장")
+	Net.input({ "type": "concede" })
+	await host.get_tree().create_timer(1.2).timeout
+	host.get_viewport().get_texture().get_image().save_png("user://result.png")
+	print("[ui-tests] 결과 화면 저장")
