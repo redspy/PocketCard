@@ -28,6 +28,8 @@ static func run_all(host: Node) -> Array:
 	var fails: Array = []
 	fails.append_array(run_layout())
 	fails.append_array(await run_render(host))
+	for m in ["table", "hand"]:
+		fails.append_array(await run_play(host, m))
 	return fails
 
 # ───────────────────────── 오프라인 게임 도우미 ─────────────────────────
@@ -159,4 +161,136 @@ static func shot(host: Node, mode: String, turn := 6, name := "") -> void:
 	await host.get_tree().create_timer(0.5).timeout
 	host.get_viewport().get_texture().get_image().save_png("user://shot_%s.png" % (name if name != "" else mode))
 	print("[ui-tests] 화면 저장: shot_%s.png (턴 %s)" % [name if name != "" else mode, str(Net.view.get("turnNumber"))])
+	# 손패에서 쓸 수 있는 카드 하나 고른 화면
+	var acts: Array = Net.view.get("actions", [])
+	var mv = GCore.find_first(acts, func(m): return m.get("card") != null and m.get("target") != null)
+	if mv == null:
+		mv = GCore.find_first(acts, func(m): return m.get("card") != null)
+	if mv != null:
+		s.tap_hand(str(mv.card))
+		await host.get_tree().create_timer(0.6).timeout
+		host.get_viewport().get_texture().get_image().save_png("user://shot_%s_sel.png" % mode)
+		s._clear_select()
+	var me: Dictionary = Net.view.players[Net.seat]
+	if me.get("active") != null:
+		s.open_popover(str(me.active.sid))
+		await host.get_tree().create_timer(0.6).timeout
+		host.get_viewport().get_texture().get_image().save_png("user://shot_%s_pop.png" % mode)
+	print("[ui-tests] 화면 저장: 고르기·말풍선")
 	s.queue_free()
+
+# ───────────────────────── 2단계: 화면 조작으로 끝까지 ─────────────────────────
+
+static func _frames(host: Node, n := 2) -> void:
+	for i in n:
+		await host.get_tree().process_frame
+
+## 봇이 고른 입력을 실제 화면 조작(손패 탭 → 대상 탭, 말풍선 버튼, 시트 버튼, 턴 종료)으로 수행한다
+static func ui_do(host: Node, s: BattleScreen, inp: Dictionary) -> String:
+	var v: Dictionary = Net.view
+	match str(inp.type):
+		"choice":
+			var req = GCore.find_first(v.requests, func(r): return str(r.id) == str(inp.requestId))
+			await _frames(host)
+			if s.sheet == null:
+				return "선택 시트가 없음 (%s)" % str(req.kind)
+			var kind := BRequest.kind_of(s, req)
+			var pk: Array = inp.picks
+			if kind == "reveal":
+				s.choose_now(req, "ok")
+			elif kind == "values" and int(req.min) == 1 and int(req.max) == 1:
+				s.choose_now(req, str(pk[0]))
+			else:
+				for x in pk:
+					s.toggle_pick(req, str(x))
+				s.confirm_request(req)
+		"endTurn":
+			s.tap_end_turn()
+			if s.last_sent.get("type") != "endTurn":
+				s.tap_end_turn()
+		"stadium":
+			s.tap_stadium_effect()
+		"attack", "ability", "retreat":
+			var me: Dictionary = v.players[Net.seat]
+			var sid := str(inp.sid) if inp.type == "ability" else str(me.active.sid)
+			s.tap_slot(sid)
+			await _frames(host)
+			if s.popover == null:
+				return "말풍선이 안 열림 (%s)" % inp.type
+			var btns: Array = s.popover_buttons()
+			var b = null
+			for x in btns:
+				if inp.type == "attack" and x.has_meta("attack_index") and int(x.get_meta("attack_index")) == int(inp.index) and UI.is_enabled(x):
+					b = x
+				elif inp.type == "ability" and x.has_meta("ability") and str(x.get_meta("move").input.sid) == sid:
+					b = x
+				elif inp.type == "retreat" and x.has_meta("retreat"):
+					b = x
+			if b == null:
+				return "말풍선에 버튼 없음 (%s)" % JSON.stringify(inp)
+			b.tapped.emit()
+			if inp.type == "retreat":
+				await _frames(host)
+				s.tap_slot(str(inp.to))
+		"play":
+			s.tap_hand(str(inp.card))
+			await _frames(host)
+			if s.sel_card != str(inp.card) and s.last_sent.is_empty():
+				return "손패 카드가 골라지지 않음"
+			if inp.get("target") != null:
+				s.tap_slot(str(inp.target))
+			elif s.targets.has("bench"):
+				s.tap_empty("bench:0")
+			else:
+				s.tap_zone()
+		"concede":
+			return "항복은 5단계"
+	await _frames(host)
+	if GEngine.canon(s.last_sent) != GEngine.canon(inp):
+		return "보낸 입력 다름: 기대 %s / 보냄 %s" % [JSON.stringify(inp), JSON.stringify(s.last_sent)]
+	return ""
+
+## 화면 조작만으로 AI 와 끝까지 대전 (내 자리 판단은 봇, 실행은 화면)
+static func run_play(host: Node, mode: String, my_deck := "gardevoir", ai_deck := "charizard", seed := "c0de") -> Array:
+	var fails: Array = []
+	await start_offline(host, my_deck, ai_deck)
+	var s := attach(host, BattleScreen.new(mode)) as BattleScreen
+	var d := LocalGame.data()
+	var bot: Callable = GBot.makeAiBot(d.cat, d.info.db)
+	var rng := GRng.seedRng(seed)
+	var last := -1
+	var steps := 0
+	var kinds := {}
+	for i in 6000:
+		await host.get_tree().process_frame
+		var v: Dictionary = Net.view
+		if v.is_empty():
+			continue
+		if v.get("result") != null:
+			break
+		if int(v.version) == last or not GBot.botHasWork(v):
+			continue
+		last = int(v.version)
+		var inp = bot.call(v.duplicate(true), rng)
+		if inp == null:
+			continue
+		s.last_sent = {}
+		var err: String = await ui_do(host, s, inp)
+		kinds[str(inp.type)] = int(kinds.get(str(inp.type), 0)) + 1
+		steps += 1
+		if err != "":
+			fails.append("%s 조작 %d (턴 %d): %s" % [mode, steps, int(v.turnNumber), err])
+			if fails.size() > 8:
+				break
+			if s.last_sent.is_empty():
+				Net.input(inp)   # 화면으로 못 했으면 직접 보내 계속 진행
+		for p in check_render(s):
+			if fails.size() < 12:
+				fails.append("%s 그리기: %s" % [mode, p])
+	var res = Net.view.get("result")
+	if res == null:
+		fails.append("%s: 게임이 끝나지 않음" % mode)
+	print("[ui-tests] 조작(%s): %d번 %s, 결과 %s" % [mode, steps, JSON.stringify(kinds), str(res.get("reason")) if res != null else "-"])
+	s.queue_free()
+	await _frames(host)
+	return fails

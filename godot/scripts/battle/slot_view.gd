@@ -15,6 +15,7 @@ var _badges: VBoxContainer
 var _weak: Label
 var _tool: Label
 var _empty: Panel
+var hit: TapArea                   # 빈 칸도 누를 수 있게 (카드가 없을 때 받음)
 
 func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_PASS
@@ -28,6 +29,9 @@ func _init() -> void:
 	_empty.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_empty.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_empty)
+	hit = TapArea.new()
+	hit.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(hit)
 	card = BCard.new()
 	card.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(card)
@@ -61,6 +65,7 @@ func set_slot(s, active := false) -> void:
 	var has := not slot.is_empty()
 	_empty.visible = not has
 	card.visible = has
+	hit.visible = not has
 	var face_down := bool(slot.get("faceDown", false)) or slot.get("stack") == null
 	var top := ""
 	if has and not face_down:
@@ -190,3 +195,20 @@ func _relayout() -> void:
 	_tool.add_theme_font_size_override("font_size", maxi(12, int(w * 0.09)))
 	_tool.size = Vector2.ZERO
 	_tool.position = Vector2(w - _tool.get_minimum_size().x - 2, h - bh - 10 - _tool.get_minimum_size().y)
+
+## 강조: 카드가 있으면 카드에, 빈 칸이면 빈 칸 틀에
+func set_mark(kind: String) -> void:
+	if card.visible:
+		card.set_mark(kind)
+		var esb := _empty.get_theme_stylebox("panel") as StyleBoxFlat
+		esb.border_color = Color(1, 1, 1, 0.16)
+	else:
+		var sb := _empty.get_theme_stylebox("panel") as StyleBoxFlat
+		sb.border_color = UI.ACCENT if kind == "target" else Color(1, 1, 1, 0.16)
+		sb.set_border_width_all(5 if kind == "target" else 2)
+		_empty_mark = kind
+
+var _empty_mark := ""
+
+func mark() -> String:
+	return card.mark() if card.visible else _empty_mark

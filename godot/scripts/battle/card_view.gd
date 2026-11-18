@@ -8,6 +8,7 @@ var _img: TextureRect
 var _back: Panel
 var _frame: Panel
 var _glow_tw: Tween
+var _big_req := false
 
 func _init() -> void:
 	super._init()
@@ -34,25 +35,31 @@ static func back_style() -> StyleBoxFlat:
 
 ## code 가 "" 이면 뒷면
 func set_card(c: String, big := false) -> void:
-	if c == code and (_img.texture != null or c == ""):
+	if c == code and (c == "" or (_img.texture != null and (not big or _big_req))):
+		return
+	if c == code and big and not _big_req and c != "":
+		_big_req = true
+		ImageCache.request("res://cards/full/%s.webp" % c, BCard._apply.bind(weakref(self), c, false))
 		return
 	code = c
+	_big_req = big
 	_back.visible = c == ""
 	_img.texture = null
 	_img.visible = c != ""
 	if c == "":
 		return
-	var ref: WeakRef = weakref(_img)
-	var want := c
-	ImageCache.request("res://cards/thumb/%s.webp" % c, func(t):
-		var r = ref.get_ref()
-		if r and r.texture == null and is_instance_valid(self) and code == want:
-			r.texture = t)
+	# 콜백이 이 노드를 붙잡지 않게 정적 함수 + 약한 참조 (이미지가 늦게 와도 사라진 카드를 건드리지 않음)
+	ImageCache.request("res://cards/thumb/%s.webp" % c, BCard._apply.bind(weakref(self), c, true))
 	if big:
-		ImageCache.request("res://cards/full/%s.webp" % c, func(t):
-			var r = ref.get_ref()
-			if r and is_instance_valid(self) and code == want:
-				r.texture = t)
+		ImageCache.request("res://cards/full/%s.webp" % c, BCard._apply.bind(weakref(self), c, false))
+
+static func _apply(t: Texture2D, ref: WeakRef, want: String, only_if_empty: bool) -> void:
+	var me = ref.get_ref()
+	if me == null or me.code != want:
+		return
+	if only_if_empty and me._img.texture != null:
+		return
+	me._img.texture = t
 
 ## 강조: "target" = 놓을 수 있는 곳(금색 틀 맥동), "pick" = 고른 것(굵은 틀), "dim" = 흐리게, "" = 보통
 func set_mark(kind: String) -> void:
