@@ -272,7 +272,7 @@ static func _frame_koCheck(ctx: Dictionary, f: Dictionary) -> void:
 				takes[GCore.other(seat)] += n
 				if not s.inCheckup and s.turnPlayer != seat:
 					s.players[seat].koTurn = s.turnNumber
-				GCore.emit(ctx, { "type": "ko", "player": seat, "code": GCore.inst(ctx, GCore.topOf(slot)).code, "prizes": n })
+				GCore.emit(ctx, { "type": "ko", "player": seat, "sid": slot.sid, "code": GCore.inst(ctx, GCore.topOf(slot)).code, "prizes": n })
 				# 학습장치: 상대 기술로 내 배틀 포켓몬이 기절하면 기본 에너지 1장을 장치를 단 포켓몬으로 옮김
 				if was_active and s.attackCtx != null and s.attackCtx.seat != seat:
 					var holder = GCore.find_first(s.players[seat].bench, func(b): return GCore.toolName(ctx, b) == "학습장치")

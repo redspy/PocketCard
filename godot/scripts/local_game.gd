@@ -114,7 +114,7 @@ func _schedule_ai() -> void:
 		_ai_wait = ai_delay_ms / 1000.0
 
 func _process(delta: float) -> void:
-	if _ai_wait < 0.0:
+	if _ai_wait < 0.0 or Net.fx_busy:
 		return
 	_ai_wait -= delta
 	if _ai_wait > 0.0:

@@ -41,6 +41,8 @@ var picks: Dictionary = {}          # 요청 id -> Array
 var only_usable := false
 var last_sent: Dictionary = {}      # 테스트용: 마지막으로 보낸 입력
 var _confirm_end := 0
+var fx: BFx
+var _fed_version := -1
 var menu_btn: TapArea
 var speed_btn: TapArea
 var auto_btn: TapArea
@@ -70,11 +72,15 @@ func _ready() -> void:
 		add_child(c)
 		set(n, c)
 	_build_static()
+	fx = BFx.new(self)
+	add_child(fx)
+	fx.start_from_now()
 	Net.changed.connect(_refresh)
 	resized.connect(_refresh)
 	_refresh()
 
 func _exit_tree() -> void:
+	Net.fx_busy = false   # 연출 도중 화면이 닫혀도 AI 가 멈추지 않게
 	if Net.changed.is_connected(_refresh):
 		Net.changed.disconnect(_refresh)
 
@@ -211,6 +217,10 @@ func _refresh() -> void:
 	if not is_inside_tree() or Net.view.is_empty() or Net.seat < 0:
 		return
 	var v: Dictionary = Net.view
+	# 새 상태가 오면 새 사건을 연출 큐에 (HP 지연 표시·기절 칸 유지가 먼저 정해져야 해서 그리기 전에)
+	if fx and int(v.version) != _fed_version:
+		_fed_version = int(v.version)
+		fx.feed()
 	var me := _me()
 	var opp := _opp()
 	var sz := size if size.x > 0 else Vector2(720, 1560)
@@ -221,7 +231,7 @@ func _refresh() -> void:
 	if mode == "table":
 		_place_side(opp, "opp", seen)
 	for sid in slots.keys():
-		if not seen.has(sid):
+		if not seen.has(sid) and not (fx and fx.hold.has(sid)):
 			slots[sid].queue_free()
 			slots.erase(sid)
 	_place_board(v, me, opp)
@@ -255,6 +265,10 @@ func _place_side(p: Dictionary, side: String, seen: Dictionary) -> void:
 		var rect: Rect2 = list[i][1]
 		var node: BSlot
 		if s != null:
+			# 포켓몬이 있는 칸의 빈 칸 틀은 숨긴다 (안 그러면 칸 수가 바뀔 때 옛 틀이 뒤에 남음)
+			var ekey := "%s:%d" % [side, i]
+			if empties.has(ekey):
+				empties[ekey].visible = false
 			var sid := str(s.sid)
 			seen[sid] = true
 			if not slots.has(sid):
@@ -274,9 +288,17 @@ func _place_side(p: Dictionary, side: String, seen: Dictionary) -> void:
 				board.add_child(e)
 				empties[key] = e
 			node = empties[key]
-		node.position = rect.position
+		# 자리가 바뀌면(후퇴·교체·벤치 당김) 미끄러지듯 이동
+		if s != null and node.has_meta("placed") and fx and fx.speed() > 0.0 and node.position.distance_to(rect.position) > 1.0:
+			BattleScreen.move_node(node, rect.position, 0.22 / fx.speed())
+		else:
+			BattleScreen.move_node(node, rect.position, 0.0)
+		node.set_meta("placed", true)
 		node.size = rect.size
 		node.set_slot(s, bool(list[i][2]) and mode == "table")
+		if s != null and fx:
+			var pend := int(fx.pending_hp.get(str(s.sid), 0))
+			node.show_hp(clampi(node.real_left() + pend, 0, node.max_hp()) if pend != 0 else -1)
 		node.visible = true
 	for key in empties:
 		if key.begins_with(side + ":") and int(key.split(":")[1]) >= list.size():
@@ -390,6 +412,23 @@ func _btn_box(on: bool) -> StyleBoxFlat:
 	sb.content_margin_top = 14
 	sb.content_margin_bottom = 14
 	return sb
+
+## 칸의 위치 이동은 한 번에 하나만 (흔들기·돌진·자리 이동이 겹쳐 엉뚱한 곳에 멈추지 않게). 목표 위치를 meta 로 기억
+static func move_node(node: Control, pos: Vector2, dur: float) -> void:
+	var old = node.get_meta("pos_tw") if node.has_meta("pos_tw") else null
+	var running: bool = old is Tween and (old as Tween).is_valid() and (old as Tween).is_running()
+	# 같은 목표로 이미 움직이는 중이면 그대로 둔다 (다시 그릴 때마다 처음부터 다시 움직이지 않게)
+	if running and node.has_meta("target_pos") and (node.get_meta("target_pos") as Vector2).distance_to(pos) < 0.5 and dur > 0.0:
+		return
+	if old is Tween and (old as Tween).is_valid():
+		(old as Tween).kill()
+	node.set_meta("target_pos", pos)
+	if dur <= 0.0:
+		node.position = pos
+		return
+	var tw := node.create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(node, "position", pos, dur)
+	node.set_meta("pos_tw", tw)
 
 static func bench_slots(p: Dictionary) -> int:
 	return maxi(int(p.benchMax), (p.bench as Array).size())
@@ -721,6 +760,16 @@ func send_input(inp: Dictionary) -> void:
 	_clear_select(false)
 	Net.input(inp)
 	Input.vibrate_handheld(10)
+
+## 손패 모드: 상대 행동 한 줄 알림 (최근 2줄)
+var _notices: Array = []
+
+func notify(text: String) -> void:
+	if text == "":
+		return
+	_notices.push_front(text)
+	_notices = _notices.slice(0, 2)
+	notice_label.text = "\n".join(_notices)
 
 func _toast(text: String) -> void:
 	toast.text = text

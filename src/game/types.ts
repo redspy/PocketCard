@@ -170,7 +170,7 @@ export type GameEvent =
   | { seq: number; type: 'damage'; player: Seat; sid: string; amount: number; counters?: boolean; note?: string }
   | { seq: number; type: 'heal'; player: Seat; sid: string; amount: number }
   | { seq: number; type: 'condition'; player: Seat; sid: string; cond: string; on: boolean }
-  | { seq: number; type: 'ko'; player: Seat; code: string; prizes: number }
+  | { seq: number; type: 'ko'; player: Seat; sid: string; code: string; prizes: number }
   | { seq: number; type: 'switch'; player: Seat; from: string; to: string }
   | { seq: number; type: 'note'; text: string };
 

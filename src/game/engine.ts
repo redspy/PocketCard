@@ -244,7 +244,7 @@ FRAMES.koCheck = (ctx, f) => {
         if (s.attackCtx && s.attackCtx.seat !== seat && wasActive) n += s.attackCtx.extraPrizes;
         takes[other(seat)] += n;
         if (!s.inCheckup && s.turnPlayer !== seat) s.players[seat].koTurn = s.turnNumber;
-        emit(ctx, { type: 'ko', player: seat, code: inst(ctx, topOf(slot)).code, prizes: n });
+        emit(ctx, { type: 'ko', player: seat, sid: slot.sid, code: inst(ctx, topOf(slot)).code, prizes: n });
         // 학습장치: 상대 기술로 내 배틀 포켓몬이 기절하면 기본 에너지 1장을 장치를 단 포켓몬으로 옮김
         if (wasActive && s.attackCtx && s.attackCtx.seat !== seat) {
           const holder = s.players[seat].bench.find((b) => toolName(ctx, b) === '학습장치');

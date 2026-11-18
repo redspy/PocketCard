@@ -44,6 +44,10 @@ static func run_all(host: Node) -> Array:
 		fails.append_array(await run_auto(host))
 	if want.call("flow"):
 		fails.append_array(await run_flow(host))
+	if want.call("fx"):
+		fails.append_array(await run_fx(host))
+	if only.has("fxshot"):
+		await fx_shots(host)
 	if want.call("drag"):
 		for m in ["table", "hand"]:
 			fails.append_array(await run_play(host, m, "charizard", "gardevoir", "d2a9", true))
@@ -78,7 +82,7 @@ static func attach(host: Node, screen: Control) -> Control:
 static func check_render(s: BattleScreen) -> Array:
 	var out: Array = []
 	var v: Dictionary = Net.view
-	if v.is_empty():
+	if v.is_empty() or (s.fx and s.fx.busy()):
 		return out
 	var sides := [["my", v.players[Net.seat]]]
 	if s.mode == "table":
@@ -100,7 +104,8 @@ static func check_render(s: BattleScreen) -> Array:
 				out.append("%s: %s 칸 없음" % [s.mode, sl.sid])
 				continue
 			if not (node as Control).visible or (node as Control).position.distance_to((it[1] as Rect2).position) > 0.5:
-				out.append("%s: %s 위치 다름" % [s.mode, sl.sid])
+				var tw = node.get_meta("pos_tw") if node.has_meta("pos_tw") else null
+				out.append("%s: %s 위치 다름 (지금 %s, 목표 %s, 기억 %s, 움직이는 중 %s, 크기 %s)" % [s.mode, sl.sid, (node as Control).position, (it[1] as Rect2).position, str(node.get_meta("target_pos", null)), str(tw is Tween and (tw as Tween).is_running()), str((node as Control).scale)])
 			if sl.get("hp") != null and node.left_shown() != int(sl.hp) - int(sl.damage):
 				out.append("%s: %s HP 표시 %d ≠ %d" % [s.mode, sl.sid, node.left_shown(), int(sl.hp) - int(sl.damage)])
 		if s.mode == "table":
@@ -111,6 +116,17 @@ static func check_render(s: BattleScreen) -> Array:
 			var shown: int = (s.prize_cards[side] as Array).filter(func(c): return c.visible).size()
 			if shown != BattleScreen._count_true(p.prizes):
 				out.append("%s 사이드 표시 %d ≠ %d" % [side, shown, BattleScreen._count_true(p.prizes)])
+	# 포켓몬이 있는 칸 자리에 빈 칸 틀이 보이면 안 됨
+	for k in s.empties:
+		var e: BSlot = s.empties[k]
+		if not e.visible:
+			continue
+		var side2: String = k.split(":")[0]
+		var idx := int(k.split(":")[1])
+		var pp: Dictionary = v.players[Net.seat] if side2 == "my" else v.players[1 - Net.seat]
+		var filled: bool = (idx == 0 and pp.active != null) or (idx > 0 and idx - 1 < (pp.bench as Array).size())
+		if filled:
+			out.append("%s: %s 빈 칸 틀이 포켓몬 뒤에 보임" % [s.mode, k])
 	if s.slots.size() != expect:
 		out.append("%s: 칸 노드 %d ≠ 포켓몬 %d" % [s.mode, s.slots.size(), expect])
 	return out
@@ -614,3 +630,93 @@ static func run_flow(host: Node) -> Array:
 		Nav.pop()
 		await host.get_tree().create_timer(0.4).timeout
 	return fails
+
+# ───────────────────────── 6단계: 연출 ─────────────────────────
+
+## 연출을 켠 채(2배속) 자동 진행으로 끝까지: 연출이 멈춘 순간마다 화면 == 상태, 남은 지연·기절 칸 없음, 누르면 건너뛰기
+static func run_fx(host: Node) -> Array:
+	var fails: Array = []
+	await start_offline(host)
+	Net.send({ "t": "aiSpeed", "ms": 250 })
+	await _frames(host, 2)
+	var s := attach(host, BattleScreen.new("table")) as BattleScreen
+	s.auto_btn.tapped.emit()
+	var t0 := Time.get_ticks_msec()
+	var idle_checks := 0
+	var skipped := false
+	var was_busy := false
+	for i in 200000:
+		await _frames(host, 1)
+		var v: Dictionary = Net.view
+		if v.get("result") != null and not s.fx.busy():
+			break
+		var busy: bool = s.fx.busy()
+		if busy and not skipped and not s._my_turn() and s.fx.catcher and s.fx.catcher.visible and int(v.get("turnNumber", 0)) >= 6:
+			# 상대 차례 연출 중 화면을 누르면 건너뛰기
+			skipped = true
+			var before := Time.get_ticks_msec()
+			s.fx.catcher.tapped.emit()
+			for k in 120:
+				await _frames(host, 1)
+				if not s.fx.busy():
+					break
+			if s.fx.busy():
+				fails.append("누르기로 연출이 건너뛰어지지 않음")
+			print("[ui-tests] 연출 건너뛰기: %.2f초" % ((Time.get_ticks_msec() - before) / 1000.0))
+		if was_busy and not busy:
+			# 연출이 막 끝남: 화면 == 상태
+			await host.get_tree().create_timer(0.3).timeout
+			# 자리 이동(미끄러짐)이 끝날 때까지 (연출이 없는 사건 직후에는 이동만 진행 중일 수 있음)
+			for k in 20:
+				var moving := s.slots.values().any(func(n): return n.has_meta("pos_tw") and (n.get_meta("pos_tw") as Tween).is_valid() and (n.get_meta("pos_tw") as Tween).is_running())
+				if not moving:
+					break
+				await host.get_tree().create_timer(0.05).timeout
+			if not s.fx.busy():
+				idle_checks += 1
+				if not s.fx.pending_hp.is_empty():
+					fails.append("연출 후 HP 지연이 남음 %s" % JSON.stringify(s.fx.pending_hp))
+				if not s.fx.hold.is_empty():
+					fails.append("연출 후 기절 칸이 남음 %s" % JSON.stringify(s.fx.hold.keys()))
+				for p in check_render(s):
+					if fails.size() < 10:
+						fails.append("연출 후 그리기: " + p)
+		was_busy = busy
+		if Time.get_ticks_msec() - t0 > 600000:
+			fails.append("연출 테스트 시간 초과 (턴 %s)" % str(v.get("turnNumber")))
+			break
+	var c: Dictionary = s.fx.counts
+	for need in ["turnStart", "play", "attack", "damage", "move"]:
+		if int(c.get(need, 0)) == 0:
+			fails.append("연출 안 된 사건: %s" % need)
+	if Net.view.get("result") == null:
+		fails.append("연출 테스트: 게임이 끝나지 않음")
+	print("[ui-tests] 연출(2배속): %.0f초, 연출 후 검사 %d번, 재생 %s" % [(Time.get_ticks_msec() - t0) / 1000.0, idle_checks, JSON.stringify(c)])
+	s.queue_free()
+	await _frames(host)
+	return fails
+
+## 창 모드: 연출 중 장면 몇 장 저장 (user://fx_N.png)
+static func fx_shots(host: Node) -> void:
+	await start_offline(host)
+	Net.send({ "t": "aiSpeed", "ms": 700 })
+	var s := attach(host, BattleScreen.new("table")) as BattleScreen
+	s.auto_btn.tapped.emit()
+	var n := 0
+	var t0 := Time.get_ticks_msec()
+	var last_kind := ""
+	while n < 8 and Time.get_ticks_msec() - t0 < 240000:
+		await host.get_tree().create_timer(0.12).timeout
+		var c: Dictionary = s.fx.counts
+		var kind := ""
+		for k in ["attack", "ko", "coin", "damage", "play", "turnStart"]:
+			if int(c.get(k, 0)) > int(s.get_meta("seen_" + k, 0)):
+				kind = k
+				s.set_meta("seen_" + k, int(c.get(k, 0)))
+				break
+		if kind != "" and s.fx.busy() and int(Net.view.get("turnNumber", 0)) >= 3 and (kind != last_kind or kind in ["ko", "coin"]):
+			last_kind = kind
+			await host.get_tree().create_timer(0.15).timeout
+			host.get_viewport().get_texture().get_image().save_png("user://fx_%d_%s.png" % [n, kind])
+			print("[ui-tests] 연출 장면 저장: fx_%d_%s.png" % [n, kind])
+			n += 1

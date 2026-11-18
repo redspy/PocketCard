@@ -15,6 +15,7 @@ var code := ""
 var token := ""
 var solo := false              # AI 연습 (게임판 없이 서버 AI 와 대전)
 var offline := false           # 서버 없이 폰 안의 엔진으로 AI 연습 (LocalGame)
+var fx_busy := false           # 대전 화면이 연출 중 (오프라인 AI 는 연출이 끝날 때까지 기다림)
 var _local: LocalGame = null
 var status := "idle"            # idle / connecting / open / closed
 var seat := -1                  # 0, 1 (참가 전 -1)
