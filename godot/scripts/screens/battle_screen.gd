@@ -66,9 +66,12 @@ func _ready() -> void:
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
+	# 손패 카드는 겹침 순서로 z_index(최대 100)를 쓰므로, 위 레이어는 그보다 높여야 손패에 안 가림
+	var layer_z := { "board": 0, "hud": 0, "sheet_layer": 200, "fx_layer": 300, "drag_layer": 400 }
 	for n in ["board", "hud", "sheet_layer", "fx_layer", "drag_layer"]:
 		var c := Control.new()
 		c.name = n
+		c.z_index = layer_z[n]
 		c.set_anchors_preset(Control.PRESET_FULL_RECT)
 		c.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(c)

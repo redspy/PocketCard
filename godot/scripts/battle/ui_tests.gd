@@ -91,6 +91,11 @@ static func check_render(s: BattleScreen) -> Array:
 	var v: Dictionary = Net.view
 	if v.is_empty() or (s.fx and s.fx.busy()):
 		return out
+	# 확대 보기·선택 창(sheet_layer)이 손패 위에 그려지는지 (손패 카드 z_index 가 위 레이어를 넘으면 가림)
+	for c in s.hand.get_children():
+		if c is CanvasItem and _abs_z(c) >= _abs_z(s.sheet_layer):
+			out.append("손패 카드(z %d)가 확대 보기 레이어(z %d) 위에 그려짐" % [_abs_z(c), _abs_z(s.sheet_layer)])
+			break
 	var sides := [["my", v.players[Net.seat]]]
 	if s.mode == "table":
 		sides.append(["opp", v.players[1 - Net.seat]])
@@ -708,6 +713,12 @@ static func run_fx(host: Node) -> Array:
 			fails.append("연출 테스트 시간 초과 (턴 %s)" % str(v.get("turnNumber")))
 			break
 	var c: Dictionary = s.fx.counts
+	if c.is_empty():
+		# 가끔 전체 실행에서만 재생 0 이 나옴 → 다음에 원인을 볼 수 있게 상태를 남긴다
+		fails.append("연출 재생 0: 턴 %s, 결과 %s, 사건 %d개(마지막 seq %s), fx last_seq %d, fed %d, 화면 트리 안 %s, Nav 깊이 %d" % [
+			str(Net.view.get("turnNumber")), str(Net.view.get("result") != null), Net.events_log.size(),
+			str(Net.events_log[-1].get("seq")) if not Net.events_log.is_empty() else "-", s.fx.last_seq, s._fed_version,
+			str(s.is_inside_tree()), Nav.depth()])
 	for need in ["turnStart", "play", "attack", "damage", "move"]:
 		if int(c.get(need, 0)) == 0:
 			fails.append("연출 안 된 사건: %s" % need)
@@ -899,3 +910,14 @@ static func run_sizes(host: Node) -> Array:
 			box.queue_free()
 			await _frames(host)
 	return fails
+
+## 실제로 그려지는 z (z_as_relative 누적)
+static func _abs_z(n: CanvasItem) -> int:
+	var z := 0
+	var c: Node = n
+	while c is CanvasItem:
+		z += (c as CanvasItem).z_index
+		if not (c as CanvasItem).z_as_relative:
+			break
+		c = c.get_parent()
+	return z
