@@ -63,6 +63,7 @@ static func build(screen, req: Dictionary) -> Control:
 					var codes: Array = (rv.cards as Array).map(func(c): return str(c.code))
 					col.add_child(_strip(screen, codes, codes.map(func(_c): return ""), w * 0.3, func(_i): pass))
 			var ok := UI.button("확인", 28, true, true)
+			ok.set_meta("val", "ok")
 			ok.tapped.connect(func(): screen.choose_now(req, "ok"))
 			col.add_child(ok)
 			return root
@@ -84,9 +85,13 @@ static func build(screen, req: Dictionary) -> Control:
 					shown = usable
 			var codes: Array = shown.map(func(x): return cm.get(x, ""))
 			var states: Array = shown.map(func(x): return "on" if p.has(x) else ("" if opts.has(x) else "off"))
-			col.add_child(_strip(screen, codes, states, w * 0.3, func(i):
+			var strip := _strip(screen, codes, states, w * 0.3, func(i):
 				if opts.has(shown[i]):
-					screen.toggle_pick(req, shown[i])))
+					screen.toggle_pick(req, shown[i]))
+			var cells: Array = strip.get_child(0).get_children()
+			for i in cells.size():
+				cells[i].set_meta("val", shown[i])
+			col.add_child(strip)
 		"slots":
 			var row := HFlowContainer.new()
 			row.add_theme_constant_override("h_separation", 10)
@@ -100,6 +105,7 @@ static func build(screen, req: Dictionary) -> Control:
 				c.set_slot(s, false)
 				c.set_mark("pick" if p.has(sid) else "")
 				c.card.tapped.connect(func(): screen.toggle_pick(req, sid))
+				c.card.set_meta("val", sid)
 				c.card.long_pressed.connect(func(): screen.zoom_slot(sid))
 				row.add_child(c)
 			col.add_child(row)
@@ -109,6 +115,7 @@ static func build(screen, req: Dictionary) -> Control:
 			for o in opts:
 				var val := str(o)
 				var b := UI.button("사이드 %d" % (int(val) + 1), 24, p.has(val), p.has(val))
+				b.set_meta("val", val)
 				b.tapped.connect(func(): screen.toggle_pick(req, val))
 				row.add_child(b)
 			col.add_child(row)
@@ -120,6 +127,7 @@ static func build(screen, req: Dictionary) -> Control:
 			for o in opts:
 				var val := str(o)
 				var b := UI.button(str(labels.get(val, VALUE_LABEL.get(val, val))), 26, p.has(val), p.has(val))
+				b.set_meta("val", val)
 				if mn == 1 and mx == 1:
 					b.tapped.connect(func(): screen.choose_now(req, val))
 				else:
@@ -130,6 +138,7 @@ static func build(screen, req: Dictionary) -> Control:
 				return root
 	var okb := UI.button("결정%s" % ("" if p.is_empty() else " (%d)" % p.size()), 28, true, true)
 	UI.set_enabled(okb, p.size() >= mini(mn, opts.size()) and p.size() <= mx)
+	okb.set_meta("confirm", true)
 	okb.tapped.connect(func(): screen.confirm_request(req))
 	col.add_child(okb)
 	return root
@@ -154,3 +163,31 @@ static func _strip(screen, codes: Array, states: Array, w: float, on_tap: Callab
 		c.long_pressed.connect(func(): BZoom.open(screen.sheet_layer, codes, k))
 		row.add_child(c)
 	return sc
+
+## 탁자에서 직접 고를 때 위에 뜨는 안내 띠 (안내 + 고른 수 + 결정)
+static func pick_bar(screen, req: Dictionary) -> Control:
+	var root := PanelContainer.new()
+	root.add_theme_stylebox_override("panel", UI.box(Color(0.04, 0.09, 0.07, 0.95), 16, 3, UI.ACCENT))
+	var mm := UI.margin(12)
+	root.add_child(mm)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	mm.add_child(row)
+	var id := str(req.id)
+	var mn := int(req.min)
+	var mx := int(req.max)
+	var p: Array = screen.picks.get(id, [])
+	var single := mn == 1 and mx == 1
+	var txt := str(req.prompt) + ("" if single else "  (%d~%d개, 고름 %d)" % [mn, mx, p.size()])
+	var l := UI.label(txt, 22, UI.TEXT, HORIZONTAL_ALIGNMENT_LEFT, true)
+	l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	l.custom_minimum_size.x = 300
+	row.add_child(l)
+	if not single:
+		var okb := UI.button("결정", 24, true, true)
+		okb.set_meta("confirm", true)
+		UI.set_enabled(okb, p.size() >= mini(mn, (req.options as Array).size()) and p.size() <= mx)
+		okb.tapped.connect(func(): screen.confirm_request(req))
+		row.add_child(okb)
+	root.set_meta("kind", "board")
+	return root

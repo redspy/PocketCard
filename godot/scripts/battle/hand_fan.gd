@@ -7,6 +7,9 @@ extends Control
 signal card_tapped(iid: String)
 signal card_long(iid: String)
 signal card_swipe_up(iid: String)
+signal card_drag_start(iid: String, pos: Vector2)
+signal card_drag(iid: String, pos: Vector2)
+signal card_drag_end(iid: String, pos: Vector2)
 
 var cards: Dictionary = {}      # iid -> BCard
 var order: Array = []           # 손패 순서 (iid)
@@ -37,6 +40,10 @@ func set_hand(hand: Array, use: Dictionary, sel: String, csize: Vector2) -> void
 			c.tapped.connect(func(): card_tapped.emit(iid))
 			c.long_pressed.connect(func(): card_long.emit(iid))
 			c.swiped.connect(func(d: Vector2): _on_swipe(iid, d))
+			c.draggable = true
+			c.drag_started.connect(func(pos: Vector2): card_drag_start.emit(iid, pos))
+			c.dragged.connect(func(pos: Vector2): card_drag.emit(iid, pos))
+			c.drag_ended.connect(func(pos: Vector2): card_drag_end.emit(iid, pos))
 			add_child(c)
 			cards[iid] = c
 	for iid in cards.keys():
@@ -46,9 +53,8 @@ func set_hand(hand: Array, use: Dictionary, sel: String, csize: Vector2) -> void
 	_place(false)
 
 func _on_swipe(iid: String, d: Vector2) -> void:
-	if d.y < -absf(d.x):
-		card_swipe_up.emit(iid)
-	elif absf(d.x) > absf(d.y):
+	# 위로 밀기는 끌어 놓기가 맡는다 (밀어서 바로 쓰기는 잘못 놓았을 때 엉뚱하게 쓰여서 없앰)
+	if absf(d.x) > absf(d.y):
 		offset = clampf(offset + d.x, -_overflow(), 0.0)
 		_place(true)
 
@@ -57,7 +63,8 @@ func _step() -> float:
 	if n <= 1:
 		return card_size.x
 	var fit := (size.x - 24.0 - card_size.x) / (n - 1)
-	return clampf(fit, card_size.x * 0.34, card_size.x * 0.92)
+	# 겹침은 카드 폭의 24%(손가락으로 누를 수 있는 최소)까지 — 그보다 많으면 옆으로 넘기기
+	return clampf(fit, maxf(44.0, card_size.x * 0.24), card_size.x * 0.92)
 
 func _overflow() -> float:
 	var n := order.size()
@@ -98,3 +105,37 @@ func _place(anim: bool) -> void:
 func refresh_layout() -> void:
 	offset = clampf(offset, -_overflow(), 0.0)
 	_place(false)
+
+## 이 카드를 눌렀을 때 다른 카드에 가리지 않고 화면 안인 지점 (전역 좌표) — 회전·겹침을 정확히 계산
+func press_point(iid: String) -> Vector2:
+	if not cards.has(iid):
+		return Vector2(-1, -1)
+	var c: BCard = cards[iid]
+	var view := get_viewport_rect()
+	for fy in [0.35, 0.5, 0.2, 0.65, 0.8]:
+		for fx in [0.15, 0.3, 0.08, 0.45, 0.6, 0.75, 0.9]:
+			var gp: Vector2 = c.get_global_transform() * (c.size * Vector2(fx, fy))
+			if not view.has_point(gp):
+				continue
+			var covered := false
+			for o in cards.values():
+				if o == c or o.z_index < c.z_index or (o.z_index == c.z_index and o.get_index() < c.get_index()):
+					continue
+				var lp: Vector2 = o.get_global_transform().affine_inverse() * gp
+				if Rect2(Vector2.ZERO, o.size).has_point(lp):
+					covered = true
+					break
+			if not covered:
+				return gp
+	return c.get_global_transform() * (c.size * 0.5)
+
+## 이 카드가 화면 안에 보이도록 패를 넘긴다
+func reveal(iid: String) -> void:
+	var i := order.find(iid)
+	if i < 0 or _overflow() <= 0.0:
+		return
+	var x := 12.0 + i * _step()
+	var want := clampf(size.x * 0.5 - x - card_size.x * 0.5, -_overflow(), 0.0)
+	if absf(want - offset) > 1.0:
+		offset = want
+		_place(true)

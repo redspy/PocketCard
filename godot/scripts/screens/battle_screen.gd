@@ -117,6 +117,9 @@ func _build_static() -> void:
 		for i in 6:
 			var c := BCard.new()
 			c.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			if side == "my":
+				var k := i
+				c.tapped.connect(func(): tap_prize(k))
 			board.add_child(c)
 			arr.append(c)
 		prize_cards[side] = arr
@@ -127,6 +130,9 @@ func _build_static() -> void:
 	hand.card_tapped.connect(tap_hand)
 	hand.card_long.connect(func(iid): _zoom_hand(iid))
 	hand.card_swipe_up.connect(swipe_up_hand)
+	hand.card_drag_start.connect(_drag_start)
+	hand.card_drag.connect(_drag_move)
+	hand.card_drag_end.connect(_drag_end)
 	board.add_child(hand)
 	# 상단 바
 	var bar := Panel.new()
@@ -355,8 +361,24 @@ static func _count_true(arr) -> int:
 
 ## 지금 강조할 대상들을 칸에 표시
 func _apply_marks() -> void:
+	var bp_opts: Array = []
+	var bp_picks: Array = []
+	if not board_pick.is_empty():
+		bp_opts = board_pick.req.options
+		bp_picks = picks.get(str(board_pick.req.id), [])
 	for sid in slots:
-		slots[sid].set_mark("target" if targets.has(sid) else "")
+		var mk := "target" if targets.has(sid) else ""
+		if board_pick.get("kind") == "slots":
+			mk = "pick" if bp_picks.has(sid) else ("target" if bp_opts.has(sid) else "dim")
+		slots[sid].set_mark(mk)
+	for i in 6:
+		var pc: BCard = prize_cards["my"][i]
+		pc.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if board_pick.get("kind") == "prizes":
+			pc.mouse_filter = Control.MOUSE_FILTER_STOP
+			pc.set_mark("pick" if bp_picks.has(str(i)) else ("target" if bp_opts.has(str(i)) else ""))
+		else:
+			pc.set_mark("")
 	for key in empties:
 		var e: BSlot = empties[key]
 		var bkey := "bench:%s" % key.split(":")[1] if key.begins_with("my:") else ""
@@ -433,6 +455,10 @@ func tap_empty(bkey: String) -> void:
 
 ## 포켓몬 칸 탭: 대상이면 실행, 아니면 (내 포켓몬) 말풍선 / (상대) 크게 보기
 func tap_slot(sid: String) -> void:
+	if not board_pick.is_empty():
+		if board_pick.kind == "slots":
+			board_pick_tap(sid)
+		return
 	var req = my_request()
 	if req != null:
 		return
@@ -679,16 +705,60 @@ func _build_request() -> void:
 	if sheet:
 		sheet.queue_free()
 		sheet = null
+	board_pick = {}
 	if req == null:
 		hand.visible = true
+		_apply_marks()
 		return
 	_clear_select(false)
+	var kind := BRequest.kind_of(self, req)
+	var top_y: float = L.bar.position.y + L.bar.size.y
+	if mode == "table" and (kind == "slots" or kind == "prizes"):
+		# 탁자에서 직접 고르기: 후보가 맥동, 위에 안내 띠
+		board_pick = { "req": req, "kind": kind }
+		sheet = BRequest.pick_bar(self, req)
+		sheet_layer.add_child(sheet)
+		sheet.size = Vector2(size.x - 24, 0)
+		sheet.position = Vector2(12, top_y + 6)
+		hand.visible = true
+		_apply_marks()
+		return
 	sheet = BRequest.build(self, req)
 	sheet_layer.add_child(sheet)
+	if kind == "values" or kind == "reveal":
+		# 작은 선택(예·아니오·확인 등)은 가운데 대화상자
+		await get_tree().process_frame
+		if not is_instance_valid(sheet):
+			return
+		var w: float = minf(size.x - 40, 640)
+		sheet.size = Vector2(w, 0)
+		var h := sheet.get_combined_minimum_size().y
+		sheet.position = Vector2((size.x - w) / 2, clampf((size.y - h) / 2, top_y, size.y - h))
+		hand.visible = true
+		return
 	sheet.set_meta("covers_hand", true)
 	hand.visible = false
-	sheet.position = Vector2(0, maxf(L.bar.position.y + L.bar.size.y, size.y * 0.42))
+	sheet.position = Vector2(0, maxf(top_y, size.y * 0.42))
 	sheet.size = Vector2(size.x, size.y - sheet.position.y)
+
+var board_pick: Dictionary = {}     # 탁자에서 고르는 중인 요청 { req, kind }
+
+## 탁자 고르기: 포켓몬 또는 사이드 칸을 눌렀을 때
+func board_pick_tap(val: String) -> void:
+	if board_pick.is_empty():
+		return
+	var req: Dictionary = board_pick.req
+	if not (req.options as Array).has(val):
+		_toast("여기는 고를 수 없습니다.")
+		return
+	if int(req.min) == 1 and int(req.max) == 1:
+		choose_now(req, val)
+	else:
+		toggle_pick(req, val)
+
+func tap_prize(i: int) -> void:
+	if not board_pick.is_empty() and board_pick.kind == "prizes":
+		board_pick_tap(str(i))
 
 ## 요청 안의 고르기 토글
 func toggle_pick(req: Dictionary, val: String) -> void:
@@ -703,6 +773,7 @@ func toggle_pick(req: Dictionary, val: String) -> void:
 		p.append(val)
 	picks[id] = p
 	_build_request()
+	_apply_marks()
 
 func confirm_request(req: Dictionary) -> void:
 	var id := str(req.id)
@@ -716,3 +787,101 @@ func confirm_request(req: Dictionary) -> void:
 
 func choose_now(req: Dictionary, val: String) -> void:
 	send_input({ "type": "choice", "requestId": str(req.id), "picks": [val] })
+
+# ───────────────────────── 끌어 놓기 ─────────────────────────
+
+var drag_ghost: BCard = null
+var drag_iid := ""
+var drag_hover := ""
+
+var dbg_drag: Dictionary = {}       # 테스트 진단: 마지막 끌기
+
+func _drag_start(iid: String, pos: Vector2) -> void:
+	dbg_drag = { "start": iid, "pos": pos }
+	if my_request() != null:
+		dbg_drag["why"] = "request"
+		return
+	_close_popover()
+	if sel_card != iid:
+		tap_hand(iid)
+	if sel_card != iid:
+		return   # 쓸 수 없는 카드 (tap_hand 가 알림)
+	drag_iid = iid
+	drag_ghost = BCard.new()
+	drag_ghost.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	drag_ghost.size = L.card * 0.78
+	drag_ghost.set_card(hand.codes.get(iid, ""), true)
+	drag_ghost.modulate.a = 0.92
+	drag_layer.add_child(drag_ghost)
+	if hand.cards.has(iid):
+		hand.cards[iid].modulate.a = 0.25
+	_drag_move(iid, pos)
+
+func _drag_move(iid: String, pos: Vector2) -> void:
+	if drag_ghost == null or iid != drag_iid:
+		return
+	drag_ghost.position = pos - drag_ghost.size * Vector2(0.5, 0.75)
+	drag_ghost.rotation_degrees = clampf((pos.x - size.x / 2) / size.x * 8.0, -6, 6)
+	var t := drop_target(pos)
+	if t != drag_hover:
+		drag_hover = t
+		drag_ghost.scale = Vector2(1.08, 1.08) if t != "" else Vector2.ONE
+
+## 놓은 곳(전역 좌표)의 대상 키: 포켓몬 sid / "bench" / "zone" / "" (못 놓는 곳)
+func drop_target(pos: Vector2) -> String:
+	for key in targets:
+		if slots.has(key) and (slots[key] as Control).get_global_rect().grow(10).has_point(pos):
+			return key
+	if targets.has("bench"):
+		for k in empties:
+			var e: BSlot = empties[k]
+			if k.begins_with("my:") and e.visible and e.get_global_rect().grow(10).has_point(pos):
+				return "bench"
+	if targets.has("zone"):
+		# 가운데 줄(탁자) 또는 손패보다 위 아무 곳 (포켓몬 위가 아니면)
+		var above_hand := pos.y < hand.global_position.y - 10
+		var on_slot := slots.values().any(func(n): return (n as Control).get_global_rect().has_point(pos))
+		if (mode == "table" and mid.get_global_rect().grow(16).has_point(pos)) or (above_hand and not on_slot):
+			return "zone"
+	if targets.has("bench") and pos.y < hand.global_position.y - 10:
+		var on_slot2 := slots.values().any(func(n): return (n as Control).get_global_rect().has_point(pos))
+		if not on_slot2:
+			return "bench"
+	return ""
+
+func _drag_end(iid: String, pos: Vector2) -> void:
+	if iid != drag_iid:
+		return
+	var t := drop_target(pos)
+	dbg_drag["end"] = pos
+	dbg_drag["t"] = t
+	dbg_drag["targets"] = targets.keys()
+	dbg_drag["rects"] = targets.keys().filter(func(k): return slots.has(k)).map(func(k): return str((slots[k] as Control).get_global_rect()))
+	if drag_ghost:
+		drag_ghost.queue_free()
+	drag_ghost = null
+	drag_iid = ""
+	drag_hover = ""
+	if hand.cards.has(iid):
+		hand.cards[iid].modulate.a = 1.0
+	if t != "" and targets.has(t):
+		_send_move(targets[t])
+		return
+	if pos.y < hand.global_position.y - 10:
+		_toast(_why_not(iid))
+	_clear_select()
+
+## 못 놓는 곳에 놓았을 때 안내 (어디에 놓을 수 있는지)
+func _why_not(iid: String) -> String:
+	var moves := _moves_for_card(iid)
+	if moves.is_empty():
+		return "지금은 쓸 수 없는 카드입니다."
+	var names: Array = []
+	for m in moves:
+		if m.get("target") != null:
+			var s = _slot_data(str(m.target))
+			if s != null and s.get("stack") != null:
+				names.append(BData.name_of(str(s.stack[(s.stack as Array).size() - 1].code)))
+	if not names.is_empty():
+		return "여기에는 놓을 수 없습니다. 놓을 수 있는 포켓몬: %s" % ", ".join(names)
+	return "여기에는 놓을 수 없습니다."
