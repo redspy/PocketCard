@@ -558,14 +558,18 @@ static func dealAttackDamage(ctx: Dictionary, seat: int, atk: Dictionary, target
 			dmg += 50
 	if dmg <= 0:
 		return 0
-	# 3) 약점 4) 저항력
+	# 3) 약점 4) 저항력 (연출용으로 적용 여부를 사건에 남김)
+	var w_hit := false
+	var r_hit := false
 	if wr and on_opp_active:
 		# 릴리에의 삐삐 ex "페어리존": 상대 필드의 드래곤 타입 포켓몬의 약점은 초 타입
 		var weak = "P" if (td.type == "N" and fieldHasAbility(ctx, seat, "フェアリーゾーン")) else td.weak
 		if truthy(weak) and weak == ad.type:
 			dmg *= 2
+			w_hit = true
 		if truthy(td.resist) and td.resist == ad.type:
 			dmg -= 30
+			r_hit = true
 		if dmg <= 0:
 			return 0
 	# 5) 받는 쪽 효과
@@ -585,7 +589,12 @@ static func dealAttackDamage(ctx: Dictionary, seat: int, atk: Dictionary, target
 		dmg = hp - 10
 		note(ctx, "%s: 버티는 하트 — HP 10 으로 남음" % slotName(ctx, target))
 	target.damage += dmg
-	emit(ctx, { "type": "damage", "player": t_owner, "sid": target.sid, "amount": dmg })
+	var ev := { "type": "damage", "player": t_owner, "sid": target.sid, "amount": dmg }
+	if w_hit:
+		ev["weak"] = true
+	if r_hit:
+		ev["resist"] = true
+	emit(ctx, ev)
 	return dmg
 
 ## 데미지 카운터 올리기 (데미지가 아님: 약점·저항력·데미지 증감 무시)

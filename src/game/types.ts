@@ -167,7 +167,7 @@ export type GameEvent =
   | { seq: number; type: 'play'; player: Seat; code: string; what: string }          // 카드 사용 알림 (스포트라이트)
   | { seq: number; type: 'attack'; player: Seat; code: string; name: string; index: number }
   | { seq: number; type: 'ability'; player: Seat; code: string; name: string }
-  | { seq: number; type: 'damage'; player: Seat; sid: string; amount: number; counters?: boolean; note?: string }
+  | { seq: number; type: 'damage'; player: Seat; sid: string; amount: number; counters?: boolean; weak?: boolean; resist?: boolean; note?: string }
   | { seq: number; type: 'heal'; player: Seat; sid: string; amount: number }
   | { seq: number; type: 'condition'; player: Seat; sid: string; cond: string; on: boolean }
   | { seq: number; type: 'ko'; player: Seat; sid: string; code: string; prizes: number }

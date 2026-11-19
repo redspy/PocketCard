@@ -19,6 +19,10 @@ var counts: Dictionary = {}     # 사건 종류 -> 재생 수 (테스트용)
 var catcher: TapArea            # 재생 중 누르면 건너뛰기
 var impacts: Array = []         # 테스트용: 충돌 기록 [{ sids, tier, synced }]
 var _board_tw: Tween
+var _reps: Dictionary = {}      # 이번 턴 연출 종류 -> 횟수 (반복 가속)
+var _accel := 1.0               # 지금 사건의 길이 배율 (1 · 0.75 · 0.5)
+var accel_log: Array = []       # 테스트용: [{ key, n, accel }]
+var wr_shown: Array = []        # 테스트용: 띄운 약점·저항 표시
 
 # ───────────────────────── 설정·등급 (docs/fx-hearthstone-review.md) ─────────────────────────
 
@@ -54,6 +58,68 @@ static func tier(amount: int, kos := false) -> int:
 		return 1
 	return 0
 
+## 약점이면 한 등급 위 (특대 상한)
+static func tier_of(e: Dictionary, kos := false) -> int:
+	var t := tier(int(e.get("amount", 0)), kos)
+	if bool(e.get("weak", false)):
+		t = mini(t + 1, 3)
+	return t
+
+## 숫자 아래 보조 표시: 약점 ×2 / 저항 −30
+static func wr_label(e: Dictionary) -> String:
+	if bool(e.get("weak", false)):
+		return "약점 ×2"
+	if bool(e.get("resist", false)):
+		return "저항 −30"
+	return ""
+
+## 반복 가속: 한 턴에 같은 연출 3번째부터 0.75배, 5번째부터 0.5배 길이
+static func accel_for(n: int) -> float:
+	if n >= 5:
+		return 0.5
+	if n >= 3:
+		return 0.75
+	return 1.0
+
+## 반복 가속 종류: 카드 사용은 무엇을 했는지까지(에너지 붙이기·서포트…), 나머지는 사건 종류
+static func rep_key(e: Dictionary) -> String:
+	var t := str(e.get("type", ""))
+	if t == "play":
+		return "play:" + str(e.get("what", ""))
+	if t == "move":
+		var fr = e.get("from", {})
+		var to = e.get("to", {})
+		if fr is Dictionary and to is Dictionary and str(fr.get("zone", "")) == "deck" and str(to.get("zone", "")) == "hand":
+			return "draw"
+		return ""
+	if t in ["attack", "ability", "damage", "heal", "condition", "ko"]:
+		return t
+	return ""
+
+func _set_accel(e: Dictionary) -> void:
+	var t := str(e.get("type", ""))
+	if t == "turnStart":
+		_reps.clear()
+	var key := rep_key(e)
+	if key == "":
+		_accel = 1.0
+		return
+	var n := int(_reps.get(key, 0)) + 1
+	_reps[key] = n
+	_accel = accel_for(n)
+	if t == "ko" and _game_ends_after():
+		_accel = 1.0     # 승부를 가르는 마지막 기절은 제 속도로
+	accel_log.append({ "key": key, "n": n, "accel": _accel })
+
+func _game_ends_after() -> bool:
+	for q in queue:
+		var qt := str(q.get("type", ""))
+		if qt == "gameEnd":
+			return true
+		if qt == "turnStart":
+			return false
+	return false
+
 const NUM_SIZE := [44, 54, 68, 84]
 const VIBRATE_MS := [10, 15, 25, 40]
 const KNOCK_PX := [8.0, 14.0, 20.0, 26.0]
@@ -81,7 +147,8 @@ func speed() -> float:
 	if not Net.solo:
 		return 1.0
 	var d := Net.ai_delay()
-	return 0.0 if d <= 0 else (2.0 if d <= 300 else 1.0)
+	var base := 0.0 if d <= 0 else (2.0 if d <= 300 else 1.0)
+	return base / _accel if base > 0.0 else 0.0
 
 func busy() -> bool:
 	return playing or not queue.is_empty()
@@ -146,10 +213,12 @@ func _run() -> void:
 		if skipping or not is_instance_valid(screen):
 			_apply_now(e)
 			continue
+		_set_accel(e)
 		if screen.mode == "table":
 			await _play_table(e)
 		else:
 			await _play_hand(e)
+	_accel = 1.0
 	skipping = false
 	playing = false
 	Net.fx_busy = false
@@ -258,7 +327,7 @@ func _banner(text: String, sub: String, sec: float, color := UI.ACCENT) -> void:
 		p.queue_free()
 
 ## 숫자: 칸 가운데에서 튀어나와(0.5→1.25→1.0배) 멈춰 읽히고(0.4초) 살짝 떠오르며 사라짐. 크기는 등급별
-func _number(sid: String, text: String, color: Color, t := 1) -> void:
+func _number(sid: String, text: String, color: Color, t := 1, sub := "") -> void:
 	var n = _node(sid)
 	if n == null:
 		return
@@ -276,6 +345,19 @@ func _number(sid: String, text: String, color: Color, t := 1) -> void:
 		lab.rotation_degrees = randf_range(-4.0, 4.0)
 	lab.scale = Vector2(0.5, 0.5)
 	lab.set_meta("fx_number", text)
+	if sub != "":
+		# 약점·저항: 숫자 바로 아래 작은 띠 (숫자와 함께 튀고 사라짐). 약점은 금색, 저항은 회청색
+		var weak := sub.begins_with("약점")
+		var sc := Color(1, 0.82, 0.3) if weak else Color(0.7, 0.8, 0.9)
+		var sl := UI.label(sub, 26, sc, HORIZONTAL_ALIGNMENT_CENTER)
+		sl.add_theme_stylebox_override("normal", UI.box(Color(0.05, 0.05, 0.05, 0.85), 8, 2, sc))
+		sl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var ms := sl.get_combined_minimum_size()
+		sl.size = ms
+		sl.position = Vector2((lab.size.x - ms.x) / 2, lab.size.y - 6)
+		sl.set_meta("fx_wr", sub)
+		lab.add_child(sl)
+		lab.set_meta("fx_wr", sub)
 	screen.fx_layer.add_child(lab)
 	var sp := speed()
 	var tw := lab.create_tween()
@@ -338,11 +420,14 @@ func _impact(evs: Array, stop: float, synced: bool) -> void:
 	for e in evs:
 		var sid := str(e.sid)
 		var amt := int(e.amount)
-		var t := tier(amt, _kos_after(sid))
+		var t := tier_of(e, _kos_after(sid))
 		top = maxi(top, t)
 		pending_hp[sid] = int(pending_hp.get(sid, 0)) - amt
 		_update_hp(sid)
-		_number(sid, "-%d" % amt, Color(1, 0.35, 0.3), t)
+		var wr := wr_label(e)
+		_number(sid, "-%d" % amt, Color(1, 0.35, 0.3), t, wr)
+		if wr != "":
+			wr_shown.append(wr)
 		var n := _node(sid)
 		_flash(n)
 		var away := Vector2(0, 1) if int(e.player) == Net.seat else Vector2(0, -1)   # 내 칸은 아래로, 상대 칸은 위로
@@ -390,7 +475,7 @@ func _attack(e: Dictionary, mine: bool) -> void:
 		hits.append(d)
 	var top := 0
 	for h in hits:
-		top = maxi(top, tier(int(h.amount), _kos_after(str(h.sid))))
+		top = maxi(top, tier_of(h, _kos_after(str(h.sid))))
 	var stop: float = HIT_STOP[top]
 	var color: Color = UI.ACCENT if mine else Color(0.95, 0.45, 0.4)
 	_tag(n, ("" if mine else "AI · ") + "기술 [%s]" % str(e.get("name", "")), color, 0.9)
@@ -513,7 +598,7 @@ func _play_table(e: Dictionary) -> void:
 		"attack":
 			await _attack(e, mine)
 		"damage":
-			_impact([e], HIT_STOP[tier(int(e.amount), _kos_after(str(e.sid)))], false)
+			_impact([e], HIT_STOP[tier_of(e, _kos_after(str(e.sid)))], false)
 			await _wait(0.5)
 		"heal":
 			var sid2 := str(e.sid)
@@ -606,7 +691,7 @@ func _play_hand(e: Dictionary) -> void:
 				screen.notify(l)
 		"damage":
 			if int(e.player) == Net.seat:
-				_vibrate(VIBRATE_MS[tier(int(e.amount), _kos_after(str(e.sid)))])
+				_vibrate(VIBRATE_MS[tier_of(e, _kos_after(str(e.sid)))])
 		"ko":
 			if int(e.player) == Net.seat:
 				_vibrate(30)

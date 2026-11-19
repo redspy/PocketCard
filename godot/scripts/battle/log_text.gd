@@ -25,7 +25,7 @@ static func line(e: Dictionary, me: int) -> String:
 		"play": return "%s: %s — %s" % [w, nm, str(e.get("what", ""))]
 		"attack": return "%s: %s 기술 [%s]" % [w, nm, str(e.get("name", ""))]
 		"ability": return "%s: %s 특성 [%s]" % [w, nm, str(e.get("name", ""))]
-		"damage": return "   → %s 포켓몬 %s %d" % [w, "카운터" if bool(e.get("counters", false)) else "데미지", int(e.amount)]
+		"damage": return "   → %s 포켓몬 %s %d%s" % [w, "카운터" if bool(e.get("counters", false)) else "데미지", int(e.amount), (" (약점 ×2)" if bool(e.get("weak", false)) else "") + (" (저항 −30)" if bool(e.get("resist", false)) else "")]
 		"heal": return "   → %s 포켓몬 %d 회복" % [w, int(e.amount)]
 		"condition":
 			if bool(e.get("on", false)):

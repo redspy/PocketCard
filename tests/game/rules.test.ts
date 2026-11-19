@@ -60,6 +60,8 @@ test('약점 ×2: 악 타입 리자몽 ex 의 버닝다크 → 가디안 ex (약
   const r = act(s, 0, { type: 'attack', index: attackIndex(s, 0, 'バーニングダーク') });
   const dmg = r.events.find((e) => e.type === 'damage');
   assert.equal(dmg && 'amount' in dmg ? dmg.amount : 0, 360, '180 ×2 (상대가 가져간 사이드 0장) → 310HP 가디안 ex 기절');
+  assert.ok(dmg && 'weak' in dmg && dmg.weak === true, '피해 사건에 약점 표시 (연출용)');
+  assert.ok(!(dmg && 'resist' in dmg), '저항력 표시 없음');
   assert.ok(r.events.some((e) => e.type === 'ko'));
   checkInvariants(r.state, [60, 60]);
 });
@@ -69,10 +71,14 @@ test('저항력 −30, 약점·저항력 무시 기술', () => {
   const s = scenario(['gholdengo', 'gardevoir'], { active: 'M1L_026', energy: ['SV1S_108', 'SV1S_108'], bench: ['M1L_027'] }, { active: 'SV1S_028' });
   const r = act(s, 0, { type: 'attack', index: attackIndex(s, 0, 'パワージェム') });
   assert.equal(r.state.players[1].active!.damage, 20);
+  const d1 = r.events.find((e) => e.type === 'damage');
+  assert.ok(d1 && 'resist' in d1 && d1.resist === true && !('weak' in d1), '피해 사건에 저항력 표시 (연출용)');
   // 솔록 코스모빔: 벤치에 루나톤이 있으면 70, 약점·저항력 계산 안 함
   const s2 = scenario(['gholdengo', 'gardevoir'], { active: 'M1L_027', energy: ['SV1S_108'], bench: ['M1L_026'] }, { active: 'SV1S_028' });
   const r2 = act(s2, 0, { type: 'attack', index: attackIndex(s2, 0, 'コスモビーム') });
   assert.equal(r2.state.players[1].active!.damage, 70);
+  const d2 = r2.events.find((e) => e.type === 'damage');
+  assert.ok(d2 && !('resist' in d2) && !('weak' in d2), '약점·저항력 무시 기술은 표시 없음');
 });
 
 test('테라스탈: 벤치에서는 기술 데미지를 받지 않지만 데미지 카운터는 올라간다', () => {

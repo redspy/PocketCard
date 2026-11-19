@@ -743,6 +743,37 @@ static func run_fx(host: Node) -> Array:
 		fails.append("기술과 피해가 한 번도 동기화되지 않음 (충돌 %d번)" % imp.size())
 	if s.board.position != Vector2.ZERO:
 		fails.append("판 흔들림 뒤 판이 제자리가 아님 %s" % s.board.position)
+	# 8) 약점·저항: 약점이면 한 등급 위, 숫자 아래 보조 표시, 기록 줄
+	for tc in [[{ "amount": 60, "weak": true }, 2], [{ "amount": 30, "weak": true }, 1], [{ "amount": 200, "weak": true }, 3], [{ "amount": 20, "resist": true }, 0]]:
+		if BFx.tier_of(tc[0]) != tc[1]:
+			fails.append("약점·저항 등급 %s → %d (기대 %d)" % [JSON.stringify(tc[0]), BFx.tier_of(tc[0]), tc[1]])
+	if BFx.wr_label({ "weak": true }) != "약점 ×2" or BFx.wr_label({ "resist": true }) != "저항 −30" or BFx.wr_label({}) != "":
+		fails.append("약점·저항 표시 글자가 다름")
+	if not BLog.line({ "type": "damage", "player": 0, "sid": "s1", "amount": 60, "weak": true }, 0).contains("약점"):
+		fails.append("기록 줄에 약점 표시 없음")
+	var wr_events := Net.events_log.filter(func(x): return str(x.get("type", "")) == "damage" and (bool(x.get("weak", false)) or bool(x.get("resist", false)))).size()
+	if not s.slots.is_empty():
+		var sid0: String = str(s.slots.keys()[0])
+		s.fx._number(sid0, "-120", Color.RED, 2, "약점 ×2")
+		var found := s.fx_layer.get_children().any(func(ch): return ch.has_meta("fx_wr") and str(ch.get_meta("fx_wr")) == "약점 ×2")
+		if not found:
+			fails.append("숫자 아래 약점 표시가 그려지지 않음")
+	# 9) 반복 가속: 3번째부터 0.75배, 5번째부터 0.5배 (승부를 가르는 마지막 기절은 1배)
+	for tc in [[1, 1.0], [2, 1.0], [3, 0.75], [4, 0.75], [5, 0.5], [9, 0.5]]:
+		if BFx.accel_for(tc[0]) != tc[1]:
+			fails.append("반복 가속 %d번째 → %s (기대 %s)" % [tc[0], BFx.accel_for(tc[0]), tc[1]])
+	var al: Array = s.fx.accel_log
+	var fast := 0
+	for x in al:
+		var want := BFx.accel_for(int(x.n))
+		if float(x.accel) < 1.0:
+			fast += 1
+		if float(x.accel) != want and not (str(x.key) == "ko" and float(x.accel) == 1.0):
+			fails.append("반복 가속 기록 이상 %s" % JSON.stringify(x))
+			break
+	if s.fx._accel != 1.0:
+		fails.append("연출이 끝났는데 반복 가속이 남음 %s" % s.fx._accel)
+	print("[ui-tests] 약점·저항 사건 %d개 (표시 %d), 반복 가속 %d/%d개" % [wr_events, s.fx.wr_shown.size(), fast, al.size()])
 	print("[ui-tests] 공격 연출: 충돌 %d번 (기술과 동기화 %d), 등급별 %s" % [imp.size(), synced, JSON.stringify(tiers)])
 	print("[ui-tests] 연출(2배속): %.0f초, 연출 후 검사 %d번, 재생 %s" % [(Time.get_ticks_msec() - t0) / 1000.0, idle_checks, JSON.stringify(c)])
 	s.queue_free()

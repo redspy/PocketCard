@@ -354,12 +354,13 @@ export function dealAttackDamage(ctx: Ctx, seat: Seat, atk: PokemonSlot, target:
     if (hasAbility(ctx, atk, 'ふくがん') && td.abilities.length > 0) dmg += 50;
   }
   if (dmg <= 0) return 0;
-  // 3) 약점 4) 저항력
+  // 3) 약점 4) 저항력 (연출용으로 적용 여부를 사건에 남김)
+  let wHit = false, rHit = false;
   if (wr && onOppActive) {
     // 릴리에의 삐삐 ex "페어리존": 상대 필드의 드래곤 타입 포켓몬의 약점은 초 타입
     const weak = td.type === 'N' && fieldHasAbility(ctx, seat, 'フェアリーゾーン') ? 'P' : td.weak;
-    if (weak && weak === ad.type) dmg *= 2;
-    if (td.resist && td.resist === ad.type) dmg -= 30;
+    if (weak && weak === ad.type) { dmg *= 2; wHit = true; }
+    if (td.resist && td.resist === ad.type) { dmg -= 30; rHit = true; }
     if (dmg <= 0) return 0;
   }
   // 5) 받는 쪽 효과
@@ -376,7 +377,10 @@ export function dealAttackDamage(ctx: Ctx, seat: Seat, atk: PokemonSlot, target:
     note(ctx, `${slotName(ctx, target)}: 버티는 하트 — HP 10 으로 남음`);
   }
   target.damage += dmg;
-  emit(ctx, { type: 'damage', player: tOwner, sid: target.sid, amount: dmg });
+  const ev: { type: 'damage'; player: Seat; sid: string; amount: number; weak?: boolean; resist?: boolean } = { type: 'damage', player: tOwner, sid: target.sid, amount: dmg };
+  if (wHit) ev.weak = true;
+  if (rHit) ev.resist = true;
+  emit(ctx, ev);
   return dmg;
 }
 
