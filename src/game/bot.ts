@@ -199,6 +199,7 @@ export function makeAiBot(cat: Catalog, db: CardDB): Bot {
         case 'ビッグバイト': dmg = oppAct && oppAct.damage > 0 ? 30 : 260; break;
         case 'ほえさけぶ': dmg = 20 * Math.floor(s.damage / 10); break;
         case 'クルーエルアロー': dmg = 100; break;
+        case '스톰슬래시': case '브레인웨이브': dmg = 60 + 30 * (s.attached ?? []).filter((x) => card(x.code)?.energy?.type === 'P').length; break;
         default: if (!dmg && a.text) dmg = 20;
       }
       const od = top(oppAct);
@@ -216,7 +217,14 @@ export function makeAiBot(cat: Catalog, db: CardDB): Bot {
       const ab = d?.pokemon?.abilities[0]?.nameJa;
       if (ab === 'カースドボム') { const c = d?.pokemon?.stage === 2 ? 130 : 50; if (opp.prizes.filter(Boolean).length <= 1) return false; return [opp.active, ...opp.bench].some((t) => t && remain(t) <= c && top(t)?.pokemon?.rule); }
       if (ab === 'サイコエンブレイス') return !!act && !!actBest && missing(act, actBest.cost).length > 0 && n < 20;
-      const drawy = ['さかてにとる', 'リスタート', 'ボーナスコイン', 'ルナサイクル', 'ていさつしれい'];
+      // 하늘의 봉인석 [스타오더]: 배틀의 기본 포켓몬 V 가 지금 기술로 상대 배틀의 VSTAR·VMAX 를 기절시킬 수 있을 때만
+      if ((a.input as { tool?: boolean }).tool) {
+        const ad = top(act)?.pokemon, od = top(oppAct)?.pokemon;
+        if (s !== act || !ad || ad.rule !== 'V' || ad.stage !== 0 || !od || (od.rule !== 'VSTAR' && od.rule !== 'VMAX')) return false;
+        return attacks0.some((m) => canKo(estimate(act, Number((m.input as { index: number }).index)), oppAct));
+      }
+      if (ab === '검의 포효') return false;   // 쓰면 차례가 끝남 → 맨 마지막에 (아래 7번 뒤)
+      const drawy = ['さかてにとる', 'リスタート', 'ボーナスコイン', 'ルナサイクル', 'ていさつしれい', '리파인'];
       if (lowDeck && drawy.includes(ab ?? '')) return false;
       return true;
     });
@@ -300,6 +308,9 @@ export function makeAiBot(cat: Catalog, db: CardDB): Bot {
     }
     const stadium = pick('stadium');
     if (stadium) return strip(stadium);
+    // 자시안 V "검의 포효": 공격할 수 없는 차례의 끝에 (쓰면 차례가 끝남)
+    const sword = acts.find((a) => a.kind === 'ability' && !(a.input as { tool?: boolean }).tool && top(slotBySid(a.target ?? ''))?.pokemon?.abilities[0]?.nameJa === '검의 포효');
+    if (sword) return strip(sword);
     return end ? strip(end) : null;
   };
 }

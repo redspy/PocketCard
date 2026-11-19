@@ -267,7 +267,7 @@ HP70 Psychic 진화전:- 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"ty
 HP100 Psychic 진화전:ラルトス 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:1
   [기술] コールサイン (Psychic) : 自分の山札からポケモンを3枚まで選び、相手に見せて、手札に加える。そして山札を切る。
   [기술] サイコショット (Psychic) 30: 
-## SV1S_028 가디안 ex [Pokemon/Stage2/EX] jp=SV1S-028 (gardevoir×2)
+## SV1S_028 가디안 ex [Pokemon/Stage2/EX] jp=SV1S-028 (gardevoir×2,gardevoir23×2)
 HP310 Psychic 진화전:- 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:2
   [특성] サイコエンブレイス: 自分の番に何回でも使える。自分のトラッシュから「基本エネルギー」を1枚選び、自分のポケモンにつける。その後、つけたポケモンにダメカンを2個のせる。（きぜつするポケモンに、この特性は使えない。）
   [기술] ミラクルフォース (PsychicPsychicColorless) 190: このポケモンの特殊状態を、すべて回復する。
@@ -406,11 +406,11 @@ HP110 Water 진화전:- 약점:[{"type":"Lightning","value":"x2"}] 저항:[] 후
 HP80 Psychic 진화전:- 약점:[{"type":"Darkness","value":"x2"}] 저항:[{"type":"Fighting","value":"-30"}] 후퇴:1
   [기술] ひっかく (Colorless) 20: 
   [기술] ロストマイン (Psychic) : このワザは、自分のロストゾーンにカードが10枚以上あるときにしか使えない。ダメカン12個を、相手のポケモンに好きなようにのせる。
-## S12a_033 찬란한 개굴닌자 [Pokemon/Basic] jp=S12a-033 (giratina×1)
+## S12a_033 찬란한 개굴닌자 [Pokemon/Basic] jp=S12a-033 (giratina×1,gardevoir23×1)
 HP130 Water 진화전:- 약점:[{"type":"Lightning","value":"x2"}] 저항:[] 후퇴:1
   [특성] かくしふだ: 自分の番に、自分の手札からエネルギーを1枚トラッシュするなら、1回使える。自分の山札を2枚引く。
   [기술] げっこうしゅりけん (WaterWaterColorless) : このポケモンについているエネルギーを2個トラッシュし、相手のポケモン2匹に、それぞれ90ダメージ。［ベンチは弱点・抵抗力を計算しない。］
-## S12a_029 마나피 [Pokemon/Basic] jp=S12a-029 (giratina×1)
+## S12a_029 마나피 [Pokemon/Basic] jp=S12a-029 (giratina×1,gardevoir23×1)
 HP70 Water 진화전:- 약점:[{"type":"Lightning","value":"x2"}] 저항:[] 후퇴:1
   [특성] なみのヴェール: このポケモンがいるかぎり、自分のベンチポケモン全員は、相手のワザのダメージを受けない。
   [기술] みずかけ (Water) 20: 
@@ -426,7 +426,7 @@ HP210 Darkness 진화전:- 약점:[{"type":"Fighting","value":"x2"}] 저항:[] �
 HP280 Dragon 진화전:ギラティナV 약점:[] 저항:[] 후퇴:2
   [기술] ロストインパクト (GrassPsychicColorless) 280: 自分の場のポケモンについているエネルギーを2個選び、ロストゾーンに置く。
   [기술] スターレクイエム (GrassPsychic) : このワザは、自分のロストゾーンにカードが10枚以上あるときにしか使えない。相手のバトルポケモンをきぜつさせる。［対戦中、自分はVSTARパワーを1回しか使えない。］
-## S8_089 배틀VIP패스 [Trainer/Item] jp=S8-091 (giratina×4)
+## S8_089 배틀VIP패스 [Trainer/Item] jp=S8-091 (giratina×4,gardevoir23×4)
   [효과] このカードは、最初の自分の番にしか使えない。自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。
 ## SVB_001 네스트볼 [trainer] (giratina×3) — 데이터 없음
 ## S12a_139 미라주게이트 [Trainer/Item] jp=S12a-141 (giratina×4)
@@ -439,9 +439,51 @@ HP280 Dragon 진화전:ギラティナV 약점:[] 저항:[] 후퇴:2
 ## SVB_003 포켓기어3.0 [trainer] (giratina×1) — 데이터 없음
 ## S12a_155 아크로마의 실험 [Trainer/Supporter] jp=S12a-148 (giratina×4)
   [효과] 自分の山札を上から5枚見て、その中からカードを3枚選び、手札に加える。残りのカードはロストゾーンに置く。
-## SVB_020 보스의 지령 [trainer] (giratina×2) — 데이터 없음
-## SVB_022 원규 [trainer] (giratina×1) — 데이터 없음
+## SVB_020 보스의 지령 [trainer] (giratina×2,gardevoir23×1) — 데이터 없음
+## SVB_022 원규 [trainer] (giratina×1,gardevoir23×1) — 데이터 없음
 ## SVB_027 정상으로 가는 눈길 [trainer] (giratina×2) — 데이터 없음
-## SVB_033 기본 초 에너지 [energy] (giratina×4) — 데이터 없음
+## SVB_033 기본 초 에너지 [energy] (giratina×4,gardevoir23×12) — 데이터 없음
 ## SVB_029 기본 풀 에너지 [energy] (giratina×3) — 데이터 없음
 ## SVB_031 기본 물 에너지 [energy] (giratina×3) — 데이터 없음
+## S11a_036 랄토스 [Pokemon/Basic] jp=S11a-036 (gardevoir23×1)
+HP60 Psychic 진화전:- 약점:[{"type":"Metal","value":"x2"}] 저항:[] 후퇴:1
+  [기술] メモリースキップ (Psychic) 10: 相手のバトルポケモンが持っているワザを1つ選ぶ。次の相手の番、このワザを受けたポケモンは、選ばれたワザが使えない。
+## S9a_032 랄토스 [Pokemon/Basic] jp=S9a-032 (gardevoir23×3)
+HP70 Psychic 진화전:- 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"type":"Fighting","value":"－30"}] 후퇴:1
+  [기술] テレポートブレイク (Psychic) 10: このポケモンをベンチポケモンと入れ替える。
+## S10D_028 크레세리아 [pokemon] (gardevoir23×1) — 데이터 없음
+## S8a_002 뮤 [pokemon] (gardevoir23×1) — 데이터 없음
+## S12a_067 자시안 V [Pokemon/Basic] jp=S12a-067 (gardevoir23×2)
+HP220 Psychic 진화전:- 약점:[{"type":"Metal","value":"x2"}] 저항:[] 후퇴:2
+  [특성] けんのほうこう: 自分の番に1回使えて、使ったなら、自分の番は終わる。自分の山札から[P]エネルギーを1枚選び、自分のポケモンにつける。そして山札を切る。
+  [기술] ストームスラッシュ (ColorlessColorlessColorless) 60+: このポケモンについている[P]エネルギーの数×30ダメージ追加。
+## SVB_008 네오라이트 V [pokemon] (gardevoir23×1) — 데이터 없음
+## S11a_037 킬리아 [Pokemon/Stage1] jp=S11a-037 (gardevoir23×4)
+HP80 Psychic 진화전:ラルトス 약점:[{"type":"Metal","value":"x2"}] 저항:[] 후퇴:2
+  [특성] リファイン: 自分の番に、自分の手札を1枚トラッシュするなら、1回使える。自分の山札を2枚引く。
+  [기술] ビンタ (PsychicColorless) 30: 
+## S8b_196 가디안 [Pokemon/Stage2] jp=S8b-196 (gardevoir23×1)
+HP140 Psychic 진화전:キルリア 약점:[{"type":"Metal","value":"x2"}] 저항:[] 후퇴:2
+  [특성] アルカナシャイン: 自分の番に1回使える。自分の山札を上から2枚見て、その中から基本エネルギーを好きなだけ選び、自分のポケモンに好きなようにつける。残りのカードは手札に加える。
+  [기술] ブレインウェーブ (ColorlessColorlessColorless) 60+: このポケモンについている[超]エネルギーの数×30ダメージ追加。
+## SVB_013 레벨볼 [trainer] (gardevoir23×4) — 데이터 없음
+## SVB_015 안개의 수정 [trainer] (gardevoir23×3) — 데이터 없음
+## SVB_005 하이퍼볼 [trainer] (gardevoir23×3) — 데이터 없음
+## SVB_002 이상한사탕 [trainer] (gardevoir23×2) — 데이터 없음
+## SV1S_070 친구수첩 [Trainer/Item] jp=SV1S-069 (gardevoir23×1)
+  [효과] 自分のトラッシュからサポートを2枚まで選び、相手に見せて、山札にもどして切る。
+## S12a_147 하늘의 봉인석 [Trainer/Tool] jp=S12a-146 (gardevoir23×1)
+  [효과] このカードをつけている「ポケモンV」は、このVSTARパワーを使える。特性スターオーダー自分の番に使える。この番、自分のたねポケモンの「ポケモンV」が使うワザのダメージで、相手のバトル場の「ポケモンVSTAR・VMAX」がきぜつしたなら、サイドを1枚多くとる。［対戦中、自分はVSTARパワーを1回しか使えない。］
+## SVB_007 박사의 연구 [trainer] (gardevoir23×3) — 데이터 없음
+## SVC_021 저지맨 [trainer] (gardevoir23×1) — 데이터 없음
+## S12_096 작업원 [Trainer/Supporter] jp=S12-093 (gardevoir23×1)
+  [효과] 自分の山札を3枚引く。場に出ているスタジアムをトラッシュする。
+## SV1V_075 미모사 [Trainer/Supporter] jp=SV1V-077 (gardevoir23×1)
+  [효과] 自分のトラッシュからポケモンを5枚まで選び、相手に見せて、山札にもどして切る。その後、山札を3枚引く。
+## SVB_021 세레나 [trainer] (gardevoir23×1) — 데이터 없음
+## SV1S_074 모란 [Trainer/Supporter] jp=SV1S-077 (gardevoir23×1)
+  [효과] 自分の場のたねポケモンを1匹選び、そのポケモンと、ついているすべてのカードを、手札にもどす。
+## S12a_165 무너진 스타디움 [Trainer/Stadium] jp=S12a-167 (gardevoir23×1)
+  [효과] おたがいのプレイヤーがベンチに出せるポケモンの数は、4匹になる。［ベンチの数を変更する効果は、少ない数が優先される。］（このカードが場に出たとき、ベンチが5匹以上いるプレイヤーは、4匹になるまでトラッシュする。トラッシュするのは、このカードの持ち主から。）
+## S12a_166 신오신전 [Trainer/Stadium] jp=S12a-169 (gardevoir23×1)
+  [효과] おたがいの場のポケモンについている特殊エネルギーの効果はすべてなくなり、[C]エネルギー1個ぶんとしてはたらく。

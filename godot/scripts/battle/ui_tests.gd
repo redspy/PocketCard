@@ -266,7 +266,7 @@ static func ui_do(host: Node, s: BattleScreen, inp: Dictionary, drag := false) -
 			for x in btns:
 				if inp.type == "attack" and x.has_meta("attack_index") and int(x.get_meta("attack_index")) == int(inp.index) and UI.is_enabled(x):
 					b = x
-				elif inp.type == "ability" and x.has_meta("ability") and str(x.get_meta("move").input.sid) == sid:
+				elif inp.type == "ability" and x.has_meta("ability") and str(x.get_meta("move").input.sid) == sid and GCore.truthy(x.get_meta("move").input.get("tool")) == GCore.truthy(inp.get("tool")):
 					b = x
 				elif inp.type == "retreat" and x.has_meta("retreat"):
 					b = x

@@ -6,7 +6,7 @@ import { prizeValue } from './cardData.ts';
 import {
   BENCH_MAX, abilityActive, attackCost, canPay, clearSlot, dataOf, drawOne, emit, energiesOf, findSlot, flip, hasAbility, inst, maxHp, moveCard,
   nameOf, newId, note, other, playerHasEffect, prizesLeft, provided, putCounters, remainingHp, request, retreatCost, shuffleDeck,
-  slotData, slotHasEffect, slotName, slotsOf, stadiumName, switchActive, toolName, toolOf, topOf,
+  slotData, slotHasEffect, slotName, slotsOf, specialEnergyOff, stadiumName, switchActive, toolName, toolOf, topOf,
 } from './core.ts';
 import type { Ctx } from './core.ts';
 import { coin, seedRng } from './rng.ts';
@@ -242,6 +242,13 @@ FRAMES.koCheck = (ctx, f) => {
         const wasActive = s.players[seat].active === slot;
         // 이 기술로 상대 배틀 포켓몬을 기절시켰을 때의 추가 사이드 (무쇠손 ex, 브라이어)
         if (s.attackCtx && s.attackCtx.seat !== seat && wasActive) n += s.attackCtx.extraPrizes;
+        // 하늘의 봉인석 [스타오더]: 기본 포켓몬 V 의 기술로 VSTAR·VMAX 를 기절시키면 +1
+        if (s.attackCtx && s.attackCtx.seat !== seat && wasActive && !s.inCheckup && playerHasEffect(s, s.attackCtx.seat, 'starOrder')
+          && (d.pokemon?.rule === 'VSTAR' || d.pokemon?.rule === 'VMAX')) {
+          const atk = findSlot(s, s.attackCtx.sid)?.slot;
+          const ap = atk ? slotData(ctx, atk).pokemon : undefined;
+          if (ap && ap.stage === 0 && ap.rule === 'V') n += 1;
+        }
         takes[other(seat)] += n;
         if (!s.inCheckup && s.turnPlayer !== seat) s.players[seat].koTurn = s.turnNumber;
         emit(ctx, { type: 'ko', player: seat, sid: slot.sid, code: inst(ctx, topOf(slot)).code, prizes: n });
@@ -432,6 +439,14 @@ export function legalMoves(s: GameState, seat: Seat, info: CardInfo): LegalMove[
     if (def.can && def.can(ctx, seat, sl)) continue;
     out.push({ input: { type: 'ability', player: seat, sid: sl.sid }, kind: 'ability', label: `특성: ${slotName(ctx, sl)} ${ab.name || ab.nameJa}`, target: sl.sid });
   }
+  // 하늘의 봉인석: 붙인 「포켓몬 V」가 VSTAR 파워 [스타오더] 를 쓸 수 있다 (대전 중 1번)
+  if (!p.vstarUsed && stadiumName(ctx) !== '정상으로 가는 눈길') {
+    for (const sl of slots) {
+      const r = slotData(ctx, sl).pokemon?.rule;
+      if (sl.faceDown || toolName(ctx, sl) !== '하늘의 봉인석' || (r !== 'V' && r !== 'VMAX' && r !== 'VSTAR')) continue;
+      out.push({ input: { type: 'ability', player: seat, sid: sl.sid, tool: true }, kind: 'ability', label: `VSTAR 파워: ${slotName(ctx, sl)} 스타오더 (하늘의 봉인석)`, target: sl.sid });
+    }
+  }
   // 후퇴
   const act = p.active;
   if (act && !p.flags.retreat && p.bench.length && act.cond.rot !== 'asleep' && act.cond.rot !== 'paralyzed' && !slotHasEffect(act, 'noRetreat')) {
@@ -445,6 +460,7 @@ export function legalMoves(s: GameState, seat: Seat, info: CardInfo): LegalMove[
       if (!canPay(provided(ctx, act), cost)) return;
       if (a.kind === 'gx' && p.gxUsed) return;
       if (a.kind === 'vstar' && p.vstarUsed) return;
+      if (act.effects.some((e) => e.kind === 'lockAttack' && e.name === (a.name || a.nameJa))) return;   // 메모리스킵·임팩트블로
       const def = ATTACKS[a.nameJa];
       if (def?.can && def.can(ctx, seat, act)) return;
       out.push({ input: { type: 'attack', player: seat, index: i }, kind: 'attack', label: `기술: ${a.name || a.nameJa}${a.damage ? ` ${a.damage}${a.op}` : ''}` });
@@ -539,10 +555,19 @@ function doMove(ctx: Ctx, seat: Seat, input: GameInput) {
     }
     case 'ability': {
       const slot = findSlot(s, input.sid)!.slot;
+      if (input.tool) {
+        // 하늘의 봉인석 [스타오더]: 이 차례에 기본 포켓몬 V 의 기술 데미지로 상대 배틀의 VSTAR·VMAX 를 기절시키면 사이드 +1
+        p.vstarUsed = true;
+        p.effects.push({ kind: 'starOrder', until: s.turnNumber });
+        emit(ctx, { type: 'ability', player: seat, code: inst(ctx, topOf(slot)).code, name: '스타오더 (VSTAR 파워)' });
+        return;
+      }
       const ab = slotData(ctx, slot).pokemon!.abilities[0];
       slot.abilityTurn = s.turnNumber;
       p.flags.names.push(ab.nameJa);
       emit(ctx, { type: 'ability', player: seat, code: inst(ctx, topOf(slot)).code, name: ab.name || ab.nameJa });
+      // 쓰면 차례가 끝나는 특성 (자시안 V 검의 포효)
+      if (ABILITIES[ab.nameJa]?.endsTurn) s.stack.push({ id: newId(s, 'f'), kind: 'endTurn', step: 0, player: seat, data: {} });
       s.stack.push({ id: newId(s, 'f'), kind: 'koCheck', step: 0, player: seat, data: {} });
       s.stack.push({ id: newId(s, 'f'), kind: 'abilityRun', step: 0, player: seat, data: { sid: slot.sid, ab: ab.nameJa } });
       return;
@@ -617,11 +642,11 @@ function playCard(ctx: Ctx, seat: Seat, iid: string, target?: string) {
     p.flags.energy = true;
     moveCard(ctx, iid, { zone: 'attach', sid: target! });
     emit(ctx, { type: 'play', player: seat, code, what: '에너지 붙이기' });
-    if (d.name === '제트 에너지') {
+    if (d.name === '제트 에너지' && !specialEnergyOff(ctx)) {
       const t = findSlot(s, target!);
       if (t && !t.active) { switchActive(ctx, seat, t.slot.sid); note(ctx, '제트 에너지: 배틀 포켓몬과 교체'); }
     }
-    if (d.name === '캡쳐 에너지' && p.deck.length && p.bench.length < p.benchMax)
+    if (d.name === '캡쳐 에너지' && !specialEnergyOff(ctx) && p.deck.length && p.bench.length < p.benchMax)
       s.stack.push({ id: newId(s, 'f'), kind: 'search', step: 0, player: seat, data: { from: 'deck', filter: { kind: 'pokemon', stage: 0 }, max: 1, to: 'bench', prompt: '캡쳐 에너지: 벤치에 낼 기본 포켓몬을 고르세요.', src: '특수 에너지 [캡쳐 에너지]' } });
     return;
   }

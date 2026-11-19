@@ -95,7 +95,21 @@ static func why_unusable(v: Dictionary, seat: int, code: String) -> String:
 						return "상대의 남은 사이드가 3장 이하일 때만 쓸 수 있습니다 (지금 %d장)." % opp_prizes
 				"교체카트":
 					return "배틀 포켓몬이 기본 포켓몬이고 벤치 포켓몬이 있어야 합니다."
+				"친구수첩":
+					return "트래쉬에 서포트가 없습니다."
+				"세레나":
+					return "트래쉬할 패도, 끌어낼 상대 벤치의 포켓몬 V 도 없습니다."
+				"모란":
+					return "패로 되돌릴 기본 포켓몬이 없습니다 (필드에 포켓몬이 2마리 이상 있어야 합니다)."
 				"퀵볼", "로스트스위퍼":
 					return "패에 이 카드 말고 다른 카드가 1장 이상 있어야 합니다 (로스트스위퍼는 도구·스타디움도 필요)."
 			return "지금은 사용 조건이 맞지 않습니다 (카드 설명의 조건을 확인하세요)."
 	return "지금은 쓸 수 없는 카드입니다."
+
+## 특성을 지금 못 쓰는 이유 (조건이 있는 특성만, 모르면 "") — 말풍선이 안 열리는 내 포켓몬을 눌렀을 때 안내
+static func ability_unusable(ability_name: String, is_active: bool) -> String:
+	match ability_name:
+		"이상한 꼬리":
+			if not is_active:
+				return "특성 [이상한 꼬리]: 배틀 포켓몬일 때만 쓸 수 있습니다."
+	return ""

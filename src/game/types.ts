@@ -32,7 +32,7 @@ export type Conditions = { poison: number; burn: boolean; rot: Rot; paraUntil: n
 /** 포켓몬에 걸린 효과 (벤치로 가거나 진화하면 사라짐) — until: 이 턴 번호가 끝날 때 만료 */
 export type SlotEffect = { kind: 'noAttack' | 'noRetreat' | 'reduce30' | 'immuneBasicNonC' | 'lockAttack'; until: number; name?: string };
 /** 플레이어에 걸린 효과 */
-export type PlayerEffect = { kind: 'itemLock' | 'boostExV30' | 'boostEx40' | 'brier'; until: number };
+export type PlayerEffect = { kind: 'itemLock' | 'boostExV30' | 'boostEx40' | 'brier' | 'starOrder'; until: number };
 
 /** 필드의 포켓몬 한 마리 */
 export type PokemonSlot = {
@@ -149,7 +149,7 @@ export type GameInput =
   | { type: 'play'; player: Seat; card: string; target?: string }   // 패의 카드 사용 (포켓몬 내기·진화·에너지·트레이너스)
   | { type: 'retreat'; player: Seat; to: string }
   | { type: 'attack'; player: Seat; index: number }
-  | { type: 'ability'; player: Seat; sid: string }
+  | { type: 'ability'; player: Seat; sid: string; tool?: boolean }   // tool: 포켓몬의 도구가 주는 특성 (하늘의 봉인석 VSTAR 파워)
   | { type: 'stadium'; player: Seat }                                 // 스타디움 효과 사용
   | { type: 'endTurn'; player: Seat }
   | { type: 'concede'; player: Seat };

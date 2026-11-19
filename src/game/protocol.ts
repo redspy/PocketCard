@@ -16,7 +16,7 @@ export type ClientInput =
   | { type: 'play'; card: string; target?: string }
   | { type: 'retreat'; to: string }
   | { type: 'attack'; index: number }
-  | { type: 'ability'; sid: string }
+  | { type: 'ability'; sid: string; tool?: boolean }
   | { type: 'stadium' }
   | { type: 'endTurn' }
   | { type: 'concede' };
@@ -70,7 +70,7 @@ export function toGameInput(input: ClientInput, player: Seat): GameInput {
     case 'play': return input.target ? { type: 'play', player, card: String(input.card), target: String(input.target) } : { type: 'play', player, card: String(input.card) };
     case 'retreat': return { type: 'retreat', player, to: String(input.to) };
     case 'attack': return { type: 'attack', player, index: Number(input.index) };
-    case 'ability': return { type: 'ability', player, sid: String(input.sid) };
+    case 'ability': return input.tool ? { type: 'ability', player, sid: String(input.sid), tool: true } : { type: 'ability', player, sid: String(input.sid) };
     case 'stadium': return { type: 'stadium', player };
     case 'endTurn': return { type: 'endTurn', player };
     case 'concede': return { type: 'concede', player };

@@ -137,7 +137,7 @@ static func frameSource(ctx: Dictionary, fr: Dictionary):
 	if fr.kind == "trigger":
 		# 조건이 되면 발동하는 특성 (진화했을 때 등)
 		var found = GCore.findSlot(ctx.s, _nz(data.get("sid")))
-		var names := { "infernalReign": "연옥 지배", "jewelSeeker": "보석 찾기", "flyingEntry": "플라잉엔트리", "rapidVernier": "래피드 버니어", "darkSignal": "다크시그널" }
+		var names := { "infernalReign": "연옥 지배", "jewelSeeker": "보석 찾기", "flyingEntry": "플라잉엔트리", "rapidVernier": "래피드 버니어", "darkSignal": "다크시그널", "luminousSign": "루미너스사인" }
 		var name: String = names.get(str(data.get("effect")), "")
 		var who: String = GCore.slotName(ctx, found.slot) if found != null else "포켓몬"
 		return who + "의 특성" + ((" [" + name + "]") if name != "" else "") + " (조건이 되어 발동)"
@@ -210,6 +210,7 @@ static func needDeck(ctx: Dictionary, seat: int):
 const POKEMON := { "kind": "pokemon" }
 const BASIC := { "kind": "pokemon", "stage": 0 }
 const BASIC_ENERGY := { "kind": "energy", "basicEnergy": true }
+const SUPPORTER := { "kind": "trainer", "trainer": "supporter" }
 
 static func search(from_zone: String, flt: Dictionary, mx: int, to_zone: String, extra: Dictionary = {}) -> Array:
 	var d := { "from": from_zone, "filter": flt, "max": mx, "to": to_zone }
@@ -569,6 +570,9 @@ static func _initFrames() -> void:
 				return
 			"darkSignal":
 				GEffects.then(ctx, f, [["gust", {}]])
+				return
+			"luminousSign":
+				GEffects.then(ctx, f, [GEffects.search("deck", GEffects.SUPPORTER, 1, "hand", { "reveal": true, "prompt": "패로 가져올 서포트를 고르세요." })])
 				return
 		GEffects.done(ctx, f)
 
@@ -1079,6 +1083,82 @@ static func _initTrainers() -> void:
 		GEffects.done(c, f)
 	TRAINERS["원규"] = t
 
+	# ── 2023 코리안리그 시즌3 마스터 우승 가디안 ex ──
+	t = {}
+	t["can"] = func(c: Dictionary, s: int, _me): return GEffects.needDeck(c, s)
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		GEffects.then(c, f, [GEffects.search("deck", { "kind": "pokemon", "maxHp": 90 }, 1, "hand", { "reveal": true, "prompt": "HP 90 이하 포켓몬을 고르세요." })])
+	TRAINERS["레벨볼"] = t
+
+	t = {}
+	t["can"] = func(c: Dictionary, s: int, _me): return GEffects.needDeck(c, s)
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		GEffects.then(c, f, [GEffects.search("deck", { "or": [{ "kind": "pokemon", "stage": 0, "ptype": "P" }, { "kind": "energy", "basicEnergy": true, "etype": "P" }] }, 1, "hand", { "reveal": true, "prompt": "초 타입 기본 포켓몬 또는 기본 초 에너지를 고르세요." })])
+	TRAINERS["안개의 수정"] = t
+
+	t = {}
+	t["can"] = func(c: Dictionary, s: int, _me):
+		return null if GEffects.discardHas(c, s, GEffects.SUPPORTER) else "트래쉬에 서포트가 없습니다."
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		GEffects.then(c, f, [GEffects.search("discard", GEffects.SUPPORTER, 2, "deck", { "min": 1, "reveal": true, "prompt": "덱으로 되돌릴 서포트를 2장까지 고르세요." }), ["shuffle", {}]])
+	TRAINERS["친구수첩"] = t
+
+	t = {}
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		for seat in [f.player, GCore.other(f.player)]:
+			var p: Dictionary = c.s.players[seat]
+			for iid in p.hand.duplicate():
+				GCore.moveCard(c, iid, { "zone": "deck", "player": seat, "position": "top" })
+			GCore.shuffleDeck(c, seat)
+		GCore.drawN(c, f.player, 4)
+		GCore.drawN(c, GCore.other(f.player), 4)
+		GEffects.done(c, f)
+	TRAINERS["저지맨"] = t
+
+	t = {}
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		GCore.drawN(c, f.player, 3)
+		if GCore.truthy(c.s.stadium):
+			GCore.moveCard(c, c.s.stadium, { "zone": "discard", "player": c.s.cards[c.s.stadium].owner })
+			GEffects.updateBench(c)
+		GEffects.done(c, f)
+	TRAINERS["작업원"] = t
+
+	t = {}
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		GEffects.then(c, f, [GEffects.search("discard", GEffects.POKEMON, 5, "deck", { "reveal": true, "prompt": "덱으로 되돌릴 포켓몬을 5장까지 고르세요." }), ["shuffle", {}], ["draw", { "n": 3 }]])
+	TRAINERS["미모사"] = t
+
+	t = {}
+	t["can"] = func(c: Dictionary, s: int, me):
+		return null if (GEffects.handOthers(c, s, me) >= 1 or GEffects.vBenchOf(c, GCore.other(s)).size() > 0) else "트래쉬할 패도, 끌어낼 상대 벤치의 포켓몬 V 도 없습니다."
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		GEffects.then(c, f, [["serena", {}]])
+	TRAINERS["세레나"] = t
+
+	t = {}
+	t["can"] = func(c: Dictionary, s: int, _me):
+		return null if GEffects.peonyTargets(c, s).size() > 0 else "패로 되돌릴 기본 포켓몬이 없습니다 (필드에 포켓몬이 2마리 이상 있어야 합니다)."
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		GEffects.then(c, f, [["peony", {}]])
+	TRAINERS["모란"] = t
+
+## 상대 벤치의 '포켓몬 V' (V·VMAX·VSTAR)
+static func vBenchOf(ctx: Dictionary, seat: int) -> Array:
+	return ctx.s.players[seat].bench.filter(func(b):
+		var pk = GCore.slotData(ctx, b).get("pokemon")
+		var r = pk.get("rule") if pk != null else null
+		return not b.faceDown and (r == "V" or r == "VMAX" or r == "VSTAR")).map(func(b): return b.sid)
+
+## 모란: 되돌릴 수 있는 내 기본 포켓몬 (필드에 2마리 이상일 때만 — 마지막 1마리를 되돌리면 필드가 빔)
+static func peonyTargets(ctx: Dictionary, seat: int) -> Array:
+	var sl := GCore.slotsOf(ctx.s, seat)
+	if sl.size() < 2:
+		return []
+	return sl.filter(func(x):
+		var pk = GCore.slotData(ctx, x).get("pokemon")
+		return not x.faceDown and pk != null and pk.stage == 0).map(func(x): return x.sid)
+
 # ───────────────────────── 이상한사탕 · 진화 ─────────────────────────
 
 ## 기본 포켓몬 슬롯에 이상한사탕으로 올릴 수 있는 패의 2진화
@@ -1135,6 +1215,8 @@ static func onBenched(ctx: Dictionary, seat: int, sid: String) -> void:
 	var ab = pk.abilities[0].nameJa if (pk != null and pk.abilities.size() > 0) else null
 	if ab == "フライングエントリー" and ctx.s.players[GCore.other(seat)].bench.size() > 0:
 		pushTrigger(ctx, seat, "flyingEntry", sid, "루차불 특성: 상대 벤치 포켓몬 2마리에 데미지 카운터를 1개씩 올릴까요?")
+	if ab == "루미너스사인" and ctx.s.players[seat].deck.size() > 0:
+		pushTrigger(ctx, seat, "luminousSign", sid, "네오라이트 V 특성: 덱에서 서포트를 1장 가져올까요?")
 	if ab == "ラピッドバーニア" and ctx.s.players[seat].active != null:
 		pushTrigger(ctx, seat, "rapidVernier", sid, "무쇠잎새 ex 특성: 배틀 포켓몬과 바꾸고 벤치의 에너지를 옮길까요?")
 
@@ -1289,6 +1371,33 @@ static func _initAbilities() -> void:
 	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
 		GEffects.then(c, f, [["concealedCards", {}]])
 	ABILITIES["숨겨진 수단"] = t
+
+	# ── 2023 코리안리그 시즌3 가디안 ex ──
+	t = { "once": "pokemon" }
+	t["can"] = func(c: Dictionary, s: int, slot):
+		return "배틀 포켓몬일 때만 쓸 수 있습니다." if not is_same(c.s.players[s].active, slot) else GEffects.needDeck(c, s)
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		GEffects.then(c, f, [GEffects.search("deck", { "kind": "trainer", "trainer": "item" }, 1, "hand", { "look": 6, "reveal": true, "prompt": "덱 위 6장 중 패로 가져올 아이템 1장" })])
+	ABILITIES["이상한 꼬리"] = t
+
+	t = { "once": "pokemon", "endsTurn": true }
+	t["can"] = func(c: Dictionary, s: int, _sl): return GEffects.needDeck(c, s)
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		GEffects.then(c, f, [GEffects.search("deck", { "kind": "energy", "etype": "P" }, 1, "attach", { "prompt": "내 포켓몬에게 붙일 초 에너지를 고르세요 (쓰면 차례가 끝남)." })])
+	ABILITIES["검의 포효"] = t
+
+	t = { "once": "pokemon" }
+	t["can"] = func(c: Dictionary, s: int, _sl):
+		return GEffects.needDeck(c, s) if c.s.players[s].hand.size() > 0 else "트래쉬할 패가 없습니다."
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		GEffects.then(c, f, [["discardHand", { "n": 1 }], ["draw", { "n": 2 }]])
+	ABILITIES["리파인"] = t
+
+	t = { "once": "pokemon" }
+	t["can"] = func(c: Dictionary, s: int, _sl): return GEffects.needDeck(c, s)
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		GEffects.then(c, f, [["arcanaShine", {}]])
+	ABILITIES["아르카나 샤인"] = t
 
 # ───────────────────────── 기술 ─────────────────────────
 # 기술 처리기: f.data = { sid(공격 포켓몬), base(기본 데미지), attackJa } — 기본: 상대 배틀 포켓몬에게 base
@@ -1892,10 +2001,100 @@ static func _initAttacks() -> void:
 		GEffects.done(c, f)
 	ATTACKS["스타레퀴엠"] = t
 
+	# ── 2023 코리안리그 시즌3 가디안 ex ──
+	t = {}
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		var tg = GEffects.oppActive(c, f)
+		if f.step == 0:
+			GEffects.hit(c, f, GEffects.base(f))
+			var atks: Array = []
+			if tg != null and not tg.faceDown and GCore.remainingHp(c, tg) > 0:
+				var pk = GCore.slotData(c, tg).get("pokemon")
+				atks = pk.attacks if pk != null else []
+			if atks.is_empty():
+				GEffects.done(c, f)
+				return
+			var opts: Array = []
+			var labels := {}
+			for i in range(atks.size()):
+				opts.append(str(i))
+			for i in range(atks.size()):
+				var at = atks[i]
+				labels[str(i)] = (at.name if GCore.truthy(at.name) else at.nameJa) + " " + (str(at.damage) if GCore.truthy(at.damage) else "") + str(at.op)
+			GCore.ask(c, f, 1, f.player, "pickOption", opts, 1, 1, "상대의 다음 차례에 못 쓰게 할 기술을 고르세요.", { "labels": labels })
+			return
+		var a = null
+		if tg != null:
+			var pk2 = GCore.slotData(c, tg).get("pokemon")
+			var idx := int(f.picks[0])
+			if pk2 != null and idx >= 0 and idx < pk2.attacks.size():
+				a = pk2.attacks[idx]
+		if tg != null and a != null:
+			var an: String = a.name if GCore.truthy(a.name) else a.nameJa
+			tg.effects.append({ "kind": "lockAttack", "until": c.s.turnNumber + 1, "name": an })
+			GCore.note(c, GCore.slotName(c, tg) + ": 다음 차례에 [" + an + "] 사용 불가")
+		GEffects.done(c, f)
+	ATTACKS["메모리스킵"] = t
+
+	t = {}
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		GEffects.hit(c, f, GEffects.base(f))
+		GEffects.then(c, f, [["switchOwn", {}]])
+	ATTACKS["텔레포트 브레이크"] = t
+
+	t = {}
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		var mine: Array = GCore.slotsOf(c.s, f.player).filter(func(sl): return sl.damage >= 10)
+		var n: int = mine.reduce(func(acc, sl): return acc + mini(2, floori(float(sl.damage) / 10)), 0)
+		if f.step == 0:
+			if n == 0:
+				GCore.note(c, "옮길 데미지 카운터가 없습니다.")
+				GEffects.done(c, f)
+				return
+			GCore.ask(c, f, 1, f.player, "pickSlot", GCore.slotsOf(c.s, GCore.other(f.player)).map(func(sl): return sl.sid), 1, 1, "내 포켓몬의 데미지 카운터 " + str(n) + "개를 옮겨 올릴 상대 포켓몬")
+			return
+		var fs = GCore.findSlot(c.s, f.picks[0])
+		if fs != null:
+			var tg: Dictionary = fs.slot
+			for sl in mine:
+				var k := mini(2, floori(float(sl.damage) / 10))
+				sl.damage -= k * 10
+				GCore.emit(c, { "type": "heal", "player": f.player, "sid": sl.sid, "amount": k * 10 })
+			GCore.putCounters(c, tg, n)
+		GEffects.done(c, f)
+	ATTACKS["문라이트 리버스"] = t
+
+	## 붙어 있는 초 에너지 개수 × 30 추가 (자시안 V 스톰슬래시, 가디안 브레인웨이브)
+	var psyBonus := {}
+	psyBonus["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		var a = GEffects.atkSlot(c, f)
+		var n: int = GCore.provided(c, a).filter(func(u): return u == "P" or u == "*").size() if a != null else 0
+		GEffects.hit(c, f, GEffects.base(f) + 30 * n)
+		GEffects.done(c, f)
+	ATTACKS["스톰슬래시"] = psyBonus
+	ATTACKS["브레인웨이브"] = psyBonus
+
+	t = {}
+	t["can"] = func(c: Dictionary, s: int, _sl):
+		return null if c.s.players[s].bench.size() > 0 else "벤치 포켓몬이 없으면 쓸 수 없습니다 (필드에 포켓몬이 남지 않음)."
+	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
+		GEffects.hit(c, f, GEffects.base(f))
+		var a = GEffects.atkSlot(c, f)
+		if a != null:
+			for x in a.attached.duplicate():
+				GCore.moveCard(c, x, { "zone": "deck", "player": f.player, "position": "top" })
+			for x in a.stack.duplicate():
+				GCore.moveCard(c, x, { "zone": "deck", "player": f.player, "position": "top" })
+			GCore.shuffleDeck(c, f.player)
+		GEffects.done(c, f)
+		if c.s.players[f.player].active == null:
+			GCore.pushFrame(c, "promote", f.player, {})
+	ATTACKS["아쿠아리턴"] = t
+
 	# 효과 없는 기술 (기본 데미지만)
 	for plain_ja in ["ひだね", "ひをはく", "かぜおこし", "つばさでうつ", "つぶやく", "おにび", "たいあたり", "パワージェム", "ちょっとうらむ", "かみつく", "リューズヘッド",
 		"ジェットヘッド", "スキップ", "クォーツシャイン", "スピードウイング", "ずつき", "サイコショット", "ビンタ", "アームプレス", "マグネブラスト",
-		"물기", "날카로운날개", "어둠엄니", "정권찌르기", "다이아크", "회전어택", "물뿌리기", "할퀴기"]:
+		"물기", "날카로운날개", "어둠엄니", "정권찌르기", "다이아크", "회전어택", "물뿌리기", "할퀴기", "루나블라스트"]:
 		ATTACKS[plain_ja] = plain
 
 const TM_ATTACK := { "name": "에볼루션", "nameJa": "TM_EVOLUTION", "cost": ["C"], "damage": 0, "op": "", "text": "자신의 벤치 포켓몬을 2마리까지 골라, 각각 덱에서 그 포켓몬으로부터 진화하는 카드를 찾아 진화시킨다." }
@@ -2184,6 +2383,65 @@ static func _initFrames3() -> void:
 			return
 		GCore.ask(ctx, f, 2, f.player, "pickSlot", opts, 1, 1, "데미지 카운터를 올릴 상대 포켓몬 (남은 " + str(f.data.left) + "개)")
 
+	## 세레나: ① 패 1~3장 트래쉬 → 5장이 되도록 뽑기 ② 상대 벤치의 포켓몬 V 를 배틀로
+	FRAMES["serena"] = func(ctx: Dictionary, f: Dictionary) -> void:
+		var p: Dictionary = ctx.s.players[f.player]
+		if f.step == 0:
+			var opts: Array = []
+			if p.hand.size() > 0:
+				opts.append("draw")
+			if GEffects.vBenchOf(ctx, GCore.other(f.player)).size() > 0:
+				opts.append("gust")
+			if opts.is_empty():
+				GEffects.done(ctx, f)
+				return
+			GCore.ask(ctx, f, 1, f.player, "pickOption", opts, 1, 1, "세레나: 효과를 고르세요.", { "labels": { "draw": "패 1~3장 트래쉬 → 5장이 되도록 뽑기", "gust": "상대 벤치의 포켓몬 V 를 배틀 포켓몬과 교체" } })
+			return
+		if f.step == 1:
+			var pk: Array = GEffects._picks(f)
+			if pk.size() > 0 and pk[0] == "gust":
+				GCore.ask(ctx, f, 3, f.player, "pickSlot", GEffects.vBenchOf(ctx, GCore.other(f.player)), 1, 1, "배틀 필드로 끌어낼 상대 벤치의 포켓몬 V 를 고르세요.")
+				return
+			GCore.ask(ctx, f, 2, f.player, "pickCards", p.hand.duplicate(), 1, 3, "트래쉬할 패를 1~3장 고르세요 (그 뒤 패가 5장이 되도록 뽑음).", { "cards": GEffects.cardsOf(ctx, p.hand) })
+			return
+		if f.step == 2:
+			for iid in GEffects._picks(f):
+				GCore.moveCard(ctx, iid, { "zone": "discard", "player": f.player })
+			while p.hand.size() < 5 and GCore.drawOne(ctx, f.player):
+				pass  # 5장까지
+			GEffects.done(ctx, f)
+			return
+		if GEffects._picks(f).size() > 0:
+			GCore.switchActive(ctx, GCore.other(f.player), f.picks[0])
+		GEffects.done(ctx, f)
+
+	## 모란: 내 기본 포켓몬 1마리와 붙은 카드 전부를 패로
+	FRAMES["peony"] = func(ctx: Dictionary, f: Dictionary) -> void:
+		if f.step == 0:
+			GCore.ask(ctx, f, 1, f.player, "pickSlot", GEffects.peonyTargets(ctx, f.player), 1, 1, "패로 되돌릴 기본 포켓몬을 고르세요 (붙은 카드도 모두 패로).")
+			return
+		var found = GCore.findSlot(ctx.s, f.picks[0])
+		if found != null:
+			for a in found.slot.attached.duplicate():
+				GCore.moveCard(ctx, a, { "zone": "hand", "player": f.player })
+			for x in found.slot.stack.duplicate():
+				GCore.moveCard(ctx, x, { "zone": "hand", "player": f.player })
+		GEffects.done(ctx, f)
+		if ctx.s.players[f.player].active == null:
+			GCore.pushFrame(ctx, "promote", f.player, {})
+
+	## 가디안 "아르카나 샤인": 덱 위 2장 중 기본 에너지를 원하는 만큼 붙이고, 남은 카드는 패로
+	FRAMES["arcanaShine"] = func(ctx: Dictionary, f: Dictionary) -> void:
+		var p: Dictionary = ctx.s.players[f.player]
+		if f.step == 0:
+			f.data["top"] = p.deck.slice(0, 2)
+			GEffects.seq(ctx, f, 1, [GEffects.search("deck", GEffects.BASIC_ENERGY, 2, "attach", { "look": 2, "shuffle": false, "prompt": "덱 위 2장 중 붙일 기본 에너지 (원하는 만큼, 남은 카드는 패로)" })])
+			return
+		for iid in f.data.top:
+			if p.deck.has(iid):
+				GCore.moveCard(ctx, iid, { "zone": "hand", "player": f.player })
+		GEffects.done(ctx, f)
+
 # ───────────────────────── 벤치 칸 수 (제로의 대공동) ─────────────────────────
 
 ## 스타디움·테라스탈 변화 뒤 벤치 칸 수를 다시 계산. 넘치면 넘친 만큼 트래쉬 (스타디움 주인부터)
@@ -2197,7 +2455,7 @@ static func updateBench(ctx: Dictionary) -> void:
 		order = [0, 1]
 	for seat in order:
 		var p: Dictionary = ctx.s.players[seat]
-		p.benchMax = 8 if (st == "제로의 대공동" and GCore.hasTera(ctx, seat)) else 5
+		p.benchMax = 4 if st == "무너진 스타디움" else (8 if (st == "제로의 대공동" and GCore.hasTera(ctx, seat)) else 5)
 		if p.bench.size() > p.benchMax:
 			GCore.pushFrame(ctx, "benchTrim", seat, {})
 
@@ -2205,9 +2463,9 @@ static func updateBench(ctx: Dictionary) -> void:
 
 const PASSIVE := ["スカイライン", "いたずらロック", "ダイヤコート", "フェアリーゾーン", "ふくがん", "みがる", "ろうれんのわざ", "がんばりハート", "エースキャンセラー",
 	"ブーストしんか", "にじいろDNA", "ほうせきさがし", "れんごくしはい", "フライングエントリー", "ラピッドバーニア",
-	"벤치배리어", "파도의 베일", "로스트 프로바이드", "와일드스타일", "다크시그널"]
-const TOOLS := ["반짝이는 결정", "풍선", "오기머리띠", "용기의부적", "학습장치", "부스트에너지 미래", "기술머신 에볼루션"]
-const STADIUMS := ["제로의 대공동", "재밍타워", "그래비티 마운틴", "보울마을", "악의 탑", "정상으로 가는 눈길"]
+	"벤치배리어", "파도의 베일", "로스트 프로바이드", "와일드스타일", "다크시그널", "루미너스사인"]
+const TOOLS := ["반짝이는 결정", "풍선", "오기머리띠", "용기의부적", "학습장치", "부스트에너지 미래", "기술머신 에볼루션", "하늘의 봉인석"]
+const STADIUMS := ["제로의 대공동", "재밍타워", "그래비티 마운틴", "보울마을", "악의 탑", "정상으로 가는 눈길", "무너진 스타디움", "신오신전"]
 const SPECIAL_ENERGY := ["제트 에너지", "네오 어퍼 에너지", "루미너스 에너지", "일격 에너지", "캡쳐 에너지"]
 
 ## 카드 효과가 자동화되었는가 (화면에 "수동" 표시용, 데이터 테스트에서 전부 true 인지 검사)

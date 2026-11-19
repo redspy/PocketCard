@@ -10,7 +10,7 @@ const ROOT = new URL('../', import.meta.url);
 export const P = (p) => new URL(p, ROOT);
 export const ALLOWED = ['G', 'H', 'I'];
 export const RANK = { G: 1, H: 2, I: 3 };
-export const APP_DECKS = ['flareon', 'dragapult', 'charizard', 'gholdengo', 'gardevoir', 'pachirisu', 'umbreon', 'giratina'];
+export const APP_DECKS = ['flareon', 'dragapult', 'charizard', 'gholdengo', 'gardevoir', 'pachirisu', 'umbreon', 'giratina', 'gardevoir23'];
 export const MATCH_OK = 34;        // 256비트 중 이 이하이면 같은 카드로 본다
 const CACHE = P('.cache/regulation/');
 mkdirSync(CACHE, { recursive: true });

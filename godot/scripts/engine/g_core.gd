@@ -391,6 +391,10 @@ static func stadiumName(ctx: Dictionary):
 static func toolsActive(ctx: Dictionary) -> bool:
 	return stadiumName(ctx) != "재밍타워"
 
+## 신오신전: 포켓몬에게 붙은 특수 에너지의 효과가 모두 없어지고 무색 1개분
+static func specialEnergyOff(ctx: Dictionary) -> bool:
+	return stadiumName(ctx) == "신오신전"
+
 static func toolOf(ctx: Dictionary, slot: Dictionary):
 	return find_first(slot.attached, func(a): return GCore.dataOf(ctx, a).kind == "trainer")
 
@@ -475,6 +479,9 @@ static func provided(ctx: Dictionary, slot: Dictionary) -> Array:
 		var d := dataOf(ctx, e)
 		if d.has("energy") and d.energy.basic and truthy(d.energy.type):
 			out.append(d.energy.type)
+			continue
+		if specialEnergyOff(ctx):
+			out.append("C")
 			continue
 		match d.name:
 			"제트 에너지", "캡쳐 에너지": out.append("C")
@@ -590,7 +597,8 @@ static func dealAttackDamage(ctx: Dictionary, seat: int, atk: Dictionary, target
 		if hasAbility(ctx, atk, "ふくがん") and td.abilities.size() > 0:
 			dmg += 50
 		# 일격 에너지: 붙인 포켓몬의 기술이 상대 배틀 포켓몬에게 주는 데미지 +20 (장마다)
-		dmg += 20 * energiesOf(ctx, atk).filter(func(e): return GCore.nameOf(ctx, e) == "일격 에너지").size()
+		if not specialEnergyOff(ctx):
+			dmg += 20 * energiesOf(ctx, atk).filter(func(e): return GCore.nameOf(ctx, e) == "일격 에너지").size()
 	if dmg <= 0:
 		return 0
 	# 3) 약점 4) 저항력 (연출용으로 적용 여부를 사건에 남김)

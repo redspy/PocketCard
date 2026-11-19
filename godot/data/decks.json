@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated": "2026-11-19T15:45:02.155Z",
+  "generated": "2026-11-19T22:51:08.994Z",
   "decks": [
     {
       "guide": {
@@ -5913,7 +5913,411 @@
           "thumb": "res://cards/thumb/SV1a_073.webp"
         }
       ]
+    },
+    {
+      "guide": {
+        "summary": "가디안 ex의 사이코 임브레이스로 트래쉬의 초 에너지를 계속 다시 붙이고, 자시안 V의 스톰슬래시로 공격하는 초 타입 덱입니다. 2023 코리안리그 시즌3 마스터 부문 우승 덱(계나원 선수)입니다.",
+        "concept": "킬리아의 리파인과 하이퍼볼로 패를 버리며 초 에너지를 트래쉬에 쌓고, 가디안 ex로 진화하면 사이코 임브레이스로 그 에너지를 자시안 V에게 몰아 줍니다. 스톰슬래시는 붙은 초 에너지 1개마다 30씩 커집니다. 임브레이스로 내 포켓몬에 쌓인 데미지 카운터는 크레세리아의 문라이트 리버스로 상대에게 옮깁니다.",
+        "keyCards": [
+          {
+            "code": "SV1S_028",
+            "role": "엔진",
+            "text": "사이코 임브레이스: 차례에 몇 번이든 트래쉬의 기본 초 에너지를 초 포켓몬에게 붙이고, 그 포켓몬에 데미지 카운터 2개. 미라클포스 190.",
+            "name": "가디안 ex"
+          },
+          {
+            "code": "S11a_037",
+            "role": "드로우",
+            "text": "리파인: 패를 1장 트래쉬하고 2장 뽑습니다. 초 에너지를 버려 임브레이스 재료로 씁니다.",
+            "name": "킬리아"
+          },
+          {
+            "code": "S12a_067",
+            "role": "메인 어태커",
+            "text": "스톰슬래시 60 + 붙은 초 에너지 1개마다 30. 검의 포효로 덱의 초 에너지를 붙일 수 있지만 쓰면 차례가 끝납니다.",
+            "name": "자시안 V"
+          },
+          {
+            "code": "S12a_147",
+            "role": "마무리",
+            "text": "하늘의 봉인석(VSTAR 파워 스타오더): 이 차례에 기본 포켓몬 V의 기술로 상대 배틀의 VSTAR·VMAX를 기절시키면 사이드를 1장 더 가져옵니다.",
+            "name": "하늘의 봉인석"
+          },
+          {
+            "code": "S10D_028",
+            "role": "서브 어태커",
+            "text": "문라이트 리버스: 내 포켓몬마다 데미지 카운터 2개씩을 상대 포켓몬 1마리에게 옮깁니다. 루나블라스트 110.",
+            "name": "크레세리아"
+          },
+          {
+            "code": "S8b_196",
+            "role": "에너지 가속",
+            "text": "아르카나 샤인: 덱 위 2장 중 기본 에너지를 붙이고 나머지는 패로. 브레인웨이브 60 + 초 에너지 1개마다 30.",
+            "name": "가디안"
+          }
+        ],
+        "plan": [
+          {
+            "label": "1턴",
+            "text": "배틀VIP패스·레벨볼로 랄토스와 자시안 V를 깔고, 하이퍼볼·리파인으로 초 에너지를 트래쉬에 보냅니다."
+          },
+          {
+            "label": "2턴",
+            "text": "이상한사탕으로 랄토스에서 바로 가디안 ex로 진화하고, 사이코 임브레이스로 자시안 V에게 에너지를 3~4개 붙입니다."
+          },
+          {
+            "label": "중반",
+            "text": "스톰슬래시 150~180으로 공격합니다. 쌓인 카운터는 크레세리아의 문라이트 리버스로 상대에게 옮깁니다."
+          },
+          {
+            "label": "후반",
+            "text": "상대가 VMAX·VSTAR이면 하늘의 봉인석 스타오더로 사이드를 1장 더 가져오고, 보스의 지령·세레나로 남은 사이드를 노립니다."
+          }
+        ],
+        "tips": [
+          "사이코 임브레이스는 붙인 뒤 HP가 남는 포켓몬(남은 HP 30 이상)에게만 쓸 수 있습니다.",
+          "랄토스의 텔레포트 브레이크는 공격 뒤 벤치 포켓몬과 교체되므로 다음 공격수를 앞으로 낼 수 있습니다.",
+          "뮤의 이상한 꼬리는 배틀 포켓몬일 때 덱 위 6장에서 아이템을 찾습니다.",
+          "무너진 스타디움은 서로의 벤치를 4마리로 줄이고, 신오신전은 상대의 특수 에너지(일격·캡쳐 등)를 무색 1개로 만듭니다."
+        ],
+        "strengths": [
+          "트래쉬의 에너지를 계속 다시 쓰는 에너지 가속",
+          "에너지가 붙을수록 커지는 데미지",
+          "상대 스타디움·특수 에너지에 대응하는 카드"
+        ],
+        "weaknesses": [
+          "2진화 라인이 늦으면 초반이 약함",
+          "임브레이스의 카운터로 내 포켓몬 HP가 깎임",
+          "자시안 V는 강철 약점이고 기절하면 사이드 2장"
+        ],
+        "matchups": []
+      },
+      "id": "gardevoir23",
+      "name": "가디안 ex (2023)",
+      "note": "2023 코리안리그 시즌3 마스터 우승 · 계나원 (덱 코드 tWFR-fldR-45xQ-ya05)",
+      "cover": "S8b_196",
+      "total": 60,
+      "counts": {
+        "pokemon": 18,
+        "trainer": 30,
+        "energy": 12
+      },
+      "cards": [
+        {
+          "id": "S11a_036",
+          "code": "S11a_036",
+          "name": "랄토스",
+          "count": 1,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S11a_036.webp",
+          "thumb": "res://cards/thumb/S11a_036.webp"
+        },
+        {
+          "id": "S9a_032",
+          "code": "S9a_032",
+          "name": "랄토스",
+          "count": 3,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S9a_032.webp",
+          "thumb": "res://cards/thumb/S9a_032.webp"
+        },
+        {
+          "id": "S10D_028",
+          "code": "S10D_028",
+          "name": "크레세리아",
+          "count": 1,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S10D_028.webp",
+          "thumb": "res://cards/thumb/S10D_028.webp"
+        },
+        {
+          "id": "S8a_002",
+          "code": "S8a_002",
+          "name": "뮤",
+          "count": 1,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S8a_002.webp",
+          "thumb": "res://cards/thumb/S8a_002.webp"
+        },
+        {
+          "id": "S12a_067",
+          "code": "S12a_067",
+          "name": "자시안 V",
+          "count": 2,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S12a_067.webp",
+          "thumb": "res://cards/thumb/S12a_067.webp"
+        },
+        {
+          "id": "S12a_029",
+          "code": "S12a_029",
+          "name": "마나피",
+          "count": 1,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S12a_029.webp",
+          "thumb": "res://cards/thumb/S12a_029.webp"
+        },
+        {
+          "id": "SVB_008",
+          "code": "SVB_008",
+          "name": "네오라이트 V",
+          "count": 1,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/SVB_008.webp",
+          "thumb": "res://cards/thumb/SVB_008.webp"
+        },
+        {
+          "id": "S12a_033",
+          "code": "S12a_033",
+          "name": "찬란한 개굴닌자",
+          "count": 1,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S12a_033.webp",
+          "thumb": "res://cards/thumb/S12a_033.webp"
+        },
+        {
+          "id": "S11a_037",
+          "code": "S11a_037",
+          "name": "킬리아",
+          "count": 4,
+          "kind": "pokemon",
+          "basic": false,
+          "full": "res://cards/full/S11a_037.webp",
+          "thumb": "res://cards/thumb/S11a_037.webp"
+        },
+        {
+          "id": "SV1S_028",
+          "code": "SV1S_028",
+          "name": "가디안 ex",
+          "count": 2,
+          "kind": "pokemon",
+          "basic": false,
+          "full": "res://cards/full/SV1S_028.webp",
+          "thumb": "res://cards/thumb/SV1S_028.webp",
+          "prints": [
+            {
+              "code": "SV1S_028",
+              "reg": "G",
+              "special": false,
+              "full": "res://cards/full/SV1S_028.webp",
+              "thumb": "res://cards/thumb/SV1S_028.webp"
+            },
+            {
+              "code": "SV4a_328",
+              "reg": "G",
+              "special": true,
+              "full": "res://cards/full/SV4a_328.webp",
+              "thumb": "res://cards/thumb/SV4a_328.webp"
+            },
+            {
+              "code": "SV4a_348",
+              "reg": "G",
+              "special": true,
+              "full": "res://cards/full/SV4a_348.webp",
+              "thumb": "res://cards/thumb/SV4a_348.webp"
+            }
+          ]
+        },
+        {
+          "id": "S8b_196",
+          "code": "S8b_196",
+          "name": "가디안",
+          "count": 1,
+          "kind": "pokemon",
+          "basic": false,
+          "full": "res://cards/full/S8b_196.webp",
+          "thumb": "res://cards/thumb/S8b_196.webp"
+        },
+        {
+          "id": "S8_089",
+          "code": "S8_089",
+          "name": "배틀VIP패스",
+          "count": 4,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/S8_089.webp",
+          "thumb": "res://cards/thumb/S8_089.webp"
+        },
+        {
+          "id": "SVB_013",
+          "code": "SVB_013",
+          "name": "레벨볼",
+          "count": 4,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_013.webp",
+          "thumb": "res://cards/thumb/SVB_013.webp"
+        },
+        {
+          "id": "SVB_015",
+          "code": "SVB_015",
+          "name": "안개의 수정",
+          "count": 3,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_015.webp",
+          "thumb": "res://cards/thumb/SVB_015.webp"
+        },
+        {
+          "id": "SVB_005",
+          "code": "SVB_005",
+          "name": "하이퍼볼",
+          "count": 3,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_005.webp",
+          "thumb": "res://cards/thumb/SVB_005.webp"
+        },
+        {
+          "id": "SVB_002",
+          "code": "SVB_002",
+          "name": "이상한사탕",
+          "count": 2,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_002.webp",
+          "thumb": "res://cards/thumb/SVB_002.webp"
+        },
+        {
+          "id": "SV1S_070",
+          "code": "SV1S_070",
+          "name": "친구수첩",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SV1S_070.webp",
+          "thumb": "res://cards/thumb/SV1S_070.webp"
+        },
+        {
+          "id": "S12a_147",
+          "code": "S12a_147",
+          "name": "하늘의 봉인석",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/S12a_147.webp",
+          "thumb": "res://cards/thumb/S12a_147.webp"
+        },
+        {
+          "id": "SVB_007",
+          "code": "SVB_007",
+          "name": "박사의 연구",
+          "count": 3,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_007.webp",
+          "thumb": "res://cards/thumb/SVB_007.webp"
+        },
+        {
+          "id": "SVC_021",
+          "code": "SVC_021",
+          "name": "저지맨",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVC_021.webp",
+          "thumb": "res://cards/thumb/SVC_021.webp"
+        },
+        {
+          "id": "SVB_022",
+          "code": "SVB_022",
+          "name": "원규",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_022.webp",
+          "thumb": "res://cards/thumb/SVB_022.webp"
+        },
+        {
+          "id": "S12_096",
+          "code": "S12_096",
+          "name": "작업원",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/S12_096.webp",
+          "thumb": "res://cards/thumb/S12_096.webp"
+        },
+        {
+          "id": "SV1V_075",
+          "code": "SV1V_075",
+          "name": "미모사",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SV1V_075.webp",
+          "thumb": "res://cards/thumb/SV1V_075.webp"
+        },
+        {
+          "id": "SVB_020",
+          "code": "SVB_020",
+          "name": "보스의 지령",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_020.webp",
+          "thumb": "res://cards/thumb/SVB_020.webp"
+        },
+        {
+          "id": "SVB_021",
+          "code": "SVB_021",
+          "name": "세레나",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_021.webp",
+          "thumb": "res://cards/thumb/SVB_021.webp"
+        },
+        {
+          "id": "SV1S_074",
+          "code": "SV1S_074",
+          "name": "모란",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SV1S_074.webp",
+          "thumb": "res://cards/thumb/SV1S_074.webp"
+        },
+        {
+          "id": "S12a_165",
+          "code": "S12a_165",
+          "name": "무너진 스타디움",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/S12a_165.webp",
+          "thumb": "res://cards/thumb/S12a_165.webp"
+        },
+        {
+          "id": "S12a_166",
+          "code": "S12a_166",
+          "name": "신오신전",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/S12a_166.webp",
+          "thumb": "res://cards/thumb/S12a_166.webp"
+        },
+        {
+          "id": "SVB_033",
+          "code": "SVB_033",
+          "name": "기본 초 에너지",
+          "count": 12,
+          "kind": "energy",
+          "basic": false,
+          "full": "res://cards/full/SVB_033.webp",
+          "thumb": "res://cards/thumb/SVB_033.webp"
+        }
+      ]
     }
   ],
-  "dataVersion": "97d5b1d5df54840c"
+  "dataVersion": "55c2ae8975ce25b4"
 }

@@ -68,7 +68,10 @@ static func toGameInput(input: Dictionary, player: int):
 			return { "type": "play", "player": player, "card": str(input.card) }
 		"retreat": return { "type": "retreat", "player": player, "to": str(input.to) }
 		"attack": return { "type": "attack", "player": player, "index": int(input.index) }
-		"ability": return { "type": "ability", "player": player, "sid": str(input.sid) }
+		"ability":
+			if GCore.truthy(input.get("tool")):
+				return { "type": "ability", "player": player, "sid": str(input.sid), "tool": true }
+			return { "type": "ability", "player": player, "sid": str(input.sid) }
 		"stadium": return { "type": "stadium", "player": player }
 		"endTurn": return { "type": "endTurn", "player": player }
 		"concede": return { "type": "concede", "player": player }

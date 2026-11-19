@@ -221,3 +221,111 @@ test('히스이의 헤비볼: 사이드의 기본 포켓몬과 바꿔 패로, �
   assert.ok(p2.prizes.some((x) => x && st.cards[x].ruleId === 'SVB_016'), '헤비볼이 사이드로');
   assert.deepEqual(total(st), [60, 60]);
 });
+
+// ── 2023 코리안리그 시즌3 마스터 우승 가디안 ex (gardevoir23) ──
+/** seat 의 첫 요청에 picks 로 답한다 (picks 가 함수면 요청을 보고 고름) */
+function answer(s: GameState, seat: Seat, picks: string[] | ((r: GameState['requests'][number]) => string[])): GameState {
+  const r = s.requests.find((x) => x.player === seat);
+  assert.ok(r, `플레이어 ${seat} 의 요청 없음`);
+  return applyInput(s, { type: 'choice', player: seat, requestId: r.id, picks: typeof picks === 'function' ? picks(r) : picks }, info).state;
+}
+const handOf = (s: GameState, seat: Seat, id: string) => s.players[seat].hand.find((x) => s.cards[x].ruleId === id)!;
+const first = (r: GameState['requests'][number]) => r.options.slice(0, 1);
+
+test('신오신전: 특수 에너지는 무색 1개분 (일격 에너지의 악 대신·+20 없음)', () => {
+  const side = { active: 'S6a_047', energy: ['SGG_019'] };
+  const plainS = scenario(['umbreon', 'gardevoir23'], side, { active: 'S9a_032' });
+  assert.ok(legalMoves(plainS, 0, info).some((m) => m.kind === 'attack'), '스타디움이 없으면 일격 에너지로 검은눈빛 [악]');
+  const temple = scenario(['umbreon', 'gardevoir23'], side, { active: 'S9a_032' }, { stadium: [1, 'S12a_166'] });
+  assert.ok(!legalMoves(temple, 0, info).some((m) => m.kind === 'attack'), '신오신전: 일격 에너지가 무색이라 [악] 비용을 못 냄');
+});
+
+test('무너진 스타디움: 벤치 4마리 — 낼 때 넘치는 포켓몬은 주인부터 트래쉬', () => {
+  const s = scenario(['gardevoir23', 'umbreon'], { active: 'S8a_002', bench: ['S11a_036', 'S9a_032', 'S9a_032', 'S10D_028', 'S12a_067'], hand: ['S12a_165', 'S9a_032'] }, { active: 'SGG_004' });
+  let st = act(s, 0, { type: 'play', card: handOf(s, 0, 'S12a_165') }).state;
+  assert.equal(st.players[0].benchMax, 4);
+  st = answer(st, 0, first);
+  assert.equal(st.players[0].bench.length, 4, '1마리 트래쉬');
+  assert.ok(!legalMoves(st, 0, info).some((m) => m.kind === 'play'), '벤치가 4마리면 더 낼 수 없음');
+  assert.deepEqual(total(st), [60, 60]);
+});
+
+test('하늘의 봉인석 스타오더: 기본 포켓몬 V 로 VMAX 를 기절시키면 사이드 +1 (VSTAR 파워 1번)', () => {
+  const s = scenario(['gardevoir23', 'umbreon'], { active: 'S12a_067', energy: ['SVB_033', 'SVB_033', 'SVB_033'], tool: 'S12a_147' }, { active: 'S6a_048', damage: 200, bench: ['SGG_004'] });
+  const star = legalMoves(s, 0, info).find((m) => m.kind === 'ability' && (m.input as { tool?: boolean }).tool);
+  assert.ok(star, '봉인석 VSTAR 파워');
+  let st = act(s, 0, star!.input).state;
+  assert.ok(st.players[0].vstarUsed);
+  assert.ok(!legalMoves(st, 0, info).some((m) => (m.input as { tool?: boolean }).tool), '대전 중 1번');
+  st = act(st, 0, { type: 'attack', index: atk(st, 0, '스톰슬래시') }).state;   // 60 + 초 에너지 3개 × 30 = 150 ≥ 남은 110
+  const take = st.requests.find((r) => r.kind === 'takePrize')!;
+  assert.equal(take.min, 4, 'VMAX 3장 + 스타오더 1장');
+});
+
+test('메모리스킵: 고른 기술은 상대의 다음 차례에 못 씀 (다른 기술은 씀)', () => {
+  const s = scenario(['gardevoir23', 'umbreon'], { active: 'S11a_036', energy: ['SVB_033'] }, { active: 'S6a_047', energy: ['SGG_019', 'SGG_019', 'SGG_019'] });
+  let st = act(s, 0, { type: 'attack', index: atk(s, 0, '메모리스킵') }).state;
+  st = answer(st, 0, ['1']);   // 월광의칼날
+  assert.equal(st.turnPlayer, 1);
+  const labels = legalMoves(st, 1, info).filter((m) => m.kind === 'attack').map((m) => m.label);
+  assert.ok(labels.some((l) => l.includes('검은눈빛')), labels.join(','));
+  assert.ok(!labels.some((l) => l.includes('월광의칼날')), labels.join(','));
+});
+
+test('가디안 아르카나 샤인 · 킬리아 리파인 · 네오라이트 V 루미너스사인 · 자시안 V 검의 포효(차례 끝)', () => {
+  // 아르카나 샤인: 덱 위 2장 = [에너지, 트레이너스] → 에너지는 붙이고 나머지는 패로
+  const s = scenario(['gardevoir23', 'umbreon'], { active: 'S8b_196', bench: ['S11a_037'] }, { active: 'SGG_004' });
+  const p = s.players[0];
+  const en = p.deck.splice(p.deck.findIndex((x) => s.cards[x].ruleId === 'SVB_033'), 1)[0];
+  const tr = p.deck.splice(p.deck.findIndex((x) => info.db[s.cards[x].ruleId].kind === 'trainer'), 1)[0];
+  p.deck.unshift(en, tr);
+  const hand0 = p.hand.length;
+  let st = act(s, 0, legalMoves(s, 0, info).find((m) => m.kind === 'ability' && m.target === s.players[0].active!.sid)!.input).state;
+  st = answer(st, 0, first);                              // 에너지 고르기
+  st = answer(st, 0, [st.players[0].active!.sid]);        // 붙일 포켓몬
+  assert.equal(st.players[0].active!.attached.length, 1, '에너지 붙음');
+  assert.equal(st.players[0].hand.length, hand0 + 1, '남은 1장은 패로');
+  // 리파인: 패 1장 트래쉬 → 2장 뽑기
+  const kir = legalMoves(st, 0, info).find((m) => m.kind === 'ability' && m.target === st.players[0].bench[0].sid)!;
+  const h1 = st.players[0].hand.length;
+  st = act(st, 0, kir.input).state;
+  st = answer(st, 0, first);
+  assert.equal(st.players[0].hand.length, h1 + 1);
+  // 루미너스사인: 패에서 벤치로 내면 덱의 서포트를 패로
+  const s2 = scenario(['gardevoir23', 'umbreon'], { active: 'S8a_002', hand: ['SVB_008'] }, { active: 'SGG_004' });
+  let st2 = act(s2, 0, { type: 'play', card: handOf(s2, 0, 'SVB_008') }).state;
+  st2 = answer(st2, 0, ['yes']);
+  st2 = answer(st2, 0, first);
+  assert.ok(st2.players[0].hand.some((x) => info.db[st2.cards[x].ruleId].trainer === 'supporter'), '서포트를 패로');
+  // 검의 포효: 덱의 초 에너지를 붙이고 차례가 끝남
+  const s3 = scenario(['gardevoir23', 'umbreon'], { active: 'S12a_067' }, { active: 'SGG_004' });
+  let st3 = act(s3, 0, legalMoves(s3, 0, info).find((m) => m.kind === 'ability')!.input).state;
+  st3 = answer(st3, 0, first);
+  st3 = answer(st3, 0, [st3.players[0].active!.sid]);
+  assert.equal(st3.players[0].active!.attached.length, 1);
+  assert.equal(st3.turnPlayer, 1, '차례가 끝남');
+});
+
+test('세레나(포켓몬 V 끌어내기) · 모란(기본 포켓몬과 붙은 카드를 패로) · 아쿠아리턴(덱으로 되돌리고 새 배틀 포켓몬)', () => {
+  const s = scenario(['gardevoir23', 'umbreon'], { active: 'S9a_032', hand: ['SVB_021'] }, { active: 'SGG_004', bench: ['S6a_047'] });
+  let st = act(s, 0, { type: 'play', card: handOf(s, 0, 'SVB_021') }).state;
+  st = answer(st, 0, ['gust']);
+  st = answer(st, 0, first);
+  assert.equal(info.db[st.cards[st.players[1].active!.stack[0]].ruleId].name, '블래키 V');
+  const s2 = scenario(['gardevoir23', 'umbreon'], { active: 'S9a_032', bench: ['S12a_067'], benchEnergy: [['SVB_033']], hand: ['SV1S_074'] }, { active: 'SGG_004' });
+  let st2 = act(s2, 0, { type: 'play', card: handOf(s2, 0, 'SV1S_074') }).state;
+  st2 = answer(st2, 0, [st2.players[0].bench[0].sid]);
+  assert.equal(st2.players[0].bench.length, 0);
+  assert.ok(st2.players[0].hand.some((x) => st2.cards[x].ruleId === 'S12a_067') && st2.players[0].hand.some((x) => st2.cards[x].ruleId === 'SVB_033'), '포켓몬과 에너지 모두 패로');
+  assert.deepEqual(total(st2), [60, 60]);
+  const s3 = scenario(['gardevoir23', 'umbreon'], { active: 'SVB_008', energy: ['SVB_033', 'SVB_033', 'SVB_033'], bench: ['S9a_032'] }, { active: 'SGG_004', bench: ['SGG_004'] });
+  // 이 덱에는 물 에너지가 없으므로 붙은 에너지 1장을 기본 물 에너지(기라티나 덱의 인쇄)로 바꿔서 [물] 비용을 맞춘다
+  const w = s3.players[0].active!.attached[0];
+  s3.cards[w] = { ...s3.cards[w], ruleId: 'SVB_031', code: 'SVB_031' };
+  const deck0 = s3.players[0].deck.length;
+  let st3 = act(s3, 0, { type: 'attack', index: atk(s3, 0, '아쿠아리턴') }).state;
+  st3 = settle(st3);
+  assert.equal(st3.players[0].deck.length, deck0 + 4 - 0, '포켓몬 + 에너지 3장이 덱으로');
+  assert.equal(info.db[st3.cards[st3.players[0].active!.stack[0]].ruleId].name, '랄토스', '벤치의 포켓몬이 배틀로');
+  assert.deepEqual(total(st3), [60, 60]);
+});

@@ -21,8 +21,8 @@ test('난수: 같은 시드면 같은 결과, 셔플은 순열', () => {
   assert.deepEqual([...arr].sort((p, q) => p - q), Array.from({ length: 60 }, (_, i) => i));
 });
 
-test('덱 데이터: 8개 덱 모두 60장, 기본 포켓몬 있음', () => {
-  assert.equal(deckIds.length, 8);
+test('덱 데이터: 9개 덱 모두 60장, 기본 포켓몬 있음', () => {
+  assert.equal(deckIds.length, 9);
   for (const id of deckIds) {
     const g = createGame(config(seedOf(3), id, id), info).state;
     assert.equal(g.players[0].deck.length, 60, id);

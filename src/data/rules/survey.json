@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-19T14:45:01.084Z",
+  "generated": "2026-11-19T21:34:09.711Z",
   "cards": [
     {
       "code": "SV7_076",
@@ -3544,7 +3544,8 @@
       "name": "가디안 ex",
       "kind": "pokemon",
       "decks": {
-        "gardevoir": 2
+        "gardevoir": 2,
+        "gardevoir23": 2
       },
       "rules": {
         "jp": "SV1S-028",
@@ -5352,7 +5353,8 @@
       "name": "찬란한 개굴닌자",
       "kind": "pokemon",
       "decks": {
-        "giratina": 1
+        "giratina": 1,
+        "gardevoir23": 1
       },
       "rules": {
         "jp": "S12a-033",
@@ -5404,7 +5406,8 @@
       "name": "마나피",
       "kind": "pokemon",
       "decks": {
-        "giratina": 1
+        "giratina": 1,
+        "gardevoir23": 1
       },
       "rules": {
         "jp": "S12a-029",
@@ -5606,7 +5609,8 @@
       "name": "배틀VIP패스",
       "kind": "trainer",
       "decks": {
-        "giratina": 4
+        "giratina": 4,
+        "gardevoir23": 4
       },
       "rules": {
         "jp": "S8-091",
@@ -5753,7 +5757,8 @@
       "name": "보스의 지령",
       "kind": "trainer",
       "decks": {
-        "giratina": 2
+        "giratina": 2,
+        "gardevoir23": 1
       },
       "rules": null
     },
@@ -5762,7 +5767,8 @@
       "name": "원규",
       "kind": "trainer",
       "decks": {
-        "giratina": 1
+        "giratina": 1,
+        "gardevoir23": 1
       },
       "rules": null
     },
@@ -5780,7 +5786,8 @@
       "name": "기본 초 에너지",
       "kind": "energy",
       "decks": {
-        "giratina": 4
+        "giratina": 4,
+        "gardevoir23": 12
       },
       "rules": null
     },
@@ -5801,6 +5808,540 @@
         "giratina": 3
       },
       "rules": null
+    },
+    {
+      "code": "S11a_036",
+      "name": "랄토스",
+      "kind": "pokemon",
+      "decks": {
+        "gardevoir23": 1
+      },
+      "rules": {
+        "jp": "S11a-036",
+        "name": "ラルトス",
+        "category": "Pokemon",
+        "stage": "Basic",
+        "hp": 60,
+        "types": [
+          "Psychic"
+        ],
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [],
+        "attacks": [
+          {
+            "cost": [
+              "Psychic"
+            ],
+            "name": "メモリースキップ",
+            "damage": 10,
+            "effect": "相手のバトルポケモンが持っているワザを1つ選ぶ。次の相手の番、このワザを受けたポケモンは、選ばれたワザが使えない。"
+          }
+        ],
+        "weaknesses": [
+          {
+            "type": "Metal",
+            "value": "x2"
+          }
+        ],
+        "resistances": [],
+        "retreat": 1,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "Common"
+      }
+    },
+    {
+      "code": "S9a_032",
+      "name": "랄토스",
+      "kind": "pokemon",
+      "decks": {
+        "gardevoir23": 3
+      },
+      "rules": {
+        "jp": "S9a-032",
+        "name": "ラルトス",
+        "category": "Pokemon",
+        "stage": "Basic",
+        "hp": 70,
+        "types": [
+          "Psychic"
+        ],
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [],
+        "attacks": [
+          {
+            "cost": [
+              "Psychic"
+            ],
+            "name": "テレポートブレイク",
+            "damage": 10,
+            "effect": "このポケモンをベンチポケモンと入れ替える。"
+          }
+        ],
+        "weaknesses": [
+          {
+            "type": "Darkness",
+            "value": "×2"
+          }
+        ],
+        "resistances": [
+          {
+            "type": "Fighting",
+            "value": "－30"
+          }
+        ],
+        "retreat": 1,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "Common"
+      }
+    },
+    {
+      "code": "S10D_028",
+      "name": "크레세리아",
+      "kind": "pokemon",
+      "decks": {
+        "gardevoir23": 1
+      },
+      "rules": null
+    },
+    {
+      "code": "S8a_002",
+      "name": "뮤",
+      "kind": "pokemon",
+      "decks": {
+        "gardevoir23": 1
+      },
+      "rules": null
+    },
+    {
+      "code": "S12a_067",
+      "name": "자시안 V",
+      "kind": "pokemon",
+      "decks": {
+        "gardevoir23": 2
+      },
+      "rules": {
+        "jp": "S12a-067",
+        "name": "ザシアンV",
+        "category": "Pokemon",
+        "stage": "Basic",
+        "hp": 220,
+        "types": [
+          "Psychic"
+        ],
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "E",
+        "abilities": [
+          {
+            "type": "Ability",
+            "name": "けんのほうこう",
+            "effect": "自分の番に1回使えて、使ったなら、自分の番は終わる。自分の山札から[P]エネルギーを1枚選び、自分のポケモンにつける。そして山札を切る。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Colorless",
+              "Colorless",
+              "Colorless"
+            ],
+            "name": "ストームスラッシュ",
+            "damage": "60+",
+            "effect": "このポケモンについている[P]エネルギーの数×30ダメージ追加。"
+          }
+        ],
+        "weaknesses": [
+          {
+            "type": "Metal",
+            "value": "x2"
+          }
+        ],
+        "resistances": [],
+        "retreat": 2,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "Double rare"
+      }
+    },
+    {
+      "code": "SVB_008",
+      "name": "네오라이트 V",
+      "kind": "pokemon",
+      "decks": {
+        "gardevoir23": 1
+      },
+      "rules": null
+    },
+    {
+      "code": "S11a_037",
+      "name": "킬리아",
+      "kind": "pokemon",
+      "decks": {
+        "gardevoir23": 4
+      },
+      "rules": {
+        "jp": "S11a-037",
+        "name": "キルリア",
+        "category": "Pokemon",
+        "stage": "Stage1",
+        "hp": 80,
+        "types": [
+          "Psychic"
+        ],
+        "evolveFrom": "ラルトス",
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [
+          {
+            "type": "Ability",
+            "name": "リファイン",
+            "effect": "自分の番に、自分の手札を1枚トラッシュするなら、1回使える。自分の山札を2枚引く。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Psychic",
+              "Colorless"
+            ],
+            "name": "ビンタ",
+            "damage": 30,
+            "effect": null
+          }
+        ],
+        "weaknesses": [
+          {
+            "type": "Metal",
+            "value": "x2"
+          }
+        ],
+        "resistances": [],
+        "retreat": 2,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "Common"
+      }
+    },
+    {
+      "code": "S8b_196",
+      "name": "가디안",
+      "kind": "pokemon",
+      "decks": {
+        "gardevoir23": 1
+      },
+      "rules": {
+        "jp": "S8b-196",
+        "name": "サーナイト",
+        "category": "Pokemon",
+        "stage": "Stage2",
+        "hp": 140,
+        "types": [
+          "Psychic"
+        ],
+        "evolveFrom": "キルリア",
+        "suffix": null,
+        "regulationMark": "E",
+        "abilities": [
+          {
+            "type": "Ability",
+            "name": "アルカナシャイン",
+            "effect": "自分の番に1回使える。自分の山札を上から2枚見て、その中から基本エネルギーを好きなだけ選び、自分のポケモンに好きなようにつける。残りのカードは手札に加える。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Colorless",
+              "Colorless",
+              "Colorless"
+            ],
+            "name": "ブレインウェーブ",
+            "damage": "60+",
+            "effect": "このポケモンについている[超]エネルギーの数×30ダメージ追加。"
+          }
+        ],
+        "weaknesses": [
+          {
+            "type": "Metal",
+            "value": "x2"
+          }
+        ],
+        "resistances": [],
+        "retreat": 2,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "Character Rare"
+      }
+    },
+    {
+      "code": "SVB_013",
+      "name": "레벨볼",
+      "kind": "trainer",
+      "decks": {
+        "gardevoir23": 4
+      },
+      "rules": null
+    },
+    {
+      "code": "SVB_015",
+      "name": "안개의 수정",
+      "kind": "trainer",
+      "decks": {
+        "gardevoir23": 3
+      },
+      "rules": null
+    },
+    {
+      "code": "SVB_005",
+      "name": "하이퍼볼",
+      "kind": "trainer",
+      "decks": {
+        "gardevoir23": 3
+      },
+      "rules": null
+    },
+    {
+      "code": "SVB_002",
+      "name": "이상한사탕",
+      "kind": "trainer",
+      "decks": {
+        "gardevoir23": 2
+      },
+      "rules": null
+    },
+    {
+      "code": "SV1S_070",
+      "name": "친구수첩",
+      "kind": "trainer",
+      "decks": {
+        "gardevoir23": 1
+      },
+      "rules": {
+        "jp": "SV1S-069",
+        "name": "ともだちてちょう",
+        "category": "Trainer",
+        "stage": null,
+        "hp": null,
+        "types": null,
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "G",
+        "abilities": [],
+        "attacks": [],
+        "weaknesses": null,
+        "resistances": null,
+        "retreat": null,
+        "trainerType": "Item",
+        "energyType": null,
+        "effect": "自分のトラッシュからサポートを2枚まで選び、相手に見せて、山札にもどして切る。",
+        "rarity": "Uncommon"
+      }
+    },
+    {
+      "code": "S12a_147",
+      "name": "하늘의 봉인석",
+      "kind": "trainer",
+      "decks": {
+        "gardevoir23": 1
+      },
+      "rules": {
+        "jp": "S12a-146",
+        "name": "空の封印石",
+        "category": "Trainer",
+        "stage": null,
+        "hp": null,
+        "types": null,
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [],
+        "attacks": [],
+        "weaknesses": null,
+        "resistances": null,
+        "retreat": null,
+        "trainerType": "Tool",
+        "energyType": null,
+        "effect": "このカードをつけている「ポケモンV」は、このVSTARパワーを使える。特性スターオーダー自分の番に使える。この番、自分のたねポケモンの「ポケモンV」が使うワザのダメージで、相手のバトル場の「ポケモンVSTAR・VMAX」がきぜつしたなら、サイドを1枚多くとる。［対戦中、自分はVSTARパワーを1回しか使えない。］",
+        "rarity": "None"
+      }
+    },
+    {
+      "code": "SVB_007",
+      "name": "박사의 연구",
+      "kind": "trainer",
+      "decks": {
+        "gardevoir23": 3
+      },
+      "rules": null
+    },
+    {
+      "code": "SVC_021",
+      "name": "저지맨",
+      "kind": "trainer",
+      "decks": {
+        "gardevoir23": 1
+      },
+      "rules": null
+    },
+    {
+      "code": "S12_096",
+      "name": "작업원",
+      "kind": "trainer",
+      "decks": {
+        "gardevoir23": 1
+      },
+      "rules": {
+        "jp": "S12-093",
+        "name": "さぎょういん",
+        "category": "Trainer",
+        "stage": null,
+        "hp": null,
+        "types": null,
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [],
+        "attacks": [],
+        "weaknesses": null,
+        "resistances": null,
+        "retreat": null,
+        "trainerType": "Supporter",
+        "energyType": null,
+        "effect": "自分の山札を3枚引く。場に出ているスタジアムをトラッシュする。",
+        "rarity": "Uncommon"
+      }
+    },
+    {
+      "code": "SV1V_075",
+      "name": "미모사",
+      "kind": "trainer",
+      "decks": {
+        "gardevoir23": 1
+      },
+      "rules": {
+        "jp": "SV1V-077",
+        "name": "ミモザ",
+        "category": "Trainer",
+        "stage": null,
+        "hp": null,
+        "types": null,
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "G",
+        "abilities": [],
+        "attacks": [],
+        "weaknesses": null,
+        "resistances": null,
+        "retreat": null,
+        "trainerType": "Supporter",
+        "energyType": null,
+        "effect": "自分のトラッシュからポケモンを5枚まで選び、相手に見せて、山札にもどして切る。その後、山札を3枚引く。",
+        "rarity": "Uncommon"
+      }
+    },
+    {
+      "code": "SVB_021",
+      "name": "세레나",
+      "kind": "trainer",
+      "decks": {
+        "gardevoir23": 1
+      },
+      "rules": null
+    },
+    {
+      "code": "SV1S_074",
+      "name": "모란",
+      "kind": "trainer",
+      "decks": {
+        "gardevoir23": 1
+      },
+      "rules": {
+        "jp": "SV1S-077",
+        "name": "ボタン",
+        "category": "Trainer",
+        "stage": null,
+        "hp": null,
+        "types": null,
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "G",
+        "abilities": [],
+        "attacks": [],
+        "weaknesses": null,
+        "resistances": null,
+        "retreat": null,
+        "trainerType": "Supporter",
+        "energyType": null,
+        "effect": "自分の場のたねポケモンを1匹選び、そのポケモンと、ついているすべてのカードを、手札にもどす。",
+        "rarity": "Uncommon"
+      }
+    },
+    {
+      "code": "S12a_165",
+      "name": "무너진 스타디움",
+      "kind": "trainer",
+      "decks": {
+        "gardevoir23": 1
+      },
+      "rules": {
+        "jp": "S12a-167",
+        "name": "崩れたスタジアム",
+        "category": "Trainer",
+        "stage": null,
+        "hp": null,
+        "types": null,
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [],
+        "attacks": [],
+        "weaknesses": null,
+        "resistances": null,
+        "retreat": null,
+        "trainerType": "Stadium",
+        "energyType": null,
+        "effect": "おたがいのプレイヤーがベンチに出せるポケモンの数は、4匹になる。［ベンチの数を変更する効果は、少ない数が優先される。］（このカードが場に出たとき、ベンチが5匹以上いるプレイヤーは、4匹になるまでトラッシュする。トラッシュするのは、このカードの持ち主から。）",
+        "rarity": "None"
+      }
+    },
+    {
+      "code": "S12a_166",
+      "name": "신오신전",
+      "kind": "trainer",
+      "decks": {
+        "gardevoir23": 1
+      },
+      "rules": {
+        "jp": "S12a-169",
+        "name": "シンオウ神殿",
+        "category": "Trainer",
+        "stage": null,
+        "hp": null,
+        "types": null,
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [],
+        "attacks": [],
+        "weaknesses": null,
+        "resistances": null,
+        "retreat": null,
+        "trainerType": "Stadium",
+        "energyType": null,
+        "effect": "おたがいの場のポケモンについている特殊エネルギーの効果はすべてなくなり、[C]エネルギー1個ぶんとしてはたらく。",
+        "rarity": "None"
+      }
     }
   ]
 }

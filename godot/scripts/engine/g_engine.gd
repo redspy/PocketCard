@@ -269,6 +269,12 @@ static func _frame_koCheck(ctx: Dictionary, f: Dictionary) -> void:
 				# 이 기술로 상대 배틀 포켓몬을 기절시켰을 때의 추가 사이드 (무쇠손 ex, 브라이어)
 				if s.attackCtx != null and s.attackCtx.seat != seat and was_active:
 					n += s.attackCtx.extraPrizes
+				# 하늘의 봉인석 [스타오더]: 기본 포켓몬 V 의 기술로 VSTAR·VMAX 를 기절시키면 +1
+				if s.attackCtx != null and s.attackCtx.seat != seat and was_active and not s.inCheckup and GCore.playerHasEffect(s, s.attackCtx.seat, "starOrder") 						and d.has("pokemon") and (d.pokemon.get("rule") == "VSTAR" or d.pokemon.get("rule") == "VMAX"):
+					var atk_f = GCore.findSlot(s, str(s.attackCtx.sid))
+					var ap = GCore.slotData(ctx, atk_f.slot).get("pokemon") if atk_f != null else null
+					if ap != null and ap.stage == 0 and ap.get("rule") == "V":
+						n += 1
 				takes[GCore.other(seat)] += n
 				if not s.inCheckup and s.turnPlayer != seat:
 					s.players[seat].koTurn = s.turnNumber
@@ -508,6 +514,14 @@ static func legalMoves(s: Dictionary, seat: int, info: Dictionary) -> Array:
 		if def.has("can") and GCore.truthy(def.can.call(ctx, seat, sl)):
 			continue
 		out.append(_mv({ "type": "ability", "player": seat, "sid": sl.sid }, "ability", "특성: %s %s" % [GCore.slotName(ctx, sl), ab.name if ab.name != "" else ab.nameJa], null, sl.sid))
+	# 하늘의 봉인석: 붙인 '포켓몬 V'가 VSTAR 파워 [스타오더] 를 쓸 수 있다 (대전 중 1번)
+	if not p.vstarUsed and GCore.stadiumName(ctx) != "정상으로 가는 눈길":
+		for sl in slots:
+			var sd := GCore.slotData(ctx, sl)
+			var r = sd.pokemon.get("rule") if sd.has("pokemon") else null
+			if sl.faceDown or GCore.toolName(ctx, sl) != "하늘의 봉인석" or (r != "V" and r != "VMAX" and r != "VSTAR"):
+				continue
+			out.append(_mv({ "type": "ability", "player": seat, "sid": sl.sid, "tool": true }, "ability", "VSTAR 파워: %s 스타오더 (하늘의 봉인석)" % GCore.slotName(ctx, sl), null, sl.sid))
 	# 후퇴
 	var act = p.active
 	if act != null and not p.flags.retreat and p.bench.size() > 0 and act.cond.rot != "asleep" and act.cond.rot != "paralyzed" and not GCore.slotHasEffect(act, "noRetreat"):
@@ -527,6 +541,9 @@ static func legalMoves(s: Dictionary, seat: int, info: Dictionary) -> Array:
 				continue
 			if a.get("kind") == "vstar" and p.vstarUsed:
 				continue
+			var a_name: String = a.name if GCore.truthy(a.name) else a.nameJa
+			if act.effects.any(func(e): return e.kind == "lockAttack" and e.get("name") == a_name):
+				continue   # 메모리스킵·임팩트블로
 			var def = GEffects.ATTACKS.get(a.nameJa)
 			if def != null and def.has("can") and GCore.truthy(def.can.call(ctx, seat, act)):
 				continue
@@ -642,10 +659,20 @@ static func doMove(ctx: Dictionary, seat: int, input: Dictionary) -> void:
 			_push(s, "attack", seat, { "sid": act.sid, "base": a.damage, "attackJa": a.nameJa })
 		"ability":
 			var slot: Dictionary = GCore.findSlot(s, input.sid).slot
+			if GCore.truthy(input.get("tool")):
+				# 하늘의 봉인석 [스타오더]: 이 차례에 기본 포켓몬 V 의 기술 데미지로 상대 배틀의 VSTAR·VMAX 를 기절시키면 사이드 +1
+				p.vstarUsed = true
+				p.effects.append({ "kind": "starOrder", "until": s.turnNumber })
+				GCore.emit(ctx, { "type": "ability", "player": seat, "code": GCore.inst(ctx, GCore.topOf(slot)).code, "name": "스타오더 (VSTAR 파워)" })
+				return
 			var ab: Dictionary = GCore.slotData(ctx, slot).pokemon.abilities[0]
 			slot.abilityTurn = s.turnNumber
 			p.flags.names.append(ab.nameJa)
 			GCore.emit(ctx, { "type": "ability", "player": seat, "code": GCore.inst(ctx, GCore.topOf(slot)).code, "name": ab.name if ab.name != "" else ab.nameJa })
+			# 쓰면 차례가 끝나는 특성 (자시안 V 검의 포효)
+			var abdef = GEffects.ABILITIES.get(ab.nameJa)
+			if abdef != null and GCore.truthy(abdef.get("endsTurn")):
+				_push(s, "endTurn", seat, {})
 			_push(s, "koCheck", seat, {})
 			_push(s, "abilityRun", seat, { "sid": slot.sid, "ab": ab.nameJa })
 		"stadium":
@@ -723,12 +750,12 @@ static func playCard(ctx: Dictionary, seat: int, iid: String, target) -> void:
 		p.flags.energy = true
 		GCore.moveCard(ctx, iid, { "zone": "attach", "sid": target })
 		GCore.emit(ctx, { "type": "play", "player": seat, "code": code, "what": "에너지 붙이기" })
-		if d.name == "제트 에너지":
+		if d.name == "제트 에너지" and not GCore.specialEnergyOff(ctx):
 			var t = GCore.findSlot(s, target)
 			if t != null and not t.active:
 				GCore.switchActive(ctx, seat, t.slot.sid)
 				GCore.note(ctx, "제트 에너지: 배틀 포켓몬과 교체")
-		if d.name == "캡쳐 에너지" and p.deck.size() > 0 and p.bench.size() < p.benchMax:
+		if d.name == "캡쳐 에너지" and not GCore.specialEnergyOff(ctx) and p.deck.size() > 0 and p.bench.size() < p.benchMax:
 			_push(s, "search", seat, { "from": "deck", "filter": { "kind": "pokemon", "stage": 0 }, "max": 1, "to": "bench", "prompt": "캡쳐 에너지: 벤치에 낼 기본 포켓몬을 고르세요.", "src": "특수 에너지 [캡쳐 에너지]" })
 		return
 	# 트레이너스

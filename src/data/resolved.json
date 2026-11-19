@@ -1207,6 +1207,158 @@
       ]
     },
     {
+      "id": "gardevoir23",
+      "name": "가디안 ex (2023)",
+      "note": "2023 코리안리그 시즌3 마스터 우승 · 계나원 (덱 코드 tWFR-fldR-45xQ-ya05)",
+      "cards": [
+        {
+          "count": 1,
+          "nameEn": "랄토스",
+          "ref": "ko:S11a_036"
+        },
+        {
+          "count": 3,
+          "nameEn": "랄토스",
+          "ref": "ko:S9a_032"
+        },
+        {
+          "count": 1,
+          "nameEn": "크레세리아",
+          "ref": "ko:S10D_028"
+        },
+        {
+          "count": 1,
+          "nameEn": "뮤",
+          "ref": "ko:S8a_002"
+        },
+        {
+          "count": 2,
+          "nameEn": "자시안 V",
+          "ref": "ko:S12a_067"
+        },
+        {
+          "count": 1,
+          "nameEn": "마나피",
+          "ref": "ko:S12a_029"
+        },
+        {
+          "count": 1,
+          "nameEn": "네오라이트 V",
+          "ref": "ko:SVB_008"
+        },
+        {
+          "count": 1,
+          "nameEn": "찬란한 개굴닌자",
+          "ref": "ko:S12a_033"
+        },
+        {
+          "count": 4,
+          "nameEn": "킬리아",
+          "ref": "ko:S11a_037"
+        },
+        {
+          "count": 2,
+          "nameEn": "가디안 ex",
+          "ref": "ko:SV1S_028"
+        },
+        {
+          "count": 1,
+          "nameEn": "가디안",
+          "ref": "ko:S8b_196"
+        },
+        {
+          "count": 4,
+          "nameEn": "배틀VIP패스",
+          "ref": "ko:S8_089"
+        },
+        {
+          "count": 4,
+          "nameEn": "레벨볼",
+          "ref": "ko:SVB_013"
+        },
+        {
+          "count": 3,
+          "nameEn": "안개의 수정",
+          "ref": "ko:SVB_015"
+        },
+        {
+          "count": 3,
+          "nameEn": "하이퍼볼",
+          "ref": "ko:SVB_005"
+        },
+        {
+          "count": 2,
+          "nameEn": "이상한사탕",
+          "ref": "ko:SVB_002"
+        },
+        {
+          "count": 1,
+          "nameEn": "친구수첩",
+          "ref": "ko:SV1S_070"
+        },
+        {
+          "count": 1,
+          "nameEn": "하늘의 봉인석",
+          "ref": "ko:S12a_147"
+        },
+        {
+          "count": 3,
+          "nameEn": "박사의 연구",
+          "ref": "ko:SVB_007"
+        },
+        {
+          "count": 1,
+          "nameEn": "저지맨",
+          "ref": "ko:SVC_021"
+        },
+        {
+          "count": 1,
+          "nameEn": "원규",
+          "ref": "ko:SVB_022"
+        },
+        {
+          "count": 1,
+          "nameEn": "작업원",
+          "ref": "ko:S12_096"
+        },
+        {
+          "count": 1,
+          "nameEn": "미모사",
+          "ref": "ko:SV1V_075"
+        },
+        {
+          "count": 1,
+          "nameEn": "보스의 지령",
+          "ref": "ko:SVB_020"
+        },
+        {
+          "count": 1,
+          "nameEn": "세레나",
+          "ref": "ko:SVB_021"
+        },
+        {
+          "count": 1,
+          "nameEn": "모란",
+          "ref": "ko:SV1S_074"
+        },
+        {
+          "count": 1,
+          "nameEn": "무너진 스타디움",
+          "ref": "ko:S12a_165"
+        },
+        {
+          "count": 1,
+          "nameEn": "신오신전",
+          "ref": "ko:S12a_166"
+        },
+        {
+          "count": 12,
+          "nameEn": "기본 초 에너지",
+          "ref": "ko:SVB_033"
+        }
+      ]
+    },
+    {
       "id": "dragapult_gdansk",
       "name": "드래펄트 ex (국제)",
       "note": "Regional Gdańsk 2026-10-31 3위",
@@ -2805,6 +2957,182 @@
     "ko:SVB_031": {
       "nameEn": "기본 물 에너지",
       "ko": "SVB_031",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S11a_036": {
+      "nameEn": "랄토스",
+      "ko": "S11a_036",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S9a_032": {
+      "nameEn": "랄토스",
+      "ko": "S9a_032",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S10D_028": {
+      "nameEn": "크레세리아",
+      "ko": "S10D_028",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S8a_002": {
+      "nameEn": "뮤",
+      "ko": "S8a_002",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S12a_067": {
+      "nameEn": "자시안 V",
+      "ko": "S12a_067",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_008": {
+      "nameEn": "네오라이트 V",
+      "ko": "SVB_008",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S11a_037": {
+      "nameEn": "킬리아",
+      "ko": "S11a_037",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S8b_196": {
+      "nameEn": "가디안",
+      "ko": "S8b_196",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_013": {
+      "nameEn": "레벨볼",
+      "ko": "SVB_013",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_015": {
+      "nameEn": "안개의 수정",
+      "ko": "SVB_015",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_005": {
+      "nameEn": "하이퍼볼",
+      "ko": "SVB_005",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_002": {
+      "nameEn": "이상한사탕",
+      "ko": "SVB_002",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1S_070": {
+      "nameEn": "친구수첩",
+      "ko": "SV1S_070",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S12a_147": {
+      "nameEn": "하늘의 봉인석",
+      "ko": "S12a_147",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_007": {
+      "nameEn": "박사의 연구",
+      "ko": "SVB_007",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVC_021": {
+      "nameEn": "저지맨",
+      "ko": "SVC_021",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S12_096": {
+      "nameEn": "작업원",
+      "ko": "S12_096",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1V_075": {
+      "nameEn": "미모사",
+      "ko": "SV1V_075",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_021": {
+      "nameEn": "세레나",
+      "ko": "SVB_021",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SV1S_074": {
+      "nameEn": "모란",
+      "ko": "SV1S_074",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S12a_165": {
+      "nameEn": "무너진 스타디움",
+      "ko": "S12a_165",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S12a_166": {
+      "nameEn": "신오신전",
+      "ko": "S12a_166",
       "score": null,
       "tried": [
         "manual"

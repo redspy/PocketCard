@@ -283,6 +283,17 @@ static func estimate(bc: Dictionary, me: Dictionary, opp: Dictionary, s, i: int)
 			dmg = 20 * floori(float(s.damage) / 10)
 		"クルーエルアロー":
 			dmg = 100
+		"스톰슬래시", "브레인웨이브":
+			var att2 = s.get("attached")
+			if att2 == null:
+				att2 = []
+			var np := 0
+			for x in att2:
+				var xd = card(bc, x.code)
+				var xe = xd.get("energy") if xd != null else null
+				if xe != null and xe.get("type") == "P":
+					np += 1
+			dmg = 60 + 30 * np
 		_:
 			if not GCore.truthy(dmg) and GCore.truthy(a.get("text")):
 				dmg = 20
@@ -521,7 +532,16 @@ static func _aiMove(bc: Dictionary, st: Dictionary, view: Dictionary, rng: Array
 			return false
 		if ab == "サイコエンブレイス":
 			return act != null and actBest != null and GBot.missing(bc, act, actBest.cost).size() > 0 and n < 20
-		var drawy := ["さかてにとる", "リスタート", "ボーナスコイン", "ルナサイクル", "ていさつしれい"]
+		# 하늘의 봉인석 [스타오더]: 배틀의 기본 포켓몬 V 가 지금 기술로 상대 배틀의 VSTAR·VMAX 를 기절시킬 수 있을 때만
+		if GCore.truthy(a.input.get("tool")):
+			var adk = GBot._pk(GBot.top(bc, act))
+			var odk = GBot._pk(GBot.top(bc, oppAct))
+			if not is_same(s, act) or adk == null or adk.get("rule") != "V" or adk.stage != 0 or odk == null or (odk.get("rule") != "VSTAR" and odk.get("rule") != "VMAX"):
+				return false
+			return attacks0.any(func(m): return GBot.canKo(GBot.estimate(bc, me, opp, act, int(m.input.index)), oppAct))
+		if ab == "검의 포효":
+			return false   # 쓰면 차례가 끝남 → 맨 마지막에 (아래 7번 뒤)
+		var drawy := ["さかてにとる", "リスタート", "ボーナスコイン", "ルナサイクル", "ていさつしれい", "리파인"]
 		if lowDeck and drawy.has(ab if ab != null else ""):
 			return false
 		return true
@@ -667,4 +687,13 @@ static func _aiMove(bc: Dictionary, st: Dictionary, view: Dictionary, rng: Array
 	var stadium = _pick(acts, "stadium")
 	if stadium != null:
 		return strip(stadium)
+	# 자시안 V "검의 포효": 공격할 수 없는 차례의 끝에 (쓰면 차례가 끝남)
+	var sword = GCore.find_first(acts, func(a):
+		if a.kind != "ability" or GCore.truthy(a.input.get("tool")):
+			return false
+		var tg = a.get("target")
+		var spk = GBot._pk(GBot.top(bc, GBot.slotBySid(me, opp, tg if tg != null else "")))
+		return spk != null and spk.abilities.size() > 0 and spk.abilities[0].nameJa == "검의 포효")
+	if sword != null:
+		return strip(sword)
 	return strip(end) if end != null else null

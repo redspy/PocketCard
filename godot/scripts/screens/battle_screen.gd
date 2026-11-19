@@ -785,7 +785,23 @@ func tap_slot(sid: String) -> void:
 	if _is_mine(sid) and _slot_moves(sid).size() > 0:
 		open_popover(sid)
 	else:
+		if _is_mine(sid) and _my_turn():
+			var why := _ability_why(sid)
+			if why != "":
+				_toast(why)
 		zoom_slot(sid)
+
+## 내 포켓몬의 특성을 지금 못 쓰는 이유 (조건이 있는 특성만, 없으면 "")
+func _ability_why(sid: String) -> String:
+	var s = _slot_data(sid)
+	if s == null or s.get("stack") == null or (s.stack as Array).is_empty():
+		return ""
+	var pk = BData.card(str(s.stack[(s.stack as Array).size() - 1].code)).get("pokemon")
+	if not (pk is Dictionary) or (pk.get("abilities", []) as Array).is_empty():
+		return ""
+	var me := _me()
+	var is_active: bool = me.get("active") != null and str(me.active.sid) == sid
+	return BHint.ability_unusable(str(pk.abilities[0].get("name", "")), is_active)
 
 func _is_mine(sid: String) -> bool:
 	var me := _me()

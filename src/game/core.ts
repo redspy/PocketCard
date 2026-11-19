@@ -238,6 +238,8 @@ export function ask(ctx: Ctx, f: Frame, nextStep: number, player: Seat, kind: Re
 
 export const stadiumName = (ctx: Ctx) => (ctx.s.stadium ? nameOf(ctx, ctx.s.stadium) : null);
 export const toolsActive = (ctx: Ctx) => stadiumName(ctx) !== '재밍타워';
+/** 신오신전: 포켓몬에게 붙은 특수 에너지의 효과가 모두 없어지고 무색 1개분 */
+export const specialEnergyOff = (ctx: Ctx) => stadiumName(ctx) === '신오신전';
 export const toolOf = (ctx: Ctx, slot: PokemonSlot) => slot.attached.find((a) => dataOf(ctx, a).kind === 'trainer') ?? null;
 export const toolName = (ctx: Ctx, slot: PokemonSlot) => { const t = toolOf(ctx, slot); return t && toolsActive(ctx) ? nameOf(ctx, t) : null; };
 export const energiesOf = (ctx: Ctx, slot: PokemonSlot) => slot.attached.filter((a) => dataOf(ctx, a).kind === 'energy');
@@ -290,6 +292,7 @@ export function provided(ctx: Ctx, slot: PokemonSlot): EUnit[] {
   for (const e of ens) {
     const d = dataOf(ctx, e);
     if (d.energy?.basic && d.energy.type) { out.push(d.energy.type); continue; }
+    if (specialEnergyOff(ctx)) { out.push('C'); continue; }
     switch (d.name) {
       case '제트 에너지': case '캡쳐 에너지': out.push('C'); break;
       case '일격 에너지': out.push('FD'); break;
@@ -375,7 +378,7 @@ export function dealAttackDamage(ctx: Ctx, seat: Seat, atk: PokemonSlot, target:
     if (tool === '부스트에너지 미래' && ad.future) dmg += 20;
     if (hasAbility(ctx, atk, 'ふくがん') && td.abilities.length > 0) dmg += 50;
     // 일격 에너지: 붙인 포켓몬의 기술이 상대 배틀 포켓몬에게 주는 데미지 +20 (장마다)
-    dmg += 20 * energiesOf(ctx, atk).filter((e) => nameOf(ctx, e) === '일격 에너지').length;
+    if (!specialEnergyOff(ctx)) dmg += 20 * energiesOf(ctx, atk).filter((e) => nameOf(ctx, e) === '일격 에너지').length;
   }
   if (dmg <= 0) return 0;
   // 3) 약점 4) 저항력 (연출용으로 적용 여부를 사건에 남김)
