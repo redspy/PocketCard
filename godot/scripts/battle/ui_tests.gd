@@ -730,6 +730,20 @@ static func run_fx(host: Node) -> Array:
 			fails.append("연출 안 된 사건: %s" % need)
 	if Net.view.get("result") == null:
 		fails.append("연출 테스트: 게임이 끝나지 않음")
+	# 공격 연출 (docs/fx-hearthstone-review.md): 등급 경계, 기술 → 피해 충돌 동기화, 판 흔들림 후 제자리
+	for tc in [[10, false, 0], [30, false, 0], [40, false, 1], [90, false, 1], [100, false, 2], [190, false, 2], [200, false, 3], [10, true, 3]]:
+		if BFx.tier(tc[0], tc[1]) != tc[2]:
+			fails.append("피해 등급 %d%s → %d (기대 %d)" % [tc[0], " 기절" if tc[1] else "", BFx.tier(tc[0], tc[1]), tc[2]])
+	var imp: Array = s.fx.impacts
+	var synced := imp.filter(func(x): return x.synced).size()
+	var tiers := {}
+	for x in imp:
+		tiers[int(x.tier)] = int(tiers.get(int(x.tier), 0)) + 1
+	if synced == 0:
+		fails.append("기술과 피해가 한 번도 동기화되지 않음 (충돌 %d번)" % imp.size())
+	if s.board.position != Vector2.ZERO:
+		fails.append("판 흔들림 뒤 판이 제자리가 아님 %s" % s.board.position)
+	print("[ui-tests] 공격 연출: 충돌 %d번 (기술과 동기화 %d), 등급별 %s" % [imp.size(), synced, JSON.stringify(tiers)])
 	print("[ui-tests] 연출(2배속): %.0f초, 연출 후 검사 %d번, 재생 %s" % [(Time.get_ticks_msec() - t0) / 1000.0, idle_checks, JSON.stringify(c)])
 	s.queue_free()
 	await _frames(host)

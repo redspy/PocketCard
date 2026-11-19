@@ -1179,6 +1179,22 @@ func open_menu() -> void:
 		b.set_meta("item", it[0])
 		b.tapped.connect(it[1])
 		col.add_child(b)
+	# 연출 설정: 큰 피해 때 판 흔들림·진동 (끄면 user://fx.json 에 저장)
+	BFx.load_settings()
+	for st in [["shake", "화면 흔들림"], ["vibrate", "진동"]]:
+		var key: String = st[0]
+		var on: bool = BFx.shake_on if key == "shake" else BFx.vibrate_on
+		var sb := UI.button("%s: %s" % [st[1], "켜짐" if on else "꺼짐"], 26)
+		sb.set_meta("item", key)
+		sb.tapped.connect(func():
+			if key == "shake":
+				BFx.shake_on = not BFx.shake_on
+			else:
+				BFx.vibrate_on = not BFx.vibrate_on
+			BFx.save_settings()
+			var now_on: bool = BFx.shake_on if key == "shake" else BFx.vibrate_on
+			(sb.get_meta("label") as Label).text = "%s: %s" % [st[1], "켜짐" if now_on else "꺼짐"])
+		col.add_child(sb)
 	if actions().any(func(m): return m.kind == "concede"):
 		var cb := UI.button("항복", 26)
 		cb.set_meta("item", "항복")
