@@ -5,7 +5,7 @@ import type { CardDB } from './cardData.ts';
 
 type RawPrint = { code: string; reg?: string; special?: boolean };
 type RawCard = { id?: string; code: string; name: string; count: number; kind: DeckCardDef['kind']; basic: boolean; prints?: RawPrint[] };
-type RawDeck = { id: string; name: string; cover?: string; total: number; cards: RawCard[] };
+type RawDeck = { id: string; name: string; cover?: string; total: number; cards: RawCard[]; playable?: boolean };
 export type RawDecks = { decks: RawDeck[] };
 
 export type CatalogCard = { id: string; code: string; name: string; count: number; kind: DeckCardDef['kind']; basic: boolean; prints: string[] };
@@ -29,7 +29,8 @@ function hash(text: string): string {
 }
 
 export function buildCatalog(raw: RawDecks): Catalog {
-  const decks: CatalogDeck[] = raw.decks.map((d) => ({
+  // playable: false = 덱 뷰어 전용 (대전 규칙 준비 중) — 대전 카탈로그·데이터 버전에서 뺀다
+  const decks: CatalogDeck[] = raw.decks.filter((d) => d.playable !== false).map((d) => ({
     id: d.id, name: d.name, cover: d.cover ?? d.cards[0]?.code ?? '',
     cards: d.cards.map((c) => ({
       id: c.id ?? c.code, code: c.code, name: c.name, count: c.count, kind: c.kind, basic: !!c.basic,

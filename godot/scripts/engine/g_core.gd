@@ -111,7 +111,7 @@ static func prizeValue(c) -> int:
 	if c == null or not (c as Dictionary).has("pokemon"):
 		return 1
 	var rule = c.pokemon.get("rule")
-	return 3 if rule == "mega" else (2 if rule == "ex" else 1)
+	return 3 if (rule == "mega" or rule == "VMAX") else (2 if truthy(rule) else 1)
 
 # ───────────────────────── 카드 조회 ─────────────────────────
 
@@ -173,6 +173,7 @@ static func locate(s: Dictionary, iid: String):
 		if p.hand.has(iid): return { "player": seat, "zone": "hand" }
 		if p.prizes.has(iid): return { "player": seat, "zone": "prizes" }
 		if p.discard.has(iid): return { "player": seat, "zone": "discard" }
+		if p.lost.has(iid): return { "player": seat, "zone": "lost" }
 		if p.active != null and (p.active.stack.has(iid) or p.active.attached.has(iid)): return { "player": seat, "zone": "active" }
 		for b in p.bench:
 			if b.stack.has(iid) or b.attached.has(iid):
@@ -197,6 +198,7 @@ static func removeFrom(ctx: Dictionary, s: Dictionary, iid: String):
 		"hand": _drop(p.hand, iid)
 		"prizes": p.prizes[p.prizes.find(iid)] = null
 		"discard": _drop(p.discard, iid)
+		"lost": _drop(p.lost, iid)
 		"stadium": s.stadium = null
 		"reveal": _drop(s.using, iid)
 		"active", "bench":
@@ -255,6 +257,9 @@ static func moveCard(ctx: Dictionary, iid: String, dest: Dictionary) -> String:
 		"discard":
 			s.players[dest.player].discard.append(nid)
 			to = { "player": dest.player, "zone": "discard" }
+		"lost":
+			s.players[dest.player].lost.append(nid)
+			to = { "player": dest.player, "zone": "lost" }
 		"prizes":
 			s.players[dest.player].prizes[dest.index] = nid
 			to = { "player": dest.player, "zone": "prizes" }
@@ -408,6 +413,9 @@ static func abilityActive(ctx: Dictionary, slot: Dictionary) -> bool:
 	var d := slotData(ctx, slot)
 	if _abilities(d).is_empty() or slot.faceDown:
 		return false
+	# 정상으로 가는 눈길: 서로의 룰을 가진 포켓몬의 특성은 모두 없어진다
+	if d.pokemon.rule != null and stadiumName(ctx) == "정상으로 가는 눈길":
+		return false
 	if d.pokemon.stage != 0 or d.pokemon.abilities[0].nameJa == "いたずらロック":
 		return true
 	for seat in [0, 1]:
@@ -469,7 +477,8 @@ static func provided(ctx: Dictionary, slot: Dictionary) -> Array:
 			out.append(d.energy.type)
 			continue
 		match d.name:
-			"제트 에너지": out.append("C")
+			"제트 에너지", "캡쳐 에너지": out.append("C")
+			"일격 에너지": out.append("FD")
 			"루미너스 에너지": out.append("C" if specials.size() > 1 else "*")
 			"네오 어퍼 에너지":
 				if stage == 2:
@@ -488,6 +497,8 @@ static func canPay(units: Array, cost: Array) -> bool:
 	for t in specific:
 		var i := pool.find(t)
 		if i < 0:
+			i = find_index(pool, func(u): return String(u).length() == 2 and String(u).contains(t))
+		if i < 0:
 			i = pool.find("*")
 		if i < 0:
 			return false
@@ -504,6 +515,20 @@ static func attackCost(ctx: Dictionary, slot: Dictionary, seat: int, cost: Array
 			c.remove_at(i)
 		else:
 			c.pop_back()
+	# 윽우지 "로스트 프로바이드": 로스트존 4장 이상이면 기술 에너지가 모두 없어짐
+	if hasAbility(ctx, slot, "로스트 프로바이드") and ctx.s.players[seat].lost.size() >= 4:
+		return []
+	# 드래피온 V "와일드스타일": 상대 필드의 일격·연격·퓨전 포켓몬 수만큼 무색 에너지가 적어짐
+	if hasAbility(ctx, slot, "와일드스타일"):
+		var n := slotsOf(ctx.s, other(seat)).filter(func(sl):
+			if sl.faceDown:
+				return false
+			var tg = GCore.slotData(ctx, sl).get("tags")
+			return tg != null and (tg as Array).any(func(t): return t == "일격" or t == "연격" or t == "퓨전")).size()
+		for k in n:
+			var j := c.rfind("C")
+			if j >= 0:
+				c.remove_at(j)
 	if attack_ja == "ブラッドムーン" and hasAbility(ctx, slot, "ろうれんのわざ"):
 		var taken := prizesTaken(ctx.s, other(seat))
 		for k in taken:
@@ -511,6 +536,9 @@ static func attackCost(ctx: Dictionary, slot: Dictionary, seat: int, cost: Array
 			if j >= 0:
 				c.remove_at(j)
 	return c
+
+static func lostCount(s: Dictionary, seat: int) -> int:
+	return s.players[seat].lost.size()
 
 static func prizesLeft(s: Dictionary, seat: int) -> int:
 	return s.players[seat].prizes.filter(func(x): return GCore.truthy(x)).size()
@@ -528,7 +556,8 @@ static func slotHasEffect(slot: Dictionary, kind: String) -> bool:
 
 ## 기술 데미지를 준다 (규칙서 데미지 계산 순서).
 ## base: 기술 데미지(+, × 반영 후), wr: 약점·저항력 계산 여부(상대 배틀 포켓몬에게만 true)
-static func dealAttackDamage(ctx: Dictionary, seat: int, atk: Dictionary, target: Dictionary, base: int, wr: bool) -> int:
+## opts: { ignoreEffects?, noWeak? }
+static func dealAttackDamage(ctx: Dictionary, seat: int, atk: Dictionary, target: Dictionary, base: int, wr: bool, opts: Dictionary = {}) -> int:
 	var s: Dictionary = ctx.s
 	var t_owner := ownerOfSlot(s, target)
 	var t_active := isActive(s, target)
@@ -542,6 +571,10 @@ static func dealAttackDamage(ctx: Dictionary, seat: int, atk: Dictionary, target
 		note(ctx, "%s: 테라스탈 — 벤치에서는 기술 데미지를 받지 않음" % slotName(ctx, target))
 		return 0
 	var on_opp_active := t_active and t_owner != seat
+	# 뮤 "벤치배리어"·마나피 "파도의 베일": 상대 기술로 벤치 포켓몬은 데미지를 받지 않는다
+	if not t_active and t_owner != seat and (fieldHasAbility(ctx, t_owner, "벤치배리어") or fieldHasAbility(ctx, t_owner, "파도의 베일")):
+		note(ctx, "%s: 벤치 포켓몬은 상대 기술의 데미지를 받지 않음" % slotName(ctx, target))
+		return 0
 	# 2) 공격하는 쪽 효과
 	if on_opp_active:
 		var t_rule: bool = td.rule != null
@@ -556,6 +589,8 @@ static func dealAttackDamage(ctx: Dictionary, seat: int, atk: Dictionary, target
 			dmg += 20
 		if hasAbility(ctx, atk, "ふくがん") and td.abilities.size() > 0:
 			dmg += 50
+		# 일격 에너지: 붙인 포켓몬의 기술이 상대 배틀 포켓몬에게 주는 데미지 +20 (장마다)
+		dmg += 20 * energiesOf(ctx, atk).filter(func(e): return GCore.nameOf(ctx, e) == "일격 에너지").size()
 	if dmg <= 0:
 		return 0
 	# 3) 약점 4) 저항력 (연출용으로 적용 여부를 사건에 남김)
@@ -564,16 +599,16 @@ static func dealAttackDamage(ctx: Dictionary, seat: int, atk: Dictionary, target
 	if wr and on_opp_active:
 		# 릴리에의 삐삐 ex "페어리존": 상대 필드의 드래곤 타입 포켓몬의 약점은 초 타입
 		var weak = "P" if (td.type == "N" and fieldHasAbility(ctx, seat, "フェアリーゾーン")) else td.weak
-		if truthy(weak) and weak == ad.type:
+		if truthy(weak) and weak == ad.type and not truthy(opts.get("noWeak")):
 			dmg *= 2
 			w_hit = true
 		if truthy(td.resist) and td.resist == ad.type:
-			dmg -= 30
+			dmg -= int(td.get("resistValue", 30)) if td.get("resistValue") != null else 30
 			r_hit = true
 		if dmg <= 0:
 			return 0
-	# 5) 받는 쪽 효과
-	if t_owner != seat:
+	# 5) 받는 쪽 효과 ("상대 배틀 포켓몬에게 걸려 있는 효과를 계산하지 않는" 기술은 건너뜀)
+	if t_owner != seat and not (truthy(opts.get("ignoreEffects")) and t_active):
 		if slotHasEffect(target, "reduce30"):
 			dmg -= 30
 		if hasAbility(ctx, target, "ダイヤコート"):

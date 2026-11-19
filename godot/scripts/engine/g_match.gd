@@ -81,6 +81,8 @@ static func buildCatalog(raw: Dictionary) -> Dictionary:
 	var decks: Array = []
 	var basics := {}
 	for d in raw.decks:
+		if d.get("playable", true) == false:
+			continue   # 덱 뷰어 전용 (대전 규칙 준비 중)
 		var cards: Array = []
 		for c in d.cards:
 			var prints: Array = []

@@ -21,8 +21,8 @@ test('난수: 같은 시드면 같은 결과, 셔플은 순열', () => {
   assert.deepEqual([...arr].sort((p, q) => p - q), Array.from({ length: 60 }, (_, i) => i));
 });
 
-test('덱 데이터: 6개 덱 모두 60장, 기본 포켓몬 있음', () => {
-  assert.equal(deckIds.length, 6);
+test('덱 데이터: 8개 덱 모두 60장, 기본 포켓몬 있음', () => {
+  assert.equal(deckIds.length, 8);
   for (const id of deckIds) {
     const g = createGame(config(seedOf(3), id, id), info).state;
     assert.equal(g.players[0].deck.length, 60, id);
@@ -31,7 +31,7 @@ test('덱 데이터: 6개 덱 모두 60장, 기본 포켓몬 있음', () => {
 
 test('셋업: 코인 → 선공 선택 → 7장 → 배틀/벤치 → 사이드 6장 → 선공 첫 턴 드로우', () => {
   for (let k = 0; k < 30; k++) {
-    const a = deckIds[k % 6], b = deckIds[(k * 5 + 1) % 6];
+    const a = deckIds[k % deckIds.length], b = deckIds[(k * 5 + 1) % deckIds.length];
     const run = playRandom(seedOf(100 + k), a, b, 60);
     const s = run.states.find((x) => x.phase !== 'setup');
     assert.ok(s, `셋업이 끝나지 않음 (${a} vs ${b})`);
@@ -49,7 +49,7 @@ test('셋업: 코인 → 선공 선택 → 7장 → 배틀/벤치 → 사이드 
 
 test('불변식: 무작위 플레이 내내 카드 60장 보존, iid 중복 없음', () => {
   for (let k = 0; k < 40; k++) {
-    const run = playRandom(seedOf(500 + k), deckIds[k % 6], deckIds[(k + 2) % 6]);
+    const run = playRandom(seedOf(500 + k), deckIds[k % deckIds.length], deckIds[(k + 2) % deckIds.length]);
     for (const s of run.states) checkInvariants(s, [60, 60]);
   }
 });
@@ -65,7 +65,7 @@ test('누출: 숨겨진 카드를 뒤섞어도 각 시점의 보기는 같다 (�
   const r = seedRng(seedOf(9));
   let checked = 0;
   for (let k = 0; k < 25; k++) {
-    const run = playRandom(seedOf(900 + k), deckIds[k % 6], deckIds[(k + 3) % 6], 150);
+    const run = playRandom(seedOf(900 + k), deckIds[k % deckIds.length], deckIds[(k + 3) % deckIds.length], 150);
     run.states.forEach((s, i) => {
       for (const v of [0, 1, 'board'] as const) {
         checkNoLeak(s, v, r);

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-17T15:08:59.779Z",
+  "generated": "2026-11-19T14:45:01.084Z",
   "cards": [
     {
       "code": "SV7_076",
@@ -997,7 +997,8 @@
         "flareon": 1,
         "charizard": 2,
         "dragapult": 4,
-        "gardevoir": 4
+        "gardevoir": 4,
+        "giratina": 2
       },
       "rules": {
         "jp": "SV2D-069",
@@ -2006,7 +2007,8 @@
       "kind": "trainer",
       "decks": {
         "charizard": 1,
-        "gardevoir": 1
+        "gardevoir": 1,
+        "giratina": 2
       },
       "rules": {
         "jp": "SV2P-066",
@@ -2092,7 +2094,8 @@
       "name": "제트 에너지",
       "kind": "energy",
       "decks": {
-        "charizard": 2
+        "charizard": 2,
+        "giratina": 2
       },
       "rules": {
         "jp": "SV1a-072",
@@ -2765,7 +2768,8 @@
       "name": "기본 격투 에너지",
       "kind": "energy",
       "decks": {
-        "gholdengo": 7
+        "gholdengo": 7,
+        "umbreon": 3
       },
       "rules": null
     },
@@ -4872,6 +4876,931 @@
         "effect": "自分の山札から、それぞれちがうタイプの基本エネルギーを2枚まで選び、相手に見せて、どちらか1枚を手札に加え、残りのエネルギーを自分のポケモンにつける。そして山札を切る。",
         "rarity": "None"
       }
+    },
+    {
+      "code": "SGG_004",
+      "name": "델빌",
+      "kind": "pokemon",
+      "decks": {
+        "umbreon": 4
+      },
+      "rules": null
+    },
+    {
+      "code": "SM12_035",
+      "name": "춤추새 GX",
+      "kind": "pokemon",
+      "decks": {
+        "umbreon": 1
+      },
+      "rules": null
+    },
+    {
+      "code": "SM12a_055",
+      "name": "뮤",
+      "kind": "pokemon",
+      "decks": {
+        "umbreon": 1
+      },
+      "rules": null
+    },
+    {
+      "code": "SGG_005",
+      "name": "헬가",
+      "kind": "pokemon",
+      "decks": {
+        "umbreon": 4
+      },
+      "rules": null
+    },
+    {
+      "code": "S5I_036",
+      "name": "일격 우라오스 V",
+      "kind": "pokemon",
+      "decks": {
+        "umbreon": 2
+      },
+      "rules": {
+        "jp": "S5I-036",
+        "name": "いちげきウーラオスV",
+        "category": "Pokemon",
+        "stage": "Basic",
+        "hp": 220,
+        "types": [
+          "Fighting"
+        ],
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "E",
+        "abilities": [],
+        "attacks": [
+          {
+            "cost": [
+              "Fighting"
+            ],
+            "name": "とぎすます",
+            "damage": null,
+            "effect": "自分の山札から[闘]エネルギーを2枚まで選び、このポケモンにつける。そして山札を切る。"
+          },
+          {
+            "cost": [
+              "Fighting",
+              "Fighting",
+              "Colorless"
+            ],
+            "name": "インパクトブロー",
+            "damage": 180,
+            "effect": "次の自分の番、このポケモンは「インパクトブロー」が使えない。"
+          }
+        ],
+        "weaknesses": [
+          {
+            "type": "Psychic",
+            "value": "x2"
+          }
+        ],
+        "resistances": [],
+        "retreat": 2,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "Double rare"
+      }
+    },
+    {
+      "code": "S5I_037",
+      "name": "일격 우라오스 VMAX",
+      "kind": "pokemon",
+      "decks": {
+        "umbreon": 2
+      },
+      "rules": {
+        "jp": "S5I-037",
+        "name": "いちげきウーラオスVMAX",
+        "category": "Pokemon",
+        "stage": "VMAX",
+        "hp": 330,
+        "types": [
+          "Fighting"
+        ],
+        "evolveFrom": "いちげきウーラオスV",
+        "suffix": null,
+        "regulationMark": "E",
+        "abilities": [],
+        "attacks": [
+          {
+            "cost": [
+              "Colorless",
+              "Colorless",
+              "Colorless"
+            ],
+            "name": "せいけんづき",
+            "damage": 100,
+            "effect": null
+          },
+          {
+            "cost": [
+              "Fighting",
+              "Fighting",
+              "Fighting",
+              "Colorless"
+            ],
+            "name": "キョダイイチゲキ",
+            "damage": 270,
+            "effect": "このポケモンについているエネルギーを、すべてトラッシュする。このワザのダメージは、相手のバトルポケモンにかかっている効果を計算しない。"
+          }
+        ],
+        "weaknesses": [
+          {
+            "type": "Psychic",
+            "value": "x2"
+          }
+        ],
+        "resistances": [],
+        "retreat": 3,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "Triple Rare"
+      }
+    },
+    {
+      "code": "S6a_047",
+      "name": "블래키 V",
+      "kind": "pokemon",
+      "decks": {
+        "umbreon": 3
+      },
+      "rules": null
+    },
+    {
+      "code": "S6a_048",
+      "name": "블래키 VMAX",
+      "kind": "pokemon",
+      "decks": {
+        "umbreon": 2
+      },
+      "rules": null
+    },
+    {
+      "code": "SGG_009",
+      "name": "퀵볼",
+      "kind": "trainer",
+      "decks": {
+        "umbreon": 4
+      },
+      "rules": null
+    },
+    {
+      "code": "SM9_081",
+      "name": "포켓몬통신",
+      "kind": "trainer",
+      "decks": {
+        "umbreon": 2
+      },
+      "rules": {
+        "jp": "SM9-082",
+        "name": "ポケモン通信",
+        "category": "Trainer",
+        "stage": null,
+        "hp": null,
+        "types": null,
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "C",
+        "abilities": [],
+        "attacks": [],
+        "weaknesses": null,
+        "resistances": null,
+        "retreat": null,
+        "trainerType": "Item",
+        "energyType": null,
+        "effect": "自分の手札からポケモンを1枚選び、相手に見せてから、山札にもどす。もどした場合、自分の山札からポケモンを1枚選び、相手に見せてから、手札に加える。そして山札を切る。",
+        "rarity": "Uncommon"
+      }
+    },
+    {
+      "code": "SGG_008",
+      "name": "진화향로",
+      "kind": "trainer",
+      "decks": {
+        "umbreon": 2
+      },
+      "rules": null
+    },
+    {
+      "code": "SGG_011",
+      "name": "포켓몬 교체",
+      "kind": "trainer",
+      "decks": {
+        "umbreon": 2
+      },
+      "rules": null
+    },
+    {
+      "code": "SGG_012",
+      "name": "활력의 항아리",
+      "kind": "trainer",
+      "decks": {
+        "umbreon": 4
+      },
+      "rules": null
+    },
+    {
+      "code": "S4a_171",
+      "name": "풍선",
+      "kind": "trainer",
+      "decks": {
+        "umbreon": 2
+      },
+      "rules": null
+    },
+    {
+      "code": "S4a_160",
+      "name": "보통낚싯대",
+      "kind": "trainer",
+      "decks": {
+        "umbreon": 1
+      },
+      "rules": null
+    },
+    {
+      "code": "SGG_015",
+      "name": "박사의 연구",
+      "kind": "trainer",
+      "decks": {
+        "umbreon": 4
+      },
+      "rules": null
+    },
+    {
+      "code": "SGI_016",
+      "name": "마리",
+      "kind": "trainer",
+      "decks": {
+        "umbreon": 3
+      },
+      "rules": null
+    },
+    {
+      "code": "SGI_019",
+      "name": "보스의 지령",
+      "kind": "trainer",
+      "decks": {
+        "umbreon": 2
+      },
+      "rules": null
+    },
+    {
+      "code": "SM9_085",
+      "name": "민화의 대접",
+      "kind": "trainer",
+      "decks": {
+        "umbreon": 1
+      },
+      "rules": null
+    },
+    {
+      "code": "SGG_018",
+      "name": "악의 탑",
+      "kind": "trainer",
+      "decks": {
+        "umbreon": 3
+      },
+      "rules": null
+    },
+    {
+      "code": "SGG_019",
+      "name": "일격 에너지",
+      "kind": "energy",
+      "decks": {
+        "umbreon": 4
+      },
+      "rules": null
+    },
+    {
+      "code": "S4a_189",
+      "name": "캡쳐 에너지",
+      "kind": "energy",
+      "decks": {
+        "umbreon": 4
+      },
+      "rules": null
+    },
+    {
+      "code": "S12a_064",
+      "name": "큐아링",
+      "kind": "pokemon",
+      "decks": {
+        "giratina": 4
+      },
+      "rules": {
+        "jp": "S12a-064",
+        "name": "キュワワー",
+        "category": "Pokemon",
+        "stage": "Basic",
+        "hp": 70,
+        "types": [
+          "Psychic"
+        ],
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [
+          {
+            "type": "Ability",
+            "name": "はなえらび",
+            "effect": "このポケモンがバトル場にいるなら、自分の番に1回使える。自分の山札を上から2枚見て、どちらか1枚を選び、手札に加える。残りのカードはロストゾーンに置く。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Psychic",
+              "Colorless"
+            ],
+            "name": "かいてんアタック",
+            "damage": 30,
+            "effect": null
+          }
+        ],
+        "weaknesses": [
+          {
+            "type": "Metal",
+            "value": "x2"
+          }
+        ],
+        "resistances": [],
+        "retreat": 1,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "None"
+      }
+    },
+    {
+      "code": "S11_033",
+      "name": "윽우지",
+      "kind": "pokemon",
+      "decks": {
+        "giratina": 1
+      },
+      "rules": {
+        "jp": "S11-033",
+        "name": "ウッウ",
+        "category": "Pokemon",
+        "stage": "Basic",
+        "hp": 110,
+        "types": [
+          "Water"
+        ],
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [
+          {
+            "type": "Ability",
+            "name": "ロストプロバイド",
+            "effect": "自分のロストゾーンにカードが4枚以上あるなら、このポケモンがワザを使うためのエネルギーは、すべてなくなる。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Water",
+              "Water",
+              "Colorless"
+            ],
+            "name": "おとぼけスピット",
+            "damage": 110,
+            "effect": "このワザのダメージは弱点を計算しない。"
+          }
+        ],
+        "weaknesses": [
+          {
+            "type": "Lightning",
+            "value": "x2"
+          }
+        ],
+        "resistances": [],
+        "retreat": 1,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "Uncommon"
+      }
+    },
+    {
+      "code": "S11_044",
+      "name": "깜까미",
+      "kind": "pokemon",
+      "decks": {
+        "giratina": 2
+      },
+      "rules": {
+        "jp": "S11-044",
+        "name": "ヤミラミ",
+        "category": "Pokemon",
+        "stage": "Basic",
+        "hp": 80,
+        "types": [
+          "Psychic"
+        ],
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [],
+        "attacks": [
+          {
+            "cost": [
+              "Colorless"
+            ],
+            "name": "ひっかく",
+            "damage": 20,
+            "effect": null
+          },
+          {
+            "cost": [
+              "Psychic"
+            ],
+            "name": "ロストマイン",
+            "damage": null,
+            "effect": "このワザは、自分のロストゾーンにカードが10枚以上あるときにしか使えない。ダメカン12個を、相手のポケモンに好きなようにのせる。"
+          }
+        ],
+        "weaknesses": [
+          {
+            "type": "Darkness",
+            "value": "x2"
+          }
+        ],
+        "resistances": [
+          {
+            "type": "Fighting",
+            "value": "-30"
+          }
+        ],
+        "retreat": 1,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "Rare"
+      }
+    },
+    {
+      "code": "S12a_033",
+      "name": "찬란한 개굴닌자",
+      "kind": "pokemon",
+      "decks": {
+        "giratina": 1
+      },
+      "rules": {
+        "jp": "S12a-033",
+        "name": "かがやくゲッコウガ",
+        "category": "Pokemon",
+        "stage": "Basic",
+        "hp": 130,
+        "types": [
+          "Water"
+        ],
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [
+          {
+            "type": "Ability",
+            "name": "かくしふだ",
+            "effect": "自分の番に、自分の手札からエネルギーを1枚トラッシュするなら、1回使える。自分の山札を2枚引く。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Water",
+              "Water",
+              "Colorless"
+            ],
+            "name": "げっこうしゅりけん",
+            "damage": null,
+            "effect": "このポケモンについているエネルギーを2個トラッシュし、相手のポケモン2匹に、それぞれ90ダメージ。［ベンチは弱点・抵抗力を計算しない。］"
+          }
+        ],
+        "weaknesses": [
+          {
+            "type": "Lightning",
+            "value": "x2"
+          }
+        ],
+        "resistances": [],
+        "retreat": 1,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "Radiant Rare"
+      }
+    },
+    {
+      "code": "S12a_029",
+      "name": "마나피",
+      "kind": "pokemon",
+      "decks": {
+        "giratina": 1
+      },
+      "rules": {
+        "jp": "S12a-029",
+        "name": "マナフィ",
+        "category": "Pokemon",
+        "stage": "Basic",
+        "hp": 70,
+        "types": [
+          "Water"
+        ],
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [
+          {
+            "type": "Ability",
+            "name": "なみのヴェール",
+            "effect": "このポケモンがいるかぎり、自分のベンチポケモン全員は、相手のワザのダメージを受けない。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Water"
+            ],
+            "name": "みずかけ",
+            "damage": 20,
+            "effect": null
+          }
+        ],
+        "weaknesses": [
+          {
+            "type": "Lightning",
+            "value": "x2"
+          }
+        ],
+        "resistances": [],
+        "retreat": 1,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "None"
+      }
+    },
+    {
+      "code": "S12a_110",
+      "name": "기라티나 V",
+      "kind": "pokemon",
+      "decks": {
+        "giratina": 3
+      },
+      "rules": {
+        "jp": "S12a-110",
+        "name": "ギラティナV",
+        "category": "Pokemon",
+        "stage": "Basic",
+        "hp": 220,
+        "types": [
+          "Dragon"
+        ],
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [],
+        "attacks": [
+          {
+            "cost": [
+              "Colorless"
+            ],
+            "name": "アビスシーク",
+            "damage": null,
+            "effect": "自分の山札を上から4枚見て、その中からカードを2枚選び、手札に加える。残りのカードはロストゾーンに置く。"
+          },
+          {
+            "cost": [
+              "Grass",
+              "Psychic",
+              "Colorless"
+            ],
+            "name": "ひきさく",
+            "damage": 160,
+            "effect": "このワザのダメージは、相手のバトルポケモンにかかっている効果を計算しない。"
+          }
+        ],
+        "weaknesses": [],
+        "resistances": [],
+        "retreat": 2,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "Double rare"
+      }
+    },
+    {
+      "code": "S12a_085",
+      "name": "드래피온 V",
+      "kind": "pokemon",
+      "decks": {
+        "giratina": 1
+      },
+      "rules": {
+        "jp": "S12a-085",
+        "name": "ドラピオンV",
+        "category": "Pokemon",
+        "stage": "Basic",
+        "hp": 210,
+        "types": [
+          "Darkness"
+        ],
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [
+          {
+            "type": "Ability",
+            "name": "ワイルドスタイル",
+            "effect": "相手の場の「いちげき」「れんげき」「フュージョン」のポケモンの数ぶん、このポケモンがワザを使うための[C]エネルギーは少なくなる。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Colorless",
+              "Colorless",
+              "Colorless",
+              "Colorless"
+            ],
+            "name": "ダイナミックテール",
+            "damage": 190,
+            "effect": "自分のポケモン1匹にも、60ダメージ。［ベンチは弱点・抵抗力を計算しない。］"
+          }
+        ],
+        "weaknesses": [
+          {
+            "type": "Fighting",
+            "value": "x2"
+          }
+        ],
+        "resistances": [],
+        "retreat": 2,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "Double rare"
+      }
+    },
+    {
+      "code": "S12a_111",
+      "name": "기라티나 VSTAR",
+      "kind": "pokemon",
+      "decks": {
+        "giratina": 3
+      },
+      "rules": {
+        "jp": "S12a-111",
+        "name": "ギラティナVSTAR",
+        "category": "Pokemon",
+        "stage": "VSTAR",
+        "hp": 280,
+        "types": [
+          "Dragon"
+        ],
+        "evolveFrom": "ギラティナV",
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [],
+        "attacks": [
+          {
+            "cost": [
+              "Grass",
+              "Psychic",
+              "Colorless"
+            ],
+            "name": "ロストインパクト",
+            "damage": 280,
+            "effect": "自分の場のポケモンについているエネルギーを2個選び、ロストゾーンに置く。"
+          },
+          {
+            "cost": [
+              "Grass",
+              "Psychic"
+            ],
+            "name": "スターレクイエム",
+            "damage": null,
+            "effect": "このワザは、自分のロストゾーンにカードが10枚以上あるときにしか使えない。相手のバトルポケモンをきぜつさせる。［対戦中、自分はVSTARパワーを1回しか使えない。］"
+          }
+        ],
+        "weaknesses": [],
+        "resistances": [],
+        "retreat": 2,
+        "trainerType": null,
+        "energyType": null,
+        "effect": null,
+        "rarity": "Triple Rare"
+      }
+    },
+    {
+      "code": "S8_089",
+      "name": "배틀VIP패스",
+      "kind": "trainer",
+      "decks": {
+        "giratina": 4
+      },
+      "rules": {
+        "jp": "S8-091",
+        "name": "バトルVIPパス",
+        "category": "Trainer",
+        "stage": null,
+        "hp": null,
+        "types": null,
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "E",
+        "abilities": [],
+        "attacks": [],
+        "weaknesses": null,
+        "resistances": null,
+        "retreat": null,
+        "trainerType": "Item",
+        "energyType": null,
+        "effect": "このカードは、最初の自分の番にしか使えない。自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
+        "rarity": "Uncommon"
+      }
+    },
+    {
+      "code": "SVB_001",
+      "name": "네스트볼",
+      "kind": "trainer",
+      "decks": {
+        "giratina": 3
+      },
+      "rules": null
+    },
+    {
+      "code": "S12a_139",
+      "name": "미라주게이트",
+      "kind": "trainer",
+      "decks": {
+        "giratina": 4
+      },
+      "rules": {
+        "jp": "S12a-141",
+        "name": "ミラージュゲート",
+        "category": "Trainer",
+        "stage": null,
+        "hp": null,
+        "types": null,
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [],
+        "attacks": [],
+        "weaknesses": null,
+        "resistances": null,
+        "retreat": null,
+        "trainerType": "Item",
+        "energyType": null,
+        "effect": "このカードは、自分のロストゾーンにカードが7枚以上あるときにしか使えない。 自分の山札から、それぞれちがうタイプの基本エネルギーを2枚まで選び、自分のポケモンに好きなようにつける。そして山札を切る。",
+        "rarity": "None"
+      }
+    },
+    {
+      "code": "S10D_060",
+      "name": "교체카트",
+      "kind": "trainer",
+      "decks": {
+        "giratina": 2
+      },
+      "rules": null
+    },
+    {
+      "code": "SI_364",
+      "name": "동굴탈출로프",
+      "kind": "trainer",
+      "decks": {
+        "giratina": 2
+      },
+      "rules": null
+    },
+    {
+      "code": "SVB_004",
+      "name": "포켓몬 교체",
+      "kind": "trainer",
+      "decks": {
+        "giratina": 1
+      },
+      "rules": null
+    },
+    {
+      "code": "SVB_014",
+      "name": "로스트스위퍼",
+      "kind": "trainer",
+      "decks": {
+        "giratina": 1
+      },
+      "rules": null
+    },
+    {
+      "code": "SVB_016",
+      "name": "히스이의 헤비볼",
+      "kind": "trainer",
+      "decks": {
+        "giratina": 1
+      },
+      "rules": null
+    },
+    {
+      "code": "SVB_003",
+      "name": "포켓기어3.0",
+      "kind": "trainer",
+      "decks": {
+        "giratina": 1
+      },
+      "rules": null
+    },
+    {
+      "code": "S12a_155",
+      "name": "아크로마의 실험",
+      "kind": "trainer",
+      "decks": {
+        "giratina": 4
+      },
+      "rules": {
+        "jp": "S12a-148",
+        "name": "アクロマの実験",
+        "category": "Trainer",
+        "stage": null,
+        "hp": null,
+        "types": null,
+        "evolveFrom": null,
+        "suffix": null,
+        "regulationMark": "F",
+        "abilities": [],
+        "attacks": [],
+        "weaknesses": null,
+        "resistances": null,
+        "retreat": null,
+        "trainerType": "Supporter",
+        "energyType": null,
+        "effect": "自分の山札を上から5枚見て、その中からカードを3枚選び、手札に加える。残りのカードはロストゾーンに置く。",
+        "rarity": "None"
+      }
+    },
+    {
+      "code": "SVB_020",
+      "name": "보스의 지령",
+      "kind": "trainer",
+      "decks": {
+        "giratina": 2
+      },
+      "rules": null
+    },
+    {
+      "code": "SVB_022",
+      "name": "원규",
+      "kind": "trainer",
+      "decks": {
+        "giratina": 1
+      },
+      "rules": null
+    },
+    {
+      "code": "SVB_027",
+      "name": "정상으로 가는 눈길",
+      "kind": "trainer",
+      "decks": {
+        "giratina": 2
+      },
+      "rules": null
+    },
+    {
+      "code": "SVB_033",
+      "name": "기본 초 에너지",
+      "kind": "energy",
+      "decks": {
+        "giratina": 4
+      },
+      "rules": null
+    },
+    {
+      "code": "SVB_029",
+      "name": "기본 풀 에너지",
+      "kind": "energy",
+      "decks": {
+        "giratina": 3
+      },
+      "rules": null
+    },
+    {
+      "code": "SVB_031",
+      "name": "기본 물 에너지",
+      "kind": "energy",
+      "decks": {
+        "giratina": 3
+      },
+      "rules": null
     }
   ]
 }

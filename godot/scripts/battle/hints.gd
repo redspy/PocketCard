@@ -53,6 +53,8 @@ static func why_unusable(v: Dictionary, seat: int, code: String) -> String:
 		"energy":
 			if bool(fl.get("energy", false)):
 				return "에너지는 한 턴에 한 장만 붙일 수 있습니다. 이번 턴에 이미 붙였습니다."
+			if nm == "일격 에너지":
+				return "일격 에너지는 '일격' 포켓몬에게만 붙일 수 있습니다."
 			return "지금은 이 에너지를 붙일 수 없습니다 (상대 특성 등의 효과)."
 		"trainer":
 			var sub := str(d.get("trainer", ""))
@@ -74,5 +76,26 @@ static func why_unusable(v: Dictionary, seat: int, code: String) -> String:
 				if int(me.get("turns", 0)) <= 1:
 					return "자기 첫 턴에는 이상한사탕을 쓸 수 없습니다."
 				return "이상한사탕으로 진화시킬 포켓몬(이번 턴 전에 나온 기본 포켓몬 + 손패의 2진화)이 없습니다."
+			# 카드에 적힌 사용 조건 (공식 덱 레시피 카드)
+			var lost_n: int = (me.get("lost", []) as Array).size()
+			var opp_prizes: int = (v.players[1 - seat].get("prizes", []) as Array).filter(func(x): return bool(x)).size()
+			var hand_n := int(me.get("handCount", 0))
+			match nm:
+				"미라주게이트":
+					if lost_n < 7:
+						return "로스트존에 카드가 7장 이상 있어야 합니다 (지금 %d장)." % lost_n
+				"배틀VIP패스":
+					if int(me.get("turns", 0)) != 1:
+						return "자신의 첫 번째 차례에만 쓸 수 있습니다."
+				"민화의 대접":
+					if hand_n >= 6:
+						return "패가 이 카드를 포함해 6장 이상이면 쓸 수 없습니다 (지금 %d장)." % hand_n
+				"원규":
+					if opp_prizes > 3:
+						return "상대의 남은 사이드가 3장 이하일 때만 쓸 수 있습니다 (지금 %d장)." % opp_prizes
+				"교체카트":
+					return "배틀 포켓몬이 기본 포켓몬이고 벤치 포켓몬이 있어야 합니다."
+				"퀵볼", "로스트스위퍼":
+					return "패에 이 카드 말고 다른 카드가 1장 이상 있어야 합니다 (로스트스위퍼는 도구·스타디움도 필요)."
 			return "지금은 사용 조건이 맞지 않습니다 (카드 설명의 조건을 확인하세요)."
 	return "지금은 쓸 수 없는 카드입니다."

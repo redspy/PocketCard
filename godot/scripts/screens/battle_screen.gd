@@ -16,6 +16,8 @@ var drag_layer: Control
 var slots: Dictionary = {}          # sid -> BSlot
 var empties: Dictionary = {}        # "my:3" -> BSlot (빈 벤치 칸)
 var piles: Dictionary = {}          # "my_deck" 등 -> BPile
+var lost_tags: Dictionary = {}      # "my"/"opp" -> 로스트존 장수 버튼 (0장이면 숨김, 누르면 크게 보기)
+var marker_tags: Dictionary = {}    # "my"/"opp" -> "GX·VSTAR 사용함" 표시
 var prize_cards: Dictionary = {}    # "my"/"opp" -> Array[BCard]
 var stadium: BCard
 var stadium_name: Label
@@ -159,6 +161,16 @@ func _build_static() -> void:
 				var sd: String = side
 				p.card.tapped.connect(func(): open_discard(sd))
 				p.card.long_pressed.connect(func(): open_discard(sd))
+		var lt := UI.button("로스트 0", 18)
+		var lsd: String = side
+		lt.tapped.connect(func(): open_lost(lsd))
+		lt.visible = false
+		board.add_child(lt)
+		lost_tags[side] = lt
+		var mk := UI.label("", 16, Color(0.95, 0.8, 0.45), HORIZONTAL_ALIGNMENT_LEFT)
+		mk.visible = false
+		board.add_child(mk)
+		marker_tags[side] = mk
 		var arr: Array = []
 		for i in 6:
 			var c := BCard.new()
@@ -445,6 +457,27 @@ func _place_board(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 			pile.size = r.size
 			var dis: Array = p.discard
 			pile.set_pile(k, int(p.deckCount) if k == "deck" else dis.size(), str(dis[dis.size() - 1].code) if (k == "discard" and dis.size() > 0) else "")
+		# 로스트존 (공개): 트래쉬 아래 장수, 누르면 크게 보기
+		var lost_n: int = (p.get("lost", []) as Array).size()
+		var lt: TapArea = lost_tags[side]
+		lt.visible = table and lost_n > 0
+		if lt.visible:
+			(lt.get_meta("label") as Label).text = "로스트 %d" % lost_n
+			var dr: Rect2 = L[side + "_discard"]
+			var lsz: Vector2 = lt.get_combined_minimum_size()
+			lt.position = Vector2(dr.position.x - lsz.x - 8, dr.position.y + (dr.size.y - lsz.y) / 2)
+		# GX 기술·VSTAR 파워 사용 기록 (대전 중 1번): 사이드 아래
+		var used: Array = []
+		if bool(p.get("gxUsed", false)):
+			used.append("GX")
+		if bool(p.get("vstarUsed", false)):
+			used.append("VSTAR")
+		var mk: Label = marker_tags[side]
+		mk.visible = table and not used.is_empty()
+		if mk.visible:
+			mk.text = "%s 사용함" % "·".join(used)
+			var pb: Rect2 = L[side + "_prizes_box"]
+			mk.position = Vector2(pb.position.x, pb.position.y + pb.size.y + 2)
 		var pz: Array = p.prizes
 		var cards: Array = prize_cards[side]
 		for i in 6:
@@ -520,7 +553,11 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 			conn = "  · 상대 재접속 대기"
 		var my_deck := "덱 %d%s" % [int(me.deckCount), " ⚠" if int(me.deckCount) <= BPile.LOW_DECK else ""]
 		var opp_deck := (" · 덱 %d ⚠" % int(opp.deckCount)) if int(opp.deckCount) <= BPile.LOW_DECK else ""
-		status_label.text = "%s · 사이드 %d · 트래쉬 %d%s\n상대: 패 %d · 사이드 %d%s · 큰 화면은 게임판에서" % [my_deck, _count_true(me.prizes), (me.discard as Array).size(), conn, int(opp.handCount), _count_true(opp.prizes), opp_deck]
+		var my_lost_n: int = (me.get("lost", []) as Array).size()
+		var opp_lost_n: int = (opp.get("lost", []) as Array).size()
+		var my_lost := (" · 로스트 %d" % my_lost_n) if my_lost_n > 0 else ""
+		var opp_lost := (" · 로스트 %d" % opp_lost_n) if opp_lost_n > 0 else ""
+		status_label.text = "%s · 사이드 %d · 트래쉬 %d%s%s\n상대: 패 %d · 사이드 %d%s%s · 큰 화면은 게임판에서" % [my_deck, _count_true(me.prizes), (me.discard as Array).size(), my_lost, conn, int(opp.handCount), _count_true(opp.prizes), opp_deck, opp_lost]
 		notice_label.position = L.notice.position
 		notice_label.size = L.notice.size
 	# 이번 턴 사용 칩 + 턴 종료
@@ -775,6 +812,17 @@ func zoom_slot(sid: String) -> BZoom:
 func _zoom_hand(iid: String) -> void:
 	var codes: Array = hand.order.map(func(i): return hand.codes[i])
 	BZoom.open(sheet_layer, codes, hand.order.find(iid))
+
+## 로스트존 크게 보기 (최근 것부터)
+func open_lost(side: String) -> BZoom:
+	var p := _me() if side == "my" else _opp()
+	var lost: Array = p.get("lost", [])
+	var codes: Array = []
+	for i in range(lost.size() - 1, -1, -1):
+		codes.append(str(lost[i].code))
+	if codes.is_empty():
+		return null
+	return BZoom.open(sheet_layer, codes, 0, codes.map(func(_c): return "로스트존 (게임에서 제외된 카드)"))
 
 func open_discard(side: String) -> BZoom:
 	var p := _me() if side == "my" else _opp()

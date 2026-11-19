@@ -30,7 +30,7 @@ for (const [id, dc] of deckCards) {
   if (card.kind === 'energy') {
     const m = /^기본 (.+) 에너지$/.exec(name);
     card.energy = { basic: !!m, type: m ? ENERGY_KO[m[1]] ?? null : null };
-    card.text = r?.effect ?? '';
+    card.text = o.text ?? r?.effect ?? '';
     if (m && !card.energy.type) problems.push(`${id} ${name}: 에너지 타입 모름`);
   } else if (card.kind === 'trainer') {
     card.trainer = o.trainer ?? TRAINER[r?.trainerType] ?? null;
@@ -45,7 +45,9 @@ for (const [id, dc] of deckCards) {
       weak: o.weak !== undefined ? o.weak : (T[r?.weaknesses?.[0]?.type] ?? null),
       resist: o.resist !== undefined ? o.resist : (T[r?.resistances?.[0]?.type] ?? null),
       retreat: o.retreat ?? Number(r?.retreat ?? 0),
-      rule: o.rule ?? (r?.suffix === 'EX' ? 'ex' : null),
+      rule: o.rule !== undefined ? o.rule : (r?.suffix === 'EX' ? 'ex' : null),
+      ...(o.radiant ? { radiant: true } : {}),
+      ...(o.resistValue ? { resistValue: o.resistValue } : {}),
       tera: !!o.tera,
       future: !!o.future,
       attacks: (o.attacks ?? r?.attacks ?? []).map((a, i) => {
@@ -57,9 +59,10 @@ for (const [id, dc] of deckCards) {
           damage: dm ? Number(dm[1]) : 0,
           op: dm ? (dm[2] === 'x' ? '×' : dm[2] || '') : (a.op ?? ''),
           text: o[`attackText${i}`] ?? a.effect ?? a.text ?? '',
+          ...(a.kind ? { kind: a.kind } : {}),
         };
       }),
-      abilities: (o.abilities ?? r?.abilities ?? []).map((a) => ({ name: ov.jaKo?.[a.nameJa ?? a.name] ?? '', nameJa: a.nameJa ?? a.name ?? '', text: o.abilityText ?? a.effect ?? a.text ?? '' })),
+      abilities: (o.abilities ?? r?.abilities ?? []).map((a) => ({ name: ov.jaKo?.[a.nameJa ?? a.name] ?? (a.name && /[가-힣]/.test(a.name) ? a.name : ''), nameJa: a.nameJa ?? a.name ?? '', text: o.abilityText ?? a.effect ?? a.text ?? '' })),
     };
     if (p.stage > 0 && !p.from) problems.push(`${id} ${name}: 진화 전 포켓몬 모름`);
     if (!p.hp) problems.push(`${id} ${name}: HP 없음`);
@@ -67,6 +70,7 @@ for (const [id, dc] of deckCards) {
     card.pokemon = p;
   }
   if (o.ace) card.ace = true;
+  if (o.tags?.length) card.tags = o.tags;
   if (!r && !ov.byCode[id] && !(card.kind === 'energy' && card.energy.basic)) problems.push(`${id} ${name}: 원본 데이터 없음`);
   out[id] = card;
 }

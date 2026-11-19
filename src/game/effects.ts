@@ -5,8 +5,9 @@ import type { CardData, EType } from './cardData.ts';
 import {
   abilityActive, ask, clearSlot, dataOf, dealAttackDamage, drawN, drawOne, emit, energiesOf, findSlot, flip, hasTera, heal,
   inst, isActive, maxHp, moveCard, nameOf, note, other, ownerOfSlot, playerHasEffect, prizesLeft, prizesTaken, provided, putCounters,
-  remainingHp, setRot, shuffleDeck, slotData, slotName, slotsOf, stadiumName, switchActive, toolOf, topOf,
+  remainingHp, setRot, shuffleDeck, slotData, slotName, slotsOf, stadiumName, switchActive, toolOf, topOf, lostCount,
 } from './core.ts';
+import { shuffleInPlace } from './rng.ts';
 import type { Ctx } from './core.ts';
 import type { Frame, PokemonSlot, Seat } from './types.ts';
 
@@ -87,7 +88,7 @@ export function frameSource(ctx: Ctx, fr: Frame): string | null {
   if (fr.kind === 'trigger') {
     // 조건이 되면 발동하는 특성 (진화했을 때 등)
     const found = findSlot(ctx.s, String(fr.data.sid ?? ''));
-    const name = { infernalReign: '연옥 지배', jewelSeeker: '보석 찾기', flyingEntry: '플라잉엔트리', rapidVernier: '래피드 버니어' }[String(fr.data.effect)] ?? '';
+    const name = { infernalReign: '연옥 지배', jewelSeeker: '보석 찾기', flyingEntry: '플라잉엔트리', rapidVernier: '래피드 버니어', darkSignal: '다크시그널' }[String(fr.data.effect)] ?? '';
     return `${found ? slotName(ctx, found.slot) : '포켓몬'}의 특성${name ? ` [${name}]` : ''} (조건이 되어 발동)`;
   }
   if (fr.kind === 'abilityRun' || fr.kind === 'attack' || fr.kind === 'attackEffect') {
@@ -323,9 +324,185 @@ export const TRAINERS: Record<string, TrainerDef> = {
   '포켓기어3.0': { can: needDeck, run: (c, f) => then(c, f, [search('deck', { kind: 'trainer', trainer: 'supporter' }, 1, 'hand', { look: 7, reveal: true, prompt: '덱 위 7장 중 서포트를 1장 가져올 수 있습니다.' })]) },
   '에너지 갈아 달기': { can: (c, s) => (slotsOf(c.s, s).length >= 2 && slotsOf(c.s, s).some((sl) => energiesOf(c, sl).some((e) => dataOf(c, e).energy?.basic)) ? null : '옮길 기본 에너지가 없습니다.'),
     run: (c, f) => then(c, f, [['energySwitch', {}]]) },
+
+  // ── 공식 덱 레시피: 블래키 VMAX · 기라티나 VSTAR ──
+  '퀵볼': { can: (c, s, self) => (handOthers(c, s, self) >= 1 ? needDeck(c, s) : '패를 1장 트래쉬해야 합니다.'),
+    run: (c, f) => then(c, f, [['discardHand', { n: 1 }], search('deck', BASIC, 1, 'hand', { reveal: true, prompt: '패로 가져올 기본 포켓몬을 고르세요.' })]) },
+  '포켓몬통신': { can: (c, s, self) => (c.s.players[s].hand.some((i) => i !== self && dataOf(c, i).kind === 'pokemon') ? null : '패에 덱으로 되돌릴 포켓몬이 없습니다.'),
+    run: (c, f) => then(c, f, [search('hand', POKEMON, 1, 'deck', { min: 1, reveal: true, shuffle: false, prompt: '덱으로 되돌릴 패의 포켓몬을 고르세요.' }),
+      search('deck', POKEMON, 1, 'hand', { reveal: true, prompt: '패로 가져올 포켓몬을 고르세요.' })]) },
+  '진화향로': { can: needDeck, run: (c, f) => then(c, f, [search('deck', { kind: 'pokemon', evolution: true }, 1, 'hand', { reveal: true, prompt: '패로 가져올 진화 포켓몬을 고르세요.' })]) },
+  '활력의 항아리': { can: (c, s) => (discardHas(c, s, { name: '일격 에너지' }) ? null : '트래쉬에 일격 에너지가 없습니다.'),
+    run: (c, f) => then(c, f, [search('discard', { name: '일격 에너지' }, 2, 'deck', { min: 1, reveal: true, prompt: '덱으로 되돌릴 일격 에너지를 2장까지 고르세요.' }), ['shuffle', {}]]) },
+  '보통낚싯대': { can: (c, s) => (discardHas(c, s, { or: [POKEMON, BASIC_ENERGY] }) ? null : '트래쉬에 포켓몬·기본 에너지가 없습니다.'),
+    run: (c, f) => then(c, f, [search('discard', POKEMON, 2, 'deck', { reveal: true, prompt: '덱으로 되돌릴 포켓몬을 2장까지 고르세요.' }),
+      search('discard', BASIC_ENERGY, 2, 'deck', { reveal: true, prompt: '덱으로 되돌릴 기본 에너지를 2장까지 고르세요.' }), ['shuffle', {}]]) },
+  '박사의 연구': { run: (c, f) => {
+    const p = c.s.players[f.player];
+    for (const iid of [...p.hand]) moveCard(c, iid, { zone: 'discard', player: f.player });
+    drawN(c, f.player, 7);
+    done(c, f);
+  } },
+  '마리': { run: (c, f) => {
+    for (const seat of [f.player, other(f.player)] as Seat[]) {
+      const p = c.s.players[seat];
+      const hand = [...p.hand];
+      shuffleInPlace(c.s.rng, hand);   // 뒷면으로 섞어서 덱 아래로
+      for (const iid of hand) moveCard(c, iid, { zone: 'deck', player: seat, position: 'bottom' });
+    }
+    drawN(c, f.player, 5);
+    drawN(c, other(f.player), 4);
+    done(c, f);
+  } },
+  '민화의 대접': { can: (c, s, self) => (handOthers(c, s, self) + 1 >= 6 ? '패가 이 카드를 포함해 6장 이상이면 쓸 수 없습니다.' : needDeck(c, s)),
+    run: (c, f) => { drawN(c, f.player, slotsOf(c.s, other(f.player)).length); done(c, f); } },
+  '배틀VIP패스': { can: (c, s) => (c.s.players[s].turns !== 1 ? '자신의 첫 번째 차례에만 쓸 수 있습니다.' : needDeck(c, s) ?? (benchRoom(c, s) > 0 ? null : '벤치가 가득 찼습니다.')),
+    run: (c, f) => then(c, f, [search('deck', BASIC, 2, 'bench', { prompt: '벤치에 낼 기본 포켓몬을 2장까지 고르세요.' })]) },
+  '미라주게이트': { can: (c, s) => (lostCount(c.s, s) < 7 ? '로스트존에 카드가 7장 이상 있어야 합니다.' : needDeck(c, s)),
+    run: (c, f) => then(c, f, [search('deck', BASIC_ENERGY, 2, 'attach', { distinct: 'type', prompt: '서로 다른 타입의 기본 에너지를 2장까지 고르세요.' })]) },
+  '교체카트': { can: (c, s) => { const p = c.s.players[s]; return !p.bench.length ? '벤치 포켓몬이 없습니다.' : p.active && slotData(c, p.active).pokemon?.stage === 0 ? null : '배틀 포켓몬이 기본 포켓몬일 때만 쓸 수 있습니다.'; },
+    run: (c, f) => then(c, f, [['switchCart', {}]]) },
+  '동굴탈출로프': { can: (c, s) => (c.s.players[s].bench.length || c.s.players[other(s)].bench.length ? null : '양쪽 모두 벤치 포켓몬이 없습니다.'),
+    run: (c, f) => then(c, f, [['escapeRope', {}]]) },
+  '로스트스위퍼': { can: (c, s, self) => (handOthers(c, s, self) < 1 ? '패를 1장 로스트존에 두어야 합니다.' : sweeperTargets(c).length ? null : '포켓몬의 도구·스타디움이 없습니다.'),
+    run: (c, f) => then(c, f, [['lostSweeper', {}]]) },
+  '히스이의 헤비볼': { run: (c, f) => then(c, f, [['heavyBall', { card: f.data.card }]]) },
+  '아크로마의 실험': { can: needDeck, run: (c, f) => then(c, f, [['lookTake', { look: 5, take: 3, prompt: '덱 위 5장 중 패로 가져올 카드 3장 (나머지는 로스트존)' }]]) },
+  '원규': { can: (c, s) => (prizesLeft(c.s, other(s)) <= 3 ? null : '상대의 남은 사이드가 3장 이하일 때만 쓸 수 있습니다.'),
+    run: (c, f) => {
+      for (const seat of [f.player, other(f.player)] as Seat[]) {
+        const p = c.s.players[seat];
+        for (const iid of [...p.hand]) moveCard(c, iid, { zone: 'deck', player: seat, position: 'top' });
+        shuffleDeck(c, seat);
+      }
+      drawN(c, f.player, 6);
+      drawN(c, other(f.player), 2);
+      done(c, f);
+    } },
 };
 
 // 트레이너스 하위 프레임 ─────────────
+
+// ── 공식 덱 레시피 하위 프레임 ─────────────
+
+/** 덱 위 look 장을 보고 take 장을 패로, 나머지는 로스트존 (어비스시크·아크로마의 실험) */
+FRAMES.lookTake = (ctx, f) => {
+  const p = ctx.s.players[f.player];
+  const look = Number(f.data.look);
+  const top = p.deck.slice(0, look);
+  if (f.step === 0) {
+    if (!top.length) return done(ctx, f);
+    const take = Math.min(Number(f.data.take), top.length);
+    return ask(ctx, f, 1, f.player, 'pickCards', top, take, take, String(f.data.prompt), { cards: cardsOf(ctx, top) });
+  }
+  const picks = f.picks ?? [];
+  for (const iid of top) moveCard(ctx, iid, picks.includes(iid) ? { zone: 'hand', player: f.player } : { zone: 'lost', player: f.player });
+  done(ctx, f);
+};
+
+/** 교체카트: 기본 배틀 포켓몬을 벤치와 교체 → 벤치로 간 포켓몬 HP 30 회복 */
+FRAMES.switchCart = (ctx, f) => {
+  const p = ctx.s.players[f.player];
+  if (f.step === 0) {
+    if (!p.bench.length || !p.active) return done(ctx, f);
+    f.data.old = p.active.sid;
+    return ask(ctx, f, 1, f.player, 'pickSlot', p.bench.map((b) => b.sid), 1, 1, '배틀 포켓몬과 바꿀 벤치 포켓몬을 고르세요.');
+  }
+  if (f.picks?.length) switchActive(ctx, f.player, f.picks[0]);
+  const old = findSlot(ctx.s, String(f.data.old));
+  if (old) heal(ctx, old.slot, 30);
+  done(ctx, f);
+};
+
+/** 동굴탈출로프: 상대부터 각자 배틀 포켓몬을 벤치와 교체 (각자 고름) */
+FRAMES.escapeRope = (ctx, f) => {
+  const opp = other(f.player);
+  if (f.step === 0) {
+    const ob = ctx.s.players[opp].bench;
+    if (ob.length && ctx.s.players[opp].active) return ask(ctx, f, 1, opp, 'pickSlot', ob.map((b) => b.sid), 1, 1, '동굴탈출로프: 배틀 포켓몬과 바꿀 내 벤치 포켓몬을 고르세요.');
+    f.step = 1;
+  }
+  if (f.step === 1) {
+    if (f.picks?.length) switchActive(ctx, opp, f.picks[0]);
+    f.picks = undefined;
+    const mb = ctx.s.players[f.player].bench;
+    if (mb.length && ctx.s.players[f.player].active) return ask(ctx, f, 2, f.player, 'pickSlot', mb.map((b) => b.sid), 1, 1, '배틀 포켓몬과 바꿀 벤치 포켓몬을 고르세요.');
+    return done(ctx, f);
+  }
+  if (f.picks?.length) switchActive(ctx, f.player, f.picks[0]);
+  done(ctx, f);
+};
+
+/** 로스트스위퍼 대상: 양쪽 필드의 포켓몬의 도구 + 스타디움 */
+function sweeperTargets(ctx: Ctx): string[] {
+  const out: string[] = [];
+  for (const seat of [0, 1] as Seat[]) for (const sl of slotsOf(ctx.s, seat)) { const t = toolOf(ctx, sl); if (t) out.push(t); }
+  if (ctx.s.stadium) out.push(ctx.s.stadium);
+  return out;
+}
+FRAMES.lostSweeper = (ctx, f) => {
+  const p = ctx.s.players[f.player];
+  if (f.step === 0) return ask(ctx, f, 1, f.player, 'pickCards', [...p.hand], 1, 1, '로스트존에 둘 패 1장 (사용 비용)', { cards: cardsOf(ctx, p.hand) });
+  if (f.step === 1) {
+    if (f.picks?.length) moveCard(ctx, f.picks[0], { zone: 'lost', player: f.player });
+    const opts = sweeperTargets(ctx);
+    if (!opts.length) return done(ctx, f);
+    return ask(ctx, f, 2, f.player, 'pickCards', opts, 1, 1, '로스트존에 둘 포켓몬의 도구 또는 스타디움', { cards: cardsOf(ctx, opts) });
+  }
+  const t = f.picks?.[0];
+  if (t) {
+    const wasStadium = ctx.s.stadium === t;
+    moveCard(ctx, t, { zone: 'lost', player: ctx.s.cards[t].owner });
+    if (wasStadium) updateBench(ctx);
+  }
+  done(ctx, f);
+};
+
+/** 히스이의 헤비볼: 사이드를 모두 보고 기본 포켓몬 1장을 이 카드와 바꿔 패로 → 사이드를 섞음 */
+FRAMES.heavyBall = (ctx, f) => {
+  const p = ctx.s.players[f.player];
+  const prizes = p.prizes.filter((x): x is string => !!x);
+  if (f.step === 0) {
+    if (!prizes.length) return done(ctx, f);
+    const opts = cardsMatching(ctx, prizes, BASIC);
+    return ask(ctx, f, 1, f.player, 'pickCards', opts, 0, 1, '사이드(프라이즈) 중 패로 가져올 기본 포켓몬 (없으면 그냥 결정)', { cards: cardsOf(ctx, prizes) });
+  }
+  const pick = f.picks?.[0];
+  const ball = String(f.data.card);
+  if (pick) {
+    const idx = p.prizes.indexOf(pick);
+    const nid = moveCard(ctx, pick, { zone: 'hand', player: f.player });
+    const rev = { id: `v${ctx.s.nextId++}`, owner: f.player, reason: `${effectSource(ctx)}: 사이드에서 [기본 포켓몬] → 패로 가져갑니다\n효과로 가져가는 카드를 상대에게 보여줍니다.`, cards: cardsOf(ctx, [nid]) };
+    ctx.s.reveals.push(rev);
+    emit(ctx, { type: 'reveal', reveal: rev });
+    ctx.s.requests.push({ id: `r${ctx.s.nextId++}`, player: other(f.player), kind: 'ackReveal', options: ['ok'], min: 1, max: 1, prompt: '상대가 보여준 카드를 확인하세요.', revealId: rev.id });
+    if (ctx.s.using.includes(ball)) moveCard(ctx, ball, { zone: 'prizes', player: f.player, index: idx });
+  }
+  // 사이드를 뒷면으로 섞는다 (자리 그대로, 카드 순서만 섞고 새 iid)
+  const idxs = p.prizes.map((x, i) => (x ? i : -1)).filter((i) => i >= 0);
+  const vals = idxs.map((i) => p.prizes[i]!);
+  shuffleInPlace(ctx.s.rng, vals);
+  idxs.forEach((i, k) => {
+    const c = ctx.s.cards[vals[k]];
+    delete ctx.s.cards[vals[k]];
+    const nid = `c${ctx.s.nextId++}`;
+    ctx.s.cards[nid] = { ...c, iid: nid };
+    p.prizes[i] = nid;
+  });
+  done(ctx, f);
+};
+
+/** 악의 탑 (스타디움 효과): 패의 「일격」 카드 1장 트래쉬 → 2장 뽑기 */
+FRAMES.darkTower = (ctx, f) => {
+  const p = ctx.s.players[f.player];
+  const opts = p.hand.filter((i) => (dataOf(ctx, i).tags ?? []).includes('일격'));
+  if (f.step === 0) {
+    if (!opts.length) return done(ctx, f);
+    return ask(ctx, f, 1, f.player, 'pickCards', opts, 1, 1, "트래쉬할 '일격' 카드를 고르세요.", { cards: cardsOf(ctx, opts) });
+  }
+  if (f.picks?.length) { moveCard(ctx, f.picks[0], { zone: 'discard', player: f.player }); drawN(ctx, f.player, 2); }
+  done(ctx, f);
+};
 
 FRAMES.glassTrumpet = (ctx, f) => {
   const p = ctx.s.players[f.player];
@@ -462,7 +639,7 @@ FRAMES.energySwitch = (ctx, f) => {
 // ───────────────────────── 진화 ─────────────────────────
 
 /** 진화 (손에서). 진화 시 발동하는 특성(리자몽 ex, 야부엉)은 프레임으로 쌓는다 */
-export function evolveFrom(ctx: Ctx, seat: Seat, cardIid: string, sid: string) {
+export function evolveFrom(ctx: Ctx, seat: Seat, cardIid: string, sid: string, fromHand = true) {
   const nid = moveCard(ctx, cardIid, { zone: 'evolve', sid });
   emit(ctx, { type: 'play', player: seat, code: inst(ctx, nid).code, what: '진화' });
   const slot = findSlot(ctx.s, sid)!.slot;
@@ -470,6 +647,7 @@ export function evolveFrom(ctx: Ctx, seat: Seat, cardIid: string, sid: string) {
   if (!abilityActive(ctx, slot)) return;
   if (ab === 'れんごくしはい' && ctx.s.players[seat].deck.length) pushTrigger(ctx, seat, 'infernalReign', sid, '리자몽 ex 특성: 덱에서 기본 에너지를 3장까지 붙일까요?');
   if (ab === 'ほうせきさがし' && hasTera(ctx, seat) && ctx.s.players[seat].deck.length) pushTrigger(ctx, seat, 'jewelSeeker', sid, '야부엉 특성: 덱에서 트레이너스를 2장까지 가져올까요?');
+  if (ab === '다크시그널' && fromHand && ctx.s.players[other(seat)].bench.length) pushTrigger(ctx, seat, 'darkSignal', sid, '블래키 VMAX 특성: 상대 벤치 포켓몬을 배틀 포켓몬과 교체할까요?');
 }
 function pushTrigger(ctx: Ctx, seat: Seat, kind: string, sid: string, prompt: string) {
   ctx.s.stack.push({ id: `f${ctx.s.nextId++}`, kind: 'trigger', step: 0, player: seat, data: { effect: kind, sid, prompt } });
@@ -485,6 +663,7 @@ FRAMES.trigger = (ctx, f) => {
     case 'jewelSeeker': return then(ctx, f, [search('deck', { kind: 'trainer' }, 2, 'hand', { reveal: true, prompt: '트레이너스를 2장까지 고르세요.' })]);
     case 'flyingEntry': return then(ctx, f, [['flyingEntry', {}]]);
     case 'rapidVernier': return then(ctx, f, [['rapidVernier', { sid: f.data.sid }]]);
+    case 'darkSignal': return then(ctx, f, [['gust', {}]]);
   }
   done(ctx, f);
 };
@@ -558,7 +737,48 @@ export const ABILITIES: Record<string, AbilityDef> = {
     run: (c, f) => then(c, f, [['psychicEmbrace', {}]]) },
   'タンデムユニット': { once: 'pokemon', can: (c, s) => needDeck(c, s) ?? (benchRoom(c, s) > 0 ? null : '벤치가 가득 찼습니다.'),
     run: (c, f) => then(c, f, [search('deck', { kind: 'pokemon', stage: 0, ptype: 'L' }, 2, 'bench', { prompt: '번개 타입 기본 포켓몬을 2장까지' })]) },
+
+  // ── 공식 덱 레시피 ──
+  '전별의 춤': { once: 'name', can: (c, s) => (c.s.players[s].koTurn === c.s.turnNumber - 1 && c.s.turnNumber > 1 ? needDeck(c, s) : '앞의 상대 차례에 내 포켓몬이 기절했을 때만 쓸 수 있습니다.'),
+    run: (c, f) => { drawN(c, f.player, 3); done(c, f); } },
+  '일격의 포효': { once: 'pokemon',
+    can: (c, s) => (!c.s.players[s].deck.some((i) => nameOf(c, i) === '일격 에너지') ? '덱에 일격 에너지가 없습니다.'
+      : !slotsOf(c.s, s).some((sl) => (slotData(c, sl).tags ?? []).includes('일격')) ? "'일격' 포켓몬이 없습니다." : null),
+    run: (c, f) => then(c, f, [['singleStrikeRoar', {}]]) },
+  '꽃고르기': { once: 'pokemon', can: (c, s, slot) => (c.s.players[s].active !== slot ? '배틀 포켓몬일 때만 쓸 수 있습니다.' : needDeck(c, s)),
+    run: (c, f) => then(c, f, [['flowerSelecting', {}]]) },
+  '숨겨진 수단': { once: 'pokemon', can: (c, s) => (!c.s.players[s].hand.some((i) => dataOf(c, i).kind === 'energy') ? '패에 에너지가 없습니다.' : needDeck(c, s)),
+    run: (c, f) => then(c, f, [['concealedCards', {}]]) },
 };
+
+/** 헬가 "일격의 포효": 덱의 일격 에너지를 일격 포켓몬에게 붙이고 그 포켓몬에 카운터 2개 */
+FRAMES.singleStrikeRoar = (ctx, f) => {
+  if (f.step === 0) return seq(ctx, f, 1, [search('deck', { name: '일격 에너지' }, 1, 'save', { save: 'picked', shuffle: false, prompt: '붙일 일격 에너지를 고르세요.' })]);
+  const picked = (f.data.picked as string[] | undefined) ?? [];
+  if (f.step === 1) {
+    const targets = slotsOf(ctx.s, f.player).filter((sl) => (slotData(ctx, sl).tags ?? []).includes('일격')).map((sl) => sl.sid);
+    if (!picked.length || !targets.length) { shuffleDeck(ctx, f.player); return done(ctx, f); }
+    return ask(ctx, f, 2, f.player, 'pickSlot', targets, 1, 1, "일격 에너지를 붙일 '일격' 포켓몬 (데미지 카운터 2개)", { cards: cardsOf(ctx, picked) });
+  }
+  const t = findSlot(ctx.s, f.picks![0])?.slot;
+  if (t) moveCard(ctx, picked[0], { zone: 'attach', sid: t.sid });
+  shuffleDeck(ctx, f.player);
+  if (t) putCounters(ctx, t, 2);
+  done(ctx, f);
+};
+
+/** 큐아링 "꽃고르기": 덱 위 2장 중 1장 패로, 나머지 로스트존 */
+FRAMES.flowerSelecting = (ctx, f) => then(ctx, f, [['lookTake', { look: 2, take: 1, prompt: '덱 위 2장 중 패로 가져올 1장 (나머지는 로스트존)' }]]);
+
+/** 찬란한 개굴닌자 "숨겨진 수단": 패의 에너지 1장 트래쉬 → 2장 뽑기 */
+FRAMES.concealedCards = (ctx, f) => {
+  const p = ctx.s.players[f.player];
+  const opts = p.hand.filter((i) => dataOf(ctx, i).kind === 'energy');
+  if (f.step === 0) return ask(ctx, f, 1, f.player, 'pickCards', opts, 1, 1, '트래쉬할 에너지를 고르세요.', { cards: cardsOf(ctx, opts) });
+  if (f.picks?.length) { moveCard(ctx, f.picks[0], { zone: 'discard', player: f.player }); drawN(ctx, f.player, 2); }
+  done(ctx, f);
+};
+
 
 FRAMES.cursedBomb = (ctx, f) => {
   const self = slotOfFrame(ctx, f);
@@ -783,10 +1003,80 @@ export const ATTACKS: Record<string, AttackDef> = {
   'バーニングダーク': { run: (c, f) => { hit(c, f, base(f) + 30 * prizesTaken(c.s, other(f.player))); done(c, f); } },
   // 기술머신 에볼루션의 기술: 벤치 포켓몬 2마리까지 덱에서 진화
   'TM_EVOLUTION': { run: (c, f) => then(c, f, [['tmEvolution', {}]]) },
+
+  // ── 공식 덱 레시피 ──
+  '뒤집기GX': { run: (c, f) => { hit(c, f, base(f)); then(c, f, [['switchOwn', {}]]); } },
+  '사이코파워': { run: (c, f) => then(c, f, [['placeCounters', { n: 3 }]]) },
+  '예민해지기': { run: (c, f) => then(c, f, [search('deck', { kind: 'energy', basicEnergy: true, etype: 'F' }, 2, 'attachTo', { attachTo: f.data.sid, prompt: '이 포켓몬에게 붙일 기본 격투 에너지를 2장까지' })]) },
+  '임팩트블로': { can: (c, s, slot) => (slot.effects.some((e) => e.kind === 'lockAttack' && e.name === '임팩트블로') ? '앞 차례에 쓴 기술이라 이번 차례에는 쓸 수 없습니다.' : null),
+    run: (c, f) => { hit(c, f, base(f)); const a = atkSlot(c, f); if (a) a.effects.push({ kind: 'lockAttack', until: c.s.turnNumber + 2, name: '임팩트블로' }); done(c, f); } },
+  '거다이일격': { run: (c, f) => {
+    const a = atkSlot(c, f);
+    const t = oppActive(c, f);
+    if (a && t) dealAttackDamage(c, f.player, a, t, base(f), true, { ignoreEffects: true });
+    if (a) for (const e of energiesOf(c, a)) moveCard(c, e, { zone: 'discard', player: f.player });
+    done(c, f);
+  } },
+  '검은눈빛': { run: (c, f) => { hit(c, f, base(f)); defenderEffect(c, f, 'noRetreat'); done(c, f); } },
+  '월광의칼날': { run: (c, f) => { const a = atkSlot(c, f); hit(c, f, base(f) + (a && a.damage > 0 ? 80 : 0)); done(c, f); } },
+  '시치미스핏': { run: (c, f) => { const a = atkSlot(c, f); const t = oppActive(c, f); if (a && t) dealAttackDamage(c, f.player, a, t, base(f), true, { noWeak: true }); done(c, f); } },
+  '로스트마인': { can: (c, s) => (lostCount(c.s, s) >= 10 ? null : '로스트존에 카드가 10장 이상 있어야 합니다.'), run: (c, f) => then(c, f, [['placeCounters', { n: 12 }]]) },
+  '월광수리검': { run: (c, f) => {
+    const a = atkSlot(c, f)!;
+    if (f.step === 0) {
+      const ens = energiesOf(c, a);
+      if (ens.length <= 2) { for (const e of ens) moveCard(c, e, { zone: 'discard', player: f.player }); f.step = 2; }
+      else return ask(c, f, 1, f.player, 'pickCards', ens, 2, 2, '트래쉬할 에너지 2개', { cards: cardsOf(c, ens) });
+    }
+    if (f.step === 1) { for (const e of f.picks ?? []) moveCard(c, e, { zone: 'discard', player: f.player }); f.picks = undefined; f.step = 2; }
+    if (f.step === 2) {
+      const opts = slotsOf(c.s, other(f.player)).map((sl) => sl.sid);
+      const n = Math.min(2, opts.length);
+      if (!n) return done(c, f);
+      return ask(c, f, 3, f.player, 'pickSlot', opts, n, n, '90 데미지를 줄 상대 포켓몬 2마리');
+    }
+    for (const sid of f.picks ?? []) { const t = findSlot(c.s, sid); if (t) dealAttackDamage(c, f.player, a, t.slot, 90, t.active); }
+    done(c, f);
+  } },
+  '어비스시크': { run: (c, f) => then(c, f, [['lookTake', { look: 4, take: 2, prompt: '덱 위 4장 중 패로 가져올 카드 2장 (나머지는 로스트존)' }]]) },
+  '찢기': { run: (c, f) => { const a = atkSlot(c, f); const t = oppActive(c, f); if (a && t) dealAttackDamage(c, f.player, a, t, base(f), true, { ignoreEffects: true }); done(c, f); } },
+  '다이내믹테일': { run: (c, f) => {
+    if (f.step === 0) { hit(c, f, base(f)); return ask(c, f, 1, f.player, 'pickSlot', slotsOf(c.s, f.player).map((s) => s.sid), 1, 1, '60 데미지를 줄 내 포켓몬 1마리'); }
+    const a = atkSlot(c, f);
+    const t = findSlot(c.s, f.picks![0]);
+    if (a && t) dealAttackDamage(c, f.player, a, t.slot, 60, false);
+    done(c, f);
+  } },
+  '로스트임팩트': { run: (c, f) => {
+    if (f.step === 0) {
+      hit(c, f, base(f));
+      const ens = slotsOf(c.s, f.player).flatMap((sl) => energiesOf(c, sl));
+      if (ens.length <= 2) { for (const e of ens) moveCard(c, e, { zone: 'lost', player: f.player }); return done(c, f); }
+      return ask(c, f, 1, f.player, 'pickCards', ens, 2, 2, '로스트존에 둘 내 필드의 에너지 2개', { cards: cardsOf(c, ens) });
+    }
+    for (const e of f.picks ?? []) moveCard(c, e, { zone: 'lost', player: f.player });
+    done(c, f);
+  } },
+  '스타레퀴엠': { can: (c, s) => (lostCount(c.s, s) >= 10 ? null : '로스트존에 카드가 10장 이상 있어야 합니다.'), run: (c, f) => {
+    const t = oppActive(c, f);
+    if (t) { t.damage = Math.max(t.damage, maxHp(c, t)); note(c, `${slotName(c, t)}: 스타레퀴엠으로 기절`); }
+    done(c, f);
+  } },
 };
+
+/** 데미지 카운터 n개를 상대 포켓몬에게 원하는 대로 (하나씩 고름) — data { n } */
+FRAMES.placeCounters = (ctx, f) => {
+  if (f.step === 0) { f.data.left = Number(f.data.n); f.step = 1; }
+  if (f.step === 2 && f.picks?.length) { const t = findSlot(ctx.s, f.picks[0]); if (t) putCounters(ctx, t.slot, 1); f.data.left = Number(f.data.left) - 1; }
+  const opts = slotsOf(ctx.s, other(f.player)).map((s) => s.sid);
+  if (Number(f.data.left) <= 0 || !opts.length) return done(ctx, f);
+  return ask(ctx, f, 2, f.player, 'pickSlot', opts, 1, 1, `데미지 카운터를 올릴 상대 포켓몬 (남은 ${f.data.left}개)`);
+};
+
 // 효과 없는 기술 (기본 데미지만)
 for (const n of ['ひだね', 'ひをはく', 'かぜおこし', 'つばさでうつ', 'つぶやく', 'おにび', 'たいあたり', 'パワージェム', 'ちょっとうらむ', 'かみつく', 'リューズヘッド',
-  'ジェットヘッド', 'スキップ', 'クォーツシャイン', 'スピードウイング', 'ずつき', 'サイコショット', 'ビンタ', 'アームプレス', 'マグネブラスト']) ATTACKS[n] = plain;
+  'ジェットヘッド', 'スキップ', 'クォーツシャイン', 'スピードウイング', 'ずつき', 'サイコショット', 'ビンタ', 'アームプレス', 'マグネブラスト',
+  '물기', '날카로운날개', '어둠엄니', '정권찌르기', '다이아크', '회전어택', '물뿌리기', '할퀴기']) ATTACKS[n] = plain;
 
 export const TM_ATTACK = { name: '에볼루션', nameJa: 'TM_EVOLUTION', cost: ['C'] as EType[], damage: 0, op: '' as const, text: '자신의 벤치 포켓몬을 2마리까지 골라, 각각 덱에서 그 포켓몬으로부터 진화하는 카드를 찾아 진화시킨다.' };
 
@@ -796,7 +1086,7 @@ FRAMES.tmEvolution = (ctx, f) => {
   if (f.step === 1) f.data.targets = f.picks ?? [];
   if (f.step === 3) {
     const targets = f.data.targets as string[];
-    if (f.picks?.length) evolveFrom(ctx, f.player, f.picks[0], targets[0]);
+    if (f.picks?.length) evolveFrom(ctx, f.player, f.picks[0], targets[0], false);
     f.data.targets = targets.slice(1);
   }
   // 남은 대상마다 덱에서 진화 카드 고르기 (진화할 카드가 없는 대상은 건너뜀)
@@ -853,10 +1143,11 @@ FRAMES.promote = (ctx, f) => {
 // ───────────────────────── 자동화 여부 ─────────────────────────
 
 const PASSIVE = new Set(['スカイライン', 'いたずらロック', 'ダイヤコート', 'フェアリーゾーン', 'ふくがん', 'みがる', 'ろうれんのわざ', 'がんばりハート', 'エースキャンセラー',
-  'ブーストしんか', 'にじいろDNA', 'ほうせきさがし', 'れんごくしはい', 'フライングエントリー', 'ラピッドバーニア']);
+  'ブーストしんか', 'にじいろDNA', 'ほうせきさがし', 'れんごくしはい', 'フライングエントリー', 'ラピッドバーニア',
+  '벤치배리어', '파도의 베일', '로스트 프로바이드', '와일드스타일', '다크시그널']);
 const TOOLS = new Set(['반짝이는 결정', '풍선', '오기머리띠', '용기의부적', '학습장치', '부스트에너지 미래', '기술머신 에볼루션']);
-const STADIUMS = new Set(['제로의 대공동', '재밍타워', '그래비티 마운틴', '보울마을']);
-const SPECIAL_ENERGY = new Set(['제트 에너지', '네오 어퍼 에너지', '루미너스 에너지']);
+const STADIUMS = new Set(['제로의 대공동', '재밍타워', '그래비티 마운틴', '보울마을', '악의 탑', '정상으로 가는 눈길']);
+const SPECIAL_ENERGY = new Set(['제트 에너지', '네오 어퍼 에너지', '루미너스 에너지', '일격 에너지', '캡쳐 에너지']);
 
 /** 카드 효과가 자동화되었는가 (화면에 "수동" 표시용, 데이터 테스트에서 전부 true 인지 검사) */
 export function isAutomated(d: CardData): boolean {

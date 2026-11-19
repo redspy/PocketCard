@@ -943,6 +943,270 @@
       ]
     },
     {
+      "id": "umbreon",
+      "name": "블래키 VMAX",
+      "note": "공식 덱 레시피 · 블래키 VMAX + 일격 우라오스 VMAX (덱 코드 PdQY-oSe6-g2fa-clYF)",
+      "cards": [
+        {
+          "count": 4,
+          "nameEn": "델빌",
+          "ref": "ko:SGG_004"
+        },
+        {
+          "count": 1,
+          "nameEn": "춤추새 GX",
+          "ref": "ko:SM12_035"
+        },
+        {
+          "count": 1,
+          "nameEn": "뮤",
+          "ref": "ko:SM12a_055"
+        },
+        {
+          "count": 4,
+          "nameEn": "헬가",
+          "ref": "ko:SGG_005"
+        },
+        {
+          "count": 2,
+          "nameEn": "일격 우라오스 V",
+          "ref": "ko:S5I_036"
+        },
+        {
+          "count": 2,
+          "nameEn": "일격 우라오스 VMAX",
+          "ref": "ko:S5I_037"
+        },
+        {
+          "count": 3,
+          "nameEn": "블래키 V",
+          "ref": "ko:S6a_047"
+        },
+        {
+          "count": 2,
+          "nameEn": "블래키 VMAX",
+          "ref": "ko:S6a_048"
+        },
+        {
+          "count": 4,
+          "nameEn": "퀵볼",
+          "ref": "ko:SGG_009"
+        },
+        {
+          "count": 2,
+          "nameEn": "포켓몬통신",
+          "ref": "ko:SM9_081"
+        },
+        {
+          "count": 2,
+          "nameEn": "진화향로",
+          "ref": "ko:SGG_008"
+        },
+        {
+          "count": 2,
+          "nameEn": "포켓몬 교체",
+          "ref": "ko:SGG_011"
+        },
+        {
+          "count": 4,
+          "nameEn": "활력의 항아리",
+          "ref": "ko:SGG_012"
+        },
+        {
+          "count": 2,
+          "nameEn": "풍선",
+          "ref": "ko:S4a_171"
+        },
+        {
+          "count": 1,
+          "nameEn": "보통낚싯대",
+          "ref": "ko:S4a_160"
+        },
+        {
+          "count": 4,
+          "nameEn": "박사의 연구",
+          "ref": "ko:SGG_015"
+        },
+        {
+          "count": 3,
+          "nameEn": "마리",
+          "ref": "ko:SGI_016"
+        },
+        {
+          "count": 2,
+          "nameEn": "보스의 지령",
+          "ref": "ko:SGI_019"
+        },
+        {
+          "count": 1,
+          "nameEn": "민화의 대접",
+          "ref": "ko:SM9_085"
+        },
+        {
+          "count": 3,
+          "nameEn": "악의 탑",
+          "ref": "ko:SGG_018"
+        },
+        {
+          "count": 3,
+          "nameEn": "기본 격투 에너지",
+          "ref": "ko:SV1S_108"
+        },
+        {
+          "count": 4,
+          "nameEn": "일격 에너지",
+          "ref": "ko:SGG_019"
+        },
+        {
+          "count": 4,
+          "nameEn": "캡쳐 에너지",
+          "ref": "ko:S4a_189"
+        }
+      ]
+    },
+    {
+      "id": "giratina",
+      "name": "기라티나 VSTAR",
+      "note": "공식 덱 레시피 · 기라티나 VSTAR 로스트존 (덱 코드 ckIE-U5Dp-jhBS-JiyF)",
+      "cards": [
+        {
+          "count": 4,
+          "nameEn": "큐아링",
+          "ref": "ko:S12a_064"
+        },
+        {
+          "count": 1,
+          "nameEn": "윽우지",
+          "ref": "ko:S11_033"
+        },
+        {
+          "count": 2,
+          "nameEn": "깜까미",
+          "ref": "ko:S11_044"
+        },
+        {
+          "count": 1,
+          "nameEn": "찬란한 개굴닌자",
+          "ref": "ko:S12a_033"
+        },
+        {
+          "count": 1,
+          "nameEn": "마나피",
+          "ref": "ko:S12a_029"
+        },
+        {
+          "count": 3,
+          "nameEn": "기라티나 V",
+          "ref": "ko:S12a_110"
+        },
+        {
+          "count": 1,
+          "nameEn": "드래피온 V",
+          "ref": "ko:S12a_085"
+        },
+        {
+          "count": 3,
+          "nameEn": "기라티나 VSTAR",
+          "ref": "ko:S12a_111"
+        },
+        {
+          "count": 4,
+          "nameEn": "배틀VIP패스",
+          "ref": "ko:S8_089"
+        },
+        {
+          "count": 3,
+          "nameEn": "네스트볼",
+          "ref": "ko:SVB_001"
+        },
+        {
+          "count": 4,
+          "nameEn": "미라주게이트",
+          "ref": "ko:S12a_139"
+        },
+        {
+          "count": 2,
+          "nameEn": "교체카트",
+          "ref": "ko:S10D_060"
+        },
+        {
+          "count": 2,
+          "nameEn": "대단한낚싯대",
+          "ref": "ko:SV2P_066"
+        },
+        {
+          "count": 2,
+          "nameEn": "동굴탈출로프",
+          "ref": "ko:SI_364"
+        },
+        {
+          "count": 1,
+          "nameEn": "포켓몬 교체",
+          "ref": "ko:SVB_004"
+        },
+        {
+          "count": 1,
+          "nameEn": "로스트스위퍼",
+          "ref": "ko:SVB_014"
+        },
+        {
+          "count": 1,
+          "nameEn": "히스이의 헤비볼",
+          "ref": "ko:SVB_016"
+        },
+        {
+          "count": 1,
+          "nameEn": "포켓기어3.0",
+          "ref": "ko:SVB_003"
+        },
+        {
+          "count": 4,
+          "nameEn": "아크로마의 실험",
+          "ref": "ko:S12a_155"
+        },
+        {
+          "count": 2,
+          "nameEn": "보스의 지령",
+          "ref": "ko:SVB_020"
+        },
+        {
+          "count": 2,
+          "nameEn": "모야모",
+          "ref": "ko:SV2D_068"
+        },
+        {
+          "count": 1,
+          "nameEn": "원규",
+          "ref": "ko:SVB_022"
+        },
+        {
+          "count": 2,
+          "nameEn": "정상으로 가는 눈길",
+          "ref": "ko:SVB_027"
+        },
+        {
+          "count": 4,
+          "nameEn": "기본 초 에너지",
+          "ref": "ko:SVB_033"
+        },
+        {
+          "count": 3,
+          "nameEn": "기본 풀 에너지",
+          "ref": "ko:SVB_029"
+        },
+        {
+          "count": 3,
+          "nameEn": "기본 물 에너지",
+          "ref": "ko:SVB_031"
+        },
+        {
+          "count": 2,
+          "nameEn": "제트 에너지",
+          "ref": "ko:SV1a_073"
+        }
+      ]
+    },
+    {
       "id": "dragapult_gdansk",
       "name": "드래펄트 ex (국제)",
       "note": "Regional Gdańsk 2026-10-31 3위",
@@ -2173,6 +2437,374 @@
     "ko:MC_735": {
       "nameEn": "하솔",
       "ko": "MC_735",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SGG_004": {
+      "nameEn": "델빌",
+      "ko": "SGG_004",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SM12_035": {
+      "nameEn": "춤추새 GX",
+      "ko": "SM12_035",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SM12a_055": {
+      "nameEn": "뮤",
+      "ko": "SM12a_055",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SGG_005": {
+      "nameEn": "헬가",
+      "ko": "SGG_005",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S5I_036": {
+      "nameEn": "일격 우라오스 V",
+      "ko": "S5I_036",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S5I_037": {
+      "nameEn": "일격 우라오스 VMAX",
+      "ko": "S5I_037",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S6a_047": {
+      "nameEn": "블래키 V",
+      "ko": "S6a_047",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S6a_048": {
+      "nameEn": "블래키 VMAX",
+      "ko": "S6a_048",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SGG_009": {
+      "nameEn": "퀵볼",
+      "ko": "SGG_009",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SM9_081": {
+      "nameEn": "포켓몬통신",
+      "ko": "SM9_081",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SGG_008": {
+      "nameEn": "진화향로",
+      "ko": "SGG_008",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SGG_011": {
+      "nameEn": "포켓몬 교체",
+      "ko": "SGG_011",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SGG_012": {
+      "nameEn": "활력의 항아리",
+      "ko": "SGG_012",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S4a_171": {
+      "nameEn": "풍선",
+      "ko": "S4a_171",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S4a_160": {
+      "nameEn": "보통낚싯대",
+      "ko": "S4a_160",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SGG_015": {
+      "nameEn": "박사의 연구",
+      "ko": "SGG_015",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SGI_016": {
+      "nameEn": "마리",
+      "ko": "SGI_016",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SGI_019": {
+      "nameEn": "보스의 지령",
+      "ko": "SGI_019",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SM9_085": {
+      "nameEn": "민화의 대접",
+      "ko": "SM9_085",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SGG_018": {
+      "nameEn": "악의 탑",
+      "ko": "SGG_018",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SGG_019": {
+      "nameEn": "일격 에너지",
+      "ko": "SGG_019",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S4a_189": {
+      "nameEn": "캡쳐 에너지",
+      "ko": "S4a_189",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S12a_064": {
+      "nameEn": "큐아링",
+      "ko": "S12a_064",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S11_033": {
+      "nameEn": "윽우지",
+      "ko": "S11_033",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S11_044": {
+      "nameEn": "깜까미",
+      "ko": "S11_044",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S12a_033": {
+      "nameEn": "찬란한 개굴닌자",
+      "ko": "S12a_033",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S12a_029": {
+      "nameEn": "마나피",
+      "ko": "S12a_029",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S12a_110": {
+      "nameEn": "기라티나 V",
+      "ko": "S12a_110",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S12a_085": {
+      "nameEn": "드래피온 V",
+      "ko": "S12a_085",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S12a_111": {
+      "nameEn": "기라티나 VSTAR",
+      "ko": "S12a_111",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S8_089": {
+      "nameEn": "배틀VIP패스",
+      "ko": "S8_089",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_001": {
+      "nameEn": "네스트볼",
+      "ko": "SVB_001",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S12a_139": {
+      "nameEn": "미라주게이트",
+      "ko": "S12a_139",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S10D_060": {
+      "nameEn": "교체카트",
+      "ko": "S10D_060",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SI_364": {
+      "nameEn": "동굴탈출로프",
+      "ko": "SI_364",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_004": {
+      "nameEn": "포켓몬 교체",
+      "ko": "SVB_004",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_014": {
+      "nameEn": "로스트스위퍼",
+      "ko": "SVB_014",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_016": {
+      "nameEn": "히스이의 헤비볼",
+      "ko": "SVB_016",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_003": {
+      "nameEn": "포켓기어3.0",
+      "ko": "SVB_003",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:S12a_155": {
+      "nameEn": "아크로마의 실험",
+      "ko": "S12a_155",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_020": {
+      "nameEn": "보스의 지령",
+      "ko": "SVB_020",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_022": {
+      "nameEn": "원규",
+      "ko": "SVB_022",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_027": {
+      "nameEn": "정상으로 가는 눈길",
+      "ko": "SVB_027",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_033": {
+      "nameEn": "기본 초 에너지",
+      "ko": "SVB_033",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_029": {
+      "nameEn": "기본 풀 에너지",
+      "ko": "SVB_029",
+      "score": null,
+      "tried": [
+        "manual"
+      ]
+    },
+    "ko:SVB_031": {
+      "nameEn": "기본 물 에너지",
+      "ko": "SVB_031",
       "score": null,
       "tried": [
         "manual"

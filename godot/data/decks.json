@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated": "2026-11-19T14:13:46.404Z",
+  "generated": "2026-11-19T15:35:38.521Z",
   "decks": [
     {
       "guide": {
@@ -5215,7 +5215,705 @@
           "thumb": "res://cards/thumb/SV4M_095.webp"
         }
       ]
+    },
+    {
+      "guide": {
+        "summary": "블래키 VMAX와 일격 우라오스 VMAX, 두 '일격' VMAX로 큰 데미지를 내는 악·격투 덱입니다. 헬가가 덱에서 일격 에너지를 붙여 주며 공격을 서두릅니다.",
+        "concept": "헬가의 특성 일격의 포효로 매 차례 일격 에너지를 붙이고(대신 데미지 카운터 2개), 일격 에너지의 +20으로 데미지를 키웁니다. 카운터가 올라간 블래키 V의 월광의칼날(80+80)이나, 효과를 무시하는 일격 우라오스 VMAX의 거다이일격(270)으로 마무리합니다.",
+        "keyCards": [
+          {
+            "code": "SGG_005",
+            "role": "에너지 가속",
+            "text": "일격의 포효: 차례마다 덱의 일격 에너지를 '일격' 포켓몬에게 붙이고 그 포켓몬에 데미지 카운터 2개. 카운터는 블래키 V의 월광의칼날을 켜는 조건이기도 합니다.",
+            "name": "헬가"
+          },
+          {
+            "code": "S6a_048",
+            "role": "메인 어태커",
+            "text": "HP310. 패에서 진화하면 다크시그널로 상대 벤치 포켓몬을 끌어냅니다. 다이아크 160(+일격 에너지).",
+            "name": "블래키 VMAX"
+          },
+          {
+            "code": "S5I_037",
+            "role": "마무리",
+            "text": "거다이일격 270: 에너지를 모두 트래쉬하는 대신 상대 배틀 포켓몬에 걸린 효과(데미지 감소·특성)를 무시합니다.",
+            "name": "일격 우라오스 VMAX"
+          },
+          {
+            "code": "S5I_036",
+            "role": "준비",
+            "text": "예민해지기로 덱의 기본 격투 에너지를 2장 붙이고, 임팩트블로 180은 연속으로 쓸 수 없습니다.",
+            "name": "일격 우라오스 V"
+          },
+          {
+            "code": "SGG_019",
+            "role": "특수 에너지",
+            "text": "'일격' 포켓몬에게만 붙고 격투·악 중 하나로 쓰이며, 상대 배틀 포켓몬에게 주는 데미지 +20.",
+            "name": "일격 에너지"
+          },
+          {
+            "code": "SM12_035",
+            "role": "드로우",
+            "text": "전별의 춤: 앞의 상대 차례에 내 포켓몬이 기절했으면 3장 뽑습니다. GX 기술은 대전 중 1번.",
+            "name": "춤추새 GX"
+          }
+        ],
+        "plan": [
+          {
+            "label": "1턴",
+            "text": "퀵볼·캡쳐 에너지로 델빌·블래키 V·일격 우라오스 V를 벤치에 깝니다. 악의 탑이 있으면 일격 카드를 버리고 2장 뽑습니다."
+          },
+          {
+            "label": "2턴",
+            "text": "헬가로 진화해 일격의 포효로 에너지를 붙이고, 블래키 VMAX로 진화하며 다크시그널로 상대의 약한 벤치를 끌어냅니다."
+          },
+          {
+            "label": "중반",
+            "text": "카운터가 올라간 블래키 V는 월광의칼날 160(+20)으로, 단단한 상대는 거다이일격으로 처리합니다."
+          },
+          {
+            "label": "후반",
+            "text": "보스의 지령으로 남은 프라이즈를 정확히 노리고, 활력의 항아리로 일격 에너지를 덱으로 돌려 다시 붙입니다."
+          }
+        ],
+        "tips": [
+          "일격의 포효의 카운터 2개는 블래키 V의 월광의칼날(+80) 조건이 되니 블래키 V에게 먼저 붙여 보세요.",
+          "VMAX는 기절하면 프라이즈를 3장 줍니다. 마지막 2장 싸움에서는 벤치의 V를 보호하세요.",
+          "거다이일격 뒤엔 에너지가 0이 되므로 다음 공격수를 미리 준비합니다.",
+          "마리는 상대 패를 4장으로 줄이는 방해 겸 드로우입니다."
+        ],
+        "strengths": [
+          "두 VMAX의 높은 HP(310·330)",
+          "헬가로 매 차례 에너지 가속",
+          "효과를 무시하는 거다이일격"
+        ],
+        "weaknesses": [
+          "VMAX가 기절하면 프라이즈 3장",
+          "헬가의 카운터로 내 포켓몬 HP가 깎임",
+          "기본 포켓몬 대부분이 풀·초 약점"
+        ],
+        "matchups": []
+      },
+      "id": "umbreon",
+      "name": "블래키 VMAX",
+      "note": "공식 덱 레시피 · 블래키 VMAX + 일격 우라오스 VMAX (덱 코드 PdQY-oSe6-g2fa-clYF)",
+      "cover": "S6a_048",
+      "total": 60,
+      "counts": {
+        "pokemon": 19,
+        "trainer": 30,
+        "energy": 11
+      },
+      "cards": [
+        {
+          "id": "SGG_004",
+          "code": "SGG_004",
+          "name": "델빌",
+          "count": 4,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/SGG_004.webp",
+          "thumb": "res://cards/thumb/SGG_004.webp"
+        },
+        {
+          "id": "SM12_035",
+          "code": "SM12_035",
+          "name": "춤추새 GX",
+          "count": 1,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/SM12_035.webp",
+          "thumb": "res://cards/thumb/SM12_035.webp"
+        },
+        {
+          "id": "SM12a_055",
+          "code": "SM12a_055",
+          "name": "뮤",
+          "count": 1,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/SM12a_055.webp",
+          "thumb": "res://cards/thumb/SM12a_055.webp"
+        },
+        {
+          "id": "SGG_005",
+          "code": "SGG_005",
+          "name": "헬가",
+          "count": 4,
+          "kind": "pokemon",
+          "basic": false,
+          "full": "res://cards/full/SGG_005.webp",
+          "thumb": "res://cards/thumb/SGG_005.webp"
+        },
+        {
+          "id": "S5I_036",
+          "code": "S5I_036",
+          "name": "일격 우라오스 V",
+          "count": 2,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S5I_036.webp",
+          "thumb": "res://cards/thumb/S5I_036.webp"
+        },
+        {
+          "id": "S5I_037",
+          "code": "S5I_037",
+          "name": "일격 우라오스 VMAX",
+          "count": 2,
+          "kind": "pokemon",
+          "basic": false,
+          "full": "res://cards/full/S5I_037.webp",
+          "thumb": "res://cards/thumb/S5I_037.webp"
+        },
+        {
+          "id": "S6a_047",
+          "code": "S6a_047",
+          "name": "블래키 V",
+          "count": 3,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S6a_047.webp",
+          "thumb": "res://cards/thumb/S6a_047.webp"
+        },
+        {
+          "id": "S6a_048",
+          "code": "S6a_048",
+          "name": "블래키 VMAX",
+          "count": 2,
+          "kind": "pokemon",
+          "basic": false,
+          "full": "res://cards/full/S6a_048.webp",
+          "thumb": "res://cards/thumb/S6a_048.webp"
+        },
+        {
+          "id": "SGG_009",
+          "code": "SGG_009",
+          "name": "퀵볼",
+          "count": 4,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SGG_009.webp",
+          "thumb": "res://cards/thumb/SGG_009.webp"
+        },
+        {
+          "id": "SM9_081",
+          "code": "SM9_081",
+          "name": "포켓몬통신",
+          "count": 2,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SM9_081.webp",
+          "thumb": "res://cards/thumb/SM9_081.webp"
+        },
+        {
+          "id": "SGG_008",
+          "code": "SGG_008",
+          "name": "진화향로",
+          "count": 2,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SGG_008.webp",
+          "thumb": "res://cards/thumb/SGG_008.webp"
+        },
+        {
+          "id": "SGG_011",
+          "code": "SGG_011",
+          "name": "포켓몬 교체",
+          "count": 2,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SGG_011.webp",
+          "thumb": "res://cards/thumb/SGG_011.webp"
+        },
+        {
+          "id": "SGG_012",
+          "code": "SGG_012",
+          "name": "활력의 항아리",
+          "count": 4,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SGG_012.webp",
+          "thumb": "res://cards/thumb/SGG_012.webp"
+        },
+        {
+          "id": "S4a_171",
+          "code": "S4a_171",
+          "name": "풍선",
+          "count": 2,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/S4a_171.webp",
+          "thumb": "res://cards/thumb/S4a_171.webp"
+        },
+        {
+          "id": "S4a_160",
+          "code": "S4a_160",
+          "name": "보통낚싯대",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/S4a_160.webp",
+          "thumb": "res://cards/thumb/S4a_160.webp"
+        },
+        {
+          "id": "SGG_015",
+          "code": "SGG_015",
+          "name": "박사의 연구",
+          "count": 4,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SGG_015.webp",
+          "thumb": "res://cards/thumb/SGG_015.webp"
+        },
+        {
+          "id": "SGI_016",
+          "code": "SGI_016",
+          "name": "마리",
+          "count": 3,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SGI_016.webp",
+          "thumb": "res://cards/thumb/SGI_016.webp"
+        },
+        {
+          "id": "SGI_019",
+          "code": "SGI_019",
+          "name": "보스의 지령",
+          "count": 2,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SGI_019.webp",
+          "thumb": "res://cards/thumb/SGI_019.webp"
+        },
+        {
+          "id": "SM9_085",
+          "code": "SM9_085",
+          "name": "민화의 대접",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SM9_085.webp",
+          "thumb": "res://cards/thumb/SM9_085.webp"
+        },
+        {
+          "id": "SGG_018",
+          "code": "SGG_018",
+          "name": "악의 탑",
+          "count": 3,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SGG_018.webp",
+          "thumb": "res://cards/thumb/SGG_018.webp"
+        },
+        {
+          "id": "SV1S_108",
+          "code": "SV1S_108",
+          "name": "기본 격투 에너지",
+          "count": 3,
+          "kind": "energy",
+          "basic": false,
+          "full": "res://cards/full/SV1S_108.webp",
+          "thumb": "res://cards/thumb/SV1S_108.webp"
+        },
+        {
+          "id": "SGG_019",
+          "code": "SGG_019",
+          "name": "일격 에너지",
+          "count": 4,
+          "kind": "energy",
+          "basic": false,
+          "full": "res://cards/full/SGG_019.webp",
+          "thumb": "res://cards/thumb/SGG_019.webp"
+        },
+        {
+          "id": "S4a_189",
+          "code": "S4a_189",
+          "name": "캡쳐 에너지",
+          "count": 4,
+          "kind": "energy",
+          "basic": false,
+          "full": "res://cards/full/S4a_189.webp",
+          "thumb": "res://cards/thumb/S4a_189.webp"
+        }
+      ]
+    },
+    {
+      "guide": {
+        "summary": "큐아링과 아크로마의 실험으로 카드를 로스트존에 빠르게 쌓고, 기라티나 VSTAR의 로스트임팩트(280)와 VSTAR 파워 스타레퀴엠으로 끝내는 로스트존 덱입니다.",
+        "concept": "로스트존에 7장이 모이면 미라주게이트로 에너지 2장을 붙이고, 4장부터는 윽우지가 에너지 없이 공격합니다. 10장이 되면 깜까미의 로스트마인과 기라티나 VSTAR의 스타레퀴엠(상대 배틀 포켓몬 기절)이 열립니다.",
+        "keyCards": [
+          {
+            "code": "S12a_111",
+            "role": "메인 어태커",
+            "text": "로스트임팩트 280(내 필드의 에너지 2개를 로스트존에). 스타레퀴엠: 로스트존 10장 이상일 때 상대 배틀 포켓몬을 기절 (VSTAR 파워, 대전 중 1번).",
+            "name": "기라티나 VSTAR"
+          },
+          {
+            "code": "S12a_110",
+            "role": "준비",
+            "text": "어비스시크로 덱 위 4장 중 2장을 패에, 나머지 2장을 로스트존에 둡니다.",
+            "name": "기라티나 V"
+          },
+          {
+            "code": "S12a_064",
+            "role": "엔진",
+            "text": "꽃고르기: 배틀 포켓몬일 때 덱 위 2장 중 1장 패, 1장 로스트존. 후퇴 비용 1로 자주 교체합니다.",
+            "name": "큐아링"
+          },
+          {
+            "code": "S12a_139",
+            "role": "에너지 가속",
+            "text": "로스트존 7장 이상일 때 서로 다른 타입의 기본 에너지를 2장 붙입니다 (풀·초·물).",
+            "name": "미라주게이트"
+          },
+          {
+            "code": "S11_033",
+            "role": "서브 어태커",
+            "text": "로스트 프로바이드: 로스트존 4장 이상이면 에너지 없이 시치미스핏 110 (약점 계산 없음).",
+            "name": "윽우지"
+          },
+          {
+            "code": "S12a_029",
+            "role": "벤치 보호",
+            "text": "파도의 베일: 내 벤치 포켓몬은 상대 기술의 데미지를 받지 않습니다.",
+            "name": "마나피"
+          }
+        ],
+        "plan": [
+          {
+            "label": "1턴",
+            "text": "배틀VIP패스로 큐아링·기라티나 V를 깔고, 큐아링을 배틀 포켓몬으로 꽃고르기를 씁니다."
+          },
+          {
+            "label": "2턴",
+            "text": "아크로마의 실험·어비스시크로 로스트존을 늘리고 기라티나 VSTAR로 진화합니다. 7장이면 미라주게이트로 에너지를 붙입니다."
+          },
+          {
+            "label": "중반",
+            "text": "로스트임팩트 280으로 VMAX가 아닌 대부분을 한 방에 잡고, 윽우지·찬란한 개굴닌자로 벤치를 정리합니다."
+          },
+          {
+            "label": "후반",
+            "text": "로스트존 10장이 되면 스타레퀴엠으로 HP와 상관없이 기절시키고, 깜까미 로스트마인으로 카운터 12개를 나눠 올립니다."
+          }
+        ],
+        "tips": [
+          "로스트임팩트는 내 필드의 에너지 2개를 로스트존으로 보내므로, 그 자체로 로스트존 장수를 늘립니다.",
+          "큐아링의 꽃고르기는 배틀 포켓몬일 때만 쓸 수 있습니다. 교체카트·포켓몬 교체로 앞뒤를 바꿔 줍니다.",
+          "정상으로 가는 눈길은 룰을 가진 포켓몬의 특성을 지워, 상대 V·ex의 특성을 막습니다 (우리 핵심 특성은 룰이 없는 포켓몬).",
+          "히스이의 헤비볼로 사이드에 묻힌 기본 포켓몬을 꺼낼 수 있습니다."
+        ],
+        "strengths": [
+          "로스트존 장수에 따라 강해지는 여러 공격수",
+          "스타레퀴엠으로 큰 상대도 한 번에",
+          "벤치 보호(마나피)와 비용 없는 공격(윽우지)"
+        ],
+        "weaknesses": [
+          "로스트존이 쌓이기 전 초반이 약함",
+          "기라티나 VSTAR가 기절하면 프라이즈 2장",
+          "에너지 타입이 셋이라 붙이기가 까다로움"
+        ],
+        "matchups": []
+      },
+      "id": "giratina",
+      "name": "기라티나 VSTAR",
+      "note": "공식 덱 레시피 · 기라티나 VSTAR 로스트존 (덱 코드 ckIE-U5Dp-jhBS-JiyF)",
+      "cover": "S12a_111",
+      "total": 60,
+      "counts": {
+        "pokemon": 16,
+        "trainer": 32,
+        "energy": 12
+      },
+      "cards": [
+        {
+          "id": "S12a_064",
+          "code": "S12a_064",
+          "name": "큐아링",
+          "count": 4,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S12a_064.webp",
+          "thumb": "res://cards/thumb/S12a_064.webp"
+        },
+        {
+          "id": "S11_033",
+          "code": "S11_033",
+          "name": "윽우지",
+          "count": 1,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S11_033.webp",
+          "thumb": "res://cards/thumb/S11_033.webp"
+        },
+        {
+          "id": "S11_044",
+          "code": "S11_044",
+          "name": "깜까미",
+          "count": 2,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S11_044.webp",
+          "thumb": "res://cards/thumb/S11_044.webp"
+        },
+        {
+          "id": "S12a_033",
+          "code": "S12a_033",
+          "name": "찬란한 개굴닌자",
+          "count": 1,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S12a_033.webp",
+          "thumb": "res://cards/thumb/S12a_033.webp"
+        },
+        {
+          "id": "S12a_029",
+          "code": "S12a_029",
+          "name": "마나피",
+          "count": 1,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S12a_029.webp",
+          "thumb": "res://cards/thumb/S12a_029.webp"
+        },
+        {
+          "id": "S12a_110",
+          "code": "S12a_110",
+          "name": "기라티나 V",
+          "count": 3,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S12a_110.webp",
+          "thumb": "res://cards/thumb/S12a_110.webp"
+        },
+        {
+          "id": "S12a_085",
+          "code": "S12a_085",
+          "name": "드래피온 V",
+          "count": 1,
+          "kind": "pokemon",
+          "basic": true,
+          "full": "res://cards/full/S12a_085.webp",
+          "thumb": "res://cards/thumb/S12a_085.webp"
+        },
+        {
+          "id": "S12a_111",
+          "code": "S12a_111",
+          "name": "기라티나 VSTAR",
+          "count": 3,
+          "kind": "pokemon",
+          "basic": false,
+          "full": "res://cards/full/S12a_111.webp",
+          "thumb": "res://cards/thumb/S12a_111.webp"
+        },
+        {
+          "id": "S8_089",
+          "code": "S8_089",
+          "name": "배틀VIP패스",
+          "count": 4,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/S8_089.webp",
+          "thumb": "res://cards/thumb/S8_089.webp"
+        },
+        {
+          "id": "SVB_001",
+          "code": "SVB_001",
+          "name": "네스트볼",
+          "count": 3,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_001.webp",
+          "thumb": "res://cards/thumb/SVB_001.webp"
+        },
+        {
+          "id": "S12a_139",
+          "code": "S12a_139",
+          "name": "미라주게이트",
+          "count": 4,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/S12a_139.webp",
+          "thumb": "res://cards/thumb/S12a_139.webp"
+        },
+        {
+          "id": "S10D_060",
+          "code": "S10D_060",
+          "name": "교체카트",
+          "count": 2,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/S10D_060.webp",
+          "thumb": "res://cards/thumb/S10D_060.webp"
+        },
+        {
+          "id": "SV2P_066",
+          "code": "SV2P_066",
+          "name": "대단한낚싯대",
+          "count": 2,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SV2P_066.webp",
+          "thumb": "res://cards/thumb/SV2P_066.webp"
+        },
+        {
+          "id": "SI_364",
+          "code": "SI_364",
+          "name": "동굴탈출로프",
+          "count": 2,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SI_364.webp",
+          "thumb": "res://cards/thumb/SI_364.webp"
+        },
+        {
+          "id": "SVB_004",
+          "code": "SVB_004",
+          "name": "포켓몬 교체",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_004.webp",
+          "thumb": "res://cards/thumb/SVB_004.webp"
+        },
+        {
+          "id": "SVB_014",
+          "code": "SVB_014",
+          "name": "로스트스위퍼",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_014.webp",
+          "thumb": "res://cards/thumb/SVB_014.webp"
+        },
+        {
+          "id": "SVB_016",
+          "code": "SVB_016",
+          "name": "히스이의 헤비볼",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_016.webp",
+          "thumb": "res://cards/thumb/SVB_016.webp"
+        },
+        {
+          "id": "SVB_003",
+          "code": "SVB_003",
+          "name": "포켓기어3.0",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_003.webp",
+          "thumb": "res://cards/thumb/SVB_003.webp"
+        },
+        {
+          "id": "S12a_155",
+          "code": "S12a_155",
+          "name": "아크로마의 실험",
+          "count": 4,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/S12a_155.webp",
+          "thumb": "res://cards/thumb/S12a_155.webp"
+        },
+        {
+          "id": "SVB_020",
+          "code": "SVB_020",
+          "name": "보스의 지령",
+          "count": 2,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_020.webp",
+          "thumb": "res://cards/thumb/SVB_020.webp"
+        },
+        {
+          "id": "SV2D_068",
+          "code": "SV2D_068",
+          "name": "모야모",
+          "count": 2,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SV2D_068.webp",
+          "thumb": "res://cards/thumb/SV2D_068.webp",
+          "prints": [
+            {
+              "code": "SV2D_068",
+              "reg": "G",
+              "special": false,
+              "full": "res://cards/full/SV2D_068.webp",
+              "thumb": "res://cards/thumb/SV2D_068.webp"
+            },
+            {
+              "code": "SV4a_353",
+              "reg": "G",
+              "special": true,
+              "full": "res://cards/full/SV4a_353.webp",
+              "thumb": "res://cards/thumb/SV4a_353.webp"
+            }
+          ]
+        },
+        {
+          "id": "SVB_022",
+          "code": "SVB_022",
+          "name": "원규",
+          "count": 1,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_022.webp",
+          "thumb": "res://cards/thumb/SVB_022.webp"
+        },
+        {
+          "id": "SVB_027",
+          "code": "SVB_027",
+          "name": "정상으로 가는 눈길",
+          "count": 2,
+          "kind": "trainer",
+          "basic": false,
+          "full": "res://cards/full/SVB_027.webp",
+          "thumb": "res://cards/thumb/SVB_027.webp"
+        },
+        {
+          "id": "SVB_033",
+          "code": "SVB_033",
+          "name": "기본 초 에너지",
+          "count": 4,
+          "kind": "energy",
+          "basic": false,
+          "full": "res://cards/full/SVB_033.webp",
+          "thumb": "res://cards/thumb/SVB_033.webp"
+        },
+        {
+          "id": "SVB_029",
+          "code": "SVB_029",
+          "name": "기본 풀 에너지",
+          "count": 3,
+          "kind": "energy",
+          "basic": false,
+          "full": "res://cards/full/SVB_029.webp",
+          "thumb": "res://cards/thumb/SVB_029.webp"
+        },
+        {
+          "id": "SVB_031",
+          "code": "SVB_031",
+          "name": "기본 물 에너지",
+          "count": 3,
+          "kind": "energy",
+          "basic": false,
+          "full": "res://cards/full/SVB_031.webp",
+          "thumb": "res://cards/thumb/SVB_031.webp"
+        },
+        {
+          "id": "SV1a_073",
+          "code": "SV1a_073",
+          "name": "제트 에너지",
+          "count": 2,
+          "kind": "energy",
+          "basic": false,
+          "full": "res://cards/full/SV1a_073.webp",
+          "thumb": "res://cards/thumb/SV1a_073.webp"
+        }
+      ]
     }
   ],
-  "dataVersion": "f779d9a1d534311e"
+  "dataVersion": "97d5b1d5df54840c"
 }

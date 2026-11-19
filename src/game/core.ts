@@ -58,6 +58,7 @@ export function locate(s: GameState, iid: string): { player: Seat; zone: Zone } 
     if (p.hand.includes(iid)) return { player: seat, zone: 'hand' };
     if (p.prizes.includes(iid)) return { player: seat, zone: 'prizes' };
     if (p.discard.includes(iid)) return { player: seat, zone: 'discard' };
+    if (p.lost.includes(iid)) return { player: seat, zone: 'lost' };
     if (p.active && (p.active.stack.includes(iid) || p.active.attached.includes(iid))) return { player: seat, zone: 'active' };
     if (p.bench.some((b) => b.stack.includes(iid) || b.attached.includes(iid))) return { player: seat, zone: 'bench' };
   }
@@ -76,6 +77,7 @@ function removeFrom(s: GameState, iid: string): { player: Seat; zone: Zone } {
     case 'hand': drop(p.hand); break;
     case 'prizes': { const i = p.prizes.indexOf(iid); p.prizes[i] = null; break; }
     case 'discard': drop(p.discard); break;
+    case 'lost': drop(p.lost); break;
     case 'stadium': s.stadium = null; break;
     case 'reveal': drop(s.using); break;
     case 'active':
@@ -100,7 +102,7 @@ export function newSlot(s: GameState, iid: string, faceDown = false): PokemonSlo
 
 export type Dest =
   | { zone: 'deck'; player: Seat; position: 'top' | 'bottom' }
-  | { zone: 'hand' | 'discard'; player: Seat }
+  | { zone: 'hand' | 'discard' | 'lost'; player: Seat }
   | { zone: 'prizes'; player: Seat; index: number }
   | { zone: 'active' | 'bench'; player: Seat; faceDown?: boolean }
   | { zone: 'attach'; sid: string }               // 포켓몬에 붙이기 (에너지·도구)
@@ -122,6 +124,7 @@ export function moveCard(ctx: Ctx, iid: string, dest: Dest): string {
     case 'deck': { const p = s.players[dest.player]; if (dest.position === 'top') p.deck.unshift(nid); else p.deck.push(nid); to = { player: dest.player, zone: 'deck' }; break; }
     case 'hand': s.players[dest.player].hand.push(nid); to = { player: dest.player, zone: 'hand' }; break;
     case 'discard': s.players[dest.player].discard.push(nid); to = { player: dest.player, zone: 'discard' }; break;
+    case 'lost': s.players[dest.player].lost.push(nid); to = { player: dest.player, zone: 'lost' }; break;
     case 'prizes': s.players[dest.player].prizes[dest.index] = nid; to = { player: dest.player, zone: 'prizes' }; break;
     case 'active':
     case 'bench': {
@@ -243,6 +246,8 @@ export const energiesOf = (ctx: Ctx, slot: PokemonSlot) => slot.attached.filter(
 export function abilityActive(ctx: Ctx, slot: PokemonSlot): boolean {
   const d = slotData(ctx, slot);
   if (!d.pokemon?.abilities.length || slot.faceDown) return false;
+  // 정상으로 가는 눈길: 서로의 룰을 가진 포켓몬의 특성은 모두 없어진다
+  if (d.pokemon.rule !== null && stadiumName(ctx) === '정상으로 가는 눈길') return false;
   if (d.pokemon.stage !== 0 || d.pokemon.abilities[0].nameJa === 'いたずらロック') return true;
   for (const seat of [0, 1] as Seat[]) {
     const a = ctx.s.players[seat].active;
@@ -276,8 +281,9 @@ export function retreatCost(ctx: Ctx, slot: PokemonSlot, seat: Seat): number {
 }
 
 /** 붙은 에너지가 제공하는 에너지 단위. '*' = 모든 타입 */
-export function provided(ctx: Ctx, slot: PokemonSlot): (EType | '*')[] {
-  const out: (EType | '*')[] = [];
+export type EUnit = EType | '*' | 'FD';   // 'FD' = 격투 또는 악 1개 (일격 에너지)
+export function provided(ctx: Ctx, slot: PokemonSlot): EUnit[] {
+  const out: EUnit[] = [];
   const ens = energiesOf(ctx, slot);
   const specials = ens.filter((e) => !dataOf(ctx, e).energy?.basic);
   const stage = slotData(ctx, slot).pokemon?.stage ?? 0;
@@ -285,7 +291,8 @@ export function provided(ctx: Ctx, slot: PokemonSlot): (EType | '*')[] {
     const d = dataOf(ctx, e);
     if (d.energy?.basic && d.energy.type) { out.push(d.energy.type); continue; }
     switch (d.name) {
-      case '제트 에너지': out.push('C'); break;
+      case '제트 에너지': case '캡쳐 에너지': out.push('C'); break;
+      case '일격 에너지': out.push('FD'); break;
       case '루미너스 에너지': out.push(specials.length > 1 ? 'C' : '*'); break;
       case '네오 어퍼 에너지': if (stage === 2) out.push('*', '*'); else out.push('C'); break;
       default: out.push('C');
@@ -295,12 +302,13 @@ export function provided(ctx: Ctx, slot: PokemonSlot): (EType | '*')[] {
 }
 
 /** 비용을 낼 수 있는가 (특정 타입부터 맞추고, 무색은 남은 것으로) */
-export function canPay(units: (EType | '*')[], cost: EType[]): boolean {
+export function canPay(units: EUnit[], cost: EType[]): boolean {
   const pool = [...units];
   const specific = cost.filter((c) => c !== 'C');
   const colorless = cost.length - specific.length;
   for (const t of specific) {
     let i = pool.indexOf(t);
+    if (i < 0) i = pool.findIndex((u) => u.length === 2 && u.includes(t));
     if (i < 0) i = pool.indexOf('*');
     if (i < 0) return false;
     pool.splice(i, 1);
@@ -314,6 +322,13 @@ export function attackCost(ctx: Ctx, slot: PokemonSlot, seat: Seat, cost: EType[
   const d = slotData(ctx, slot).pokemon!;
   const dropOne = () => { const i = c.lastIndexOf('C'); if (i >= 0) c.splice(i, 1); else c.pop(); };
   if (toolName(ctx, slot) === '반짝이는 결정' && d.tera) dropOne();
+  // 윽우지 "로스트 프로바이드": 로스트존 4장 이상이면 기술 에너지가 모두 없어짐
+  if (hasAbility(ctx, slot, '로스트 프로바이드') && ctx.s.players[seat].lost.length >= 4) return [];
+  // 드래피온 V "와일드스타일": 상대 필드의 일격·연격·퓨전 포켓몬 수만큼 무색 에너지가 적어짐
+  if (hasAbility(ctx, slot, '와일드스타일')) {
+    const n = slotsOf(ctx.s, other(seat)).filter((sl) => !sl.faceDown && (slotData(ctx, sl).tags ?? []).some((t) => t === '일격' || t === '연격' || t === '퓨전')).length;
+    for (let i = 0; i < n; i++) { const j = c.lastIndexOf('C'); if (j >= 0) c.splice(j, 1); }
+  }
   if (attackJa === 'ブラッドムーン' && hasAbility(ctx, slot, 'ろうれんのわざ')) {
     const taken = prizesTaken(ctx.s, other(seat));
     for (let i = 0; i < taken; i++) { const j = c.lastIndexOf('C'); if (j >= 0) c.splice(j, 1); }
@@ -321,6 +336,7 @@ export function attackCost(ctx: Ctx, slot: PokemonSlot, seat: Seat, cost: EType[
   return c;
 }
 
+export const lostCount = (s: GameState, seat: Seat) => s.players[seat].lost.length;
 export const prizesLeft = (s: GameState, seat: Seat) => s.players[seat].prizes.filter(Boolean).length;
 export const prizesTaken = (s: GameState, seat: Seat) => 6 - prizesLeft(s, seat);
 export const playerHasEffect = (s: GameState, seat: Seat, kind: string) => s.players[seat].effects.some((e) => e.kind === kind);
@@ -332,7 +348,8 @@ export const slotHasEffect = (slot: PokemonSlot, kind: string) => slot.effects.s
  * 기술 데미지를 준다 (규칙서 데미지 계산 순서).
  * base: 기술 데미지(+, × 반영 후), wr: 약점·저항력 계산 여부(상대 배틀 포켓몬에게만 true)
  */
-export function dealAttackDamage(ctx: Ctx, seat: Seat, atk: PokemonSlot, target: PokemonSlot, base: number, wr: boolean) {
+export type DamageOpts = { ignoreEffects?: boolean; noWeak?: boolean };
+export function dealAttackDamage(ctx: Ctx, seat: Seat, atk: PokemonSlot, target: PokemonSlot, base: number, wr: boolean, opts: DamageOpts = {}) {
   const { s } = ctx;
   const tOwner = ownerOfSlot(s, target);
   const tActive = isActive(s, target);
@@ -343,6 +360,11 @@ export function dealAttackDamage(ctx: Ctx, seat: Seat, atk: PokemonSlot, target:
   // 테라스탈 룰: 벤치의 테라스탈 포켓몬은 기술 데미지를 받지 않는다
   if (!tActive && td.tera) { note(ctx, `${slotName(ctx, target)}: 테라스탈 — 벤치에서는 기술 데미지를 받지 않음`); return 0; }
   const onOppActive = tActive && tOwner !== seat;
+  // 뮤 "벤치배리어"·마나피 "파도의 베일": 상대 기술로 벤치 포켓몬은 데미지를 받지 않는다
+  if (!tActive && tOwner !== seat && (fieldHasAbility(ctx, tOwner, '벤치배리어') || fieldHasAbility(ctx, tOwner, '파도의 베일'))) {
+    note(ctx, `${slotName(ctx, target)}: 벤치 포켓몬은 상대 기술의 데미지를 받지 않음`);
+    return 0;
+  }
   // 2) 공격하는 쪽 효과
   if (onOppActive) {
     const tRule = td.rule !== null;
@@ -352,6 +374,8 @@ export function dealAttackDamage(ctx: Ctx, seat: Seat, atk: PokemonSlot, target:
     if (tool === '오기머리띠' && prizesLeft(s, seat) > prizesLeft(s, other(seat))) dmg += 30;
     if (tool === '부스트에너지 미래' && ad.future) dmg += 20;
     if (hasAbility(ctx, atk, 'ふくがん') && td.abilities.length > 0) dmg += 50;
+    // 일격 에너지: 붙인 포켓몬의 기술이 상대 배틀 포켓몬에게 주는 데미지 +20 (장마다)
+    dmg += 20 * energiesOf(ctx, atk).filter((e) => nameOf(ctx, e) === '일격 에너지').length;
   }
   if (dmg <= 0) return 0;
   // 3) 약점 4) 저항력 (연출용으로 적용 여부를 사건에 남김)
@@ -359,12 +383,12 @@ export function dealAttackDamage(ctx: Ctx, seat: Seat, atk: PokemonSlot, target:
   if (wr && onOppActive) {
     // 릴리에의 삐삐 ex "페어리존": 상대 필드의 드래곤 타입 포켓몬의 약점은 초 타입
     const weak = td.type === 'N' && fieldHasAbility(ctx, seat, 'フェアリーゾーン') ? 'P' : td.weak;
-    if (weak && weak === ad.type) { dmg *= 2; wHit = true; }
-    if (td.resist && td.resist === ad.type) { dmg -= 30; rHit = true; }
+    if (weak && weak === ad.type && !opts.noWeak) { dmg *= 2; wHit = true; }
+    if (td.resist && td.resist === ad.type) { dmg -= td.resistValue ?? 30; rHit = true; }
     if (dmg <= 0) return 0;
   }
-  // 5) 받는 쪽 효과
-  if (tOwner !== seat) {
+  // 5) 받는 쪽 효과 ("상대 배틀 포켓몬에게 걸려 있는 효과를 계산하지 않는" 기술은 건너뜀)
+  if (tOwner !== seat && !(opts.ignoreEffects && tActive)) {
     if (slotHasEffect(target, 'reduce30')) dmg -= 30;
     if (hasAbility(ctx, target, 'ダイヤコート')) dmg -= 30;
     if (slotHasEffect(target, 'immuneBasicNonC') && ad.stage === 0 && ad.type !== 'C') { note(ctx, `${slotName(ctx, target)}: 기본 포켓몬의 기술 데미지를 받지 않음`); return 0; }

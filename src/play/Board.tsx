@@ -170,6 +170,7 @@ function Side({ p, view, decks, waiting, onZoom }: { p: PlayerView; view: GameVi
       <div className="pc-piles">
         <div className="pc-pile">{p.deckCount ? <CardBack /> : <div className="pc-slot empty">덱</div>}<span>덱 {p.deckCount}</span></div>
         <div className="pc-pile">{p.discard.length ? <CardImg code={p.discard[p.discard.length - 1].code} onClick={() => onZoom({ title: ` 트래쉬 장`, main: [], list: [...p.discard].reverse().map((d) => d.code) })} /> : <div className="pc-slot empty">트래쉬</div>}<span>트래쉬 {p.discard.length}</span></div>
+        {p.lost?.length > 0 && <div className="pc-pile"><CardImg code={p.lost[p.lost.length - 1].code} onClick={() => onZoom({ title: `로스트존 ${p.lost.length}장`, main: [], list: [...p.lost].reverse().map((d) => d.code) })} /><span>로스트 {p.lost.length}</span></div>}
       </div>
       <div className="pc-statusbar">
         <b>{seatName(p.seat)}</b>
@@ -178,6 +179,8 @@ function Side({ p, view, decks, waiting, onZoom }: { p: PlayerView; view: GameVi
         <span className="pc-hand">{Array.from({ length: Math.min(p.handCount, 10) }, (_, i) => <i key={i} />)}</span>
         <span>패 {p.handCount}</span><span>사이드 {p.prizes.filter(Boolean).length}</span>
         {p.mulligans > 0 && <span>멀리건 {p.mulligans}</span>}
+        {p.gxUsed && <span className="pc-chip">GX 사용함</span>}
+        {p.vstarUsed && <span className="pc-chip">VSTAR 사용함</span>}
       </div>
     </div>
   );
@@ -189,7 +192,7 @@ function Slot({ slot, decks, big, onZoom }: { slot: SlotView | null; decks: Cata
   const top = slot.stack?.[slot.stack.length - 1];
   const left = slot.hp !== null ? slot.hp - slot.damage : null;
   const badges = [slot.cond.rot && COND[slot.cond.rot], slot.cond.poison ? '독' : '', slot.cond.burn ? '화상' : '',
-    ...slot.effects.map((e) => ({ noAttack: '기술 불가', noRetreat: '후퇴 불가', reduce30: '−30', immuneBasicNonC: '기본 무효' }[e.kind]))].filter(Boolean);
+    ...slot.effects.map((e) => ({ noAttack: '기술 불가', noRetreat: '후퇴 불가', reduce30: '−30', immuneBasicNonC: '기본 무효', lockAttack: `${e.name ?? '기술'} 불가` }[e.kind]))].filter(Boolean);
   return (
     <div className={`pc-slot ${big ? 'big' : ''} ${top && !slot.faceDown ? 'zoomable' : ''}`} onClick={() => { if (top && !slot.faceDown) onZoom({ title: nameOf(decks, top.code), main: [top.code], extra: [...slot.stack!.slice(0, -1).map((x) => x.code).reverse(), ...(slot.attached ?? []).map((a) => a.code)] }); }}>
       {slot.faceDown || !top ? <CardBack /> : <CardImg code={top.code} name={nameOf(decks, top.code)} />}

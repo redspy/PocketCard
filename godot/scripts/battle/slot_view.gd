@@ -87,7 +87,7 @@ func set_slot(s, active := false) -> void:
 	if bool(cond.get("burn", false)):
 		_badges.add_child(_badge("화상", Color(0.85, 0.35, 0.15)))
 	for e in slot.get("effects", []):
-		var t = { "noAttack": "기술 불가", "noRetreat": "후퇴 불가", "reduce30": "-30", "immuneBasicNonC": "기본 무효" }.get(str(e.kind))
+		var t = { "noAttack": "기술 불가", "noRetreat": "후퇴 불가", "reduce30": "-30", "immuneBasicNonC": "기본 무효", "lockAttack": "%s 불가" % str(e.get("name", "기술")) }.get(str(e.kind))
 		if t != null:
 			_badges.add_child(_badge(t, Color(0.25, 0.35, 0.5)))
 	# 붙은 에너지 점 (6개 넘으면 ×N) + 도구

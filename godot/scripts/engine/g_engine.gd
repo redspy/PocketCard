@@ -53,8 +53,8 @@ static func createGame(config: Dictionary, info: Dictionary) -> Dictionary:
 
 static func emptyPlayer(deck_id: String) -> Dictionary:
 	return {
-		"deckId": deck_id, "deck": [], "hand": [], "prizes": [], "discard": [], "active": null, "bench": [], "benchMax": GCore.BENCH_MAX, "mulligans": 0, "conceded": false,
-		"turns": 0, "flags": { "energy": false, "supporter": false, "retreat": false, "stadium": false, "stadiumUsed": false, "names": [] }, "koTurn": -1, "effects": [],
+		"deckId": deck_id, "deck": [], "hand": [], "prizes": [], "discard": [], "lost": [], "active": null, "bench": [], "benchMax": GCore.BENCH_MAX, "mulligans": 0, "conceded": false,
+		"turns": 0, "flags": { "energy": false, "supporter": false, "retreat": false, "stadium": false, "stadiumUsed": false, "names": [] }, "koTurn": -1, "gxUsed": false, "vstarUsed": false, "effects": [],
 	}
 
 ## 진행을 막는 요청 (공개 확인은 막지 않음)
@@ -451,6 +451,8 @@ static func legalMoves(s: Dictionary, seat: int, info: Dictionary) -> Array:
 			if p.flags.energy or (d.get("ace", false) and ace_locked):
 				continue
 			for sl in slots:
+				if nm == "일격 에너지" and not GEffects.hasTag(GCore.slotData(ctx, sl), "일격"):
+					continue  # 「일격」의 포켓몬에게만
 				out.append(_mv({ "type": "play", "player": seat, "card": iid, "target": sl.sid }, "attach", "%s → %s" % [nm, GCore.slotName(ctx, sl)], iid, sl.sid))
 		else:
 			var sub = d.get("trainer")
@@ -487,6 +489,10 @@ static func legalMoves(s: Dictionary, seat: int, info: Dictionary) -> Array:
 	# 스타디움 효과 (보울마을)
 	if GCore.stadiumName(ctx) == "보울마을" and not p.flags.stadiumUsed and bench_room > 0 and p.deck.size() > 0:
 		out.append(_mv({ "type": "stadium", "player": seat }, "stadium", "보울마을: 덱에서 기본 포켓몬을 벤치로"))
+	# 악의 탑: 패의 「일격」 카드 1장을 트래쉬하고 2장 뽑기
+	var hand_strike: bool = p.hand.any(func(i): return GEffects.hasTag(GCore.dataOf(ctx, i), "일격"))
+	if GCore.stadiumName(ctx) == "악의 탑" and not p.flags.stadiumUsed and p.deck.size() > 0 and hand_strike:
+		out.append(_mv({ "type": "stadium", "player": seat }, "stadium", "악의 탑: 일격 카드 1장 트래쉬 → 2장 뽑기"))
 	# 특성
 	for sl in slots:
 		if not GCore.abilityActive(ctx, sl):
@@ -516,6 +522,10 @@ static func legalMoves(s: Dictionary, seat: int, info: Dictionary) -> Array:
 			var a: Dictionary = atks[i]
 			var cost := GCore.attackCost(ctx, act, seat, a.cost, a.nameJa)
 			if not GCore.canPay(GCore.provided(ctx, act), cost):
+				continue
+			if a.get("kind") == "gx" and p.gxUsed:
+				continue
+			if a.get("kind") == "vstar" and p.vstarUsed:
 				continue
 			var def = GEffects.ATTACKS.get(a.nameJa)
 			if def != null and def.has("can") and GCore.truthy(def.can.call(ctx, seat, act)):
@@ -622,6 +632,10 @@ static func doMove(ctx: Dictionary, seat: int, input: Dictionary) -> void:
 		"attack":
 			var act: Dictionary = p.active
 			var a: Dictionary = attacksOf(ctx, act)[int(input.index)]
+			if a.get("kind") == "gx":
+				p.gxUsed = true
+			if a.get("kind") == "vstar":
+				p.vstarUsed = true
 			GCore.emit(ctx, { "type": "attack", "player": seat, "code": GCore.inst(ctx, GCore.topOf(act)).code, "name": a.name if a.name != "" else a.nameJa, "index": int(input.index) })
 			_push(s, "endTurn", seat, {})
 			_push(s, "koCheck", seat, {})
@@ -637,6 +651,9 @@ static func doMove(ctx: Dictionary, seat: int, input: Dictionary) -> void:
 		"stadium":
 			p.flags.stadiumUsed = true
 			GCore.emit(ctx, { "type": "play", "player": seat, "code": GCore.inst(ctx, s.stadium).code, "what": "스타디움 효과" })
+			if GCore.stadiumName(ctx) == "악의 탑":
+				_push(s, "darkTower", seat, {})
+				return
 			_push(s, "search", seat, { "from": "deck", "filter": { "kind": "pokemon", "stage": 0, "noRule": true }, "max": 1, "to": "bench", "prompt": "벤치에 낼 룰 없는 기본 포켓몬" })
 		"play":
 			playCard(ctx, seat, input.card, input.get("target"))
@@ -711,6 +728,8 @@ static func playCard(ctx: Dictionary, seat: int, iid: String, target) -> void:
 			if t != null and not t.active:
 				GCore.switchActive(ctx, seat, t.slot.sid)
 				GCore.note(ctx, "제트 에너지: 배틀 포켓몬과 교체")
+		if d.name == "캡쳐 에너지" and p.deck.size() > 0 and p.bench.size() < p.benchMax:
+			_push(s, "search", seat, { "from": "deck", "filter": { "kind": "pokemon", "stage": 0 }, "max": 1, "to": "bench", "prompt": "캡쳐 에너지: 벤치에 낼 기본 포켓몬을 고르세요.", "src": "특수 에너지 [캡쳐 에너지]" })
 		return
 	# 트레이너스
 	var sub = d.get("trainer")
@@ -791,7 +810,7 @@ static func resolveChoice(ctx: Dictionary, seat: int, request_id: String, picks)
 ## 플레이어가 가진 카드 수 (모든 구역 합) — 불변식 검사용
 static func countCards(s: Dictionary, seat: int) -> int:
 	var p: Dictionary = s.players[seat]
-	var n: int = p.deck.size() + p.hand.size() + GCore.prizesLeft(s, seat) + p.discard.size()
+	var n: int = p.deck.size() + p.hand.size() + GCore.prizesLeft(s, seat) + p.discard.size() + p.lost.size()
 	if p.active != null:
 		n += p.active.stack.size() + p.active.attached.size()
 	for b in p.bench:

@@ -18,6 +18,9 @@ export type PlayerView = {
   hand: CardView[] | null;         // 본인만
   prizes: boolean[];               // 칸마다 카드가 있는지 (내용은 아무도 모름)
   discard: CardView[];
+  lost: CardView[];
+  gxUsed: boolean;
+  vstarUsed: boolean;
   active: SlotView | null;
   bench: SlotView[];
   benchMax: number;
@@ -70,6 +73,7 @@ export function viewFor(s: GameState, viewer: Viewer, info: CardInfo): GameView 
       hand: viewer === seat ? p.hand.map((i) => cv(s, i)) : null,
       prizes: p.prizes.map((x) => x !== null),
       discard: p.discard.map((i) => cv(s, i)),
+      lost: p.lost.map((i) => cv(s, i)), gxUsed: p.gxUsed, vstarUsed: p.vstarUsed,
       active: p.active ? slotView(s, p.active, seat, viewer, info) : null,
       bench: p.bench.map((b) => slotView(s, b, seat, viewer, info)),
       benchMax: p.benchMax, mulligans: p.mulligans, conceded: p.conceded, turns: p.turns, flags: p.flags, effects: p.effects,

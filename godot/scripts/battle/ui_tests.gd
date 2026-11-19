@@ -960,8 +960,8 @@ static func run_lan(host: Node, addr: String, code: String) -> Array:
 	if res == null:
 		fails.append("서버 대전: 게임이 끝나지 않음")
 	print("[ui-tests] 서버 대전(손패 모드): %d번 %s, 결과 %s" % [steps, JSON.stringify(kinds), str(res.get("reason")) if res != null else "-"])
-	# 결과 화면 → 나가기 → 첫 화면
-	for i in 60:
+	# 결과 화면 → 나가기 → 첫 화면 (테스트가 사람보다 빨리 조작해 쌓인 연출(차례 배너 등)이 끝날 때까지 최대 15초)
+	for i in 150:
 		await host.get_tree().create_timer(0.1).timeout
 		if s.result_panel != null:
 			break

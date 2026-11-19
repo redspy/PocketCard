@@ -1,6 +1,6 @@
 {
  "version": 1,
- "generated": "2026-11-17T16:24:54.236Z",
+ "generated": "2026-11-19T14:49:51.133Z",
  "cards": {
   "SV7_076": {
    "id": "SV7_076",
@@ -2978,6 +2978,911 @@
    "kind": "trainer",
    "text": "自分の山札から、それぞれちがうタイプの基本エネルギーを2枚まで選び、相手に見せて、どちらか1枚を手札に加え、残りのエネルギーを自分のポケモンにつける。そして山札を切る。",
    "trainer": "supporter"
+  },
+  "SGG_004": {
+   "id": "SGG_004",
+   "name": "델빌",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 60,
+    "type": "D",
+    "weak": "G",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "물기",
+      "nameJa": "물기",
+      "cost": [
+       "C"
+      ],
+      "damage": 20,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": []
+   },
+   "tags": [
+    "일격"
+   ]
+  },
+  "SM12_035": {
+   "id": "SM12_035",
+   "name": "춤추새 GX",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 170,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 1,
+    "rule": "GX",
+    "resistValue": 20,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "날카로운날개",
+      "nameJa": "날카로운날개",
+      "cost": [
+       "P",
+       "C",
+       "C"
+      ],
+      "damage": 80,
+      "op": "",
+      "text": ""
+     },
+     {
+      "name": "뒤집기GX",
+      "nameJa": "뒤집기GX",
+      "cost": [
+       "P",
+       "C",
+       "C"
+      ],
+      "damage": 100,
+      "op": "",
+      "text": "이 포켓몬을 벤치 포켓몬과 교체한다. (대전 중 자신은 GX기술을 1번만 사용할 수 있다.)",
+      "kind": "gx"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "전별의 춤",
+      "nameJa": "전별의 춤",
+      "text": "상대의 이전 차례에 자신의 포켓몬이 기절했다면 자신의 차례에 1번 사용할 수 있다. 자신의 덱을 3장 뽑는다. 이 차례에 이미 다른 「전별의 춤」을 사용했다면 이 특성은 사용할 수 없다."
+     }
+    ]
+   }
+  },
+  "SM12a_055": {
+   "id": "SM12a_055",
+   "name": "뮤",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 60,
+    "type": "P",
+    "weak": "P",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "사이코파워",
+      "nameJa": "사이코파워",
+      "cost": [
+       "C"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "데미지 카운터 3개를 상대의 포켓몬에게 원하는 대로 올린다."
+     }
+    ],
+    "abilities": [
+     {
+      "name": "벤치배리어",
+      "nameJa": "벤치배리어",
+      "text": "이 포켓몬이 있는 한, 자신의 벤치 포켓몬 전원은 상대의 기술의 데미지를 받지 않는다."
+     }
+    ]
+   }
+  },
+  "SGG_005": {
+   "id": "SGG_005",
+   "name": "헬가",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "델빌",
+    "hp": 130,
+    "type": "D",
+    "weak": "G",
+    "resist": null,
+    "retreat": 2,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "어둠엄니",
+      "nameJa": "어둠엄니",
+      "cost": [
+       "D",
+       "C"
+      ],
+      "damage": 50,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": [
+     {
+      "name": "일격의 포효",
+      "nameJa": "일격의 포효",
+      "text": "자신의 차례에 1번 사용할 수 있다. 자신의 덱에서 「일격 에너지」를 1장 선택해서 자신의 「일격」의 포켓몬에게 붙인다. 그리고 덱을 섞는다. 그 뒤, 붙인 포켓몬에게 데미지 카운터를 2개 올린다."
+     }
+    ]
+   },
+   "tags": [
+    "일격"
+   ]
+  },
+  "S5I_036": {
+   "id": "S5I_036",
+   "name": "일격 우라오스 V",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 220,
+    "type": "F",
+    "weak": "P",
+    "resist": null,
+    "retreat": 2,
+    "rule": "V",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "예민해지기",
+      "nameJa": "예민해지기",
+      "cost": [
+       "F"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "자신의 덱에서 {F}에너지를 2장까지 선택해서 이 포켓몬에게 붙인다. 그리고 덱을 섞는다."
+     },
+     {
+      "name": "임팩트블로",
+      "nameJa": "임팩트블로",
+      "cost": [
+       "F",
+       "F",
+       "C"
+      ],
+      "damage": 180,
+      "op": "",
+      "text": "자신의 다음 차례에 이 포켓몬은 「임팩트블로」를 사용할 수 없다."
+     }
+    ],
+    "abilities": []
+   },
+   "tags": [
+    "일격"
+   ]
+  },
+  "S5I_037": {
+   "id": "S5I_037",
+   "name": "일격 우라오스 VMAX",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "일격 우라오스 V",
+    "hp": 330,
+    "type": "F",
+    "weak": "P",
+    "resist": null,
+    "retreat": 3,
+    "rule": "VMAX",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "정권찌르기",
+      "nameJa": "정권찌르기",
+      "cost": [
+       "C",
+       "C",
+       "C"
+      ],
+      "damage": 100,
+      "op": "",
+      "text": ""
+     },
+     {
+      "name": "거다이일격",
+      "nameJa": "거다이일격",
+      "cost": [
+       "F",
+       "F",
+       "F",
+       "C"
+      ],
+      "damage": 270,
+      "op": "",
+      "text": "이 포켓몬에게 붙어 있는 에너지를 모두 트래쉬한다. 이 기술의 데미지는 상대의 배틀 포켓몬에게 걸려 있는 효과를 계산하지 않는다."
+     }
+    ],
+    "abilities": []
+   },
+   "tags": [
+    "일격"
+   ]
+  },
+  "S6a_047": {
+   "id": "S6a_047",
+   "name": "블래키 V",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 200,
+    "type": "D",
+    "weak": "G",
+    "resist": null,
+    "retreat": 2,
+    "rule": "V",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "검은눈빛",
+      "nameJa": "검은눈빛",
+      "cost": [
+       "D"
+      ],
+      "damage": 30,
+      "op": "",
+      "text": "상대의 다음 차례에 이 기술을 받은 포켓몬은 후퇴할 수 없다."
+     },
+     {
+      "name": "월광의칼날",
+      "nameJa": "월광의칼날",
+      "cost": [
+       "D",
+       "C",
+       "C"
+      ],
+      "damage": 80,
+      "op": "+",
+      "text": "이 포켓몬에게 데미지 카운터가 올려져 있다면 80데미지를 추가한다."
+     }
+    ],
+    "abilities": []
+   },
+   "tags": [
+    "일격"
+   ]
+  },
+  "S6a_048": {
+   "id": "S6a_048",
+   "name": "블래키 VMAX",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "블래키 V",
+    "hp": 310,
+    "type": "D",
+    "weak": "G",
+    "resist": null,
+    "retreat": 2,
+    "rule": "VMAX",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "다이아크",
+      "nameJa": "다이아크",
+      "cost": [
+       "D",
+       "C",
+       "C"
+      ],
+      "damage": 160,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": [
+     {
+      "name": "다크시그널",
+      "nameJa": "다크시그널",
+      "text": "자신의 차례에 이 카드를 패에서 꺼내서 진화시켰을 때 1번 사용할 수 있다. 상대의 벤치 포켓몬을 1마리 선택해서 배틀 포켓몬과 교체한다."
+     }
+    ]
+   },
+   "tags": [
+    "일격"
+   ]
+  },
+  "SGG_009": {
+   "id": "SGG_009",
+   "name": "퀵볼",
+   "kind": "trainer",
+   "text": "이 카드는 자신의 패를 1장 트래쉬하지 않으면 사용할 수 없다.\n자신의 덱에서 기본 포켓몬을 1장 선택해서 상대에게 보여주고 패로 가져온다. 그리고 덱을 섞는다.",
+   "trainer": "item"
+  },
+  "SM9_081": {
+   "id": "SM9_081",
+   "name": "포켓몬통신",
+   "kind": "trainer",
+   "text": "자신의 패에서 포켓몬을 1장 상대에게 보여주고 덱으로 되돌린다. 그 뒤, 자신의 덱에 있는 포켓몬을 1장 상대에게 보여주고 패로 가져온다. 그리고 덱을 섞는다.",
+   "trainer": "item"
+  },
+  "SGG_008": {
+   "id": "SGG_008",
+   "name": "진화향로",
+   "kind": "trainer",
+   "text": "자신의 덱에서 진화 포켓몬을 1장 선택해서 상대에게 보여주고 패로 가져온다. 그리고 덱을 섞는다.",
+   "trainer": "item"
+  },
+  "SGG_011": {
+   "id": "SGG_011",
+   "name": "포켓몬 교체",
+   "kind": "trainer",
+   "text": "자신의 배틀 포켓몬을 벤치 포켓몬과 교체한다.",
+   "trainer": "item"
+  },
+  "SGG_012": {
+   "id": "SGG_012",
+   "name": "활력의 항아리",
+   "kind": "trainer",
+   "text": "자신의 트래쉬에서 「일격 에너지」를 2장까지 선택해서 상대에게 보여주고 덱으로 되돌리고 섞는다.",
+   "trainer": "item",
+   "tags": [
+    "일격"
+   ]
+  },
+  "S4a_171": {
+   "id": "S4a_171",
+   "name": "풍선",
+   "kind": "trainer",
+   "text": "이 카드를 붙이고 있는 포켓몬은 후퇴에 필요한 에너지가 2개만큼 적어진다.",
+   "trainer": "tool"
+  },
+  "S4a_160": {
+   "id": "S4a_160",
+   "name": "보통낚싯대",
+   "kind": "trainer",
+   "text": "자신의 트래쉬에서 포켓몬을 2장까지, 기본 에너지를 2장까지 선택해서 상대에게 보여주고 덱으로 되돌리고 섞는다. (포켓몬 또는 기본 에너지 중 어느 한쪽만이라도 좋다.)",
+   "trainer": "item"
+  },
+  "SGG_015": {
+   "id": "SGG_015",
+   "name": "박사의 연구",
+   "kind": "trainer",
+   "text": "자신의 패를 모두 트래쉬하고 덱을 7장 뽑는다.",
+   "trainer": "supporter"
+  },
+  "SGI_016": {
+   "id": "SGI_016",
+   "name": "마리",
+   "kind": "trainer",
+   "text": "서로의 플레이어는 각각 자신의 패를 모두 뒷면으로 하여 섞고 덱의 아래로 되돌린다. 그 뒤, 자신은 5장 상대는 4장 덱을 뽑는다.",
+   "trainer": "supporter"
+  },
+  "SGI_019": {
+   "id": "SGI_019",
+   "name": "보스의 지령",
+   "kind": "trainer",
+   "text": "상대의 벤치 포켓몬을 1마리 선택해서 배틀 포켓몬과 교체한다.",
+   "trainer": "supporter"
+  },
+  "SM9_085": {
+   "id": "SM9_085",
+   "name": "민화의 대접",
+   "kind": "trainer",
+   "text": "이 카드는 자신의 패가 이 카드를 포함하여 6장 이상이면 사용할 수 없다.\n상대 필드의 포켓몬의 수만큼 자신의 덱을 뽑는다.",
+   "trainer": "supporter"
+  },
+  "SGG_018": {
+   "id": "SGG_018",
+   "name": "악의 탑",
+   "kind": "trainer",
+   "text": "서로의 플레이어는 자신의 차례마다 1번 자신의 패에서 「일격」의 카드를 1장 트래쉬한다면 자신의 덱을 2장 뽑아도 좋다.",
+   "trainer": "stadium",
+   "tags": [
+    "일격"
+   ]
+  },
+  "SGG_019": {
+   "id": "SGG_019",
+   "name": "일격 에너지",
+   "kind": "energy",
+   "text": "이 카드는 「일격」의 포켓몬에게만 붙일 수 있으며, 「일격」의 포켓몬 이외에 붙어 있다면 트래쉬한다.\n이 카드는 포켓몬에게 붙어 있는 한, {F}{D} 2가지 타입의 에너지 1개분으로 작용하며 이 카드를 붙이고 있는 포켓몬이 사용하는 기술이 상대의 배틀 포켓몬에게 주는 데미지는 「+20」이 된다.",
+   "energy": {
+    "basic": false,
+    "type": null
+   },
+   "tags": [
+    "일격"
+   ]
+  },
+  "S4a_189": {
+   "id": "S4a_189",
+   "name": "캡쳐 에너지",
+   "kind": "energy",
+   "text": "이 카드는 포켓몬에게 붙어 있는 한, {C} 에너지 1개분으로 작용한다.\n이 카드를 패에서 포켓몬에게 붙였을 때 자신의 덱에서 기본 포켓몬을 1장 선택해서 벤치로 내보낸다. 그리고 덱을 섞는다.",
+   "energy": {
+    "basic": false,
+    "type": null
+   }
+  },
+  "S12a_064": {
+   "id": "S12a_064",
+   "name": "큐아링",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 70,
+    "type": "P",
+    "weak": "M",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "회전어택",
+      "nameJa": "회전어택",
+      "cost": [
+       "P",
+       "C"
+      ],
+      "damage": 30,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": [
+     {
+      "name": "꽃고르기",
+      "nameJa": "꽃고르기",
+      "text": "이 포켓몬이 배틀필드에 있다면 자신의 차례에 1번 사용할 수 있다. 자신의 덱을 위에서부터 2장 보고 그 중 1장을 선택해서 패로 가져온다. 남은 카드는 로스트존에 둔다."
+     }
+    ]
+   }
+  },
+  "S11_033": {
+   "id": "S11_033",
+   "name": "윽우지",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 110,
+    "type": "W",
+    "weak": "L",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "시치미스핏",
+      "nameJa": "시치미스핏",
+      "cost": [
+       "W",
+       "W",
+       "C"
+      ],
+      "damage": 110,
+      "op": "",
+      "text": "이 기술의 데미지는 약점 계산을 하지 않는다."
+     }
+    ],
+    "abilities": [
+     {
+      "name": "로스트 프로바이드",
+      "nameJa": "로스트 프로바이드",
+      "text": "자신의 로스트존에 카드가 4장 이상 있다면 이 포켓몬이 기술을 사용하기 위한 에너지는 모두 없어진다."
+     }
+    ]
+   }
+  },
+  "S11_044": {
+   "id": "S11_044",
+   "name": "깜까미",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 80,
+    "type": "P",
+    "weak": "D",
+    "resist": "F",
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "할퀴기",
+      "nameJa": "할퀴기",
+      "cost": [
+       "C"
+      ],
+      "damage": 20,
+      "op": "",
+      "text": ""
+     },
+     {
+      "name": "로스트마인",
+      "nameJa": "로스트마인",
+      "cost": [
+       "P"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "이 기술은 자신의 로스트존에 카드가 10장 이상 있을 때만 사용할 수 있다. 데미지 카운터 12개를 상대의 포켓몬에게 원하는 대로 올린다."
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "S12a_033": {
+   "id": "S12a_033",
+   "name": "찬란한 개굴닌자",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 130,
+    "type": "W",
+    "weak": "L",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "radiant": true,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "월광수리검",
+      "nameJa": "월광수리검",
+      "cost": [
+       "W",
+       "W",
+       "C"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "이 포켓몬에게 붙어 있는 에너지를 2개 트래쉬하고 상대의 포켓몬 2마리에게 각각 90데미지를 준다. (벤치는 약점, 저항력 계산을 하지 않는다.)"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "숨겨진 수단",
+      "nameJa": "숨겨진 수단",
+      "text": "자신의 차례에 자신의 패에서 에너지를 1장 트래쉬한다면 1번 사용할 수 있다. 자신의 덱을 2장 뽑는다."
+     }
+    ]
+   }
+  },
+  "S12a_029": {
+   "id": "S12a_029",
+   "name": "마나피",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 70,
+    "type": "W",
+    "weak": "L",
+    "resist": null,
+    "retreat": 1,
+    "rule": null,
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "물뿌리기",
+      "nameJa": "물뿌리기",
+      "cost": [
+       "W"
+      ],
+      "damage": 20,
+      "op": "",
+      "text": ""
+     }
+    ],
+    "abilities": [
+     {
+      "name": "파도의 베일",
+      "nameJa": "파도의 베일",
+      "text": "이 포켓몬이 있는 한, 자신의 벤치 포켓몬 전원은 상대 기술의 데미지를 받지 않는다."
+     }
+    ]
+   }
+  },
+  "S12a_110": {
+   "id": "S12a_110",
+   "name": "기라티나 V",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 220,
+    "type": "N",
+    "weak": null,
+    "resist": null,
+    "retreat": 2,
+    "rule": "V",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "어비스시크",
+      "nameJa": "어비스시크",
+      "cost": [
+       "C"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "자신의 덱을 위에서부터 4장 보고 그 중에서 카드를 2장 선택해서 패로 가져온다. 남은 카드는 로스트존에 둔다."
+     },
+     {
+      "name": "찢기",
+      "nameJa": "찢기",
+      "cost": [
+       "G",
+       "P",
+       "C"
+      ],
+      "damage": 160,
+      "op": "",
+      "text": "이 기술의 데미지는 상대의 배틀 포켓몬에게 걸려 있는 효과를 계산하지 않는다."
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "S12a_085": {
+   "id": "S12a_085",
+   "name": "드래피온 V",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 0,
+    "from": null,
+    "hp": 210,
+    "type": "D",
+    "weak": "F",
+    "resist": null,
+    "retreat": 2,
+    "rule": "V",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "다이내믹테일",
+      "nameJa": "다이내믹테일",
+      "cost": [
+       "C",
+       "C",
+       "C",
+       "C"
+      ],
+      "damage": 190,
+      "op": "",
+      "text": "자신의 포켓몬 1마리에게도 60데미지를 준다. (벤치는 약점, 저항력 계산을 하지 않는다.)"
+     }
+    ],
+    "abilities": [
+     {
+      "name": "와일드스타일",
+      "nameJa": "와일드스타일",
+      "text": "상대 필드의 「일격」「연격」「퓨전」의 포켓몬의 수만큼 이 포켓몬이 기술을 사용하기 위한 {C}에너지는 적어진다."
+     }
+    ]
+   }
+  },
+  "S12a_111": {
+   "id": "S12a_111",
+   "name": "기라티나 VSTAR",
+   "kind": "pokemon",
+   "text": "",
+   "pokemon": {
+    "stage": 1,
+    "from": "기라티나 V",
+    "hp": 280,
+    "type": "N",
+    "weak": null,
+    "resist": null,
+    "retreat": 2,
+    "rule": "VSTAR",
+    "tera": false,
+    "future": false,
+    "attacks": [
+     {
+      "name": "로스트임팩트",
+      "nameJa": "로스트임팩트",
+      "cost": [
+       "G",
+       "P",
+       "C"
+      ],
+      "damage": 280,
+      "op": "",
+      "text": "자신의 필드의 포켓몬에게 붙어 있는 에너지를 2개 선택해서 로스트존에 둔다."
+     },
+     {
+      "name": "스타레퀴엠",
+      "nameJa": "스타레퀴엠",
+      "cost": [
+       "G",
+       "P"
+      ],
+      "damage": 0,
+      "op": "",
+      "text": "이 기술은 자신의 로스트존에 카드가 10장 이상 있을 때만 사용할 수 있다. 상대의 배틀 포켓몬을 기절시킨다. (대전 중 자신은 VSTAR 파워를 1번만 사용할 수 있다.)",
+      "kind": "vstar"
+     }
+    ],
+    "abilities": []
+   }
+  },
+  "S8_089": {
+   "id": "S8_089",
+   "name": "배틀VIP패스",
+   "kind": "trainer",
+   "text": "이 카드는 자신의 첫 번째 차례에만 사용할 수 있다.\n자신의 덱에서 기본 포켓몬을 2장까지 선택해서 벤치로 내보낸다. 그리고 덱을 섞는다.",
+   "trainer": "item"
+  },
+  "SVB_001": {
+   "id": "SVB_001",
+   "name": "네스트볼",
+   "kind": "trainer",
+   "text": "자신의 덱에서 기본 포켓몬을 1장 선택해서 벤치로 내보낸다. 그리고 덱을 섞는다.",
+   "trainer": "item"
+  },
+  "S12a_139": {
+   "id": "S12a_139",
+   "name": "미라주게이트",
+   "kind": "trainer",
+   "text": "이 카드는 자신의 로스트존에 카드가 7장 이상 있을 때만 사용할 수 있다.\n자신의 덱에서 각각 다른 타입의 기본 에너지를 2장까지 선택해서 자신의 포켓몬에게 원하는 대로 붙인다. 그리고 덱을 섞는다.",
+   "trainer": "item"
+  },
+  "S10D_060": {
+   "id": "S10D_060",
+   "name": "교체카트",
+   "kind": "trainer",
+   "text": "자신의 배틀필드의 기본 포켓몬을 벤치 포켓몬과 교체한다. 그 뒤, 벤치로 교체한 포켓몬의 HP를 「30」회복한다.",
+   "trainer": "item"
+  },
+  "SI_364": {
+   "id": "SI_364",
+   "name": "동굴탈출로프",
+   "kind": "trainer",
+   "text": "서로의 플레이어는 각각 자신의 배틀 포켓몬을 벤치 포켓몬과 교체한다. (교체는 상대부터 한다. 벤치 포켓몬이 없는 플레이어는 교체하지 않는다.)",
+   "trainer": "item"
+  },
+  "SVB_004": {
+   "id": "SVB_004",
+   "name": "포켓몬 교체",
+   "kind": "trainer",
+   "text": "자신의 배틀 포켓몬을 벤치 포켓몬과 교체한다.",
+   "trainer": "item"
+  },
+  "SVB_014": {
+   "id": "SVB_014",
+   "name": "로스트스위퍼",
+   "kind": "trainer",
+   "text": "이 카드는 자신의 패를 1장 로스트존에 두지 않으면 사용할 수 없다.\n서로의 필드의 포켓몬에게 붙어 있는 「포켓몬의 도구」와 필드에 나와 있는 「스타디움」 중에서 1장 선택해서 로스트존에 둔다.",
+   "trainer": "item"
+  },
+  "SVB_016": {
+   "id": "SVB_016",
+   "name": "히스이의 헤비볼",
+   "kind": "trainer",
+   "text": "뒷면으로 된 자신의 프라이즈의 앞면을 모두 본다. 그 중에서 기본 포켓몬을 1장 선택해서 상대에게 보여주고 이 「히스이의 헤비볼」과 바꾸어 패로 가져온다. 보았던 프라이즈나 교체한 카드는 모두 뒷면으로 하여 섞고 프라이즈로 놓는다.",
+   "trainer": "item"
+  },
+  "SVB_003": {
+   "id": "SVB_003",
+   "name": "포켓기어3.0",
+   "kind": "trainer",
+   "text": "자신의 덱을 위에서부터 7장 보고 그 중에서 서포트를 1장 선택해서 상대에게 보여주고 패로 가져온다. 남은 카드는 덱으로 되돌리고 섞는다.",
+   "trainer": "item"
+  },
+  "S12a_155": {
+   "id": "S12a_155",
+   "name": "아크로마의 실험",
+   "kind": "trainer",
+   "text": "자신의 덱을 위에서부터 5장 보고 그 중에서 카드를 3장 선택해서 패로 가져온다. 남은 카드는 로스트존에 둔다.",
+   "trainer": "supporter"
+  },
+  "SVB_020": {
+   "id": "SVB_020",
+   "name": "보스의 지령",
+   "kind": "trainer",
+   "text": "상대의 벤치 포켓몬을 1마리 선택해서 배틀 포켓몬과 교체한다.",
+   "trainer": "supporter"
+  },
+  "SVB_022": {
+   "id": "SVB_022",
+   "name": "원규",
+   "kind": "trainer",
+   "text": "이 카드는 상대의 남은 프라이즈 장수가 3장 이하일 때만 사용할 수 있다.\n서로의 플레이어는 각각 패를 모두 덱으로 되돌리고 섞는다. 그 뒤, 자신은 6장 상대는 2장 덱을 뽑는다.",
+   "trainer": "supporter"
+  },
+  "SVB_027": {
+   "id": "SVB_027",
+   "name": "정상으로 가는 눈길",
+   "kind": "trainer",
+   "text": "서로의 필드의 「룰을 가진 포켓몬」의 특성은 모두 없어진다.",
+   "trainer": "stadium"
+  },
+  "SVB_033": {
+   "id": "SVB_033",
+   "name": "기본 초 에너지",
+   "kind": "energy",
+   "text": "",
+   "energy": {
+    "basic": true,
+    "type": "P"
+   }
+  },
+  "SVB_029": {
+   "id": "SVB_029",
+   "name": "기본 풀 에너지",
+   "kind": "energy",
+   "text": "",
+   "energy": {
+    "basic": true,
+    "type": "G"
+   }
+  },
+  "SVB_031": {
+   "id": "SVB_031",
+   "name": "기본 물 에너지",
+   "kind": "energy",
+   "text": "",
+   "energy": {
+    "basic": true,
+    "type": "W"
+   }
   }
  }
 }

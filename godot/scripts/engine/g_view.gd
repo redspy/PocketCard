@@ -34,6 +34,7 @@ static func viewFor(s: Dictionary, viewer, info: Dictionary) -> Dictionary:
 			"hand": p.hand.map(func(i): return GView._cv(s, i)) if (is_seat and viewer == seat) else null,
 			"prizes": p.prizes.map(func(x): return x != null),
 			"discard": p.discard.map(func(i): return GView._cv(s, i)),
+			"lost": p.lost.map(func(i): return GView._cv(s, i)), "gxUsed": p.gxUsed, "vstarUsed": p.vstarUsed,
 			"active": slotView(s, p.active, seat, viewer, info) if p.active != null else null,
 			"bench": p.bench.map(func(b): return GView.slotView(s, b, seat, viewer, info)),
 			"benchMax": p.benchMax, "mulligans": p.mulligans, "conceded": p.conceded, "turns": p.turns, "flags": p.flags, "effects": p.effects,

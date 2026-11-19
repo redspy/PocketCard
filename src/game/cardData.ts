@@ -12,6 +12,7 @@ export type AttackData = {
   damage: number;      // 기본 데미지 (없으면 0)
   op: '' | '+' | '×' | '-';
   text: string;        // 효과 원문 (없으면 '')
+  kind?: 'gx' | 'vstar'; // GX 기술·VSTAR 파워 (대전 중 각각 1번)
 };
 export type AbilityData = { name: string; nameJa: string; text: string };
 
@@ -23,7 +24,9 @@ export type PokemonData = {
   weak: EType | null;    // 약점 ×2
   resist: EType | null;  // 저항력 −30
   retreat: number;
-  rule: null | 'ex' | 'mega';
+  rule: null | 'ex' | 'mega' | 'V' | 'VMAX' | 'VSTAR' | 'GX';   // 룰을 가진 포켓몬 (기절 시 사이드 2~3장)
+  radiant?: boolean;     // 찬란한 포켓몬 (덱에 1장, 룰을 가진 포켓몬 아님)
+  resistValue?: number;  // 저항력 수치 (기본 30, 옛 카드는 20)
   tera: boolean;
   future: boolean;
   attacks: AttackData[];
@@ -37,6 +40,7 @@ export type CardData = {
   pokemon?: PokemonData;
   trainer?: 'item' | 'tool' | 'supporter' | 'stadium';
   ace?: boolean;
+  tags?: string[];       // 「일격」「연격」「퓨전」
   energy?: { basic: boolean; type: EType | null };   // 기본 에너지의 타입 (특수 에너지는 null)
   text: string;          // 트레이너스·특수 에너지 효과 원문
   automated?: boolean;   // 효과 자동화 여부 (effects.ts 가 채움)
@@ -45,4 +49,7 @@ export type CardData = {
 export type CardDB = Record<string, CardData>;
 
 /** 기절 시 상대가 가져가는 사이드 수 (룰 박스) */
-export const prizeValue = (c: CardData | undefined): number => (c?.pokemon?.rule === 'mega' ? 3 : c?.pokemon?.rule === 'ex' ? 2 : 1);
+export const prizeValue = (c: CardData | undefined): number => {
+  const r = c?.pokemon?.rule;
+  return r === 'mega' || r === 'VMAX' ? 3 : r ? 2 : 1;
+};

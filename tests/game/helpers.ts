@@ -72,7 +72,7 @@ export function checkInvariants(s: GameState, expected: [number, number]) {
     seen.add(iid);
   };
   for (const p of s.players) {
-    [...p.deck, ...p.hand, ...p.prizes, ...p.discard].forEach(add);
+    [...p.deck, ...p.hand, ...p.prizes, ...p.discard, ...p.lost].forEach(add);
     for (const slot of [p.active, ...p.bench]) if (slot) [...slot.stack, ...slot.attached].forEach(add);
   }
   if (s.stadium) add(s.stadium);

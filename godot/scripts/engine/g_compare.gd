@@ -53,6 +53,10 @@ static func run(path: String) -> int:
 		print("[compare] 기록 파일을 읽지 못함: %s" % path)
 		return 2
 	var raw = _load_json("res://data/decks.json")
+	# --all-decks: playable: false 덱(대전 준비 중)도 카탈로그에 넣는다
+	if data.get("allDecks") == true:
+		for d in raw.decks:
+			d.erase("playable")
 	var rules = _load_json("res://data/rules.json")
 	var cat := GMatch.buildCatalog(raw)
 	var info := { "basics": cat.basics, "db": rules.cards }

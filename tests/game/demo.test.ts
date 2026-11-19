@@ -23,10 +23,11 @@ function botGame(seed: string, d1: string, d2: string) {
   return h;
 }
 
-test('봇 대 봇: 6개 덱 조합이 셋업부터 끝까지 진행 (봇은 자기 시점만 봄)', () => {
+test('봇 대 봇: 모든 덱 조합이 셋업부터 끝까지 진행 (봇은 자기 시점만 봄)', () => {
   const ids = catalog.decks.map((d) => d.id);
-  for (let k = 0; k < 18; k++) {
-    const h = botGame(seedOf(k + 1), ids[k % 6], ids[(k + 1 + Math.floor(k / 6)) % 6]);
+  const n = ids.length;
+  for (let k = 0; k < n * 3; k++) {
+    const h = botGame(seedOf(k + 1), ids[k % n], ids[(k + 1 + Math.floor(k / n)) % n]);
     assert.equal(h.match.state.phase, 'ended', `시드 ${k + 1}: 끝나지 않음 (입력 ${h.match.inputs.length})`);
     assert.equal(h.error, null);
   }

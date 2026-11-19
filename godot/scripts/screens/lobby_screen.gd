@@ -139,6 +139,8 @@ func _build_decks(selected: String, locked: bool) -> void:
 	for c in _decks.get_children():
 		c.queue_free()
 	for d in DeckData.decks:
+		if d.get("playable", true) == false:
+			continue   # 덱 뷰어 전용 (대전 규칙 준비 중)
 		var id: String = d["id"]
 		var tap := TapArea.new()
 		var p := PanelContainer.new()
@@ -189,7 +191,8 @@ func _build_ai(selected: String) -> void:
 		c.queue_free()
 	var opts: Array = [["", "무작위"]]
 	for d in DeckData.decks:
-		opts.append([str(d["id"]), str(d["name"])])
+		if d.get("playable", true) != false:
+			opts.append([str(d["id"]), str(d["name"])])
 	for o in opts:
 		var id: String = o[0]
 		var b := UI.button(o[1], 24, id == selected, id == selected)

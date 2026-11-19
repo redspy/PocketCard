@@ -52,8 +52,8 @@ export function createGame(config: GameConfig, info?: CardInfo): ApplyResult {
 
 function emptyPlayer(deckId: string): PlayerState {
   return {
-    deckId, deck: [], hand: [], prizes: [], discard: [], active: null, bench: [], benchMax: BENCH_MAX, mulligans: 0, conceded: false,
-    turns: 0, flags: { energy: false, supporter: false, retreat: false, stadium: false, stadiumUsed: false, names: [] }, koTurn: -1, effects: [],
+    deckId, deck: [], hand: [], prizes: [], discard: [], lost: [], active: null, bench: [], benchMax: BENCH_MAX, mulligans: 0, conceded: false,
+    turns: 0, flags: { energy: false, supporter: false, retreat: false, stadium: false, stadiumUsed: false, names: [] }, koTurn: -1, gxUsed: false, vstarUsed: false, effects: [],
   };
 }
 
@@ -385,7 +385,10 @@ export function legalMoves(s: GameState, seat: Seat, info: CardInfo): LegalMove[
       }
     } else if (d.kind === 'energy') {
       if (p.flags.energy || (d.ace && aceLocked)) continue;
-      for (const sl of slots) out.push({ input: { type: 'play', player: seat, card: iid, target: sl.sid }, kind: 'attach', label: `${nm} → ${slotName(ctx, sl)}`, card: iid, target: sl.sid });
+      for (const sl of slots) {
+        if (nm === '일격 에너지' && !(slotData(ctx, sl).tags ?? []).includes('일격')) continue;   // 「일격」의 포켓몬에게만
+        out.push({ input: { type: 'play', player: seat, card: iid, target: sl.sid }, kind: 'attach', label: `${nm} → ${slotName(ctx, sl)}`, card: iid, target: sl.sid });
+      }
     } else {
       const sub = d.trainer;
       if (d.ace && aceLocked) continue;
@@ -415,6 +418,9 @@ export function legalMoves(s: GameState, seat: Seat, info: CardInfo): LegalMove[
   // 스타디움 효과 (보울마을)
   if (stadiumName(ctx) === '보울마을' && !p.flags.stadiumUsed && benchRoom > 0 && p.deck.length)
     out.push({ input: { type: 'stadium', player: seat }, kind: 'stadium', label: '보울마을: 덱에서 기본 포켓몬을 벤치로' });
+  // 악의 탑: 패의 「일격」 카드 1장을 트래쉬하고 2장 뽑기
+  if (stadiumName(ctx) === '악의 탑' && !p.flags.stadiumUsed && p.deck.length && p.hand.some((i) => (dataOf(ctx, i).tags ?? []).includes('일격')))
+    out.push({ input: { type: 'stadium', player: seat }, kind: 'stadium', label: '악의 탑: 일격 카드 1장 트래쉬 → 2장 뽑기' });
   // 특성
   for (const sl of slots) {
     if (!abilityActive(ctx, sl)) continue;
@@ -437,6 +443,8 @@ export function legalMoves(s: GameState, seat: Seat, info: CardInfo): LegalMove[
     attacksOf(ctx, act).forEach((a, i) => {
       const cost = attackCost(ctx, act, seat, a.cost, a.nameJa);
       if (!canPay(provided(ctx, act), cost)) return;
+      if (a.kind === 'gx' && p.gxUsed) return;
+      if (a.kind === 'vstar' && p.vstarUsed) return;
       const def = ATTACKS[a.nameJa];
       if (def?.can && def.can(ctx, seat, act)) return;
       out.push({ input: { type: 'attack', player: seat, index: i }, kind: 'attack', label: `기술: ${a.name || a.nameJa}${a.damage ? ` ${a.damage}${a.op}` : ''}` });
@@ -521,6 +529,8 @@ function doMove(ctx: Ctx, seat: Seat, input: GameInput) {
     case 'attack': {
       const act = p.active!;
       const a = attacksOf(ctx, act)[input.index];
+      if (a.kind === 'gx') p.gxUsed = true;
+      if (a.kind === 'vstar') p.vstarUsed = true;
       emit(ctx, { type: 'attack', player: seat, code: inst(ctx, topOf(act)).code, name: a.name || a.nameJa, index: input.index });
       s.stack.push({ id: newId(s, 'f'), kind: 'endTurn', step: 0, player: seat, data: {} });
       s.stack.push({ id: newId(s, 'f'), kind: 'koCheck', step: 0, player: seat, data: {} });
@@ -540,6 +550,7 @@ function doMove(ctx: Ctx, seat: Seat, input: GameInput) {
     case 'stadium': {
       p.flags.stadiumUsed = true;
       emit(ctx, { type: 'play', player: seat, code: inst(ctx, s.stadium!).code, what: '스타디움 효과' });
+      if (stadiumName(ctx) === '악의 탑') { s.stack.push({ id: newId(s, 'f'), kind: 'darkTower', step: 0, player: seat, data: {} }); return; }
       s.stack.push({ id: newId(s, 'f'), kind: 'search', step: 0, player: seat, data: { from: 'deck', filter: { kind: 'pokemon', stage: 0, noRule: true }, max: 1, to: 'bench', prompt: '벤치에 낼 룰 없는 기본 포켓몬' } });
       return;
     }
@@ -610,6 +621,8 @@ function playCard(ctx: Ctx, seat: Seat, iid: string, target?: string) {
       const t = findSlot(s, target!);
       if (t && !t.active) { switchActive(ctx, seat, t.slot.sid); note(ctx, '제트 에너지: 배틀 포켓몬과 교체'); }
     }
+    if (d.name === '캡쳐 에너지' && p.deck.length && p.bench.length < p.benchMax)
+      s.stack.push({ id: newId(s, 'f'), kind: 'search', step: 0, player: seat, data: { from: 'deck', filter: { kind: 'pokemon', stage: 0 }, max: 1, to: 'bench', prompt: '캡쳐 에너지: 벤치에 낼 기본 포켓몬을 고르세요.', src: '특수 에너지 [캡쳐 에너지]' } });
     return;
   }
   // 트레이너스
@@ -669,7 +682,7 @@ function resolveChoice(ctx: Ctx, seat: Seat, requestId: string, picks: string[])
 export function countCards(s: GameState, seat: Seat): number {
   const p = s.players[seat];
   const inPlay = (slot: PokemonSlot | null) => (slot ? slot.stack.length + slot.attached.length : 0);
-  return p.deck.length + p.hand.length + p.prizes.filter(Boolean).length + p.discard.length
+  return p.deck.length + p.hand.length + p.prizes.filter(Boolean).length + p.discard.length + p.lost.length
     + inPlay(p.active) + p.bench.reduce((a, b) => a + inPlay(b), 0)
     + (s.stadium && s.cards[s.stadium].owner === seat ? 1 : 0)
     + s.using.filter((i) => s.cards[i].owner === seat).length;

@@ -14,10 +14,13 @@ import { buildCatalog } from '../src/game/catalog.ts';
 const ROOT = new URL('../', import.meta.url);
 const P = (p) => new URL(p, ROOT);
 // 앱에 넣을 덱 (코리안리그 시즌 순: 마스터 → 시니어)
-const APP_DECKS = ['flareon', 'dragapult', 'charizard', 'gholdengo', 'gardevoir', 'pachirisu'];
+const APP_DECKS = ['flareon', 'dragapult', 'charizard', 'gholdengo', 'gardevoir', 'pachirisu', 'umbreon', 'giratina'];
+// 대전 규칙이 아직 준비 안 된 덱: 덱 뷰어에는 보이지만 대전 카탈로그(두 엔진)에서는 빠진다
+const NOT_PLAYABLE = new Set([]);
 const COVER = {
   flareon: 'SV8a_202', dragapult: 'SV6_120', charizard: 'SV4a_349',
   gholdengo: 'SV3a_050', gardevoir: 'SV1S_028', pachirisu: 'SV7_032',
+  umbreon: 'S6a_048', giratina: 'S12a_111',
 };
 // 한글판 코드를 모르는 카드의 종류 (이름 → 종류)
 const UNKNOWN_KIND = { '태권왕의 수련': 'trainer', '머리띠 (139/175)': 'trainer' };
@@ -193,6 +196,7 @@ for (const deckId of APP_DECKS) {
     name: d.name,
     note: d.note ?? '',
     cover: COVER[deckId] ?? cards[0]?.code,
+    ...(NOT_PLAYABLE.has(deckId) ? { playable: false } : {}),
     total,
     counts: Object.fromEntries(['pokemon', 'trainer', 'energy'].map((k) => [k, cards.filter((c) => c.kind === k).reduce((a, c) => a + c.count, 0)])),
     cards,

@@ -30,7 +30,7 @@ export type Rot = '' | 'asleep' | 'paralyzed' | 'confused';
 export type Conditions = { poison: number; burn: boolean; rot: Rot; paraUntil: number };
 
 /** 포켓몬에 걸린 효과 (벤치로 가거나 진화하면 사라짐) — until: 이 턴 번호가 끝날 때 만료 */
-export type SlotEffect = { kind: 'noAttack' | 'noRetreat' | 'reduce30' | 'immuneBasicNonC'; until: number };
+export type SlotEffect = { kind: 'noAttack' | 'noRetreat' | 'reduce30' | 'immuneBasicNonC' | 'lockAttack'; until: number; name?: string };
 /** 플레이어에 걸린 효과 */
 export type PlayerEffect = { kind: 'itemLock' | 'boostExV30' | 'boostEx40' | 'brier'; until: number };
 
@@ -48,7 +48,7 @@ export type PokemonSlot = {
 };
 
 export type HiddenZone = 'deck' | 'hand' | 'prizes';
-export type PublicZone = 'discard' | 'active' | 'bench' | 'stadium' | 'reveal';
+export type PublicZone = 'discard' | 'active' | 'bench' | 'stadium' | 'reveal' | 'lost';
 export type Zone = HiddenZone | PublicZone;
 
 export type TurnFlags = { energy: boolean; supporter: boolean; retreat: boolean; stadium: boolean; stadiumUsed: boolean; names: string[] };
@@ -59,6 +59,7 @@ export type PlayerState = {
   hand: string[];
   prizes: (string | null)[];  // 6칸, 가져간 칸은 null
   discard: string[];    // [마지막] = 맨 위
+  lost: string[];       // 로스트존 (공개, 게임이 끝날 때까지 돌아오지 않음)
   active: PokemonSlot | null;
   bench: PokemonSlot[];
   benchMax: number;
@@ -67,6 +68,8 @@ export type PlayerState = {
   turns: number;        // 이 플레이어가 시작한 턴 수 (1 = 자기 첫 턴)
   flags: TurnFlags;     // 이번 턴 사용 기록
   koTurn: number;       // 상대 턴에 이 플레이어의 포켓몬이 기절한 마지막 턴 번호
+  gxUsed: boolean;      // GX 기술 (대전 중 1번)
+  vstarUsed: boolean;   // VSTAR 파워 (대전 중 1번)
   effects: PlayerEffect[];
 };
 

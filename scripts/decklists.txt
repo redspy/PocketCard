@@ -197,6 +197,60 @@
 5 기본 풀 에너지 ko=SV2D_099
 4 기본 강철 에너지 ko=SV4M_095
 
+## umbreon | 블래키 VMAX | 공식 덱 레시피 · 블래키 VMAX + 일격 우라오스 VMAX (덱 코드 PdQY-oSe6-g2fa-clYF)
+4 델빌 ko=SGG_004
+1 춤추새 GX ko=SM12_035
+1 뮤 ko=SM12a_055
+4 헬가 ko=SGG_005
+2 일격 우라오스 V ko=S5I_036
+2 일격 우라오스 VMAX ko=S5I_037
+3 블래키 V ko=S6a_047
+2 블래키 VMAX ko=S6a_048
+4 퀵볼 ko=SGG_009
+2 포켓몬통신 ko=SM9_081
+2 진화향로 ko=SGG_008
+2 포켓몬 교체 ko=SGG_011
+4 활력의 항아리 ko=SGG_012
+2 풍선 ko=S4a_171
+1 보통낚싯대 ko=S4a_160
+4 박사의 연구 ko=SGG_015
+3 마리 ko=SGI_016
+2 보스의 지령 ko=SGI_019
+1 민화의 대접 ko=SM9_085
+3 악의 탑 ko=SGG_018
+3 기본 격투 에너지 ko=SV1S_108
+4 일격 에너지 ko=SGG_019
+4 캡쳐 에너지 ko=S4a_189
+
+## giratina | 기라티나 VSTAR | 공식 덱 레시피 · 기라티나 VSTAR 로스트존 (덱 코드 ckIE-U5Dp-jhBS-JiyF)
+4 큐아링 ko=S12a_064
+1 윽우지 ko=S11_033
+2 깜까미 ko=S11_044
+1 찬란한 개굴닌자 ko=S12a_033
+1 마나피 ko=S12a_029
+3 기라티나 V ko=S12a_110
+1 드래피온 V ko=S12a_085
+3 기라티나 VSTAR ko=S12a_111
+4 배틀VIP패스 ko=S8_089
+3 네스트볼 ko=SVB_001
+4 미라주게이트 ko=S12a_139
+2 교체카트 ko=S10D_060
+2 대단한낚싯대 ko=SV2P_066
+2 동굴탈출로프 ko=SI_364
+1 포켓몬 교체 ko=SVB_004
+1 로스트스위퍼 ko=SVB_014
+1 히스이의 헤비볼 ko=SVB_016
+1 포켓기어3.0 ko=SVB_003
+4 아크로마의 실험 ko=S12a_155
+2 보스의 지령 ko=SVB_020
+2 모야모 ko=SV2D_068
+1 원규 ko=SVB_022
+2 정상으로 가는 눈길 ko=SVB_027
+4 기본 초 에너지 ko=SVB_033
+3 기본 풀 에너지 ko=SVB_029
+3 기본 물 에너지 ko=SVB_031
+2 제트 에너지 ko=SV1a_073
+
 # ── 이하 참고용 (게임에서 사용 안 함) ──
 
 ## dragapult_gdansk | 드래펄트 ex (국제) | Regional Gdańsk 2026-10-31 3위

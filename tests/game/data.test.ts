@@ -35,7 +35,11 @@ test('덱 규칙: 같은 이름 4장 이하(기본 에너지 제외), ACE SPEC 1
   }
 });
 
-test('6개 덱의 모든 카드 효과가 자동화되어 있다', () => {
-  const manual = Object.values(info.db).filter((c) => !isAutomated(c)).map((c) => `${c.id} ${c.name}`);
+test('대전 덱의 모든 카드 효과가 자동화되어 있다', () => {
+  // 대전 카탈로그(playable 덱)의 카드만 — 덱 뷰어 전용 덱(규칙 준비 중)의 남은 카드는 따로 출력
+  const used = new Set(catalog.decks.flatMap((d) => d.cards.map((c) => c.id)));
+  const manual = Object.values(info.db).filter((c) => used.has(c.id) && !isAutomated(c)).map((c) => `${c.id} ${c.name}`);
   assert.deepEqual(manual, []);
+  const pending = Object.values(info.db).filter((c) => !used.has(c.id) && !isAutomated(c));
+  if (pending.length) console.log(`[준비 중] 대전 규칙이 아직 없는 카드 ${pending.length}종: ${pending.map((c) => c.name).join(', ')}`);
 });
