@@ -484,9 +484,9 @@ static func legalMoves(s: Dictionary, seat: int, info: Dictionary) -> Array:
 			if def.has("can") and GCore.truthy(def.can.call(ctx, seat, iid)):
 				continue
 			out.append(_mv({ "type": "play", "player": seat, "card": iid }, "trainer", "%s 사용" % nm, iid))
-	# 스타디움 효과 (보물마을)
-	if GCore.stadiumName(ctx) == "보물마을" and not p.flags.stadiumUsed and bench_room > 0 and p.deck.size() > 0:
-		out.append(_mv({ "type": "stadium", "player": seat }, "stadium", "보물마을: 덱에서 기본 포켓몬을 벤치로"))
+	# 스타디움 효과 (보울마을)
+	if GCore.stadiumName(ctx) == "보울마을" and not p.flags.stadiumUsed and bench_room > 0 and p.deck.size() > 0:
+		out.append(_mv({ "type": "stadium", "player": seat }, "stadium", "보울마을: 덱에서 기본 포켓몬을 벤치로"))
 	# 특성
 	for sl in slots:
 		if not GCore.abilityActive(ctx, sl):

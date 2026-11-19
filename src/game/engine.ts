@@ -412,9 +412,9 @@ export function legalMoves(s: GameState, seat: Seat, info: CardInfo): LegalMove[
       out.push({ input: { type: 'play', player: seat, card: iid }, kind: 'trainer', label: `${nm} 사용`, card: iid });
     }
   }
-  // 스타디움 효과 (보물마을)
-  if (stadiumName(ctx) === '보물마을' && !p.flags.stadiumUsed && benchRoom > 0 && p.deck.length)
-    out.push({ input: { type: 'stadium', player: seat }, kind: 'stadium', label: '보물마을: 덱에서 기본 포켓몬을 벤치로' });
+  // 스타디움 효과 (보울마을)
+  if (stadiumName(ctx) === '보울마을' && !p.flags.stadiumUsed && benchRoom > 0 && p.deck.length)
+    out.push({ input: { type: 'stadium', player: seat }, kind: 'stadium', label: '보울마을: 덱에서 기본 포켓몬을 벤치로' });
   // 특성
   for (const sl of slots) {
     if (!abilityActive(ctx, sl)) continue;

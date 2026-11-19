@@ -186,11 +186,11 @@ test('제로의 대공동: 테라스탈 포켓몬이 있으면 벤치 8칸, 스�
   assert.equal(st.players[0].benchMax, 8);
   st = applyInput(st, legalMoves(st, 0, info).find((m) => m.kind === 'play')!.input, info).state;
   assert.equal(st.players[0].bench.length, 6);
-  // 상대가 보물마을로 바꾸면 5칸이 되도록 1마리 트래쉬
+  // 상대가 보울마을로 바꾸면 5칸이 되도록 1마리 트래쉬
   st = applyInput(st, { type: 'endTurn', player: 0 }, info).state;
   st = settle(st);
-  const mv = legalMoves(st, 1, info).find((m) => m.label.includes('보물마을'));
-  assert.ok(mv, '보물마을을 낼 수 있음');
+  const mv = legalMoves(st, 1, info).find((m) => m.label.includes('보울마을'));
+  assert.ok(mv, '보울마을을 낼 수 있음');
   st = applyInput(st, mv!.input, info).state;
   assert.ok(st.requests.some((r) => r.player === 0 && r.min === 1), '플레이어 1 이 벤치 1마리를 고름');
   st = settle(st);

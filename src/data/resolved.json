@@ -471,7 +471,7 @@
         },
         {
           "count": 2,
-          "nameEn": "보물마을",
+          "nameEn": "보울마을",
           "ref": "ko:SV1a_071"
         },
         {
@@ -765,7 +765,7 @@
         },
         {
           "count": 2,
-          "nameEn": "보물마을",
+          "nameEn": "보울마을",
           "ref": "ko:SV1a_071"
         },
         {
@@ -1779,7 +1779,7 @@
       ]
     },
     "ko:SV1a_071": {
-      "nameEn": "보물마을",
+      "nameEn": "보울마을",
       "ko": "SV1a_071",
       "score": null,
       "tried": [

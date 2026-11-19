@@ -204,7 +204,7 @@ HP110 Psychic 진화전:- 약점:[{"type":"Darkness","value":"×2"}] 저항:[{"t
   [효과] 自分の山札から好きなカードを2枚選ぶ。残りの山札を切り、選んだカードを好きな順番に入れ替えて、山札の上にもどす。
 ## SV8a_167 수련의 돌봄 [Trainer/Supporter] jp=SV8a-168 (gholdengo×1)
   [효과] 自分のトラッシュからポケモン（「ルールを持つポケモン」をのぞく）と基本エネルギーを合計3枚まで選び、相手に見せて、手札に加える。
-## SV1a_071 보물마을 [Trainer/Stadium] jp=SV1a-070 (gholdengo×2,gardevoir×2)
+## SV1a_071 보울마을 [Trainer/Stadium] jp=SV1a-070 (gholdengo×2,gardevoir×2)
   [효과] おたがいのプレイヤーは、自分の番ごとに1回、自分の山札からたねポケモン（「ルールを持つポケモン」をのぞく）を1枚選び、ベンチに出してよい。そして山札を切る。
 ## SV4M_095 기본 강철 에너지 [energy] (gholdengo×3,pachirisu×4) — 데이터 없음
 ## SV1S_108 기본 격투 에너지 [energy] (gholdengo×7) — 데이터 없음

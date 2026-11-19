@@ -123,6 +123,10 @@ static func check_render(s: BattleScreen) -> Array:
 				continue
 			if not (node as Control).visible or (node as Control).position.distance_to((it[1] as Rect2).position) > 0.5:
 				var tw = node.get_meta("pos_tw") if node.has_meta("pos_tw") else null
+				# 제자리로 미끄러지는 중이고 목적지가 맞으면 정상 (조작 직후 검사할 때)
+				var tg = node.get_meta("target_pos", null)
+				if (node as Control).visible and tw is Tween and (tw as Tween).is_running() and tg is Vector2 and (tg as Vector2).distance_to((it[1] as Rect2).position) <= 0.5:
+					continue
 				out.append("%s: %s 위치 다름 (지금 %s, 목표 %s, 기억 %s, 움직이는 중 %s, 크기 %s)" % [s.mode, sl.sid, (node as Control).position, (it[1] as Rect2).position, str(node.get_meta("target_pos", null)), str(tw is Tween and (tw as Tween).is_running()), str((node as Control).scale)])
 			if sl.get("hp") != null and node.left_shown() != int(sl.hp) - int(sl.damage):
 				out.append("%s: %s HP 표시 %d ≠ %d" % [s.mode, sl.sid, node.left_shown(), int(sl.hp) - int(sl.damage)])
@@ -952,7 +956,7 @@ static func run_lan(host: Node, addr: String, code: String) -> Array:
 		if s.result_panel != null:
 			break
 	if s.result_panel == null:
-		fails.append("서버 대전: 결과 화면이 안 뜸")
+		fails.append("서버 대전: 결과 화면이 안 뜸 (연출 중 %s, 재생 중 %s, 남은 사건 %d, 화면 %s, 판 %s/%s)" % [s.fx.busy(), s.fx.playing, s.fx.queue.size(), str(Nav.current()), Net.view.get("version"), s._fed_version])
 		return fails
 	var out = _find_meta(s.result_panel, "result", "leave")
 	if out == null:
