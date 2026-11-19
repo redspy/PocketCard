@@ -684,12 +684,22 @@ static func run_fx(host: Node) -> Array:
 	var was_busy := false
 	var think_seen := 0
 	var recent_seen := 0
+	var shown_idle := {}
+	var early_req := false
 	for i in 200000:
 		await _frames(host, 1)
 		var v: Dictionary = Net.view
 		if v.get("result") != null and not s.fx.busy():
 			break
 		var busy: bool = s.fx.busy()
+		# 새 선택 요청은 연출이 끝난 뒤에만 뜬다 (연출 중 떠 있는 창은 연출 전부터 있던 것)
+		var sk_id: String = s.sheet_key.get_slice("|", 0)
+		if not busy:
+			if sk_id != "":
+				shown_idle[sk_id] = true
+		elif sk_id != "" and not shown_idle.has(sk_id) and not early_req:
+			early_req = true
+			fails.append("연출 중에 새 선택 창이 먼저 뜸 (%s)" % str(s.my_request().get("kind") if s.my_request() else "-"))
 		if busy and not skipped and not s._my_turn() and s.fx.catcher and s.fx.catcher.visible and int(v.get("turnNumber", 0)) >= 6:
 			# 상대 차례 연출 중 화면을 누르면 건너뛰기
 			skipped = true

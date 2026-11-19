@@ -982,8 +982,16 @@ func _show_error() -> void:
 
 # ───────────────────────── 선택 요청 (기본 시트 — 4단계에서 탁자 고르기로 확장) ─────────────────────────
 
+## 화면에 띄울 선택 요청: 새 요청은 앞선 연출이 끝난 뒤에 (기절 연출 전에 "사이드를 가져가세요"가 먼저 뜨지 않게).
+## 이미 떠 있는 요청은 연출 중에도 그대로 둔다. 탁자 모드만 (손패 모드는 큰 연출이 웹 게임판에 있어 바로 띄움)
+func shown_request():
+	var r = my_request()
+	if r != null and mode == "table" and fx and fx.busy() and not sheet_key.begins_with(str(r.id) + "|"):
+		return null
+	return r
+
 func _build_request() -> void:
-	var req = my_request()
+	var req = shown_request()
 	var rid := str(req.id) if req != null else ""
 	if rid != _usable_req:
 		_usable_req = rid
