@@ -679,6 +679,7 @@ static func run_fx(host: Node) -> Array:
 	var skipped := false
 	var was_busy := false
 	var think_seen := 0
+	var recent_seen := 0
 	for i in 200000:
 		await _frames(host, 1)
 		var v: Dictionary = Net.view
@@ -723,6 +724,23 @@ static func run_fx(host: Node) -> Array:
 						fails.append("생각 중 표시 '%s' (기대 %s, 지금 계산 '%s', 판 %s/%s, 단계 %s)" % [s.chips.text, th, s.thinking_text(), v.version, s._fed_version, str(v.get("phase"))])
 				if th:
 					think_seen += 1
+				# 최근 행동 타일: 연출 끝난 사건만, 최근 것부터, 가운데 띠 안 · 스타디움과 안 겹침
+				var rev: Array = s.recent_events()
+				var shown: Array = s.recent_tiles.filter(func(t): return t.visible)
+				if shown.size() != mini(rev.size(), shown.size()) or (rev.size() > 0 and shown.is_empty()):
+					if fails.size() < 10:
+						fails.append("최근 행동 타일 %d개 (사건 %d개)" % [shown.size(), rev.size()])
+				for ti in shown.size():
+					var tl: BCard = shown[ti]
+					if tl.code != str(rev[ti].code) or int(rev[ti].seq) > s.fx.played_seq:
+						if fails.size() < 10:
+							fails.append("최근 행동 타일 %d: %s ≠ %s" % [ti, tl.code, str(rev[ti].code)])
+					var mr: Rect2 = s.L.mid
+					var tr := Rect2(tl.position, tl.size)
+					if not mr.grow(1).encloses(tr) or tr.intersects(s.L.stadium):
+						if fails.size() < 10:
+							fails.append("최근 행동 타일 %d 위치 %s (띠 %s)" % [ti, tr, mr])
+				recent_seen = maxi(recent_seen, shown.size())
 				for side in ["my", "opp"]:
 					var pv: Dictionary = s._me() if side == "my" else s._opp()
 					var pl: BPile = s.piles[side + "_deck"]
@@ -791,6 +809,19 @@ static func run_fx(host: Node) -> Array:
 	print("[ui-tests] AI 생각 중 표시 확인 %d번" % think_seen)
 	if think_seen == 0:
 		fails.append("AI 차례에 '생각 중' 표시를 한 번도 확인하지 못함")
+	# 최근 행동 타일 탭 → 그 카드들 크게 + 기록 한 줄
+	if recent_seen == 0:
+		fails.append("최근 행동 타일이 한 번도 보이지 않음")
+	elif not s.recent_evs.is_empty():
+		var z: BZoom = s.open_recent(0)
+		await _frames(host, 2)
+		var want: String = BLog.line(s.recent_evs[0], Net.seat).strip_edges()
+		if z == null or not z.info_text().contains(want) or z.list.size() != s.recent_evs.size():
+			fails.append("최근 행동 크게 보기: '%s' (기대 '%s')" % [z.info_text() if z else "없음", want])
+		if z:
+			z.queue_free()
+			await _frames(host, 2)
+	print("[ui-tests] 최근 행동 타일 최대 %d개" % recent_seen)
 	var bp := BPile.new()
 	for tc in [["deck", 5, true], ["deck", 0, true], ["deck", 6, false], ["discard", 2, false]]:
 		bp.set_pile(tc[0], tc[1])

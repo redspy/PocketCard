@@ -13,6 +13,7 @@ var queue: Array = []
 var playing := false
 var skipping := false
 var last_seq := -1
+var played_seq := -1            # 재생(또는 건너뛰기)까지 끝난 마지막 사건 — 최근 행동 타일은 여기까지만
 var pending_hp: Dictionary = {} # sid -> 아직 안 보여준 데미지(+)/회복(-)
 var hold: Dictionary = {}       # sid -> true : 기절 연출 전까지 남겨 둘 칸
 var counts: Dictionary = {}     # 사건 종류 -> 재생 수 (테스트용)
@@ -157,6 +158,7 @@ func busy() -> bool:
 func start_from_now() -> void:
 	for e in Net.events_log:
 		last_seq = maxi(last_seq, int(e.get("seq", -1)))
+	played_seq = last_seq
 
 ## 새 사건을 큐에 넣는다 (상태가 바뀐 뒤 = view 가 새 것일 때 부른다)
 func feed() -> void:
@@ -185,6 +187,7 @@ func _flush_instant() -> void:
 	for e in queue:
 		_count(e)
 	queue.clear()
+	played_seq = last_seq
 	pending_hp.clear()
 	var had := not hold.is_empty()
 	hold.clear()
@@ -209,6 +212,7 @@ func _run() -> void:
 	_show_catcher(true)
 	while not queue.is_empty():
 		var e: Dictionary = queue.pop_front()
+		played_seq = maxi(played_seq, int(e.get("seq", -1)))
 		_count(e)
 		if skipping or not is_instance_valid(screen):
 			_apply_now(e)

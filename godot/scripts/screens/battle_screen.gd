@@ -19,6 +19,8 @@ var piles: Dictionary = {}          # "my_deck" 등 -> BPile
 var prize_cards: Dictionary = {}    # "my"/"opp" -> Array[BCard]
 var stadium: BCard
 var stadium_name: Label
+var recent_tiles: Array = []        # 탁자: 가운데 띠 왼쪽 최근 행동 카드 타일 (BCard)
+var recent_evs: Array = []          # 타일에 보이는 사건 (최근 것부터)
 var hand: BHand
 var mid: Panel
 var opp_hand: Label
@@ -133,6 +135,20 @@ func _build_static() -> void:
 	board.add_child(stadium)
 	stadium_name = UI.label("", 20, UI.TEXT_DIM)
 	board.add_child(stadium_name)
+	for i in RECENT_MAX:
+		var t := BCard.new()
+		t.name = "recent_%d" % i
+		var k := i
+		t.tapped.connect(func(): open_recent(k))
+		t.long_pressed.connect(func(): open_recent(k))
+		var fr := Panel.new()
+		fr.name = "frame"
+		fr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		fr.set_anchors_preset(Control.PRESET_FULL_RECT)
+		t.add_child(fr)
+		t.visible = false
+		board.add_child(t)
+		recent_tiles.append(t)
 	for side in ["my", "opp"]:
 		for k in ["deck", "discard"]:
 			var p := BPile.new()
@@ -185,6 +201,11 @@ func _build_static() -> void:
 	hud.add_child(status_label)
 	notice_label = UI.label("", 21, UI.TEXT_DIM, HORIZONTAL_ALIGNMENT_LEFT, true)
 	hud.add_child(notice_label)
+	# 손패 모드: 상대 행동 알림을 누르면 최근 기록
+	notice_label.mouse_filter = Control.MOUSE_FILTER_STOP
+	notice_label.gui_input.connect(func(e):
+		if e is InputEventMouseButton and not e.pressed and e.button_index == MOUSE_BUTTON_LEFT and notice_label.text != "":
+			open_log())
 	chips = UI.label("", 20, UI.TEXT_DIM)
 	hud.add_child(chips)
 	end_btn = UI.button("턴 종료", 26, true, true)
@@ -334,7 +355,65 @@ func _place_side(p: Dictionary, side: String, seen: Dictionary) -> void:
 		if key.begins_with(side + ":") and int(key.split(":")[1]) >= list.size():
 			empties[key].visible = false
 
+# ───────────────────────── 최근 행동 타일 (탁자) ─────────────────────────
+
+const RECENT_MAX := 5
+const RECENT_MINE := Color(0.96, 0.77, 0.26)
+const RECENT_OPP := Color(0.95, 0.45, 0.4)
+
+## 연출까지 끝난 카드 사용·기술·특성 (최근 것부터, 에너지 붙이기는 제외 — 매 턴 있어 정보가 적음)
+func recent_events() -> Array:
+	var out: Array = []
+	var upto: int = fx.played_seq if fx else 1 << 30
+	for i in range(Net.events_log.size() - 1, -1, -1):
+		var e: Dictionary = Net.events_log[i]
+		if int(e.get("seq", -1)) > upto:
+			continue
+		var t := str(e.get("type", ""))
+		if not (t in ["play", "attack", "ability"]) or str(e.get("code", "")) == "":
+			continue
+		if t == "play" and str(e.get("what", "")) == "에너지 붙이기":
+			continue
+		out.append(e)
+		if out.size() >= RECENT_MAX:
+			break
+	return out
+
+func _place_recent() -> void:
+	var table := mode == "table"
+	recent_evs = recent_events() if table else []
+	var m: Rect2 = L.get("mid", Rect2())
+	var h: float = m.size.y - 8
+	var w: float = h / UI.CARD_RATIO
+	var right: float = (L.stadium as Rect2).position.x - 10 if L.has("stadium") else m.end.x
+	var fit := int(floor((right - m.position.x - 4 + 6) / (w + 6)))
+	for i in RECENT_MAX:
+		var t: BCard = recent_tiles[i]
+		t.visible = table and i < recent_evs.size() and i < fit
+		if not t.visible:
+			continue
+		var e: Dictionary = recent_evs[i]
+		t.position = Vector2(m.position.x + 4 + i * (w + 6), m.position.y + 4)
+		t.size = Vector2(w, h)
+		t.set_card(str(e.code))
+		var sb := StyleBoxFlat.new()
+		sb.bg_color = Color(0, 0, 0, 0)
+		sb.border_color = RECENT_MINE if int(e.get("player", -1)) == Net.seat else RECENT_OPP
+		sb.set_border_width_all(3)
+		sb.set_corner_radius_all(6)
+		(t.get_node("frame") as Panel).add_theme_stylebox_override("panel", sb)
+		t.modulate.a = 1.0 if i == 0 else 0.85
+
+## 타일 탭: 최근 행동 카드들을 크게 (설명 = 기록 한 줄)
+func open_recent(i: int) -> BZoom:
+	if i >= recent_evs.size():
+		return null
+	var codes: Array = recent_evs.map(func(e): return str(e.code))
+	var tags: Array = recent_evs.map(func(e): return BLog.line(e, Net.seat).strip_edges())
+	return BZoom.open(sheet_layer, codes, i, tags)
+
 func _place_board(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
+	_place_recent()
 	var table := mode == "table"
 	mid.visible = table
 	if table:
