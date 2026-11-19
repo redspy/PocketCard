@@ -678,6 +678,7 @@ static func run_fx(host: Node) -> Array:
 	var idle_checks := 0
 	var skipped := false
 	var was_busy := false
+	var think_seen := 0
 	for i in 200000:
 		await _frames(host, 1)
 		var v: Dictionary = Net.view
@@ -714,6 +715,20 @@ static func run_fx(host: Node) -> Array:
 				for p in check_render(s):
 					if fails.size() < 10:
 						fails.append("연출 후 그리기: " + p)
+				# 상대 상태: AI 차례에 연출이 끝났으면 "AI 생각 중…", 덱 5장 이하면 경고색
+				v = Net.view     # 기다리는 동안 상태가 바뀌었을 수 있음
+				var th: bool = str(v.get("phase")) == "playing" and v.get("turnPlayer") != null and not s._my_turn() and s.my_request() == null
+				if th != (s.chips.text == "AI 생각 중…"):
+					if fails.size() < 10:
+						fails.append("생각 중 표시 '%s' (기대 %s, 지금 계산 '%s', 판 %s/%s, 단계 %s)" % [s.chips.text, th, s.thinking_text(), v.version, s._fed_version, str(v.get("phase"))])
+				if th:
+					think_seen += 1
+				for side in ["my", "opp"]:
+					var pv: Dictionary = s._me() if side == "my" else s._opp()
+					var pl: BPile = s.piles[side + "_deck"]
+					if pl.low != (int(pv.deckCount) <= BPile.LOW_DECK):
+						if fails.size() < 10:
+							fails.append("덱 경고 %s: 덱 %d, 경고 %s" % [side, int(pv.deckCount), pl.low])
 		was_busy = busy
 		if Time.get_ticks_msec() - t0 > 600000:
 			fails.append("연출 테스트 시간 초과 (턴 %s)" % str(v.get("turnNumber")))
@@ -773,6 +788,15 @@ static func run_fx(host: Node) -> Array:
 			break
 	if s.fx._accel != 1.0:
 		fails.append("연출이 끝났는데 반복 가속이 남음 %s" % s.fx._accel)
+	print("[ui-tests] AI 생각 중 표시 확인 %d번" % think_seen)
+	if think_seen == 0:
+		fails.append("AI 차례에 '생각 중' 표시를 한 번도 확인하지 못함")
+	var bp := BPile.new()
+	for tc in [["deck", 5, true], ["deck", 0, true], ["deck", 6, false], ["discard", 2, false]]:
+		bp.set_pile(tc[0], tc[1])
+		if bp.low != tc[2]:
+			fails.append("덱 경고 %s %d → %s (기대 %s)" % [tc[0], tc[1], bp.low, tc[2]])
+	bp.free()
 	print("[ui-tests] 약점·저항 사건 %d개 (표시 %d), 반복 가속 %d/%d개" % [wr_events, s.fx.wr_shown.size(), fast, al.size()])
 	print("[ui-tests] 공격 연출: 충돌 %d번 (기술과 동기화 %d), 등급별 %s" % [imp.size(), synced, JSON.stringify(tiers)])
 	print("[ui-tests] 연출(2배속): %.0f초, 연출 후 검사 %d번, 재생 %s" % [(Time.get_ticks_msec() - t0) / 1000.0, idle_checks, JSON.stringify(c)])

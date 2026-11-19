@@ -439,7 +439,9 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 			conn = "  · 재접속 중…"
 		elif bool(Net.lobby.get("paused", false)):
 			conn = "  · 상대 재접속 대기"
-		status_label.text = "덱 %d · 사이드 %d · 트래쉬 %d%s\n상대: 패 %d · 사이드 %d · 큰 화면은 게임판에서" % [int(me.deckCount), _count_true(me.prizes), (me.discard as Array).size(), conn, int(opp.handCount), _count_true(opp.prizes)]
+		var my_deck := "덱 %d%s" % [int(me.deckCount), " ⚠" if int(me.deckCount) <= BPile.LOW_DECK else ""]
+		var opp_deck := (" · 덱 %d ⚠" % int(opp.deckCount)) if int(opp.deckCount) <= BPile.LOW_DECK else ""
+		status_label.text = "%s · 사이드 %d · 트래쉬 %d%s\n상대: 패 %d · 사이드 %d%s · 큰 화면은 게임판에서" % [my_deck, _count_true(me.prizes), (me.discard as Array).size(), conn, int(opp.handCount), _count_true(opp.prizes), opp_deck]
 		notice_label.position = L.notice.position
 		notice_label.size = L.notice.size
 	# 이번 턴 사용 칩 + 턴 종료
@@ -448,7 +450,7 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 		var fl: Dictionary = me.flags
 		chips.text = "에너지 %s  서포트 %s  후퇴 %s" % ["✔" if fl.energy else "○", "✔" if fl.supporter else "○", "✔" if fl.retreat else "○"]
 	else:
-		chips.text = ""
+		chips.text = thinking_text()
 	end_btn.position = L.end_turn.position
 	var can_end := actions().any(func(m): return m.kind == "endTurn")
 	var ended := phase == "ended"
@@ -463,6 +465,15 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	toast.size = Vector2(size.x * 0.84, 0)
 	var ty: float = (L.center.position.y + 10) if mode == "hand" else (L.bar.position.y + L.bar.size.y + 10)
 	toast.position = Vector2(size.x * 0.08, ty)
+
+## 상대 차례에 연출이 없고 내가 고를 것도 없으면 "생각 중…" (상대 손패를 만지는 모습은 보여 주지 않음)
+func thinking_text() -> String:
+	var v: Dictionary = Net.view
+	if str(v.get("phase")) != "playing" or v.get("turnPlayer") == null or _my_turn():
+		return ""
+	if my_request() != null or (fx and fx.busy()):
+		return ""
+	return "AI 생각 중…" if Net.solo else "상대 생각 중…"
 
 ## 할 수 있는 게 턴 종료뿐이면 버튼이 천천히 맥동 (누르라고 알려 줄 뿐, 강제는 아님)
 func _set_end_hint(on: bool) -> void:

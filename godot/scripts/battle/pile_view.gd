@@ -7,6 +7,9 @@ var count := 0
 var top_code := ""
 var card: BCard
 var _count: Label
+var low := false                     # 덱이 얼마 안 남음 (경고색)
+const LOW_DECK := 5                  # 덱이 비면 뽑지 못해 패배 → 5장 이하면 경고
+const LOW_COLOR := Color(1, 0.5, 0.35)
 
 func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_PASS
@@ -24,6 +27,8 @@ func set_pile(k: String, n: int, code := "") -> void:
 	card.visible = n > 0
 	card.set_card("" if k == "deck" else code)
 	_count.text = ("덱 %d" if k == "deck" else "트래쉬 %d") % n
+	low = k == "deck" and n <= LOW_DECK
+	_count.add_theme_color_override("font_color", LOW_COLOR if low else Color.WHITE)
 	_relayout()
 
 func _relayout() -> void:
