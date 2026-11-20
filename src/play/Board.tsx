@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { defaultServer, store, useGameClient } from './client.ts';
 import { CardBack, CardImg, lastLine, nameOf, seatName } from './common.tsx';
 import type { CatalogDeck } from '../game/catalog.ts';
-import type { LobbyInfo, SeatInfo } from '../game/protocol.ts';
+import type { ClientMsg, LobbyInfo, SeatInfo } from '../game/protocol.ts';
 import type { GameEvent, Seat } from '../game/types.ts';
 import type { GameView, PlayerView, SlotView } from '../game/view.ts';
 import './play.css';
@@ -33,13 +33,13 @@ export default function Board() {
   if (!lobby) {
     return <div className="pc-root pc-center"><div className="pc-logo">POCKETCARD BATTLE</div><p className="pc-dim">게임 서버({server})에 연결하는 중… <br />PC에서 <code>npm run server</code> 를 실행했는지 확인하세요.</p></div>;
   }
-  if (lobby.phase !== 'game' || !c.view) return <Lobby lobby={lobby} decks={c.decks} layout={layout} setLayout={setLayout} />;
-  return <GameBoard view={c.view} lobby={lobby} decks={c.decks} line={lastLine(c.log, c.decks)} layout={layout} spot={lastSpot(c.log)} />;
+  if (lobby.phase !== 'game' || !c.view) return <Lobby lobby={lobby} decks={c.decks} layout={layout} setLayout={setLayout} send={c.send} error={c.error} />;
+  return <GameBoard view={c.view} lobby={lobby} decks={c.decks} line={lastLine(c.log, c.decks)} layout={layout} spot={lastSpot(c.log)} onRematch={lobby.boardAi ? () => c.send({ t: 'rematch' }) : undefined} />;
 }
 
 // ───────────────────────── 로비 ─────────────────────────
 
-function Lobby({ lobby, decks, layout, setLayout }: { lobby: LobbyInfo; decks: CatalogDeck[]; layout: Layout; setLayout: (l: Layout) => void }) {
+function Lobby({ lobby, decks, layout, setLayout, send, error }: { lobby: LobbyInfo; decks: CatalogDeck[]; layout: Layout; setLayout: (l: Layout) => void; send: (m: ClientMsg) => void; error: { message: string; at: number } | null }) {
   const [addr, setAddr] = useState(() => store.get('pocketcard.addr') ?? '');
   const shown = lobby.addresses.find((a) => a.address === addr) ?? lobby.addresses[0];
   const [now, setNow] = useState(Date.now());
@@ -68,8 +68,9 @@ function Lobby({ lobby, decks, layout, setLayout }: { lobby: LobbyInfo; decks: C
       <div className="pc-seats">
         {lobby.seats.map((s) => <SeatCard key={s.seat} s={s} decks={decks} />)}
       </div>
+      <BoardAi lobby={lobby} decks={decks} send={send} error={error} />
       <div className="pc-status">
-        {left !== null ? <span className="pc-countdown">{left}초 뒤 게임 시작</span> : '두 사람 모두 준비 완료하면 3초 뒤 게임이 시작됩니다.'}
+        {left !== null ? <span className="pc-countdown">{left}초 뒤 게임 시작</span> : lobby.boardAi ? '플레이어 1이 준비 완료하면 3초 뒤 AI와 게임이 시작됩니다.' : '두 사람 모두 준비 완료하면 3초 뒤 게임이 시작됩니다.'}
       </div>
       <div className="pc-solo">
         폰 없이 혼자 해 보기: <a href="/demo?p1=human&p2=ai">AI와 연습 대전</a> · <a href="/demo?p1=ai&p2=ai&auto=1">AI끼리 관전</a>
@@ -79,6 +80,41 @@ function Lobby({ lobby, decks, layout, setLayout }: { lobby: LobbyInfo; decks: C
         <button className={layout === 'face' ? 'on' : ''} onClick={() => setLayout('face')}>마주 보기 (눕힌 태블릿)</button>
         <button className={layout === 'side' ? 'on' : ''} onClick={() => setLayout('side')}>나란히 보기 (세운 화면)</button>
       </div>
+    </div>
+  );
+}
+
+const AI_SPEEDS: [string, number][] = [['빠르게', 250], ['보통', 700], ['천천히', 1500]];
+
+/** 플레이어 2 = 서버 AI: 폰 한 대로 게임판 흐름을 시험할 때 */
+function BoardAi({ lobby, decks, send, error }: { lobby: LobbyInfo; decks: CatalogDeck[]; send: (m: ClientMsg) => void; error: { message: string; at: number } | null }) {
+  const on = !!lobby.boardAi;
+  const locked = lobby.phase !== 'lobby';
+  const p2Human = !on && lobby.seats[1].taken && lobby.seats[1].connected;
+  const set = (m: Partial<Extract<ClientMsg, { t: 'boardAi' }>>) => send({ t: 'boardAi', on, ...m });
+  const recentErr = error && Date.now() - error.at < 8000 ? error.message : null;
+  return (
+    <div className="pc-boardai">
+      <label>
+        <input type="checkbox" checked={on} disabled={locked || p2Human} onChange={(e) => send({ t: 'boardAi', on: e.target.checked })} />
+        {' '}플레이어 2를 AI로 (폰 한 대로 시험)
+      </label>
+      {on && (
+        <>
+          {' '}덱{' '}
+          <select value={lobby.aiDeck ?? ''} disabled={locked} onChange={(e) => set({ deckId: e.target.value || null })}>
+            <option value="">무작위</option>
+            {decks.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
+          </select>
+          {' '}속도{' '}
+          <select value={String(AI_SPEEDS.find(([, ms]) => ms === lobby.aiDelayMs)?.[1] ?? lobby.aiDelayMs ?? 700)} onChange={(e) => set({ ms: Number(e.target.value) })} disabled={locked}>
+            {AI_SPEEDS.map(([n, ms]) => <option key={ms} value={ms}>{n}</option>)}
+            {!AI_SPEEDS.some(([, ms]) => ms === lobby.aiDelayMs) && lobby.aiDelayMs !== undefined && <option value={lobby.aiDelayMs}>{lobby.aiDelayMs}ms</option>}
+          </select>
+        </>
+      )}
+      {p2Human && <span className="pc-dim small"> (플레이어 2 자리에 사람이 있음)</span>}
+      {recentErr && <div className="pc-err small">{recentErr}</div>}
     </div>
   );
 }
@@ -100,7 +136,7 @@ function SeatCard({ s, decks }: { s: SeatInfo; decks: CatalogDeck[] }) {
 
 // ───────────────────────── 게임판 ─────────────────────────
 
-export function GameBoard({ view, lobby, decks, line, layout, spot }: { view: GameView; lobby: LobbyInfo; decks: CatalogDeck[]; line: string; layout: Layout; spot?: GameEvent | null }) {
+export function GameBoard({ view, lobby, decks, line, layout, spot, onRematch }: { view: GameView; lobby: LobbyInfo; decks: CatalogDeck[]; line: string; layout: Layout; spot?: GameEvent | null; onRematch?: () => void }) {
   const flip = layout === 'face';
   const [zoom, setZoom] = useState<ZoomInfo | null>(null);
   // 위쪽 절반(플레이어 2)에서 누른 카드는 마주 보기일 때 그쪽 방향으로 확대
@@ -139,7 +175,8 @@ export function GameBoard({ view, lobby, decks, line, layout, spot }: { view: Ga
       )}
       {lobby.paused && <div className="pc-overlay"><Twice flip={flip}>재접속 대기 중… ({lobby.seats.filter((s) => !s.connected).map((s) => seatName(s.seat)).join(', ')})</Twice></div>}
       {view.result && (
-        <div className="pc-overlay"><Twice flip={flip}>{view.result.winner === null ? '무승부' : `${seatName(view.result.winner)} 승리!`}<small>{view.result.reason}</small></Twice></div>
+        <div className="pc-overlay"><Twice flip={flip}>{view.result.winner === null ? '무승부' : `${seatName(view.result.winner)} 승리!`}<small>{view.result.reason}</small></Twice>
+          {onRematch && <button className="pc-rematch" onClick={onRematch}>다시 하기 (대전 준비로)</button>}</div>
       )}
     </div>
   );

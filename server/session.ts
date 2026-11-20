@@ -42,6 +42,10 @@ type Saved = {
   code: string;
   seats: [SeatState, SeatState];
   game: { config: GameConfig; inputs: GameInput[] } | null;
+  /** 게임판 세션: 플레이어 2 = 서버 AI */
+  boardAi?: boolean;
+  aiDeck?: string | null;
+  aiDelayMs?: number;
 };
 
 /** solo: 게임판 없이 폰 한 대와 서버 AI(플레이어 2)의 연습 세션. aiDelayMs: AI 입력 사이 간격 */
@@ -69,6 +73,9 @@ export class Session {
   private aiTimer: NodeJS.Timeout | null = null;
   /** AI 한 수 사이 간격 (폰에서 바꿀 수 있음) */
   aiDelayMs: number;
+  /** 게임판 세션: 플레이어 2 자리를 서버 AI 가 맡음 (폰 한 대로 게임판 흐름 시험) */
+  boardAi = false;
+  get aiOn() { return this.solo || this.boardAi; }
 
   constructor(opts: SessionOptions) {
     this.opts = opts;
@@ -93,6 +100,13 @@ export class Session {
     const s = new Session(opts);
     s.code = saved.code;
     s.seats = saved.seats.map((x) => ({ ...x, ready: saved.game ? x.ready : false })) as [SeatState, SeatState];
+    if (saved.boardAi) {
+      s.boardAi = true;
+      s.aiDeck = saved.aiDeck ?? null;
+      s.aiDelayMs = saved.aiDelayMs ?? s.aiDelayMs;
+      s.ai = makeAiBot(opts.catalog, opts.info.db);
+      if (!saved.game) s.seats[AI_SEAT] = aiSeat(s.aiDeck);
+    }
     if (saved.game) {
       s.game = Match.replay(saved.game, s.info);
       s.phase = 'game';
@@ -103,7 +117,8 @@ export class Session {
   private save() {
     const f = this.opts.file;
     if (!f) return;
-    const saved: Saved = { version: 1, code: this.code, seats: this.seats, game: this.game ? { config: this.game.config, inputs: this.game.inputs } : null };
+    const saved: Saved = { version: 1, code: this.code, seats: this.seats, game: this.game ? { config: this.game.config, inputs: this.game.inputs } : null,
+      ...(this.boardAi ? { boardAi: true, aiDeck: this.aiDeck, aiDelayMs: this.aiDelayMs } : {}) };
     mkdirSync(dirname(f), { recursive: true });
     writeFileSync(`${f}.tmp`, JSON.stringify(saved));
     renameSync(`${f}.tmp`, f);
@@ -123,7 +138,7 @@ export class Session {
   }
 
   seatConnected(seat: Seat) {
-    if (this.solo && seat === AI_SEAT) return true;
+    if (this.aiOn && seat === AI_SEAT) return true;
     for (const c of this.conns) if (c.seat === seat && c.role === 'player') return true;
     return false;
   }
@@ -135,6 +150,9 @@ export class Session {
       if (!msg || typeof msg !== 'object' || typeof (msg as { t?: unknown }).t !== 'string') throw new GameError('bad_msg', '메시지 형식 오류');
       if (msg.t === 'ping') { conn.send({ t: 'pong', serverTime: Date.now() }); return; }
       if (msg.t === 'hello') { this.hello(conn, msg); return; }
+      // 게임판: 플레이어 2 = AI 켜고 끄기, AI 대전이 끝난 뒤 다시 하기
+      if (conn.role === 'board' && msg.t === 'boardAi') { this.lastActive = Date.now(); this.setBoardAi(msg); return; }
+      if (conn.role === 'board' && msg.t === 'rematch') { this.lastActive = Date.now(); this.rematch(); return; }
       if (conn.role !== 'player' || conn.seat === null) throw new GameError('not_joined', '먼저 게임에 참가하세요.');
       this.lastActive = Date.now();
       switch (msg.t) {
@@ -174,7 +192,7 @@ export class Session {
     let token: string | null = null;
     if (msg.token) {
       const i = this.seats.findIndex((s) => s.token === msg.token);
-      if (i >= 0 && !(this.solo && i === AI_SEAT)) { seat = i as Seat; token = msg.token; }
+      if (i >= 0 && !(this.aiOn && i === AI_SEAT)) { seat = i as Seat; token = msg.token; }
     }
     if (seat === null) {
       if (!this.solo && String(msg.code ?? '') !== this.code) throw new GameError('bad_code', '세션 코드가 맞지 않습니다.');
@@ -200,6 +218,7 @@ export class Session {
     conn.send({ t: 'catalog', decks: this.opts.catalog.decks });
     this.broadcastLobby();
     if (this.game) conn.send(this.game.snapshot(this.viewerOf(conn)));
+    this.scheduleAi();   // 서버를 다시 켜 복원한 게임이 AI 차례에서 멈춰 있지 않게
   }
 
   private viewerOf(conn: Conn): Viewer { return conn.role === 'player' && conn.seat !== null ? conn.seat : 'board'; }
@@ -229,11 +248,50 @@ export class Session {
       return;
     }
     if (!ready && this.phase === 'countdown') this.cancelCountdown();
-    if (this.seats[0].ready && this.seats[1].ready && this.seatConnected(0) && this.seatConnected(1) && this.phase === 'lobby') {
-      this.phase = 'countdown';
-      this.countdownEndsAt = Date.now() + COUNTDOWN_MS;
-      this.timer = setTimeout(() => this.startGame(), COUNTDOWN_MS);
+    this.maybeCountdown();
+    this.save();
+    this.broadcastLobby();
+  }
+
+  /** 두 자리 모두 준비 + 연결 → 카운트다운 (게임판 AI 의 덱이 무작위면 이때 정함) */
+  private maybeCountdown() {
+    if (!(this.seats[0].ready && this.seats[1].ready && this.seatConnected(0) && this.seatConnected(1) && this.phase === 'lobby')) return;
+    if (this.boardAi && !this.seats[AI_SEAT].deckId) {
+      const decks = this.opts.catalog.decks;
+      this.seats[AI_SEAT].deckId = decks[randomInt(0, decks.length)].id;
     }
+    this.phase = 'countdown';
+    this.countdownEndsAt = Date.now() + COUNTDOWN_MS;
+    this.timer = setTimeout(() => this.startGame(), COUNTDOWN_MS);
+  }
+
+  /** 게임판: 플레이어 2 자리를 서버 AI 로 (끄면 빈자리). 사람이 접속해 있는 자리는 빼앗지 않는다 */
+  private setBoardAi(msg: Extract<ClientMsg, { t: 'boardAi' }>) {
+    if (this.solo) throw new GameError('bad_msg', 'AI 연습 세션에서는 쓸 수 없습니다.');
+    if (this.phase !== 'lobby') throw new GameError('in_game', '대전 준비 중에만 바꿀 수 있습니다.');
+    const decks = this.opts.catalog.decks;
+    if (msg.deckId !== undefined && msg.deckId !== null && !decks.some((d) => d.id === msg.deckId)) throw new GameError('no_deck', '없는 덱입니다.');
+    if (msg.ms !== undefined) {
+      const n = Number(msg.ms);
+      if (!Number.isFinite(n)) throw new GameError('bad_msg', '속도 값이 잘못됐습니다.');
+      this.aiDelayMs = Math.max(0, Math.min(5000, Math.round(n)));
+    }
+    if (msg.on) {
+      const s = this.seats[AI_SEAT];
+      if (!this.boardAi && s.token !== null && this.seatConnected(AI_SEAT)) throw new GameError('seat_taken', '플레이어 2 자리에 이미 사람이 접속해 있습니다.');
+      if (msg.deckId !== undefined) this.aiDeck = msg.deckId;
+      if (!this.boardAi) this.log('플레이어 2 = AI');
+      this.boardAi = true;
+      this.ai ??= makeAiBot(this.opts.catalog, this.opts.info.db);
+      this.seats[AI_SEAT] = aiSeat(this.aiDeck);
+    } else if (this.boardAi) {
+      this.boardAi = false;
+      this.ai = null;
+      this.aiDeck = null;
+      this.seats[AI_SEAT] = emptySeat();
+      this.log('플레이어 2 = AI 끔');
+    }
+    this.maybeCountdown();
     this.save();
     this.broadcastLobby();
   }
@@ -257,12 +315,14 @@ export class Session {
 
   /** AI 연습: 게임을 접고 대전 준비로 (끝난 뒤 다시 하기) */
   private rematch() {
-    if (!this.solo) throw new GameError('not_solo', 'AI 연습에서만 쓸 수 있습니다.');
+    if (!this.aiOn) throw new GameError('not_solo', 'AI 연습에서만 쓸 수 있습니다.');
+    if (this.boardAi && this.game && this.game.state.phase !== 'ended') throw new GameError('in_game', '게임이 끝난 뒤에 다시 할 수 있습니다.');
     this.stopAi();
     this.game = null;
     this.phase = 'lobby';
     this.seats[0].ready = false;
-    this.seats[AI_SEAT] = { ...this.seats[AI_SEAT], deckId: this.aiDeck, ready: false };
+    this.seats[AI_SEAT] = this.boardAi ? aiSeat(this.aiDeck) : { ...this.seats[AI_SEAT], deckId: this.aiDeck, ready: false };
+    this.save();
     this.broadcastLobby();
   }
 
@@ -345,6 +405,7 @@ export class Session {
       port: this.opts.port,
       paused: this.paused,
       ...(this.solo ? { solo: true, aiDelayMs: this.aiDelayMs } : {}),
+      ...(this.boardAi ? { boardAi: true, aiDeck: this.aiDeck, aiDelayMs: this.aiDelayMs } : {}),
     };
   }
 
@@ -368,3 +429,5 @@ export class Session {
 }
 
 function emptySeat(): SeatState { return { token: null, device: '', deckId: null, prints: {}, ready: false }; }
+/** 게임판 AI 자리: 늘 준비 완료 (덱 null = 카운트다운 때 무작위) */
+function aiSeat(deckId: string | null): SeatState { return { token: AI_TOKEN, device: 'AI', deckId, prints: {}, ready: true }; }

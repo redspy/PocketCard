@@ -132,7 +132,7 @@ func _exit_tree() -> void:
 ## 게임 중에는 뒤로 가기로 나가지 않는다 (실수 방지)
 func on_back() -> bool:
 	# AI 연습이 끝났으면 뒤로 가기 = 대전 준비로
-	if Net.solo and Net.view.get("result") != null:
+	if Net.can_rematch() and Net.view.get("result") != null:
 		Net.send({ "t": "rematch" })
 		return true
 	_err.text = "게임 중에는 뒤로 갈 수 없습니다. 끝내려면 [항복]을 누르세요."
@@ -154,7 +154,7 @@ func _refresh() -> void:
 	if not is_inside_tree():
 		return
 	# AI 연습에서 다시 하기 → 대전 준비 화면으로
-	if Net.solo and str(Net.lobby.get("phase", "game")) != "game" and Nav.current() == self:
+	if Net.can_rematch() and str(Net.lobby.get("phase", "game")) != "game" and Nav.current() == self:
 		Nav.pop()
 		return
 	var v: Dictionary = Net.view

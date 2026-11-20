@@ -221,3 +221,70 @@ test('AI 연습: 게임판 없이 폰 한 대 vs 서버 AI → 끝까지 → 재
     await srv.close();
   }
 });
+
+test('게임판: 플레이어 2 = 서버 AI → 폰 한 대로 게임 → 항복 → 다시 하기 → 서버 재시작 후에도 유지', { timeout: 60000 }, async () => {
+  const dataDir = mkdtempSync(join(tmpdir(), 'pocketcard-'));
+  let srv = await startServer({ port: 0, dataDir, beacon: false, quiet: true, aiDelayMs: 0 });
+  try {
+    const code = srv.session.code;
+    const decks = srv.catalog.decks;
+    const board = await connect(srv.port, { role: 'board' });
+
+    // 플레이어 2 자리에 사람이 접속해 있으면 AI 로 바꿀 수 없음 (끊긴 뒤에는 가능)
+    const human = await connect(srv.port, { role: 'player', code, device: 'p1' });
+    const other = await connect(srv.port, { role: 'player', code, device: 'p2' });
+    board.c.send({ t: 'boardAi', on: true });
+    assert.equal((await board.c.wait('error')).code, 'seat_taken');
+    other.c.close();
+    await board.c.wait('lobby', (m) => m.lobby.seats[1].taken && !m.lobby.seats[1].connected);
+    board.c.send({ t: 'boardAi', on: true, deckId: decks[1].id, ms: 0 });
+    let lb = (await board.c.wait('lobby', (m) => !!m.lobby.boardAi)).lobby;
+    assert.equal(lb.aiDeck, decks[1].id);
+    assert.deepEqual([lb.seats[1].device, lb.seats[1].ready, lb.seats[1].connected], ['AI', true, true]);
+    // 플레이어 2 의 옛 토큰으로는 AI 자리를 가져갈 수 없음
+    const stale = await connect(srv.port, { role: 'player', code, dataVersion: srv.catalog.dataVersion });
+    assert.equal((stale.first as Extract<ServerMsg, { t: 'error' }>).code, 'full');
+    stale.c.close();
+
+    // 폰이 준비 → 카운트다운 → 게임, 셋업은 폰만 답하면 AI 가 알아서 진행
+    const p = human.c;
+    p.send({ t: 'chooseDeck', deckId: decks[0].id });
+    p.send({ t: 'ready', ready: true });
+    await board.c.wait('lobby', (m) => m.lobby.phase === 'countdown');
+    await board.c.wait('lobby', (m) => m.lobby.phase === 'game', 6000);
+    for (let i = 0; i < 100 && srv.session.game!.state.phase === 'setup'; i++) {
+      const v = p.last('state')?.view;
+      if (v) answer(p, v);
+      await new Promise((r) => setTimeout(r, 50));
+    }
+    assert.equal(srv.session.game!.state.phase, 'playing');
+    assert.equal(srv.session.game!.config.players[1].deckId, decks[1].id);
+
+    // 끝나기 전에는 다시 하기 불가, 항복 → 끝 → 게임판에서 다시 하기
+    board.c.send({ t: 'rematch' });
+    assert.equal((await board.c.wait('error')).code, 'in_game');
+    p.send({ t: 'input', input: { type: 'concede' } });
+    await board.c.wait('state', (m) => !!m.view.result);
+    const since = board.c.msgs.length;
+    board.c.send({ t: 'rematch' });
+    lb = (await board.c.wait('lobby', (m) => m.lobby.phase === 'lobby' && board.c.msgs.indexOf(m) >= since)).lobby;
+    assert.equal(lb.boardAi, true);
+    assert.deepEqual([lb.seats[0].ready, lb.seats[1].ready, lb.seats[1].deckId], [false, true, decks[1].id]);
+
+    // 서버 재시작 → AI 자리 유지, 끄면 빈자리
+    for (const c of [board.c, p]) c.close();
+    await srv.close();
+    srv = await startServer({ port: 0, dataDir, beacon: false, quiet: true, aiDelayMs: 0 });
+    const b2 = await connect(srv.port, { role: 'board' });
+    lb = (await b2.c.wait('lobby')).lobby;
+    assert.equal(lb.boardAi, true);
+    assert.equal(lb.seats[1].ready, true);
+    b2.c.send({ t: 'boardAi', on: false });
+    lb = (await b2.c.wait('lobby', (m) => !m.lobby.boardAi)).lobby;
+    assert.equal(lb.seats[1].taken, false);
+    b2.c.close();
+  } finally {
+    await srv.close();
+    rmSync(dataDir, { recursive: true, force: true });
+  }
+});

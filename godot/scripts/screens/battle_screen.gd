@@ -111,7 +111,7 @@ func on_back() -> bool:
 		if c is BZoom:
 			c.queue_free()
 			return true
-	if Net.solo and Net.view.get("result") != null:
+	if Net.can_rematch() and Net.view.get("result") != null:
 		Net.send({ "t": "rematch" })
 		return true
 	_toast("게임 중에는 뒤로 갈 수 없습니다. 끝내려면 메뉴에서 항복하세요.")
@@ -273,7 +273,7 @@ func _my_turn() -> bool:
 
 func _refresh() -> void:
 	# AI 연습에서 다시 하기 → 대전 준비 화면으로
-	if Net.solo and str(Net.lobby.get("phase", "game")) != "game" and Nav.current() == self:
+	if Net.can_rematch() and str(Net.lobby.get("phase", "game")) != "game" and Nav.current() == self:
 		Nav.pop()
 		return
 	if not is_inside_tree() or Net.view.is_empty() or Net.seat < 0:
@@ -570,9 +570,9 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	end_btn.position = L.end_turn.position
 	var can_end := actions().any(func(m): return m.kind == "endTurn")
 	var ended := phase == "ended"
-	(end_btn.get_meta("label") as Label).text = "다시 하기" if (ended and Net.solo) else "턴 종료"
-	end_btn.visible = not ended or Net.solo
-	UI.set_enabled(end_btn, can_end or (ended and Net.solo))
+	(end_btn.get_meta("label") as Label).text = "다시 하기" if (ended and Net.can_rematch()) else "턴 종료"
+	end_btn.visible = not ended or Net.can_rematch()
+	UI.set_enabled(end_btn, can_end or (ended and Net.can_rematch()))
 	_set_end_hint(can_end and _my_turn() and my_request() == null and BHint.only_end_left(actions()))
 	var st_move := actions().any(func(m): return m.kind == "stadium")
 	stadium_btn.visible = st_move
@@ -1406,7 +1406,7 @@ func toggle_auto() -> void:
 
 func _process(delta: float) -> void:
 	# AI 연습 다시 하기 → 대전 준비 (화면 전환 중에 신호가 오면 놓칠 수 있어 매 프레임 확인)
-	if Net.solo and str(Net.lobby.get("phase", "game")) != "game" and Nav.current() == self and not Nav._busy:
+	if Net.can_rematch() and str(Net.lobby.get("phase", "game")) != "game" and Nav.current() == self and not Nav._busy:
 		Nav.pop()
 		return
 	if not auto_play or Net.view.is_empty():

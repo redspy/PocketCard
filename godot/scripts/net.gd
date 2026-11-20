@@ -112,6 +112,10 @@ func join_solo(addr: String) -> void:
 	_save()
 	_start()
 
+## 끝난 게임을 [다시 하기]로 대전 준비로 돌릴 수 있나 (AI 연습, 또는 게임판의 플레이어 2 = AI)
+func can_rematch() -> bool:
+	return solo or bool(lobby.get("boardAi", false))
+
 ## 저장된 참가 정보로 다시 연결 (앱을 다시 켰을 때)
 func can_resume() -> bool:
 	return address != "" and token != ""

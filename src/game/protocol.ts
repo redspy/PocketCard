@@ -29,6 +29,7 @@ export type ClientMsg =
   | { t: 'aiDeck'; deckId: string | null }          // AI 연습: 상대(AI) 덱 (null = 무작위)
   | { t: 'rematch' }                                // AI 연습: 끝난 게임 → 대전 준비로
   | { t: 'aiSpeed'; ms: number }                    // AI 연습: AI 한 수 사이 간격 (0~5000ms)
+  | { t: 'boardAi'; on: boolean; deckId?: string | null; ms?: number } // 게임판: 플레이어 2 자리를 서버 AI 로 (deckId null = 무작위)
   | { t: 'input'; input: ClientInput }
   | { t: 'ping' };
 
@@ -52,6 +53,8 @@ export type LobbyInfo = {
   paused: boolean;                   // 게임 중 누가 끊김
   solo?: boolean;                    // AI 연습 세션 (플레이어 2 = AI)
   aiDelayMs?: number;                // AI 연습: AI 한 수 사이 간격
+  boardAi?: boolean;                 // 게임판 세션: 플레이어 2 = 서버 AI
+  aiDeck?: string | null;            // 게임판 AI 의 덱 (null = 게임마다 무작위)
 };
 
 export type ServerMsg =
