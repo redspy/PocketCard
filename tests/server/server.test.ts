@@ -288,3 +288,28 @@ test('게임판: 플레이어 2 = 서버 AI → 폰 한 대로 게임 → 항복
     rmSync(dataDir, { recursive: true, force: true });
   }
 });
+
+test('게임판: 연결이 끊긴 플레이어 내보내기 (접속 중·게임 중에는 불가)', { timeout: 30000 }, async () => {
+  const srv = await startServer({ port: 0, dataDir: null, beacon: false, quiet: true });
+  try {
+    const code = srv.session.code;
+    const board = await connect(srv.port, { role: 'board' });
+    const p1 = await connect(srv.port, { role: 'player', code, device: 'a' });
+    const p2 = await connect(srv.port, { role: 'player', code, device: 'b' });
+    const t2 = (p2.first as Extract<ServerMsg, { t: 'welcome' }>).token!;
+    board.c.send({ t: 'kick', seat: 1 });
+    assert.equal((await board.c.wait('error')).code, 'connected');
+    p2.c.close();
+    await board.c.wait('lobby', (m) => m.lobby.seats[1].taken && !m.lobby.seats[1].connected);
+    board.c.send({ t: 'kick', seat: 1 });
+    await board.c.wait('lobby', (m) => !m.lobby.seats[1].taken);
+    // 내보낸 기기의 옛 토큰은 무효 → 코드로 새로 참가하면 빈자리에 앉음
+    const back = await connect(srv.port, { role: 'player', token: t2, code, device: 'b' });
+    const wb = back.first as Extract<ServerMsg, { t: 'welcome' }>;
+    assert.equal(wb.seat, 1);
+    assert.notEqual(wb.token, t2);
+    for (const c of [board.c, p1.c, back.c]) c.close();
+  } finally {
+    await srv.close();
+  }
+});

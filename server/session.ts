@@ -152,6 +152,7 @@ export class Session {
       if (msg.t === 'hello') { this.hello(conn, msg); return; }
       // 게임판: 플레이어 2 = AI 켜고 끄기, AI 대전이 끝난 뒤 다시 하기
       if (conn.role === 'board' && msg.t === 'boardAi') { this.lastActive = Date.now(); this.setBoardAi(msg); return; }
+      if (conn.role === 'board' && msg.t === 'kick') { this.lastActive = Date.now(); this.kick(msg.seat); return; }
       if (conn.role === 'board' && msg.t === 'rematch') { this.lastActive = Date.now(); this.rematch(); return; }
       if (conn.role !== 'player' || conn.seat === null) throw new GameError('not_joined', '먼저 게임에 참가하세요.');
       this.lastActive = Date.now();
@@ -263,6 +264,21 @@ export class Session {
     this.phase = 'countdown';
     this.countdownEndsAt = Date.now() + COUNTDOWN_MS;
     this.timer = setTimeout(() => this.startGame(), COUNTDOWN_MS);
+  }
+
+  /** 게임판: 연결이 끊긴 플레이어를 내보내 자리를 비운다 (대전 준비 중에만, 접속 중인 사람·AI 자리는 안 됨) */
+  private kick(seat: unknown) {
+    if (seat !== 0 && seat !== 1) throw new GameError('bad_msg', '자리 번호가 잘못됐습니다.');
+    if (this.phase === 'game') throw new GameError('in_game', '게임 중에는 내보낼 수 없습니다.');
+    const s = this.seats[seat];
+    if (s.token === null) throw new GameError('empty_seat', '빈자리입니다.');
+    if (this.aiOn && seat === AI_SEAT) throw new GameError('bad_msg', 'AI 자리는 [플레이어 2를 AI로]를 꺼서 비우세요.');
+    if (this.seatConnected(seat)) throw new GameError('connected', '접속 중인 플레이어는 내보낼 수 없습니다.');
+    if (this.phase === 'countdown') this.cancelCountdown();
+    this.seats[seat] = emptySeat();
+    this.log(`플레이어 ${seat + 1} 내보냄 (${s.device || '기기 이름 없음'})`);
+    this.save();
+    this.broadcastLobby();
   }
 
   /** 게임판: 플레이어 2 자리를 서버 AI 로 (끄면 빈자리). 사람이 접속해 있는 자리는 빼앗지 않는다 */

@@ -29,6 +29,7 @@ export type ClientMsg =
   | { t: 'aiDeck'; deckId: string | null }          // AI 연습: 상대(AI) 덱 (null = 무작위)
   | { t: 'rematch' }                                // AI 연습: 끝난 게임 → 대전 준비로
   | { t: 'aiSpeed'; ms: number }                    // AI 연습: AI 한 수 사이 간격 (0~5000ms)
+  | { t: 'kick'; seat: Seat }                       // 게임판: 연결이 끊긴 플레이어를 자리에서 내보냄 (대전 준비 중에만)
   | { t: 'boardAi'; on: boolean; deckId?: string | null; ms?: number } // 게임판: 플레이어 2 자리를 서버 AI 로 (deckId null = 무작위)
   | { t: 'input'; input: ClientInput }
   | { t: 'ping' };

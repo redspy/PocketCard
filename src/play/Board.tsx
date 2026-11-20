@@ -66,7 +66,7 @@ function Lobby({ lobby, decks, layout, setLayout, send, error }: { lobby: LobbyI
         </div>
       </div>
       <div className="pc-seats">
-        {lobby.seats.map((s) => <SeatCard key={s.seat} s={s} decks={decks} />)}
+        {lobby.seats.map((s) => <SeatCard key={s.seat} s={s} decks={decks} onKick={s.taken && !s.connected && lobby.phase === 'lobby' ? () => send({ t: 'kick', seat: s.seat }) : undefined} />)}
       </div>
       <BoardAi lobby={lobby} decks={decks} send={send} error={error} />
       <div className="pc-status">
@@ -119,7 +119,7 @@ function BoardAi({ lobby, decks, send, error }: { lobby: LobbyInfo; decks: Catal
   );
 }
 
-function SeatCard({ s, decks }: { s: SeatInfo; decks: CatalogDeck[] }) {
+function SeatCard({ s, decks, onKick }: { s: SeatInfo; decks: CatalogDeck[]; onKick?: () => void }) {
   const deck = decks.find((d) => d.id === s.deckId);
   const state = !s.taken ? '대기 중' : !s.connected ? '연결 끊김' : s.ready ? '준비 완료' : s.deckId ? '덱 선택함' : '연결됨';
   return (
@@ -130,6 +130,7 @@ function SeatCard({ s, decks }: { s: SeatInfo; decks: CatalogDeck[] }) {
       <div className="pc-seat-deck">
         {deck ? <><CardImg code={deck.cover} className="pc-cover" /> <span>{deck.name}</span></> : <span className="pc-dim">덱 미선택</span>}
       </div>
+      {onKick && <button className="pc-kick" onClick={() => { if (confirm(`${seatName(s.seat)}(${s.device || '이름 없는 기기'})를 내보내고 자리를 비울까요?`)) onKick(); }}>내보내기 (자리 비우기)</button>}
     </div>
   );
 }
