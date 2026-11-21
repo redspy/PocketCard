@@ -50,8 +50,9 @@ function getHost(): LocalHost {
 export default function Demo() {
   const h = useMemo(getHost, []);
   const [info, setInfo] = useState<HostInfo>(h.hostInfo);
-  const [panels, setPanels] = useState<'both' | 'p1' | 'p2' | 'none'>('both');
-  const [layout, setLayout] = useState<Layout>('side');
+  // ?phones=none|p1|p2 (폰 패널), ?layout=face (마주 보기) — 게임판만 캡처할 때
+  const [panels, setPanels] = useState<'both' | 'p1' | 'p2' | 'none'>(() => (['both', 'p1', 'p2', 'none'].find((x) => x === new URLSearchParams(location.search).get('phones')) as 'both' | 'p1' | 'p2' | 'none') ?? 'both');
+  const [layout, setLayout] = useState<Layout>(() => (new URLSearchParams(location.search).get('layout') === 'face' ? 'face' : 'side'));
   const [seedInput, setSeedInput] = useState(info.seed);
   const fileRef = useRef<HTMLInputElement>(null);
 

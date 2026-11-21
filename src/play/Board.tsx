@@ -1,7 +1,7 @@
 // 웹 게임판 (테이블에 눕힌 태블릿 기준 "마주 보기")
 //  - 로비: 큰 로고, 세션 코드·주소, 두 플레이어 상태(대기/연결/덱/준비)
 //  - 게임: 아래 절반 = 플레이어 1, 위 절반 = 플레이어 2 (180° 회전), 가운데 띠는 방향 없는 요소
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { defaultServer, store, useGameClient } from './client.ts';
 import { CardBack, CardImg, lastLine, nameOf, seatName } from './common.tsx';
 import type { CatalogDeck } from '../game/catalog.ts';
@@ -143,8 +143,13 @@ export function GameBoard({ view, lobby, decks, line, layout, spot, onRematch }:
   // 위쪽 절반(플레이어 2)에서 누른 카드는 마주 보기일 때 그쪽 방향으로 확대
   const zoomFor = (seat: Seat) => (z: Omit<ZoomInfo, 'up'>) => setZoom({ ...z, up: flip && seat === 1 });
   const waiting = (seat: Seat) => view.requests.filter((r) => r.player === seat && r.kind !== 'ackReveal');
+  // 화면(진영 절반)의 크기에 맞춰 카드가 가장 크게 나오는 배치·크기를 고른다
+  const halfRef = useRef<HTMLDivElement>(null);
+  const bench = Math.max(view.players[0].benchMax, view.players[1].benchMax, 5);
+  const fit = useFit(halfRef, bench);
+  const fitStyle = { '--ch': `${fit.ch}px`, '--cw': `${fit.ch * CARD_AR}px` } as React.CSSProperties;
   return (
-    <div className="pc-root pc-board">
+    <div className={`pc-root pc-board fit-${fit.mode}`} style={fitStyle}>
       <div className={`pc-half top ${flip ? 'flip' : 'mirror'}`}><Side p={view.players[1]} view={view} decks={decks} waiting={waiting(1)} onZoom={zoomFor(1)} /></div>
       <div className="pc-band">
         <div className={`pc-line ${flip ? 'flip' : ''}`}>{line}</div>
@@ -156,7 +161,7 @@ export function GameBoard({ view, lobby, decks, line, layout, spot, onRematch }:
         <div className="pc-stadium">{view.stadium ? <CardImg code={view.stadium.code} onClick={() => setZoom({ title: '스타디움', main: [view.stadium!.code], up: false })} /> : <div className="pc-slot empty small">스타디움</div>}</div>
         <div className="pc-line">{line}</div>
       </div>
-      <div className="pc-half bottom"><Side p={view.players[0]} view={view} decks={decks} waiting={waiting(0)} onZoom={zoomFor(0)} /></div>
+      <div className="pc-half bottom" ref={halfRef}><Side p={view.players[0]} view={view} decks={decks} waiting={waiting(0)} onZoom={zoomFor(0)} /></div>
 
       <Spotlight ev={spot ?? null} decks={decks} flip={flip} />
       {zoom && <Zoom z={zoom} decks={decks} flip={flip} onFlip={() => setZoom({ ...zoom, up: !zoom.up })} onClose={() => setZoom(null)} onPick={(code) => setZoom({ ...zoom, main: [code], extra: undefined, list: undefined, title: nameOf(decks, code) })} />}
@@ -183,6 +188,39 @@ export function GameBoard({ view, lobby, decks, line, layout, spot, onRematch }:
   );
 }
 
+const CARD_AR = 868 / 1212;
+/** 진영 절반 안의 배치 (px). 카드 높이 ch 를 기준으로 너비·높이를 어림한다 */
+const FIT = { pad: 10, status: 30, gap: 8, hp: 12, active: 1.12, prizeW: 0.62, pileW: 0.8 };
+export type Fit = { mode: 'row' | 'two'; ch: number };
+/** row: 배틀 포켓몬과 벤치를 한 줄로 (가로가 넓은 화면) / two: 배틀 위·벤치 아래 두 줄 (세로가 넉넉한 화면) */
+export function fitCards(w: number, h: number, bench: number): Fit {
+  const f = FIT;
+  const H = h - f.pad * 2 - f.status - f.gap;
+  const W = w - f.pad * 2;
+  const rowCw = (W - f.gap * (bench + 4)) / (f.prizeW + f.active + bench + f.pileW + 0.15);
+  const row = Math.min((H - f.hp) / f.active, rowCw / CARD_AR);
+  const twoCw = (W - f.gap * (bench + 3)) / (f.prizeW + bench + f.pileW);
+  const two = Math.min((H - f.gap - f.hp * 2) / (f.active + 1), twoCw / CARD_AR);
+  return row >= two ? { mode: 'row', ch: Math.max(40, Math.floor(row)) } : { mode: 'two', ch: Math.max(40, Math.floor(two)) };
+}
+function useFit(ref: React.RefObject<HTMLDivElement | null>, bench: number): Fit {
+  const [fit, setFit] = useState<Fit>({ mode: 'row', ch: 120 });
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const measure = () => {
+      const r = el.getBoundingClientRect();
+      const next = fitCards(r.width, r.height, bench);
+      setFit((cur) => (cur.mode === next.mode && Math.abs(cur.ch - next.ch) < 1 ? cur : next));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [ref, bench]);
+  return fit;
+}
+
 /** 같은 내용을 양쪽 방향으로 두 번 (마주 보는 두 사람이 모두 읽게) */
 function Twice({ children, flip }: { children: React.ReactNode; flip: boolean }) {
   return <div className="pc-twice"><div className={`pc-msg ${flip ? 'flip' : ''}`}>{children}</div><div className="pc-msg">{children}</div></div>;
@@ -196,26 +234,36 @@ const KIND: Record<string, string> = {
 function Side({ p, view, decks, waiting, onZoom }: { p: PlayerView; view: GameView; decks: CatalogDeck[]; waiting: GameView['requests']; onZoom: ZoomFn }) {
   const mine = view.turnPlayer === p.seat && view.phase === 'playing';
   const slots: (SlotView | null)[] = Array.from({ length: p.benchMax }, (_, i) => p.bench[i] ?? null);
+  const prizesLeft = p.prizes.filter(Boolean).length;
   return (
     <div className={`pc-side ${mine ? 'turn' : ''}`}>
-      <div className="pc-prizes">
-        {p.prizes.map((has, i) => (has ? <CardBack key={i} className="pc-prize" /> : <div key={i} className="pc-prize empty" />))}
-      </div>
-      <div className="pc-mid">
-        <div className="pc-active-row"><Slot slot={p.active} decks={decks} big onZoom={onZoom} /></div>
-        <div className="pc-bench-row">{slots.map((s, i) => <Slot key={s?.sid ?? `e${i}`} slot={s} decks={decks} onZoom={onZoom} />)}</div>
-      </div>
-      <div className="pc-piles">
-        <div className="pc-pile">{p.deckCount ? <CardBack /> : <div className="pc-slot empty">덱</div>}<span>덱 {p.deckCount}</span></div>
-        <div className="pc-pile">{p.discard.length ? <CardImg code={p.discard[p.discard.length - 1].code} onClick={() => onZoom({ title: ` 트래쉬 장`, main: [], list: [...p.discard].reverse().map((d) => d.code) })} /> : <div className="pc-slot empty">트래쉬</div>}<span>트래쉬 {p.discard.length}</span></div>
-        {p.lost?.length > 0 && <div className="pc-pile"><CardImg code={p.lost[p.lost.length - 1].code} onClick={() => onZoom({ title: `로스트존 ${p.lost.length}장`, main: [], list: [...p.lost].reverse().map((d) => d.code) })} /><span>로스트 {p.lost.length}</span></div>}
+      <div className="pc-field">
+        {/* 사이드: 뒷면이라 작게 겹쳐 쌓고 남은 장수만 크게 */}
+        <div className="pc-prizes" title={`사이드 ${prizesLeft}장`}>
+          {Array.from({ length: prizesLeft }, (_, i) => <CardBack key={i} className="pc-prize" />)}
+          <b className="pc-count">{prizesLeft}</b>
+        </div>
+        <div className="pc-mid">
+          <div className="pc-active-row"><Slot slot={p.active} decks={decks} big onZoom={onZoom} /></div>
+          <div className="pc-bench-row">{slots.map((s, i) => <Slot key={s?.sid ?? `e${i}`} slot={s} decks={decks} onZoom={onZoom} />)}</div>
+        </div>
+        <div className="pc-piles">
+          <div className="pc-pile discard">
+            {p.discard.length ? <CardImg code={p.discard[p.discard.length - 1].code} onClick={() => onZoom({ title: `트래쉬 ${p.discard.length}장`, main: [], list: [...p.discard].reverse().map((d) => d.code) })} /> : <div className="pc-slot empty">트래쉬</div>}
+            <b className="pc-count">{p.discard.length}</b>
+          </div>
+          <div className="pc-pile-row">
+            <div className="pc-pile deck">{p.deckCount ? <CardBack /> : <div className="pc-slot empty">덱</div>}<b className="pc-count">{p.deckCount}</b></div>
+            {p.lost?.length > 0 && <div className="pc-pile deck"><CardImg code={p.lost[p.lost.length - 1].code} onClick={() => onZoom({ title: `로스트존 ${p.lost.length}장`, main: [], list: [...p.lost].reverse().map((d) => d.code) })} /><b className="pc-count">{p.lost.length}</b></div>}
+          </div>
+        </div>
       </div>
       <div className="pc-statusbar">
         <b>{seatName(p.seat)}</b>
         {mine && <span className="pc-chip st-ready">내 차례</span>}
         {waiting.map((r) => <span key={r.id} className="pc-chip st-on">{KIND[r.kind] ?? r.kind}</span>)}
         <span className="pc-hand">{Array.from({ length: Math.min(p.handCount, 10) }, (_, i) => <i key={i} />)}</span>
-        <span>패 {p.handCount}</span><span>사이드 {p.prizes.filter(Boolean).length}</span>
+        <span>패 {p.handCount}</span><span>사이드 {prizesLeft}</span><span className="pc-dim">덱 {p.deckCount} · 트래쉬 {p.discard.length}{p.lost?.length ? ` · 로스트 ${p.lost.length}` : ''}</span>
         {p.mulligans > 0 && <span>멀리건 {p.mulligans}</span>}
         {p.gxUsed && <span className="pc-chip">GX 사용함</span>}
         {p.vstarUsed && <span className="pc-chip">VSTAR 사용함</span>}
