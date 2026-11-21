@@ -147,7 +147,7 @@ export function GameBoard({ view, lobby, decks, line, layout, spot, onRematch }:
   const halfRef = useRef<HTMLDivElement>(null);
   const bench = Math.max(view.players[0].benchMax, view.players[1].benchMax, 5);
   const fit = useFit(halfRef, bench);
-  const fitStyle = { '--ch': `${fit.ch}px`, '--cw': `${fit.ch * CARD_AR}px` } as React.CSSProperties;
+  const fitStyle = { '--ch': `${fit.ch}px`, '--cw': `${fit.ch * CARD_AR}px`, '--bench-cols': Math.ceil(bench / 2), '--active-scale': fit.active } as React.CSSProperties;
   return (
     <div className={`pc-root pc-board fit-${fit.mode}`} style={fitStyle}>
       <div className={`pc-half top ${flip ? 'flip' : 'mirror'}`}><Side p={view.players[1]} view={view} decks={decks} waiting={waiting(1)} onZoom={zoomFor(1)} /></div>
@@ -191,27 +191,51 @@ export function GameBoard({ view, lobby, decks, line, layout, spot, onRematch }:
 const CARD_AR = 868 / 1212;
 /** 진영 절반 안의 배치 (px). 카드 높이 ch 를 기준으로 너비·높이를 어림한다 */
 const FIT = { pad: 10, status: 30, gap: 8, hp: 12, active: 1.12, prizeW: 0.62, pileW: 0.8 };
-export type Fit = { mode: 'row' | 'two'; ch: number };
-/** row: 배틀 포켓몬과 벤치를 한 줄로 (가로가 넓은 화면) / two: 배틀 위·벤치 아래 두 줄 (세로가 넉넉한 화면) */
+export type FitMode = 'row' | 'two' | 'three' | 'four';
+/** ch: 카드 높이(px), active: 배틀 포켓몬 배율 (세로가 남으면 더 크게) */
+export type Fit = { mode: FitMode; ch: number; active: number };
+/** 진영 절반(w×h px)에서 카드가 가장 크게 나오는 배치
+ *  row  : [사이드][배틀][벤치 n][트래쉬] 한 줄 (가로가 넓은 화면)
+ *  two  : 배틀 위 · 벤치 아래, 사이드·트래쉬는 양옆
+ *  three: [사이드][배틀][트래쉬] 위 · 벤치 n장은 아래 줄 전체 너비 (좁고 긴 화면)
+ *  four : three 와 같되 벤치를 두 줄로 접음 (더 좁고 긴 화면) */
 export function fitCards(w: number, h: number, bench: number): Fit {
   const f = FIT;
   const H = h - f.pad * 2 - f.status - f.gap;
   const W = w - f.pad * 2;
-  const rowCw = (W - f.gap * (bench + 4)) / (f.prizeW + f.active + bench + f.pileW + 0.15);
-  const row = Math.min((H - f.hp) / f.active, rowCw / CARD_AR);
-  const twoCw = (W - f.gap * (bench + 3)) / (f.prizeW + bench + f.pileW);
-  const two = Math.min((H - f.gap - f.hp * 2) / (f.active + 1), twoCw / CARD_AR);
-  return row >= two ? { mode: 'row', ch: Math.max(40, Math.floor(row)) } : { mode: 'two', ch: Math.max(40, Math.floor(two)) };
+  const byW = (units: number, gaps: number) => (W - f.gap * gaps) / units / CARD_AR;   // 가로 units 장(cw 단위)이 들어가는 ch
+  const top = f.prizeW + f.active + f.pileW;                                              // [사이드][배틀][트래쉬] 줄
+  const k = Math.ceil(bench / 2);
+  const cands: Omit<Fit, 'active'>[] = [
+    { mode: 'row', ch: Math.min((H - f.hp) / f.active, byW(f.prizeW + f.active + bench + f.pileW + 0.15, bench + 4)) },
+    { mode: 'two', ch: Math.min((H - f.gap - f.hp * 2) / (f.active + 1), byW(f.prizeW + bench + f.pileW, bench + 3)) },
+    { mode: 'three', ch: Math.min((H - f.gap - f.hp * 2) / (f.active + 1), byW(bench, bench - 1), byW(top, 2)) },
+    { mode: 'four', ch: Math.min((H - f.gap * 2 - f.hp * 3) / (f.active + 2), byW(k, k - 1), byW(top, 2)) },
+  ];
+  // 거의 같으면 앞쪽(단순한) 배치를 쓴다
+  let best = cands[0];
+  for (const c of cands.slice(1)) if (c.ch > best.ch * 1.04) best = c;
+  const ch = Math.max(40, Math.floor(best.ch));
+  const cw = ch * CARD_AR;
+  // 남는 공간만큼 배틀 포켓몬을 키운다 (1.12 ~ 1.7배)
+  const benchRows = best.mode === 'four' ? 2 : best.mode === 'row' ? 0 : 1;
+  const rows = benchRows + 1;
+  const byH = (H - f.gap * (rows - 1) - f.hp * rows - benchRows * ch) / ch;
+  const byWidth = best.mode === 'row'
+    ? (W - f.gap * (bench + 4)) / cw - (f.prizeW + bench + f.pileW + 0.15)
+    : (W - f.gap * 2) / cw - (f.prizeW + f.pileW);
+  const active = Math.round(Math.max(f.active, Math.min(1.7, byH, byWidth)) * 100) / 100;
+  return { mode: best.mode, ch, active };
 }
 function useFit(ref: React.RefObject<HTMLDivElement | null>, bench: number): Fit {
-  const [fit, setFit] = useState<Fit>({ mode: 'row', ch: 120 });
+  const [fit, setFit] = useState<Fit>({ mode: 'row', ch: 120, active: 1.12 });
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
     const measure = () => {
       const r = el.getBoundingClientRect();
       const next = fitCards(r.width, r.height, bench);
-      setFit((cur) => (cur.mode === next.mode && Math.abs(cur.ch - next.ch) < 1 ? cur : next));
+      setFit((cur) => (cur.mode === next.mode && Math.abs(cur.ch - next.ch) < 1 && cur.active === next.active ? cur : next));
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -243,10 +267,8 @@ function Side({ p, view, decks, waiting, onZoom }: { p: PlayerView; view: GameVi
           {Array.from({ length: prizesLeft }, (_, i) => <CardBack key={i} className="pc-prize" />)}
           <b className="pc-count">{prizesLeft}</b>
         </div>
-        <div className="pc-mid">
-          <div className="pc-active-row"><Slot slot={p.active} decks={decks} big onZoom={onZoom} /></div>
-          <div className="pc-bench-row">{slots.map((s, i) => <Slot key={s?.sid ?? `e${i}`} slot={s} decks={decks} onZoom={onZoom} />)}</div>
-        </div>
+        <div className="pc-active-row"><Slot slot={p.active} decks={decks} big onZoom={onZoom} /></div>
+        <div className="pc-bench-row">{slots.map((s, i) => <Slot key={s?.sid ?? `e${i}`} slot={s} decks={decks} onZoom={onZoom} />)}</div>
         <div className="pc-piles">
           <div className="pc-pile discard">
             {p.discard.length ? <CardImg code={p.discard[p.discard.length - 1].code} onClick={() => onZoom({ title: `트래쉬 ${p.discard.length}장`, main: [], list: [...p.discard].reverse().map((d) => d.code) })} /> : <div className="pc-slot empty">트래쉬</div>}

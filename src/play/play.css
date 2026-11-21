@@ -46,21 +46,27 @@
 .pc-layout { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; color: var(--dim); }
 
 /* ── 게임판 (마주 보기) — 카드 크기 --ch 는 Board.tsx fitCards 가 진영 절반의 크기로 계산해 넣는다 */
-.pc-board { height: 100vh; display: grid; grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr); overflow: hidden; }
+.pc-board { height: 100vh; display: grid; grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr); grid-template-columns: minmax(0, 1fr); overflow: hidden; }
 .flip { transform: rotate(180deg); }
 .pc-half { min-height: 0; min-width: 0; display: flex; overflow: hidden; }
 .pc-half > * { flex: 1; min-width: 0; }
 /* 진영: 필드(사이드 | 배틀·벤치 | 트래쉬·덱) + 바깥쪽 가장자리에 상태 줄 */
 .pc-side { display: flex; flex-direction: column; gap: 8px; padding: 10px; box-sizing: border-box; }
 .pc-side.turn { box-shadow: inset 0 0 0 3px rgba(245,197,66,.55); border-radius: 16px; }
-.pc-field { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.pc-mid { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.fit-row .pc-mid { flex-direction: row; align-items: center; gap: 8px; }
+.pc-field { flex: 1; min-height: 0; display: grid; align-content: center; justify-content: center; align-items: center; justify-items: center; gap: 8px; }
+.pc-prizes { grid-area: prize; } .pc-active-row { grid-area: active; } .pc-bench-row { grid-area: bench; } .pc-piles { grid-area: pile; }
+/* 배치 (fitCards 가 고름). 위쪽 진영(나란히 보기, 회전 없음)은 줄 순서를 뒤집어 배틀 포켓몬이 가운데 쪽 */
+.fit-row .pc-field { grid-template-areas: "prize active bench pile"; }
 .fit-row .pc-active-row { margin-right: calc(var(--cw) * .15); }
+.fit-two .pc-field { grid-template-areas: "prize active pile" "prize bench pile"; }
+.fit-two .pc-half.mirror .pc-field { grid-template-areas: "prize bench pile" "prize active pile"; }
+.fit-three .pc-field, .fit-four .pc-field { grid-template-areas: "prize active pile" "bench bench bench"; }
+.fit-three .pc-half.mirror .pc-field, .fit-four .pc-half.mirror .pc-field { grid-template-areas: "bench bench bench" "prize active pile"; }
 .pc-active-row { display: flex; justify-content: center; }
 .pc-bench-row { display: flex; gap: 8px; justify-content: center; flex-wrap: nowrap; }
+.fit-four .pc-bench-row { display: grid; grid-template-columns: repeat(var(--bench-cols, 3), auto); gap: 14px 8px; }
 .pc-slot { position: relative; width: var(--cw); height: var(--ch); flex: none; }
-.pc-slot.big { width: calc(var(--cw) * 1.12); height: calc(var(--ch) * 1.12); }
+.pc-slot.big { width: calc(var(--cw) * var(--active-scale, 1.12)); height: calc(var(--ch) * var(--active-scale, 1.12)); }
 .pc-slot.empty { border: 1px dashed var(--line); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--dim); font-size: 12px; box-sizing: border-box; }
 .pc-slot.small { width: calc(var(--cw) * .8); height: calc(var(--ch) * .8); }
 .pc-dmg { position: absolute; right: -6px; top: -6px; background: var(--warn); color: #fff; font-weight: 800; border-radius: 999px; padding: 2px 8px; }
@@ -151,7 +157,6 @@
 @media (max-width: 1100px) { .demo-phone { position: absolute; z-index: 20; top: 0; bottom: 0; } .demo-phone.right { right: 0; } .demo-phone.closed { display: none; } }
 /* 나란히 보기: 위쪽 진영은 회전 없이 거울 배치 (배틀 포켓몬이 가운데 쪽) */
 .pc-half.mirror .pc-side { flex-direction: column-reverse; }
-.fit-two .pc-half.mirror .pc-mid { flex-direction: column-reverse; }
 
 /* ── 큰 카드 가로 스크롤 (폰: 패·트래쉬·선택) — 카드가 겹쳐도 옆으로 넘기며 잘 보이게 */
 .dp-strip { display: flex; overflow-x: auto; overflow-y: hidden; padding: 6px 4px 12px; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
