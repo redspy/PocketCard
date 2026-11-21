@@ -35,15 +35,20 @@ static func _table(size: Vector2, my_bmax: int, opp_bmax: int, top: float, botto
 		"my_active": 196.0, "my_bench": 130.0, "chips": 44.0, "hand_card": 188.0,
 	}
 	var scale_w := minf(1.0, W / 720.0)
+	var hand_w := func(k: float) -> float: return minf(base.hand_card * k * scale_w, W * 0.36)
 	var need := func(k: float) -> float:
 		var ob := bench_w(aw, opp_bmax, base.opp_bench * k * scale_w)
 		var mb := bench_w(aw, my_bmax, base.my_bench * k * scale_w)
 		return base.bar + base.opp_hand * k + ob * R + base.opp_active * k * scale_w * R + base.mid * k \
-			+ base.my_active * k * scale_w * R + mb * R + base.chips * k + base.hand_card * k * scale_w * R * 0.72 + GAP * 9
+			+ base.my_active * k * scale_w * R + mb * R + base.chips * k + hand_w.call(k) * R * 0.72 + GAP * 9
 	var avail := size.y - top - bottom
 	var k := 1.0
 	while k > 0.5 and need.call(k) > avail:
 		k -= 0.02
+	# 세로가 남으면 간격 대신 카드를 키운다 (배틀 포켓몬이 양옆 사이드·덱 더미와 겹치지 않는 한도, 최대 1.8배)
+	var max_active := W - 2.0 * (PAD + 96.0 + GAP)
+	while k < 1.8 and need.call(k + 0.02) + 90.0 <= avail and base.my_active * (k + 0.02) * scale_w <= max_active:
+		k += 0.02
 	var extra := maxf(0.0, avail - need.call(k))
 	var gap := GAP + extra / 9.0
 	var out := { "k": k, "mode": "table" }
@@ -73,7 +78,7 @@ static func _table(size: Vector2, my_bmax: int, opp_bmax: int, top: float, botto
 	out["my_bench"] = _row_rects(PAD, y, aw, my_bmax, mb)
 	y += mb * R + gap
 	out["chips"] = Rect2(PAD, y, aw * 0.62, base.chips * k)
-	var hc: float = base.hand_card * k * scale_w
+	var hc: float = hand_w.call(k)
 	out["card"] = Vector2(hc, hc * R)
 	# 손패 영역: 화면 아래까지 (카드 아래쪽 일부는 화면 밖으로 잘려 보임), 오른쪽 아래는 턴 종료
 	var hand_top: float = y + base.chips * k + gap * 0.5
@@ -108,20 +113,33 @@ static func _hand(size: Vector2, my_bmax: int, top: float, bottom: float) -> Dic
 	y += 76 + GAP
 	out["notice"] = Rect2(PAD, y, aw, 96)
 	y += 96 + GAP
-	# 내 포켓몬 줄: 배틀(조금 크게) + 벤치
-	var n := my_bmax
-	var bw := bench_w(aw - 150 - GAP * 2, n, 96.0)
-	var aw2 := minf(150.0, aw - n * (bw + GAP))
-	out["my_active"] = Rect2(PAD, y, aw2, aw2 * R)
-	var bench: Array = []
-	var bx := PAD + aw2 + GAP * 2
-	for i in n:
-		bench.append(Rect2(bx + i * (bw + GAP), y + (aw2 - bw) * R, bw, bw * R))
-	out["my_bench"] = bench
-	y += aw2 * R + GAP
 	var hc := minf(236.0, W * 0.33)
 	var hand_h := hc * R + 40
 	var chips_y := size.y - bottom - hand_h - 56
+	# 내 포켓몬: 가운데 안내 칸(최소 64)만 남기고 세로 공간을 채운다. 카드가 더 크게 나오는 쪽을 고름
+	#  A: [배틀][벤치 n] 한 줄  /  B: 배틀 위(가운데) · 벤치 아래 전체 너비
+	var n := my_bmax
+	var avail_h := maxf(0.0, chips_y - y - GAP * 2 - 64.0)
+	var a_bw := floorf(minf((aw - n * GAP - GAP) / (n + 1.3), avail_h / 1.3 / R))
+	var b_bw := floorf(minf((aw - (n - 1) * GAP) / n, (avail_h - GAP) / (2.25 * R)))
+	if b_bw > a_bw * 1.04:
+		var act := floorf(minf(minf(aw * 0.62, b_bw * 2.8), (avail_h - GAP - b_bw * R) / R))
+		out["my_active"] = Rect2((W - act) / 2.0, y, act, act * R)
+		y += act * R + GAP
+		out["my_bench"] = _row_rects(PAD, y, aw, n, b_bw)
+		y += b_bw * R + GAP
+	else:
+		var bw := a_bw
+		var act := floorf(minf(avail_h / R, aw - n * (bw + GAP) - GAP))
+		var total := act + GAP * 2 + n * bw + (n - 1) * GAP
+		var x0 := PAD + maxf(0.0, (aw - total) / 2.0)
+		out["my_active"] = Rect2(x0, y, act, act * R)
+		var bench: Array = []
+		var bx := x0 + act + GAP * 2
+		for i in n:
+			bench.append(Rect2(bx + i * (bw + GAP), y + (act - bw) * R, bw, bw * R))
+		out["my_bench"] = bench
+		y += act * R + GAP
 	out["center"] = Rect2(PAD, y, aw, maxf(0.0, chips_y - y - GAP))
 	out["chips"] = Rect2(PAD, chips_y, aw * 0.62, 48)
 	out["end_turn"] = Rect2(W - PAD - 176, chips_y - 4, 176, 56)
