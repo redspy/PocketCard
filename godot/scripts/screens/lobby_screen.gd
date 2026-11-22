@@ -5,6 +5,7 @@ extends Control
 
 var _info: Label
 var _opp: Label
+var _where: Label                # 폰끼리 대전 방장: 상대가 들어올 주소·방 코드 안내
 var _decks: VBoxContainer
 var _ready_btn: TapArea
 var _err: Label
@@ -26,7 +27,10 @@ func _ready() -> void:
 	layout.set_anchors_preset(Control.PRESET_FULL_RECT)
 	layout.add_theme_constant_override("separation", 0)
 	add_child(layout)
-	layout.add_child(UI.top_bar(self, "AI와 연습" if Net.solo else "대전 준비", ("서버 없이 이 폰에서" if Net.offline else "게임판 없이 폰 한 대로") if Net.solo else "세션 %s" % Net.code))
+	if Net.p2p():
+		layout.add_child(UI.top_bar(self, "폰끼리 대전", "%s · 방 코드 %s" % ["내가 방장" if Net.offline else "참가", Net.lobby.get("code", "")]))
+	else:
+		layout.add_child(UI.top_bar(self, "AI와 연습" if Net.solo else "대전 준비", ("서버 없이 이 폰에서" if Net.offline else "게임판 없이 폰 한 대로") if Net.solo else "세션 %s" % Net.code))
 
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -45,6 +49,10 @@ func _ready() -> void:
 	col.add_child(_info)
 	_opp = UI.label("", 24, UI.TEXT_DIM)
 	col.add_child(_opp)
+	_where = UI.label("", 24, UI.ACCENT, HORIZONTAL_ALIGNMENT_LEFT, true)
+	_where.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_where.visible = false
+	col.add_child(_where)
 	_err = UI.label("", 24, Color(1, 0.55, 0.5), HORIZONTAL_ALIGNMENT_LEFT, true)
 	_err.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	col.add_child(_err)
@@ -103,6 +111,14 @@ func _refresh() -> void:
 		var o: Dictionary = seats[1 - Net.seat]
 		var st := "대기 중" if not bool(o["taken"]) else ("준비 완료" if bool(o["ready"]) else ("덱: %s" % o["deckName"] if o.get("deckName") != null else "덱 고르는 중"))
 		_opp.text = "상대: %s" % st
+		if Net.p2p() and bool(o["taken"]):
+			_opp.text = "상대 (%s): %s" % [o.get("device", ""), st if bool(o.get("connected", true)) else "연결 끊김 — 재접속 기다리는 중"]
+		# 폰끼리 대전 방장: 상대가 아직 없으면 들어올 방법 안내
+		_where.visible = Net.p2p() and Net.offline and not bool(o.get("connected", false))
+		if _where.visible:
+			var ips: Array = (Net.lobby.get("addresses", []) as Array).map(func(a): return str(a.address))
+			_where.text = "상대 폰: [폰끼리 대전] → 목록에서 이 방을 누르세요.
+목록에 없으면 주소 %s · 방 코드 %s 입력" % [" / ".join(PackedStringArray(ips)) if not ips.is_empty() else "(Wi-Fi 연결 없음)", Net.lobby.get("code", "")]
 		if Net.solo:
 			_opp.text = "상대: AI · %s" % (str(o["deckName"]) if o.get("deckName") != null else "덱 무작위")
 			var ai_deck := str(o["deckId"]) if o.get("deckId") != null else ""

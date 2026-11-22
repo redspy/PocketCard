@@ -14,9 +14,9 @@ var address := ""               # "192.168.0.12:8787"
 var code := ""
 var token := ""
 var solo := false              # AI 연습 (게임판 없이 서버 AI 와 대전)
-var offline := false           # 서버 없이 폰 안의 엔진으로 AI 연습 (LocalGame)
+var offline := false           # 서버 없이 폰 안의 엔진: AI 연습(LocalGame) 또는 폰끼리 대전의 방장(PhoneHost)
 var fx_busy := false           # 대전 화면이 연출 중 (오프라인 AI 는 연출이 끝날 때까지 기다림)
-var _local: LocalGame = null
+var _local: Node = null        # LocalGame 또는 PhoneHost (handle(msg) 로 메시지를 받는다)
 var status := "idle"            # idle / connecting / open / closed
 var seat := -1                  # 0, 1 (참가 전 -1)
 var lobby: Dictionary = {}
@@ -82,11 +82,43 @@ func start_offline() -> void:
 	lobby = {}
 	view = {}
 	events_log = []
-	_local = LocalGame.new()
-	_local.deliver = _on_message
-	add_child(_local)
+	var lg := LocalGame.new()
+	lg.deliver = _on_message
+	_local = lg
+	add_child(lg)
 	_set_status("open")
-	_local.start()
+	lg.start()
+
+## 폰끼리 대전의 방장: 이 폰이 게임 서버가 된다 (PhoneHost). 상대 폰은 join(이 폰 주소:8789, 방 코드)으로 들어온다.
+## 실패하면 오류 문구 (포트를 못 여는 경우)
+func start_phone_host() -> String:
+	_stop_ws()
+	_stop_local()
+	offline = true
+	solo = false
+	fatal = false
+	last_error = {}
+	lobby = {}
+	view = {}
+	events_log = []
+	var h := PhoneHost.new()
+	h.deliver = _on_message
+	_local = h
+	add_child(h)
+	var err := h.start()
+	if err != "":
+		_stop_local()
+		return err
+	_set_status("open")
+	return ""
+
+## 폰끼리 대전 (방장이든 참가자든)
+func p2p() -> bool:
+	return bool(lobby.get("p2p", false))
+
+## 게임판(웹) 없이 폰 화면 하나로 대전하는가 → 대전 화면은 판 전체를 보여주는 탁자 모드
+func no_board() -> bool:
+	return solo or p2p()
 
 func _stop_ws() -> void:
 	_active = false
@@ -112,9 +144,9 @@ func join_solo(addr: String) -> void:
 	_save()
 	_start()
 
-## 끝난 게임을 [다시 하기]로 대전 준비로 돌릴 수 있나 (AI 연습, 또는 게임판의 플레이어 2 = AI)
+## 끝난 게임을 [다시 하기]로 대전 준비로 돌릴 수 있나 (AI 연습, 폰끼리 대전, 또는 게임판의 플레이어 2 = AI)
 func can_rematch() -> bool:
-	return solo or bool(lobby.get("boardAi", false))
+	return solo or p2p() or bool(lobby.get("boardAi", false))
 
 ## 저장된 참가 정보로 다시 연결 (앱을 다시 켰을 때)
 func can_resume() -> bool:
@@ -151,7 +183,7 @@ func send(msg: Dictionary) -> void:
 	if offline:
 		# 화면이 자기 처리 중에 다시 그려지지 않게 다음 프레임에 처리 (서버 왕복처럼)
 		if _local:
-			_local.handle.call_deferred(msg)
+			_local.call_deferred("handle", msg)
 		return
 	if _ws and _ws.get_ready_state() == WebSocketPeer.STATE_OPEN:
 		_ws.send_text(JSON.stringify(msg))
@@ -173,6 +205,7 @@ func _open() -> void:
 	if _ws:
 		_ws.close()
 	_ws = WebSocketPeer.new()
+	_ws.inbound_buffer_size = 1 << 22   # 상태 메시지가 기본(64KB)보다 클 수 있다
 	var err := _ws.connect_to_url("ws://%s" % address)
 	_prev_state = WebSocketPeer.STATE_CONNECTING
 	_set_status("connecting")

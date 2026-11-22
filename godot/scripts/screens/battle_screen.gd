@@ -70,7 +70,7 @@ func _init(m := "") -> void:
 
 func _ready() -> void:
 	if mode == "":
-		mode = "table" if Net.solo else "hand"
+		mode = "table" if Net.no_board() else "hand"
 	var bg := ColorRect.new()
 	bg.color = UI.BG
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -982,7 +982,7 @@ func start_retreat() -> void:
 
 func tap_end_turn() -> void:
 	if str(Net.view.get("phase")) == "ended":
-		if Net.solo:
+		if Net.can_rematch():
 			Net.send({ "t": "rematch" })
 		return
 	if not UI.is_enabled(end_btn) or my_request() != null:
@@ -1464,7 +1464,7 @@ func _update_result() -> void:
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_theme_constant_override("separation", 12)
 	col.add_child(row)
-	if Net.solo:
+	if Net.can_rematch():
 		var again := UI.button("다시 하기", 28, true, true)
 		again.set_meta("result", "again")
 		again.tapped.connect(func(): Net.send({ "t": "rematch" }))

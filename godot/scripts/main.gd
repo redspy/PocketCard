@@ -29,9 +29,110 @@ func _ready() -> void:
 	var ci := args.find("--engine-compare")
 	if ci >= 0 and args.size() > ci + 1:
 		_engine_compare.call_deferred(args[ci + 1])
+	var pi := args.find("--p2ptest")
+	if pi >= 0 and args.size() > pi + 1:
+		_p2ptest.call_deferred(args[pi + 1])
 	var si := args.find("--solotest")
 	if si >= 0 and args.size() > si + 1:
 		_solotest.call_deferred(args[si + 1])
+
+## 폰끼리 대전 자가 테스트 (PC 에서 두 개를 띄움): 방장은 [방 만들기], 참가자는 방 알림 목록에서 그 방 → 덱·준비
+## → 양쪽 AI 가 자기 차례를 둔다 → 참가자는 3턴에 연결을 끊었다가 자동 재접속 → 방장이 8턴에 항복 → 다시 하기 → 대전 준비
+## 실행: Godot --headless --path godot -- --p2ptest host   /   Godot --headless --path godot -- --p2ptest join
+func _p2ptest(role: String) -> void:
+	var host := role == "host"
+	Net.leave()
+	if host:
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(PhoneHost.SAVE_PATH))
+	var js := JoinScreen.new(false, true)
+	Nav.push(js, false)
+	await get_tree().create_timer(0.5).timeout
+	if host:
+		js._disc.queue_free()   # 같은 PC 의 참가자가 알림 포트(8788)를 받을 수 있게
+		js._host()
+	else:
+		var found := false
+		for i in 100:
+			await get_tree().create_timer(0.1).timeout
+			for k in js._disc.games.keys():
+				var g: Dictionary = js._disc.games[k]
+				if str(g.get("kind", "")) == "phone":
+					print("[p2ptest] 방 찾음: %s · %s · 코드 %s" % [g.name, g.address, g.code])
+					js._join(str(g.address).replace(str(g.address).get_slice(":", 0), "127.0.0.1"), str(g.code))
+					found = true
+					break
+			if found:
+				break
+		if not found:
+			print("[p2ptest] 방을 못 찾음 (%s)" % js._disc.bind_error)
+			get_tree().quit(1)
+			return
+	for i in 100:
+		await get_tree().create_timer(0.1).timeout
+		if Nav.current() is LobbyScreen:
+			break
+	print("[p2ptest] %s 대전 준비: %s, 자리 %d, p2p %s" % [role, Nav.current() is LobbyScreen, Net.seat + 1, Net.p2p()])
+	if host and Nav.current() is LobbyScreen:
+		print("[p2ptest] 방장 안내: %s" % (Nav.current() as LobbyScreen)._where.text.replace("
+", " / "))
+	var deck := "gardevoir" if host else "charizard"
+	Net.send({ "t": "chooseDeck", "deckId": deck, "prints": DeckData.choices_for(deck) })
+	await get_tree().create_timer(0.3).timeout
+	Net.send({ "t": "ready", "ready": true })
+	for i in 300:
+		await get_tree().create_timer(0.1).timeout
+		if Nav.current() is BattleScreen:
+			break
+	await get_tree().create_timer(0.5).timeout
+	print("[p2ptest] %s 대전 화면: %s (모드 %s)" % [role, Nav.current() is BattleScreen, (Nav.current() as BattleScreen).mode if Nav.current() is BattleScreen else "-"])
+	var d := LocalGame.data()
+	var bot := GBot.makeAiBot(d.cat, d.info.db)
+	var rng := GRng.seedRng("%08x" % (0xa11ce if host else 0xb0b))
+	var last_ver := -1
+	var dropped := false
+	var conceded := false
+	var sent_at := 0
+	for i in 4000:
+		await get_tree().create_timer(0.05).timeout
+		var v: Dictionary = Net.view
+		if v.is_empty() or v.get("version") == null:
+			continue
+		if v.get("result") != null:
+			break
+		if not host and not dropped and int(v.turnNumber) >= 3:
+			dropped = true
+			print("[p2ptest] 참가자: 연결 끊기 (턴 %d)" % int(v.turnNumber))
+			Net._ws.close()
+			continue
+		if host and not conceded and int(v.turnNumber) >= 8:
+			conceded = true
+			print("[p2ptest] 방장: 항복 (턴 %d, 상대 연결 %s)" % [int(v.turnNumber), not bool(Net.lobby.get("paused", false))])
+			Net.input({ "type": "concede" })
+			continue
+		# 거절된 입력(상대 재접속 대기 등)은 1.5초 뒤 다시 둔다
+		if int(v.version) == last_ver and Time.get_ticks_msec() - sent_at > 1500:
+			last_ver = -1
+		if int(v.version) == last_ver or not GBot.botHasWork(v):
+			continue
+		sent_at = Time.get_ticks_msec()
+		var inp = bot.call(v.duplicate(true), rng)
+		if inp != null:
+			last_ver = int(v.version)
+			Net.input(inp)
+	var res = Net.view.get("result")
+	print("[p2ptest] %s 결과: %s, 턴 %s, 오류 %s" % [role, res, Net.view.get("turnNumber"), Net.last_error])
+	if res != null and Net.seat == 0 and not host:
+		print("[p2ptest] 잘못된 자리")
+	await get_tree().create_timer(1.5).timeout
+	if host:
+		Net.send({ "t": "rematch" })
+	for i in 100:
+		await get_tree().create_timer(0.1).timeout
+		if Nav.current() is LobbyScreen:
+			break
+	print("[p2ptest] %s 다시 하기 → 대전 준비: %s, 단계 %s" % [role, Nav.current() is LobbyScreen, Net.lobby.get("phase")])
+	await get_tree().create_timer(1.0).timeout
+	get_tree().quit()
 
 ## 서버 접속 자가 테스트: 참가 → 덱 선택·준비 → 게임 화면 → 셋업 선택 자동 응답 → 내 차례면 턴 종료
 ## 실행: Godot --headless --path godot -- --nettest 127.0.0.1:8787 123456

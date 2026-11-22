@@ -2,6 +2,7 @@ class_name LanDiscovery
 extends Node
 ## 같은 Wi-Fi 의 게임 서버 찾기: 서버가 1초마다 UDP 8788 로 보내는 알림을 받는다.
 ## 알림: {"app":"pocketcard","protocol":1,"name":"PC이름","code":"123456","port":8787,"open":true,"addresses":[...]}
+## 폰끼리 대전의 방장 폰도 같은 알림을 보낸다: kind "phone", port 8789
 
 signal updated
 
@@ -32,7 +33,7 @@ func _process(_delta: float) -> void:
 		var port := int(d.get("port", 8787))
 		var key := "%s:%d" % [ip, port]
 		games[key] = { "name": str(d.get("name", "PC")), "code": str(d.get("code", "")), "address": key,
-			"open": bool(d.get("open", true)), "protocol": int(d.get("protocol", 0)), "seen": now }
+			"open": bool(d.get("open", true)), "protocol": int(d.get("protocol", 0)), "kind": str(d.get("kind", "server")), "seen": now }
 		dirty = true
 	for k in games.keys():
 		var g: Dictionary = games[k]
