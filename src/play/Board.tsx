@@ -50,7 +50,6 @@ function Lobby({ lobby, decks, layout, setLayout, send, error }: { lobby: LobbyI
       <div className="pc-logo">POCKETCARD BATTLE</div>
       <div className="pc-sub">포켓몬 카드게임 1:1 대전</div>
       <div className="pc-join">
-        <div className="pc-qr">QR<br /><small>다음 단계에서 추가</small></div>
         <div>
           <p>앱에서 <b>[게임 참가]</b> → 목록에서 이 게임을 고르세요.</p>
           <div className="pc-code">{lobby.code.slice(0, 3)} {lobby.code.slice(3)}</div>
@@ -128,7 +127,7 @@ function SeatCard({ s, decks, onKick }: { s: SeatInfo; decks: CatalogDeck[]; onK
       <div className={`pc-chip st-${!s.taken ? 'wait' : !s.connected ? 'lost' : s.ready ? 'ready' : 'on'}`}>{state}</div>
       <div className="pc-seat-device">{s.device || (s.taken ? '이름 없는 기기' : '')}</div>
       <div className="pc-seat-deck">
-        {deck ? <><CardImg code={deck.cover} className="pc-cover" /> <span>{deck.name}</span></> : <span className="pc-dim">덱 미선택</span>}
+        {deck ? <><CardImg code={deck.cover} className="pc-cover" /> <span>{deck.name}</span></> : <span className="pc-dim">{s.device === 'AI' ? '덱 무작위 (시작할 때 정함)' : '덱 미선택'}</span>}
       </div>
       {onKick && <button className="pc-kick" onClick={() => { if (confirm(`${seatName(s.seat)}(${s.device || '이름 없는 기기'})를 내보내고 자리를 비울까요?`)) onKick(); }}>내보내기 (자리 비우기)</button>}
     </div>

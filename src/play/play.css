@@ -24,13 +24,11 @@
 .st-lost { background: var(--warn); color: #fff; border-color: var(--warn); }
 
 /* ── 로비 */
-.pc-lobby { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 32px 16px; text-align: center; }
-.pc-logo { font-size: clamp(36px, 7vw, 88px); font-weight: 900; letter-spacing: .04em; color: var(--accent);
+.pc-lobby { display: flex; flex-direction: column; align-items: center; gap: clamp(10px, 2vh, 18px); padding: clamp(16px, 3vh, 32px) 16px; text-align: center; }
+.pc-logo { font-size: clamp(32px, min(7vw, 8vh), 88px); font-weight: 900; letter-spacing: .04em; color: var(--accent);
   text-shadow: 0 4px 0 #b8860b, 0 8px 24px rgba(0,0,0,.45); }
 .pc-sub { font-size: 20px; color: var(--dim); margin-top: -10px; }
 .pc-join { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; justify-content: center; background: var(--panel); padding: 20px 28px; border-radius: 18px; }
-.pc-qr { width: 150px; height: 150px; border: 2px dashed var(--line); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 28px; color: var(--dim); }
-.pc-qr small { font-size: 12px; }
 .pc-code { font-size: clamp(36px, 6vw, 64px); font-weight: 800; letter-spacing: .12em; font-variant-numeric: tabular-nums; }
 .pc-join select { font: inherit; background: #133; color: var(--text); border: 1px solid var(--line); border-radius: 6px; }
 .pc-seats { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
