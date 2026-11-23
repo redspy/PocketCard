@@ -51,7 +51,8 @@ static func build(screen, req: Dictionary) -> Control:
 	var p: Array = screen.picks.get(id, [])
 	var kind := kind_of(screen, req)
 	root.set_meta("kind", kind)
-	var prompt := str(req.prompt) + ("" if (mn == 1 and mx == 1) else "  (%d~%d개)" % [mn, mx])
+	# 고를 개수: 하나만 고르는 경우·고를 게 없는 경우(0~0)는 생략
+	var prompt := str(req.prompt) + ("" if (mn == 1 and mx == 1) or mx <= 0 else ("  (%d개)" % mx if mn == mx else "  (%d~%d개)" % [mn, mx]))
 	var pl := UI.label(prompt, 26, UI.TEXT, HORIZONTAL_ALIGNMENT_LEFT, true)
 	pl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	col.add_child(pl)
@@ -88,7 +89,7 @@ static func build(screen, req: Dictionary) -> Control:
 					shown = usable
 			var codes: Array = shown.map(func(x): return cm.get(x, ""))
 			var states: Array = shown.map(func(x): return "on" if p.has(x) else ("" if opts.has(x) else "off"))
-			var strip := _strip(screen, codes, states, w * 0.3, func(i):
+			var strip := _strip(screen, codes, states, w * 0.34, func(i):
 				if opts.has(shown[i]):
 					screen.toggle_pick(req, shown[i]))
 			var cells: Array = strip.get_child(0).get_children()
@@ -181,7 +182,9 @@ static func pick_bar(screen, req: Dictionary) -> Control:
 	var mx := int(req.max)
 	var p: Array = screen.picks.get(id, [])
 	var single := mn == 1 and mx == 1
-	var txt := str(req.prompt) + ("" if single else "  (%d~%d개, 고름 %d)" % [mn, mx, p.size()])
+	# 안내문에 이미 범위가 있는 경우가 많아(예: 0~5장) 여기서는 고른 수와 최대만
+	var txt := str(req.prompt) + ("" if single else "
+%d장 고름 (최대 %d장)" % [p.size(), mx])
 	var l := UI.label(txt, 22, UI.TEXT, HORIZONTAL_ALIGNMENT_LEFT, true)
 	l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	l.custom_minimum_size.x = 300

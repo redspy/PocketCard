@@ -179,7 +179,7 @@ export function GameBoard({ view, lobby, decks, line, layout, spot, onRematch }:
           ))}
         </div>
       )}
-      {lobby.paused && <div className="pc-overlay"><Twice flip={flip}>재접속 대기 중… ({lobby.seats.filter((s) => !s.connected).map((s) => seatName(s.seat)).join(', ')})</Twice></div>}
+      {lobby.paused && !view.result && <div className="pc-overlay"><Twice flip={flip}>재접속 대기 중… ({lobby.seats.filter((s) => !s.connected).map((s) => seatName(s.seat)).join(', ')})</Twice></div>}
       {view.result && (
         <div className="pc-overlay"><Twice flip={flip}>{view.result.winner === null ? '무승부' : `${seatName(view.result.winner)} 승리!`}<small>{view.result.reason}</small></Twice>
           {onRematch && <button className="pc-rematch" onClick={onRematch}>다시 하기 (대전 준비로)</button>}</div>
@@ -253,6 +253,7 @@ function Twice({ children, flip }: { children: React.ReactNode; flip: boolean })
 const KIND: Record<string, string> = {
   chooseFirst: '선공/후공 고르는 중', chooseActive: '배틀 포켓몬 고르는 중', chooseBench: '벤치 포켓몬 고르는 중',
   mulliganDraw: '추가 드로우 고르는 중', ackReveal: '공개 카드 확인 중',
+  pickCards: '카드 고르는 중', pickSlot: '포켓몬 고르는 중', pickOption: '고르는 중', takePrize: '사이드 고르는 중', promote: '새 배틀 포켓몬 고르는 중',
 };
 
 function Side({ p, view, decks, waiting, onZoom }: { p: PlayerView; view: GameView; decks: CatalogDeck[]; waiting: GameView['requests']; onZoom: ZoomFn }) {
@@ -283,7 +284,7 @@ function Side({ p, view, decks, waiting, onZoom }: { p: PlayerView; view: GameVi
       <div className="pc-statusbar">
         <b>{seatName(p.seat)}</b>
         {mine && <span className="pc-chip st-ready">내 차례</span>}
-        {waiting.map((r) => <span key={r.id} className="pc-chip st-on">{KIND[r.kind] ?? r.kind}</span>)}
+        {waiting.map((r) => <span key={r.id} className="pc-chip st-on">{KIND[r.kind] ?? '고르는 중'}</span>)}
         <span className="pc-hand">{Array.from({ length: Math.min(p.handCount, 10) }, (_, i) => <i key={i} />)}</span>
         <span>패 {p.handCount}</span><span>사이드 {prizesLeft}</span><span className="pc-dim">덱 {p.deckCount} · 트래쉬 {p.discard.length}{p.lost?.length ? ` · 로스트 ${p.lost.length}` : ''}</span>
         {p.mulligans > 0 && <span>멀리건 {p.mulligans}</span>}
@@ -352,7 +353,7 @@ function Spotlight({ ev, decks, flip }: { ev: GameEvent | null; decks: CatalogDe
   }, [ev?.seq]);
   if (!shown || !('code' in shown)) return null;
   const text = shown.type === 'attack' ? `기술 [${shown.name}]` : shown.type === 'ability' ? `특성 [${shown.name}]` : shown.type === 'play' ? shown.what : '';
-  const card = <><CardImg code={shown.code} name={nameOf(decks, shown.code)} /><div className="pc-spot-text">{seatName((shown as { player: Seat }).player)} · {nameOf(decks, shown.code)} — {text}</div></>;
+  const card = <><CardImg code={shown.code} name={nameOf(decks, shown.code)} /><div className="pc-spot-text">{seatName((shown as { player: Seat }).player)}<br />{text || nameOf(decks, shown.code)}</div></>;
   return (
     <div className="pc-spot">
       <div className={`pc-spot-one ${flip ? 'flip' : ''}`}>{card}</div>

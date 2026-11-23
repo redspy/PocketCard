@@ -29,6 +29,9 @@ func _ready() -> void:
 	var ci := args.find("--engine-compare")
 	if ci >= 0 and args.size() > ci + 1:
 		_engine_compare.call_deferred(args[ci + 1])
+	var sci := args.find("--ui-scenes")
+	if sci >= 0:
+		_ui_scenes.call_deferred(args[sci + 1] if args.size() > sci + 1 else "shot", args[sci + 2] if args.size() > sci + 2 else "table")
 	var ti := args.find("--ui-tour")
 	if ti >= 0:
 		_ui_tour.call_deferred(args[ti + 1] if args.size() > ti + 1 else "shot")
@@ -75,12 +78,16 @@ func _p2ptest(role: String) -> void:
 		if Nav.current() is LobbyScreen:
 			break
 	print("[p2ptest] %s 대전 준비: %s, 자리 %d, p2p %s" % [role, Nav.current() is LobbyScreen, Net.seat + 1, Net.p2p()])
+	await get_tree().create_timer(1.0).timeout
+	_p2p_shot(role, "1_lobby")
 	if host and Nav.current() is LobbyScreen:
 		print("[p2ptest] 방장 안내: %s" % (Nav.current() as LobbyScreen)._where.text.replace("
 ", " / "))
 	var deck := "gardevoir" if host else "charizard"
 	Net.send({ "t": "chooseDeck", "deckId": deck, "prints": DeckData.choices_for(deck) })
 	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.4).timeout
+	_p2p_shot(role, "2_lobby_deck")
 	Net.send({ "t": "ready", "ready": true })
 	for i in 300:
 		await get_tree().create_timer(0.1).timeout
@@ -106,7 +113,12 @@ func _p2ptest(role: String) -> void:
 			dropped = true
 			print("[p2ptest] 참가자: 연결 끊기 (턴 %d)" % int(v.turnNumber))
 			Net._ws.close()
+			await get_tree().create_timer(0.3).timeout
+			_p2p_shot(role, "3_reconnecting")
 			continue
+		if host and bool(Net.lobby.get("paused", false)) and not has_meta("shot_paused"):
+			set_meta("shot_paused", true)
+			_p2p_shot(role, "3_opp_paused")
 		if host and not conceded and int(v.turnNumber) >= 8:
 			conceded = true
 			print("[p2ptest] 방장: 항복 (턴 %d, 상대 연결 %s)" % [int(v.turnNumber), not bool(Net.lobby.get("paused", false))])
@@ -122,6 +134,8 @@ func _p2ptest(role: String) -> void:
 		if inp != null:
 			last_ver = int(v.version)
 			Net.input(inp)
+	await get_tree().create_timer(1.5).timeout
+	_p2p_shot(role, "4_result")
 	var res = Net.view.get("result")
 	print("[p2ptest] %s 결과: %s, 턴 %s, 오류 %s" % [role, res, Net.view.get("turnNumber"), Net.last_error])
 	if res != null and Net.seat == 0 and not host:
@@ -134,8 +148,16 @@ func _p2ptest(role: String) -> void:
 		if Nav.current() is LobbyScreen:
 			break
 	print("[p2ptest] %s 다시 하기 → 대전 준비: %s, 단계 %s" % [role, Nav.current() is LobbyScreen, Net.lobby.get("phase")])
+	await get_tree().create_timer(0.6).timeout
+	_p2p_shot(role, "5_rematch_lobby")
 	await get_tree().create_timer(1.0).timeout
 	get_tree().quit()
+
+func _p2p_shot(role: String, name: String) -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("user://tour"))
+	get_viewport().get_texture().get_image().save_png("user://tour/p2p_%s_%s.png" % [role, name])
 
 ## 서버 접속 자가 테스트: 참가 → 덱 선택·준비 → 게임 화면 → 셋업 선택 자동 응답 → 내 차례면 턴 종료
 ## 실행: Godot --headless --path godot -- --nettest 127.0.0.1:8787 123456
@@ -487,6 +509,11 @@ func _ui_tests() -> void:
 		print("[ui-tests] 실패: " + str(f))
 	print("[ui-tests] 결과: %s (실패 %d)" % ["통과" if fails.is_empty() else "실패", fails.size()])
 	get_tree().quit(0 if fails.is_empty() else 1)
+
+## 대전 중 장면 찾아 찍기 (scripts/ui_tour.gd)
+func _ui_scenes(tag: String, mode: String) -> void:
+	await UiTour.scenes(self, tag, mode)
+	get_tree().quit()
 
 ## 화면 둘러보기 스크린샷 (scripts/ui_tour.gd)
 func _ui_tour(tag: String) -> void:

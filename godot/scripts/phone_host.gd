@@ -222,7 +222,7 @@ func _msg(seat: int, m: Dictionary) -> String:
 		"input":
 			if match_ == null:
 				return "no_game|게임이 시작되지 않았습니다."
-			if not _guest_connected():
+			if not _guest_connected() and str(match_.state.phase) != "ended":
 				return "paused|상대의 재접속을 기다리는 중입니다."
 			var r := match_.submit(seat, m.get("input", {}) if m.get("input") is Dictionary else {})
 			if not r.ok:
@@ -310,7 +310,7 @@ func lobby_info() -> Dictionary:
 	for ip in local_ips():
 		addrs.append({ "address": ip, "iface": "", "preferred": addrs.is_empty() })
 	return { "code": code, "phase": phase, "countdownEndsAt": _countdown_ends if phase == "countdown" else null, "seats": out,
-		"addresses": addrs, "port": PORT, "paused": phase == "game" and not _guest_connected(), "p2p": true }
+		"addresses": addrs, "port": PORT, "paused": phase == "game" and match_ != null and str(match_.state.phase) != "ended" and not _guest_connected(), "p2p": true }
 
 func _broadcast_lobby() -> void:
 	var m := { "t": "lobby", "lobby": lobby_info() }

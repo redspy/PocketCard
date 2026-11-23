@@ -5,6 +5,7 @@ extends Control
 
 var sid := ""
 var slot: Dictionary = {}
+var face_down := false              # 뒷면(준비 단계) — HP 등 앞면 정보는 숨김
 var card: BCard
 var hp_shown := -1                 # 연출 중 보여주는 남은 HP (-1 = 실제 값)
 var _hp_label: Label
@@ -66,7 +67,7 @@ func set_slot(s, active := false) -> void:
 	_empty.visible = not has
 	card.visible = has
 	hit.visible = not has
-	var face_down := bool(slot.get("faceDown", false)) or slot.get("stack") == null
+	face_down = has and (bool(slot.get("faceDown", false)) or slot.get("stack") == null)
 	var top := ""
 	if has and not face_down:
 		var st: Array = slot.stack
@@ -101,12 +102,12 @@ func set_slot(s, active := false) -> void:
 			energies.append(et)
 		elif BData.is_tool_card(str(a.code)):
 			tool_name = BData.name_of(str(a.code))
-	var dot := maxf(12.0, size.x * 0.13)
+	var dot := clampf(size.x * 0.13, 12.0, 40.0)   # 큰 카드(손패 모드 배틀 포켓몬)에서도 점이 과하게 커지지 않게
 	for i in mini(energies.size(), 6):
 		_dots.add_child(_dot(energies[i], dot))
 	if energies.size() > 6:
 		_dots.add_child(UI.label("×%d" % energies.size(), int(dot * 0.9), Color.WHITE))
-	_tool.text = (" ◆%s " % tool_name.left(5)) if tool_name != "" else ""
+	_tool.text = (" ◆%s " % (tool_name if tool_name.length() <= 5 else tool_name.left(4) + "…")) if tool_name != "" else ""
 	_tool.add_theme_stylebox_override("normal", UI.box(Color(0.85, 0.85, 0.9, 0.92), 6))
 	_tool.visible = tool_name != ""
 	# 약점·저항 (배틀 포켓몬만, 늘 보이게 — 순간만 뜨면 기억에 의존하게 됨)
@@ -127,7 +128,7 @@ func set_slot(s, active := false) -> void:
 	_relayout()
 
 func _badge(t: String, c: Color) -> Label:
-	var l := UI.label(" %s " % t, maxi(14, int(size.x * 0.11)), Color.WHITE)
+	var l := UI.label(" %s " % t, clampi(int(size.x * 0.11), 14, 30), Color.WHITE)
 	l.add_theme_stylebox_override("normal", UI.box(c, 6))
 	return l
 
@@ -158,7 +159,7 @@ func show_hp(v: int) -> void:
 	_update_hp()
 
 func _update_hp() -> void:
-	var has := slot.get("hp") != null and not slot.is_empty()
+	var has := slot.get("hp") != null and not slot.is_empty() and not face_down
 	_hp_label.visible = has
 	_hp_bar.visible = has
 	_hp_bar_bg.visible = has
@@ -176,8 +177,10 @@ func _relayout() -> void:
 	var w := size.x
 	var h := size.y
 	card.pivot_offset = size / 2
-	var fs := maxi(16, int(w * 0.16))
+	var fs := clampi(int(w * 0.16), 16, 56)
 	_hp_label.add_theme_font_size_override("font_size", fs)
+	# 세 자리 폭을 늘 덮는다: 남은 HP 가 두 자리면 카드에 인쇄된 HP 숫자 일부가 옆으로 삐져나와 "2"+"70" 처럼 보임
+	_hp_label.custom_minimum_size.x = fs * 1.9
 	_hp_label.size = Vector2.ZERO
 	_hp_label.position = Vector2(w - _hp_label.get_minimum_size().x - 2, 2)
 	var bh := maxf(5.0, h * 0.03)
@@ -189,10 +192,10 @@ func _relayout() -> void:
 	_hp_bar.size = Vector2((w - 8) * frac, bh)
 	_dots.position = Vector2(4, h - bh - 8 - _dots.get_combined_minimum_size().y)
 	_badges.position = Vector2(2, fs + 10)
-	_weak.add_theme_font_size_override("font_size", maxi(13, int(w * 0.08)))
+	_weak.add_theme_font_size_override("font_size", clampi(int(w * 0.08), 13, 26))
 	_weak.size = Vector2.ZERO
 	_weak.position = Vector2(2, -_weak.get_minimum_size().y - 2)
-	_tool.add_theme_font_size_override("font_size", maxi(12, int(w * 0.09)))
+	_tool.add_theme_font_size_override("font_size", clampi(int(w * 0.09), 12, 26))
 	_tool.size = Vector2.ZERO
 	_tool.position = Vector2(w - _tool.get_minimum_size().x - 2, h - bh - 10 - _tool.get_minimum_size().y)
 

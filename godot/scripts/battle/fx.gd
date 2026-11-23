@@ -322,6 +322,14 @@ func _banner(text: String, sub: String, sec: float, color := UI.ACCENT) -> void:
 		col.add_child(s2)
 	p.custom_minimum_size.x = W * 0.8
 	p.position = Vector2(W * 0.1, screen.size.y * 0.42)
+	# 선택 창(공개 카드 확인 등)이 떠 있으면 그 글자 위에 겹치지 않게 창 위쪽 빈 곳으로
+	var sh = screen.sheet
+	if sh != null and is_instance_valid(sh) and sh.visible:
+		var bh := p.get_combined_minimum_size().y
+		var sr := Rect2(sh.position, sh.size)
+		if sr.intersects(Rect2(p.position, Vector2(W * 0.8, bh))):
+			var top: float = screen.L.bar.position.y + screen.L.bar.size.y + 8
+			p.position.y = maxf(top, sr.position.y - bh - 12)
 	screen.fx_layer.add_child(p)
 	p.modulate.a = 0.0
 	var tw := p.create_tween()

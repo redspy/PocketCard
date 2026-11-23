@@ -30,18 +30,18 @@ func _ready() -> void:
 	col.add_child(UI.label("2026 코리안리그 우승 덱", 26, UI.TEXT_DIM))
 
 	# 대전: PC 게임판에 참가
-	var join := UI.button("⚔  게임 참가 (PC 게임판과 대전)", 32, true, true)
+	var join := UI.wide(UI.button("⚔  게임 참가 (PC 게임판과 대전)", 32, true, true), HORIZONTAL_ALIGNMENT_LEFT)
 	join.tapped.connect(func(): Nav.push(JoinScreen.new()))
 	col.add_child(join)
 	# 연습: 게임판 없이 폰 한 대로 서버 AI 와 대전
 	# 연습: 서버·게임판 없이 이 폰 안에서 AI 와 대전 (규칙 엔진이 앱에 들어 있음)
-	var solo := UI.button("🤖  AI와 연습 (서버 없이 이 폰에서)", 30, true)
+	var solo := UI.wide(UI.button("🤖  AI와 연습 (서버 없이 이 폰에서)", 30, true), HORIZONTAL_ALIGNMENT_LEFT)
 	solo.tapped.connect(func():
 		Net.start_offline()
 		Nav.push(LobbyScreen.new()))
 	col.add_child(solo)
 	# 폰끼리: 서버·게임판 없이 같은 Wi-Fi(또는 핫스팟)의 두 폰이 1:1 대전 (한 폰이 방장)
-	var duel := UI.button("📱  폰끼리 대전 (서버 없이)", 30, true)
+	var duel := UI.wide(UI.button("📱  폰끼리 대전 (서버 없이)", 30, true), HORIZONTAL_ALIGNMENT_LEFT)
 	duel.tapped.connect(func(): Nav.push(JoinScreen.new(false, true)))
 	col.add_child(duel)
 

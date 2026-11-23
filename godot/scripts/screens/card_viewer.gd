@@ -61,7 +61,7 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP   # 아래 화면으로 터치가 새지 않게
 
 	_bg = ColorRect.new()
-	_bg.color = Color(0.02, 0.05, 0.04, 0.97)   # 뒤 덱 화면 제목이 비치지 않게
+	_bg.color = Color(0.02, 0.05, 0.04, 0.99)   # 뒤 덱 화면 제목이 비치지 않게
 	_bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_bg.modulate.a = 0.0

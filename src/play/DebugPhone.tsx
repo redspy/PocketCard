@@ -109,7 +109,7 @@ export function PhonePanel({ c, title, onLeave, compact }: { c: GameClient; titl
         </div>}
       </div>
       {c.error && Date.now() - c.error.at < 5000 && <div className="dp-error">{c.error.message}</div>}
-      {view.result && <div className="dp-result">{view.result.winner === null ? '무승부' : view.result.winner === seat ? '승리!' : '패배'} — {view.result.reason}</div>}
+      {view.result && <div className="dp-result">{view.result.winner === null ? '무승부' : view.result.winner === seat ? '승리!' : '패배'} — {loserWords(view.result.reason, view.result.winner === null || view.result.winner === seat)}</div>}
       {myReqs.map((r) => <RequestPanel key={r.id} r={r} view={view} decks={decks} onSubmit={(picks) => c.input({ type: 'choice', requestId: r.id, picks })} onZoom={setZoom} />)}
       {!myReqs.length && waitingOpp.length > 0 && <div className="dp-wait">상대가 고르는 중… ({waitingOpp[0].prompt})</div>}
 
@@ -248,4 +248,11 @@ function RequestPanel({ r, view, decks, onSubmit, onZoom }: { r: RequestView; vi
       {!(kind === 'values' && max === 1 && min === 1) && <button className="dp-primary" disabled={!ok} onClick={() => { onSubmit(picks); setPicks([]); }}>결정{picks.length ? ` (${picks.length})` : ''}</button>}
     </div>
   );
+}
+
+/** 엔진의 승리 이유 일부는 이긴 쪽 시점이라, 진 쪽 화면에서는 뒤집어 보여 준다 */
+function loserWords(reason: string, won: boolean): string {
+  if (won) return reason;
+  const flip: Record<string, string> = { '사이드를 모두 가져갔습니다.': '상대가 사이드를 모두 가져갔습니다.', '상대 필드에 포켓몬이 없습니다.': '내 필드에 포켓몬이 없습니다.' };
+  return flip[reason] ?? reason;
 }

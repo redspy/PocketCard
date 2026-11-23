@@ -108,7 +108,8 @@ func _refresh() -> void:
 	var seats: Array = Net.lobby.get("seats", [])
 	var my_deck := str(me.get("deckId", "")) if me.get("deckId") != null else ""
 	var ready := bool(me.get("ready", false))
-	_info.text = "플레이어 %d%s" % [Net.seat + 1, "" if Net.status == "open" else " · 재접속 중…"]
+	var who := ("나 (방장)" if Net.offline else "나 (참가)") if Net.p2p() else "플레이어 %d" % (Net.seat + 1)
+	_info.text = "%s%s" % [who, "" if Net.status == "open" else " · 재접속 중…"]
 	if seats.size() == 2 and Net.seat >= 0:
 		var o: Dictionary = seats[1 - Net.seat]
 		var st := "대기 중" if not bool(o["taken"]) else ("준비 완료" if bool(o["ready"]) else ("덱: %s" % o["deckName"] if o.get("deckName") != null else "덱 고르는 중"))

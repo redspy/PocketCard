@@ -240,7 +240,12 @@ func _build_static() -> void:
 	peek_back.visible = false
 	sheet_layer.add_child(peek_back)
 	toast = UI.label("", 24, Color.WHITE, HORIZONTAL_ALIGNMENT_CENTER, true)
-	toast.add_theme_stylebox_override("normal", UI.box(Color(0, 0, 0, 0.82), 14))
+	var tsb := UI.box(Color(0.02, 0.04, 0.03, 0.94), 14, 2, Color(1, 1, 1, 0.18))
+	tsb.content_margin_left = 14
+	tsb.content_margin_right = 14
+	tsb.content_margin_top = 8
+	tsb.content_margin_bottom = 8
+	toast.add_theme_stylebox_override("normal", tsb)
 	toast.modulate.a = 0.0
 	hud.add_child(toast)
 
@@ -584,9 +589,10 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 		var chips_end: float = chips.position.x + chips.get_combined_minimum_size().x + 12
 		if stadium_btn.position.x < chips_end + 12:
 			stadium_btn.position = Vector2(L.end_turn.position.x + L.end_turn.size.x - stadium_btn.get_combined_minimum_size().x, L.end_turn.position.y - stadium_btn.get_combined_minimum_size().y - 10)
-	toast.size = Vector2(size.x * 0.84, 0)
+	# 탁자: 위쪽 상대 정보 줄을 통째로 덮는다 (반쯤 걸치면 글자가 삐져나와 지저분)
+	toast.size = Vector2(size.x * 0.84 if mode == "hand" else size.x - 24, 0)
 	var ty: float = (L.center.position.y + 10) if mode == "hand" else (L.bar.position.y + L.bar.size.y + 10)
-	toast.position = Vector2(size.x * 0.08, ty)
+	toast.position = Vector2(size.x * 0.08 if mode == "hand" else 12.0, ty if mode == "hand" else ty - 6)
 
 ## 상대 차례에 연출이 없고 내가 고를 것도 없으면 "생각 중…" (상대 손패를 만지는 모습은 보여 주지 않음)
 func thinking_text() -> String:
@@ -1102,6 +1108,7 @@ func _build_request() -> void:
 		sheet.position = Vector2(12, top_y + 6)
 		hand.visible = true
 		_apply_marks()
+		_keep_bar_off_targets(sheet, req)
 		return
 	sheet = BRequest.build(self, req)
 	sheet_layer.add_child(sheet)
@@ -1127,6 +1134,33 @@ func _build_request() -> void:
 	sheet.position = Vector2(0, maxf(top_y + 70, size.y * 0.42))
 	sheet.size = Vector2(size.x, size.y - sheet.position.y)
 	_show_peek_btn()
+	_fit_sheet(sheet, top_y)
+
+## 아래 선택 창 높이를 내용에 맞춘다 (내용이 짧으면 판이 더 보이게, 길면 위로 늘림)
+func _fit_sheet(sh: Control, top_y: float) -> void:
+	await get_tree().process_frame
+	if not is_instance_valid(sh) or sh != sheet:
+		return
+	var h := sh.get_combined_minimum_size().y + UI.safe_bottom(self) + 12
+	var y := clampf(size.y - h, top_y + 70, size.y - 160)
+	sh.position = Vector2(0, y)
+	sh.size = Vector2(size.x, size.y - y)
+	_show_peek_btn()
+
+## 탁자 고르기 안내 띠가 고를 대상(상대 벤치 등)을 가리면 가운데 띠(스타디움 줄) 위로 옮긴다
+func _keep_bar_off_targets(bar: Control, req: Dictionary) -> void:
+	await get_tree().process_frame
+	if not is_instance_valid(bar) or bar != sheet:
+		return
+	bar.size = Vector2(bar.size.x, 0)
+	var r := Rect2(bar.position, Vector2(bar.size.x, bar.get_combined_minimum_size().y))
+	var hit := false
+	for o in req.options:
+		var n: Control = slots.get(str(o))
+		if n != null and n.visible and Rect2(n.position, n.size).intersects(r):
+			hit = true
+	if hit and mid.visible and mid.size.y > 0:
+		bar.position.y = mid.position.y + (mid.size.y - r.size.y) / 2.0
 
 ## 선택 창 오른쪽 위에 [판 보기]
 func _show_peek_btn() -> void:

@@ -143,7 +143,8 @@ export class Session {
     return false;
   }
 
-  get paused() { return this.phase === 'game' && !(this.seatConnected(0) && this.seatConnected(1)); }
+  /** 게임 중 한쪽이 끊겨 입력을 막는 중 (끝난 게임은 기다릴 것이 없으므로 아님) */
+  get paused() { return this.phase === 'game' && this.game?.state.phase !== 'ended' && !(this.seatConnected(0) && this.seatConnected(1)); }
 
   handle(conn: Conn, msg: ClientMsg) {
     try {
