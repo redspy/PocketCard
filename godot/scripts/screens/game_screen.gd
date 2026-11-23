@@ -193,7 +193,7 @@ func _refresh() -> void:
 	if res != null:
 		var w = res.get("winner")
 		_err.add_theme_color_override("font_color", UI.ACCENT)
-		_err.text = ("무승부" if w == null else ("승리!" if int(w) == seat else "패배")) + " — " + str(res.get("reason", ""))
+		_err.text = ("무승부" if w == null else ("승리!" if int(w) == seat else "패배")) + " — " + BattleScreen.result_words(res)
 	elif not Net.last_error.is_empty() and Time.get_ticks_msec() - int(Net.last_error.get("at", 0)) < 6000:
 		_err.add_theme_color_override("font_color", Color(1, 0.55, 0.5))
 		_err.text = str(Net.last_error.get("message", ""))

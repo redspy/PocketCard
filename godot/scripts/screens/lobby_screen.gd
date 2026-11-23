@@ -6,7 +6,7 @@ extends Control
 var _info: Label
 var _opp: Label
 var _where: Label                # 폰끼리 대전 방장: 상대가 들어올 주소·방 코드 안내
-var _decks: VBoxContainer
+var _decks: GridContainer        # 덱 목록 (넓은 화면은 2~3열)
 var _ready_btn: TapArea
 var _err: Label
 var _built_deck := "?"
@@ -68,15 +68,17 @@ func _ready() -> void:
 		_speed_box.add_theme_constant_override("v_separation", 10)
 		col.add_child(_speed_box)
 	col.add_child(UI.label("내 덱" if Net.solo else "덱 선택", 30, UI.ACCENT))
-	_decks = VBoxContainer.new()
-	_decks.add_theme_constant_override("separation", 12)
+	_decks = GridContainer.new()
+	_decks.add_theme_constant_override("h_separation", 12)
+	_decks.add_theme_constant_override("v_separation", 12)
+	_decks.columns = clampi(int(get_viewport_rect().size.x / 480.0), 1, 3)
 	col.add_child(_decks)
 
 	# 아래 고정: 준비 완료
 	var foot := UI.margin(20)
 	foot.add_theme_constant_override("margin_bottom", int(UI.safe_bottom(self)) + 20)
 	layout.add_child(foot)
-	_ready_btn = UI.button("AI와 대전 시작" if Net.solo else "준비 완료", 34, true, true)
+	_ready_btn = UI.wide(UI.button("AI와 대전 시작" if Net.solo else "준비 완료", 34, true, true))
 	_ready_btn.tapped.connect(_toggle_ready)
 	foot.add_child(_ready_btn)
 
@@ -159,10 +161,12 @@ func _build_decks(selected: String, locked: bool) -> void:
 			continue   # 덱 뷰어 전용 (대전 규칙 준비 중)
 		var id: String = d["id"]
 		var tap := TapArea.new()
+		tap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var p := PanelContainer.new()
 		p.add_theme_stylebox_override("panel", UI.box(UI.PANEL, 18, 4 if id == selected else 0, UI.ACCENT))
 		p.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		tap.add_child(p)
+		p.set_anchors_preset(Control.PRESET_FULL_RECT)
 		tap.press_target = p
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 18)

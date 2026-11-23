@@ -123,7 +123,7 @@ static func _hand(size: Vector2, my_bmax: int, top: float, bottom: float) -> Dic
 	var a_bw := floorf(minf((aw - n * GAP - GAP) / (n + 1.3), avail_h / 1.3 / R))
 	var b_bw := floorf(minf((aw - (n - 1) * GAP) / n, (avail_h - GAP) / (2.25 * R)))
 	if b_bw > a_bw * 1.04:
-		var act := floorf(minf(minf(aw * 0.62, b_bw * 2.8), (avail_h - GAP - b_bw * R) / R))
+		var act := floorf(minf(minf(aw * 0.75, b_bw * 3.4), (avail_h - GAP - b_bw * R) / R))
 		out["my_active"] = Rect2((W - act) / 2.0, y, act, act * R)
 		y += act * R + GAP
 		out["my_bench"] = _row_rects(PAD, y, aw, n, b_bw)

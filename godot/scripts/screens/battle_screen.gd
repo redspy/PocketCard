@@ -363,6 +363,9 @@ func _place_side(p: Dictionary, side: String, seen: Dictionary) -> void:
 			var pend := int(fx.pending_hp.get(str(s.sid), 0))
 			node.show_hp(clampi(node.real_left() + pend, 0, node.max_hp()) if pend != 0 else -1)
 		node.visible = true
+		# 배틀 포켓몬은 맨 나중에 그린다: 카드 위 바깥의 약점·저항 표시가 위 줄(상대 벤치) 카드에 가리지 않게
+		if bool(list[i][2]) and s != null:
+			board.move_child(node, -1)
 	for key in empties:
 		if key.begins_with(side + ":") and int(key.split(":")[1]) >= list.size():
 			empties[key].visible = false
@@ -578,6 +581,9 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	stadium_btn.visible = st_move
 	if st_move:
 		stadium_btn.position = L.end_turn.position - Vector2(220, 0)
+		var chips_end: float = chips.position.x + chips.get_combined_minimum_size().x + 12
+		if stadium_btn.position.x < chips_end + 12:
+			stadium_btn.position = Vector2(L.end_turn.position.x + L.end_turn.size.x - stadium_btn.get_combined_minimum_size().x, L.end_turn.position.y - stadium_btn.get_combined_minimum_size().y - 10)
 	toast.size = Vector2(size.x * 0.84, 0)
 	var ty: float = (L.center.position.y + 10) if mode == "hand" else (L.bar.position.y + L.bar.size.y + 10)
 	toast.position = Vector2(size.x * 0.08, ty)
@@ -906,7 +912,7 @@ func open_popover(sid: String) -> void:
 				if pk is Dictionary and opp_weak != "" and opp_weak == str(pk.type):
 					dmg += " (약점 ×2)"
 			var cost := "".join((a.cost as Array).map(func(c): return BData.TYPE_SHORT.get(str(c), str(c)).left(1)))
-			var b := _pop_button("[%s] %s  %s" % [cost, str(a.name) if str(a.name) != "" else str(a.nameJa), dmg], mv != null, mv)
+			var b := _pop_button("%s%s  %s" % [("[%s] " % cost) if cost != "" else "", str(a.name) if str(a.name) != "" else str(a.nameJa), dmg], mv != null, mv)
 			b.set_meta("attack_index", i)
 			col.add_child(b)
 		for m in moves:
@@ -943,8 +949,10 @@ func open_popover(sid: String) -> void:
 	panel.size = Vector2(w, 0)
 	var ps := panel.get_combined_minimum_size()
 	var y := node.position.y - ps.y - 10
-	if y < L.bar.position.y + L.bar.size.y:
-		y = node.position.y + node.size.y + 10
+	var below := node.position.y + node.size.y + 10
+	# 배틀 포켓몬: 아래(내 벤치 쪽)에 띄운다 — 위로 띄우면 기술을 고를 때 봐야 할 상대 배틀 포켓몬을 가린다
+	if (is_active and below + ps.y <= size.y - 8) or y < L.bar.position.y + L.bar.size.y:
+		y = below
 	panel.position = Vector2(clampf(node.position.x + node.size.x / 2 - w / 2, 14, size.x - w - 14), clampf(y, 0, size.y - ps.y))
 
 func _pop_button(text: String, enabled: bool, mv) -> TapArea:
@@ -1104,7 +1112,12 @@ func _build_request() -> void:
 			return
 		var w: float = minf(size.x - 40, 640)
 		sheet.size = Vector2(w, 0)
+		await get_tree().process_frame
+		if not is_instance_valid(sheet):
+			return
+		sheet.size = Vector2(w, 0)
 		var h := sheet.get_combined_minimum_size().y
+		sheet.size = Vector2(w, h)
 		sheet.position = Vector2((size.x - w) / 2, clampf((size.y - h) / 2, top_y + 70, size.y - h))
 		hand.visible = true
 		_show_peek_btn()
@@ -1456,7 +1469,7 @@ func _update_result() -> void:
 	mm.add_child(col)
 	var t := UI.label(title, 64, color, HORIZONTAL_ALIGNMENT_CENTER)
 	col.add_child(t)
-	var why := UI.label(my_words(str(res.get("reason", ""))), 24, UI.TEXT, HORIZONTAL_ALIGNMENT_CENTER, true)
+	var why := UI.label(result_words(res), 24, UI.TEXT, HORIZONTAL_ALIGNMENT_CENTER, true)
 	why.custom_minimum_size.x = minf(size.x - 120, 560)
 	col.add_child(why)
 	col.add_child(UI.label("턴 %d · 가져간 사이드 나 %d : 상대 %d" % [int(Net.view.turnNumber), _taken(opp), _taken(me)], 22, UI.TEXT_DIM, HORIZONTAL_ALIGNMENT_CENTER))
@@ -1503,6 +1516,14 @@ static func _taken(p: Dictionary) -> int:
 	return (p.prizes as Array).size() - _count_true(p.prizes)
 
 ## 엔진 문구의 "플레이어 1/2" 를 내 시점 "나/상대" 로
+## 결과 이유를 내 시점으로: 엔진의 승리 이유 일부는 이긴 쪽 시점("상대 필드에…")이라 진 쪽에서는 뒤집어 보여 준다
+static func result_words(res: Dictionary) -> String:
+	var t := my_words(str(res.get("reason", "")))
+	var win = res.get("winner")
+	if win == null or Net.seat < 0 or int(win) == Net.seat:
+		return t
+	return { "사이드를 모두 가져갔습니다.": "상대가 사이드를 모두 가져갔습니다.", "상대 필드에 포켓몬이 없습니다.": "내 필드에 포켓몬이 없습니다." }.get(t, t)
+
 static func my_words(t: String) -> String:
 	if Net.seat < 0:
 		return t

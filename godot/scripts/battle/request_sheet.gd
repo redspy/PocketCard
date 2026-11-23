@@ -170,7 +170,7 @@ static func _strip(screen, codes: Array, states: Array, w: float, on_tap: Callab
 ## 탁자에서 직접 고를 때 위에 뜨는 안내 띠 (안내 + 고른 수 + 결정)
 static func pick_bar(screen, req: Dictionary) -> Control:
 	var root := PanelContainer.new()
-	root.add_theme_stylebox_override("panel", UI.box(Color(0.04, 0.09, 0.07, 0.95), 16, 3, UI.ACCENT))
+	root.add_theme_stylebox_override("panel", UI.box(Color(0.04, 0.09, 0.07, 1.0), 16, 3, UI.ACCENT))   # 불투명: 뒤 상태 글자가 비치지 않게
 	var mm := UI.margin(12)
 	root.add_child(mm)
 	var row := HBoxContainer.new()

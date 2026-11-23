@@ -26,7 +26,7 @@ static func open(parent: Control, codes: Array, idx := 0, tg: Array = []) -> BZo
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.9)
+	dim.color = Color(0, 0, 0, 0.93)
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(dim)
@@ -44,10 +44,13 @@ func _ready() -> void:
 	_img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_img.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_img)
-	_info = UI.label("", 22, UI.TEXT, HORIZONTAL_ALIGNMENT_CENTER)
+	_info = UI.label("", 22, UI.TEXT, HORIZONTAL_ALIGNMENT_CENTER, true)
 	_info.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 	_info.offset_top = -sb - 80
-	_info.offset_bottom = -sb - 20
+	_info.offset_bottom = -sb - 12
+	_info.offset_left = 20
+	_info.offset_right = -20
+	_info.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_child(_info)
 	if multi:
 		var sc := ScrollContainer.new()
@@ -98,7 +101,7 @@ func _show() -> void:
 	ImageCache.request("res://cards/full/%s.webp" % code, BZoom._apply.bind(weakref(self), code, false))
 	var tag := str(tags[index]) if index < tags.size() else ""
 	if list.size() > 1:
-		_info.text = "%s%d / %d  ·  좌우로 밀거나 아래 카드를 눌러 넘기기 · 누르면 닫기" % [(tag + "  ·  ") if tag != "" else "", index + 1, list.size()]
+		_info.text = "%s%d / %d  ·  좌우로 밀어 넘기기 · 누르면 닫기" % [(tag + "  ·  ") if tag != "" else "", index + 1, list.size()]
 	else:
 		_info.text = (tag + "  ·  " if tag != "" else "") + "누르거나 아래로 밀면 닫기"
 	for k in _cells.size():

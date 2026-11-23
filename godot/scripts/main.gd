@@ -29,6 +29,9 @@ func _ready() -> void:
 	var ci := args.find("--engine-compare")
 	if ci >= 0 and args.size() > ci + 1:
 		_engine_compare.call_deferred(args[ci + 1])
+	var ti := args.find("--ui-tour")
+	if ti >= 0:
+		_ui_tour.call_deferred(args[ti + 1] if args.size() > ti + 1 else "shot")
 	var pi := args.find("--p2ptest")
 	if pi >= 0 and args.size() > pi + 1:
 		_p2ptest.call_deferred(args[pi + 1])
@@ -484,6 +487,11 @@ func _ui_tests() -> void:
 		print("[ui-tests] 실패: " + str(f))
 	print("[ui-tests] 결과: %s (실패 %d)" % ["통과" if fails.is_empty() else "실패", fails.size()])
 	get_tree().quit(0 if fails.is_empty() else 1)
+
+## 화면 둘러보기 스크린샷 (scripts/ui_tour.gd)
+func _ui_tour(tag: String) -> void:
+	await UiTour.run(self, tag)
+	get_tree().quit()
 
 func _battle_shot(mode: String) -> void:
 	await BUiTests.shot(self, mode)

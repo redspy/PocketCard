@@ -56,7 +56,7 @@ func _ready() -> void:
 		col.add_child(UI.label("한 폰에서 [방 만들기], 다른 폰은 아래 목록에서 그 방을 누르세요.
 카드 규칙은 방장 폰이 처리합니다. 두 폰에 같은 버전의 앱이 있어야 합니다.", 22, UI.TEXT_DIM, HORIZONTAL_ALIGNMENT_LEFT, true))
 	elif Net.can_resume() and Net.solo == _solo:
-		var again := UI.button("이전 게임에 다시 연결 (%s)" % Net.address, 26, true)
+		var again := UI.wide(UI.button("이전 게임에 다시 연결 (%s)" % Net.address, 26, true))
 		again.tapped.connect(func():
 			_going = true
 			Net.resume())
@@ -71,7 +71,8 @@ func _ready() -> void:
 
 	col.add_child(UI.label("직접 입력", 30, UI.TEXT))
 	_addr = UI.line_edit("방장 폰 주소 (예: 192.168.0.12)" if _phone else "PC 주소 (예: 192.168.0.12:8787)")
-	_addr.text = "" if _phone else Net.address
+	# 마지막 접속 주소를 채워 둔다 (폰끼리 대전의 방장 폰 주소는 PC 서버 참가 화면에 채우지 않음)
+	_addr.text = "" if _phone or Net.address.ends_with(":%d" % PhoneHost.PORT) else Net.address
 	col.add_child(_addr)
 	_code = UI.line_edit("방 코드 6자리" if _phone else "세션 코드 6자리")
 	_code.virtual_keyboard_type = LineEdit.KEYBOARD_TYPE_NUMBER
@@ -136,13 +137,14 @@ func _refresh_list() -> void:
 		var g: Dictionary = _disc.games[k]
 		var open: bool = g["open"]
 		if _phone:
-			var pb := UI.button("%s의 방 · %s%s" % [g["name"], g["address"].get_slice(":", 0), "" if open else " (대전 중 · 재접속만)"], 26, true, open)
+			var pb := UI.wide(UI.button("%s의 방 · %s%s" % [g["name"], g["address"].get_slice(":", 0), "" if open else " (대전 중 · 재접속만)"], 26, true, open), HORIZONTAL_ALIGNMENT_LEFT)
 			var pa: String = g["address"]
 			var pc: String = g["code"]
 			pb.tapped.connect(func(): _join(pa, pc))
 			_list.add_child(pb)
 			continue
-		var b := UI.button(("%s · %s" % [g["name"], g["address"]]) if _solo else ("%s · 코드 %s · %s%s" % [g["name"], g["code"], g["address"], "" if open else " (게임 중)"]), 24, open or _solo)
+		var b := UI.wide(UI.button(("%s · %s" % [g["name"], g["address"]]) if _solo else ("%s · 코드 %s
+%s%s" % [g["name"], g["code"], g["address"], "" if open else " (게임 중)"]), 24, open or _solo), HORIZONTAL_ALIGNMENT_LEFT)
 		var addr: String = g["address"]
 		var code: String = g["code"]
 		b.tapped.connect(func(): _join(addr, code))

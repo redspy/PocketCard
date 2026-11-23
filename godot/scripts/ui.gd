@@ -126,6 +126,15 @@ static func button(text: String, size := 28, primary := false, fill := false) ->
 	tap.set_meta("panel", p)
 	return tap
 
+## 버튼을 부모 폭에 맞춰 늘리고 글자는 줄바꿈 (목록 항목·화면 아래 큰 버튼). 긴 글자가 화면 밖으로 나가지 않게
+static func wide(b: TapArea, align := HORIZONTAL_ALIGNMENT_CENTER) -> TapArea:
+	b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	(b.get_meta("panel") as Control).set_anchors_preset(Control.PRESET_FULL_RECT)
+	var l: Label = b.get_meta("label")
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.horizontal_alignment = align
+	return b
+
 ## 버튼 비활성 표시 (탭은 화면 쪽에서 무시)
 static func set_enabled(b: TapArea, on: bool) -> void:
 	b.modulate.a = 1.0 if on else 0.4
