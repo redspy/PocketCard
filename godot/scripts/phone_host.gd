@@ -35,7 +35,7 @@ var _countdown_ends := 0.0
 
 func start() -> String:
 	LocalGame.data()
-	seats = [_empty_seat("이 폰"), _empty_seat("")]
+	seats = [_empty_seat(OS.get_model_name()), _empty_seat("")]
 	seats[HOST].token = "host"
 	_load()
 	if code == "":
@@ -343,7 +343,7 @@ func _load() -> void:
 				seats[i] = { "token": str(s.get("token", "")), "device": str(s.get("device", "")), "deckId": str(s.get("deckId", "")),
 					"prints": s.get("prints", {}) if s.get("prints") is Dictionary else {}, "ready": false }
 	seats[HOST].token = "host"
-	seats[HOST].device = "이 폰"
+	seats[HOST].device = OS.get_model_name()
 	if d.get("log") is Dictionary:
 		var m := GMatch.replay(d.log, LocalGame.data().info)
 		if m != null and str(m.state.phase) != "ended":

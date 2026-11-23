@@ -499,7 +499,7 @@ func _place_board(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	opp_hand.visible = table
 	if table:
 		opp_hand.position = L.opp_hand.position
-		opp_hand.text = "AI  패 %d장 · 사이드 %d" % [int(opp.handCount), _count_true(opp.prizes)]
+		opp_hand.text = "%s  패 %d장 · 사이드 %d" % [opp_name(), int(opp.handCount), _count_true(opp.prizes)]
 
 func _place_hand(me: Dictionary) -> void:
 	hand.position = L.hand.position
@@ -535,6 +535,12 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	bar.size = Vector2(size.x, L.bar.position.y + L.bar.size.y)
 	var phase := str(v.phase)
 	var t := "게임 준비 중" if phase == "setup" else ("게임 종료" if phase == "ended" else "턴 %d · %s" % [int(v.turnNumber), "내 차례" if _my_turn() else "상대 차례"])
+	# 탁자 모드에는 상태 줄이 없으므로 연결 상태는 제목에 (폰끼리 대전·서버 대전)
+	if phase != "ended":
+		if Net.status != "open" and not Net.offline:
+			t += " · 재접속 중…"
+		elif bool(Net.lobby.get("paused", false)):
+			t += " · 상대 재접속 대기"
 	bar_title.text = t
 	var by: float = L.bar.position.y
 	menu_btn.position = Vector2(8, by + 4)
@@ -593,6 +599,10 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	toast.size = Vector2(size.x * 0.84 if mode == "hand" else size.x - 24, 0)
 	var ty: float = (L.center.position.y + 10) if mode == "hand" else (L.bar.position.y + L.bar.size.y + 10)
 	toast.position = Vector2(size.x * 0.08 if mode == "hand" else 12.0, ty if mode == "hand" else ty - 6)
+
+## 상대를 부르는 말: AI 연습이면 "AI", 사람끼리면 "상대"
+static func opp_name() -> String:
+	return "AI" if Net.solo else "상대"
 
 ## 상대 차례에 연출이 없고 내가 고를 것도 없으면 "생각 중…" (상대 손패를 만지는 모습은 보여 주지 않음)
 func thinking_text() -> String:

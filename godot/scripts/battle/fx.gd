@@ -273,7 +273,7 @@ func _release(sid: String) -> void:
 	screen._refresh()
 
 func _who(e: Dictionary) -> String:
-	return "나" if int(e.get("player", -1)) == Net.seat else "AI"
+	return "나" if int(e.get("player", -1)) == Net.seat else BattleScreen.opp_name()
 
 ## 가운데 큰 카드 + 설명 (카드 사용·특성)
 func _big_card(code: String, caption: String, sec: float) -> void:
@@ -490,7 +490,7 @@ func _attack(e: Dictionary, mine: bool) -> void:
 		top = maxi(top, tier_of(h, _kos_after(str(h.sid))))
 	var stop: float = HIT_STOP[top]
 	var color: Color = UI.ACCENT if mine else Color(0.95, 0.45, 0.4)
-	_tag(n, ("" if mine else "AI · ") + "기술 [%s]" % str(e.get("name", "")), color, 0.9)
+	_tag(n, ("" if mine else BattleScreen.opp_name() + " · ") + "기술 [%s]" % str(e.get("name", "")), color, 0.9)
 	var state := { "hit": hits.is_empty() }
 	var hit_now := func():
 		if not state.hit:
@@ -643,7 +643,7 @@ func _play_table(e: Dictionary) -> void:
 			await _coin(e)
 		"turnStart":
 			var my_turn := int(e.player) == Net.seat
-			await _banner("내 차례" if my_turn else "AI 차례", "턴 %d" % int(e.turnNumber), 0.7)
+			await _banner("내 차례" if my_turn else BattleScreen.opp_name() + " 차례", "턴 %d" % int(e.turnNumber), 0.7)
 		"shuffle":
 			await _wait(0.05)
 		_:
