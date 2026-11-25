@@ -9,10 +9,12 @@ import { koUrl, sleep } from './ko-source.mjs';
 const ROOT = new URL('../', import.meta.url);
 export const P = (p) => new URL(p, ROOT);
 export const ALLOWED = ['G', 'H', 'I'];
-// 옛 레귤레이션 덱(공식 레시피 그대로 보관)은 그 시절 인쇄도 고를 수 있게 한다
-export const DECK_ALLOWED = { giratina: ['F', 'G', 'H', 'I'] };
+// 옛 레귤레이션 덱(공식 레시피 그대로 보관)은 레귤레이션과 상관없이 모든 인쇄를 고를 수 있게 한다
+export const ANY = '*';
+export const DECK_ALLOWED = { giratina: ANY };
 export const allowedFor = (deckId) => DECK_ALLOWED[deckId] ?? ALLOWED;
-export const RANK = { F: 0.5, G: 1, H: 2, I: 3 };
+export const regOk = (allowed, reg) => allowed === ANY || allowed.includes(reg);
+export const RANK = { D: 0.3, E: 0.4, F: 0.5, G: 1, H: 2, I: 3 };
 export const APP_DECKS = ['flareon', 'dragapult', 'charizard', 'gholdengo', 'gardevoir', 'pachirisu', 'umbreon', 'giratina', 'gardevoir23'];
 export const MATCH_OK = 34;        // 256비트 중 이 이하이면 같은 카드로 본다
 const CACHE = P('.cache/regulation/');

@@ -16,6 +16,7 @@ const DOUBLE_TAP_ZOOM := 2.5
 const DRAG_SLOP := 14.0
 const PAGE_GAP := 48.0
 const PRINT_W := 74.0             # 인쇄 썸네일 폭
+const PRINT_MIN_W := 60.0         # 이보다 작아지면 줄이지 않고 좌우로 밀어 보기
 const PRINT_GAP := 12
 const PRINTS_H := PRINT_W * 1212.0 / 868.0 + 34.0   # 썸네일 + 마크 글자
 
@@ -31,6 +32,7 @@ var _name_label: Label
 var _sub_label: Label
 var _close_btn: TapArea
 var _prints: HBoxContainer        # 같은 카드의 다른 인쇄(레귤레이션) 썸네일 줄
+var _prints_scroll: ScrollContainer   # 인쇄가 많으면 좌우로 밀어 본다
 var _reserve_prints := false      # 덱에 다른 인쇄가 있는 카드가 하나라도 있으면 위쪽 공간을 항상 비워 둠(넘길 때 카드 크기 유지)
 
 var _fit := Rect2()
@@ -78,12 +80,18 @@ func _ready() -> void:
 
 	_build_info()
 	_build_close()
+	_prints_scroll = ScrollContainer.new()
+	_prints_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_prints_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	_prints_scroll.mouse_filter = Control.MOUSE_FILTER_PASS
+	add_child(_prints_scroll)
 	_prints = HBoxContainer.new()
 	_prints.alignment = BoxContainer.ALIGNMENT_CENTER
+	_prints.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_prints.add_theme_constant_override("separation", PRINT_GAP)
 	_prints.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_prints.modulate.a = 0.0
-	add_child(_prints)
+	_prints_scroll.add_child(_prints)
 	for c in cards:
 		if DeckData.has_prints(c):
 			_reserve_prints = true
@@ -123,8 +131,8 @@ func _compute_fit() -> void:
 	var top := UI.safe_top(self) + 110.0
 	# 인쇄 썸네일 줄: 닫기 버튼 오른쪽 위, 카드 위쪽 공간을 그만큼 비운다
 	var px := 16.0 + 88.0 + 12.0
-	_prints.position = Vector2(px, UI.safe_top(self) + 16)
-	_prints.size = Vector2(size.x - px - 16.0, PRINTS_H)
+	_prints_scroll.position = Vector2(px, UI.safe_top(self) + 16)
+	_prints_scroll.size = Vector2(size.x - px - 16.0, PRINTS_H)
 	if _reserve_prints:
 		top = UI.safe_top(self) + 16 + PRINTS_H + 20.0
 	var bottom := UI.safe_bottom(self) + 150.0
@@ -203,16 +211,23 @@ func _build_prints() -> void:
 	_prints.visible = has
 	if not has:
 		return
-	# 개수가 많으면 썸네일을 줄여 한 줄에 맞춘다
+	# 개수가 많으면 썸네일을 줄여 한 줄에 맞추고, 그래도 넘치면 좌우로 밀어 본다
 	var n: int = c["prints"].size()
-	var w := minf(PRINT_W, (_prints.size.x - PRINT_GAP * (n - 1)) / n - 6.0)
+	var w := clampf((_prints_scroll.size.x - PRINT_GAP * (n - 1)) / n - 6.0, PRINT_MIN_W, PRINT_W)
+	var sel: Control = null
 	for p in c["prints"]:
-		_prints.add_child(_print_item(c, p, w))
+		var item := _print_item(c, p, w)
+		_prints.add_child(item)
+		if p["code"] == c["code"]:
+			sel = item
+	_prints_scroll.scroll_horizontal = 0
+	if sel:
+		_prints_scroll.ensure_control_visible.call_deferred(sel)
 
 func _print_item(card: Dictionary, p: Dictionary, w: float) -> TapArea:
 	var selected: bool = p["code"] == card["code"]
 	var item := TapArea.new()
-	item.mouse_filter = Control.MOUSE_FILTER_STOP
+	item.mouse_filter = Control.MOUSE_FILTER_PASS   # 밀면 인쇄 줄이 스크롤되도록
 	var col := VBoxContainer.new()
 	col.add_theme_constant_override("separation", 2)
 	col.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -250,10 +265,7 @@ func _print_item(card: Dictionary, p: Dictionary, w: float) -> TapArea:
 	return item
 
 func _over_print(pos: Vector2) -> bool:
-	for ch in _prints.get_children():
-		if ch is Control and (ch as Control).get_global_rect().has_point(pos):
-			return true
-	return false
+	return _prints_scroll.get_global_rect().has_point(pos)
 
 func _choose_print(code: String) -> void:
 	if _animating or _zoom > 1.01:
@@ -452,6 +464,11 @@ func _input(event: InputEvent) -> void:
 	# PC: 마우스 휠로 확대/축소 (커서 위치 기준), 좌우 방향키로 카드 넘기기
 	if event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
 		var mb := event as InputEventMouseButton
+		# 인쇄 줄 위에서는 휠로 좌우 스크롤
+		if _prints.visible and _over_print(mb.position):
+			_prints_scroll.scroll_horizontal += -80 if mb.button_index == MOUSE_BUTTON_WHEEL_UP else 80
+			get_viewport().set_input_as_handled()
+			return
 		var z := clampf(_zoom * (1.15 if mb.button_index == MOUSE_BUTTON_WHEEL_UP else 1.0 / 1.15), 1.0, MAX_ZOOM)
 		var c := _fit.get_center()
 		var img_pt: Vector2 = (mb.position - c - _pan) / _zoom

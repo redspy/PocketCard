@@ -8,7 +8,7 @@
 // 앱으로 내보낼 때(export-godot) 덱별 허용 레귤레이션으로 다시 거른다.
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { P, ALLOWED, allowedFor, RANK, APP_DECKS, jpInfo, reprints, isPromo, jpOf, koOf } from './print-lib.mjs';
+import { P, ALLOWED, ANY, allowedFor, RANK, APP_DECKS, jpInfo, reprints, isPromo, jpOf, koOf } from './print-lib.mjs';
 import { koUrl, download, ensureDirs, KO_DIR } from './ko-source.mjs';
 
 const resolved = JSON.parse(readFileSync(P('src/data/resolved.json'), 'utf8'));
@@ -21,7 +21,8 @@ for (const d of resolved.decks.filter((x) => APP_DECKS.includes(x.id))) {
     const code = resolved.cards[c.ref]?.ko;
     if (!code) continue;
     if (!regsOf.has(code)) regsOf.set(code, new Set());
-    for (const r of allowedFor(d.id)) regsOf.get(code).add(r);
+    const al = allowedFor(d.id);
+    for (const r of al === ANY ? [ANY] : al) regsOf.get(code).add(r);
     if (!codes.has(code) && (!only || d.id === only)) codes.set(code, c.nameEn);
   }
 }
@@ -41,13 +42,14 @@ for (const [code, name] of codes) {
     for (const p of await reprints(jm.set, jm.num)) {
       if (isPromo(p.set) || (p.set === jm.set && p.num === jm.num)) continue;
       const inf = await jpInfo(p.set, p.num);
-      if (!inf || !regsOf.get(code).has(inf.reg)) continue;
-      const ko = await koOf(p.set, p.num);
+      const any = regsOf.get(code).has(ANY);   // 레귤레이션 상관없음: 정보가 없는 옛 카드도 받는다
+      if (!any && (!inf || !regsOf.get(code).has(inf.reg))) continue;
+      const ko = await koOf(p.set, p.num).catch(() => null);   // 한글판 이미지 경로를 모르는 옛 세트(BW·HGSS 등)는 건너뜀
       if (!ko || list.some((x) => x.code === ko.code)) continue;
       const st = await download(koUrl(ko.code), fileURLToPath(new URL(`${ko.code}.webp`, KO_DIR)));
       if (st === 'missing') continue;
       if (st === 'ok') downloaded++;
-      list.push({ code: ko.code, reg: inf.reg, jp: `${p.set}-${p.num}`, special: !!(inf.official && p.num > inf.official), d: ko.d });
+      list.push({ code: ko.code, reg: inf?.reg ?? null, jp: `${p.set}-${p.num}`, special: !!(inf?.official && p.num > inf.official), d: ko.d });
     }
     // 최근 레귤레이션 → 일반 인쇄 → 코드 순
     list.sort((a, b) => (RANK[b.reg] ?? 0) - (RANK[a.reg] ?? 0) || a.special - b.special || a.code.localeCompare(b.code));

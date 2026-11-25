@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated": "2026-11-25T02:09:18.935Z",
+  "generated": "2026-11-25T02:30:46.205Z",
   "decks": [
     {
       "guide": {
@@ -5839,7 +5839,23 @@
           "kind": "trainer",
           "basic": false,
           "full": "res://cards/full/SVB_001.webp",
-          "thumb": "res://cards/thumb/SVB_001.webp"
+          "thumb": "res://cards/thumb/SVB_001.webp",
+          "prints": [
+            {
+              "code": "SVB_001",
+              "reg": "",
+              "special": false,
+              "full": "res://cards/full/SVB_001.webp",
+              "thumb": "res://cards/thumb/SVB_001.webp"
+            },
+            {
+              "code": "SV1S_107",
+              "reg": "",
+              "special": true,
+              "full": "res://cards/full/SV1S_107.webp",
+              "thumb": "res://cards/thumb/SV1S_107.webp"
+            }
+          ]
         },
         {
           "id": "S12a_139",
@@ -5869,7 +5885,23 @@
           "kind": "trainer",
           "basic": false,
           "full": "res://cards/full/SV2P_066.webp",
-          "thumb": "res://cards/thumb/SV2P_066.webp"
+          "thumb": "res://cards/thumb/SV2P_066.webp",
+          "prints": [
+            {
+              "code": "SV2P_066",
+              "reg": "G",
+              "special": false,
+              "full": "res://cards/full/SV2P_066.webp",
+              "thumb": "res://cards/thumb/SV2P_066.webp"
+            },
+            {
+              "code": "SV2P_098",
+              "reg": "",
+              "special": true,
+              "full": "res://cards/full/SV2P_098.webp",
+              "thumb": "res://cards/thumb/SV2P_098.webp"
+            }
+          ]
         },
         {
           "id": "SI_364",
@@ -5979,7 +6011,23 @@
           "kind": "trainer",
           "basic": false,
           "full": "res://cards/full/SVB_003.webp",
-          "thumb": "res://cards/thumb/SVB_003.webp"
+          "thumb": "res://cards/thumb/SVB_003.webp",
+          "prints": [
+            {
+              "code": "SJ_023",
+              "reg": "",
+              "special": false,
+              "full": "res://cards/full/SJ_023.webp",
+              "thumb": "res://cards/thumb/SJ_023.webp"
+            },
+            {
+              "code": "SVB_003",
+              "reg": "",
+              "special": false,
+              "full": "res://cards/full/SVB_003.webp",
+              "thumb": "res://cards/thumb/SVB_003.webp"
+            }
+          ]
         },
         {
           "id": "S12a_155",
@@ -6067,11 +6115,53 @@
               "thumb": "res://cards/thumb/S12a_246.webp"
             },
             {
+              "code": "S8b_158",
+              "reg": "D",
+              "special": false,
+              "full": "res://cards/full/S8b_158.webp",
+              "thumb": "res://cards/thumb/S8b_158.webp"
+            },
+            {
+              "code": "S8b_266",
+              "reg": "D",
+              "special": true,
+              "full": "res://cards/full/S8b_266.webp",
+              "thumb": "res://cards/thumb/S8b_266.webp"
+            },
+            {
+              "code": "S2_091",
+              "reg": "",
+              "special": false,
+              "full": "res://cards/full/S2_091.webp",
+              "thumb": "res://cards/thumb/S2_091.webp"
+            },
+            {
+              "code": "S2_105",
+              "reg": "",
+              "special": false,
+              "full": "res://cards/full/S2_105.webp",
+              "thumb": "res://cards/thumb/S2_105.webp"
+            },
+            {
               "code": "SVB_020",
               "reg": "",
               "special": false,
               "full": "res://cards/full/SVB_020.webp",
               "thumb": "res://cards/thumb/SVB_020.webp"
+            },
+            {
+              "code": "SV1a_092",
+              "reg": "",
+              "special": true,
+              "full": "res://cards/full/SV1a_092.webp",
+              "thumb": "res://cards/thumb/SV1a_092.webp"
+            },
+            {
+              "code": "SV1a_099",
+              "reg": "",
+              "special": true,
+              "full": "res://cards/full/SV1a_099.webp",
+              "thumb": "res://cards/thumb/SV1a_099.webp"
             }
           ]
         },
@@ -6098,6 +6188,20 @@
               "special": true,
               "full": "res://cards/full/SV4a_353.webp",
               "thumb": "res://cards/thumb/SV4a_353.webp"
+            },
+            {
+              "code": "SV2D_090",
+              "reg": "",
+              "special": true,
+              "full": "res://cards/full/SV2D_090.webp",
+              "thumb": "res://cards/thumb/SV2D_090.webp"
+            },
+            {
+              "code": "SV2D_095",
+              "reg": "",
+              "special": true,
+              "full": "res://cards/full/SV2D_095.webp",
+              "thumb": "res://cards/thumb/SV2D_095.webp"
             }
           ]
         },
@@ -6124,6 +6228,20 @@
               "special": false,
               "full": "res://cards/full/SVB_022.webp",
               "thumb": "res://cards/thumb/SVB_022.webp"
+            },
+            {
+              "code": "S9a_081",
+              "reg": "",
+              "special": true,
+              "full": "res://cards/full/S9a_081.webp",
+              "thumb": "res://cards/thumb/S9a_081.webp"
+            },
+            {
+              "code": "S9a_089",
+              "reg": "",
+              "special": true,
+              "full": "res://cards/full/S9a_089.webp",
+              "thumb": "res://cards/thumb/S9a_089.webp"
             }
           ]
         },
@@ -6175,7 +6293,23 @@
           "kind": "energy",
           "basic": false,
           "full": "res://cards/full/SV1a_073.webp",
-          "thumb": "res://cards/thumb/SV1a_073.webp"
+          "thumb": "res://cards/thumb/SV1a_073.webp",
+          "prints": [
+            {
+              "code": "SV1a_073",
+              "reg": "G",
+              "special": false,
+              "full": "res://cards/full/SV1a_073.webp",
+              "thumb": "res://cards/thumb/SV1a_073.webp"
+            },
+            {
+              "code": "SV7a_094",
+              "reg": "",
+              "special": true,
+              "full": "res://cards/full/SV7a_094.webp",
+              "thumb": "res://cards/thumb/SV7a_094.webp"
+            }
+          ]
         }
       ]
     },
@@ -6614,5 +6748,5 @@
       ]
     }
   ],
-  "dataVersion": "94443fda59ac7521"
+  "dataVersion": "28d36273658775fc"
 }

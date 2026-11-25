@@ -8,7 +8,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { hashOf, dist, allowedFor, RANK as REG_RANK } from './print-lib.mjs';
+import { hashOf, dist, allowedFor, regOk, RANK as REG_RANK } from './print-lib.mjs';
 import { buildCatalog } from '../src/game/catalog.ts';
 
 const ROOT = new URL('../', import.meta.url);
@@ -157,9 +157,9 @@ for (const deckId of APP_DECKS) {
     // 다른 인쇄: 이미지가 있는 것만 (덱 카드 자신 포함)
     if (PRINTS[code]) {
       const prints = [];
-      // 덱마다 허용 레귤레이션이 다르다 (옛 레시피 덱은 그 시절 인쇄도)
+      // 덱마다 허용 레귤레이션이 다르다 (옛 레시피 덱은 레귤레이션 상관없이)
       const allowed = allowedFor(deckId);
-      const cand = PRINTS[code].filter((p) => p.code === code || allowed.includes(p.reg));
+      const cand = PRINTS[code].filter((p) => p.code === code || regOk(allowed, p.reg));
       for (const p of await distinctPrints(code, cand)) {
         const pi = p.code === code ? img : await exportImage(p.code);
         if (pi) prints.push({ code: p.code, reg: p.reg ?? '', special: !!p.special, ...pi });

@@ -1,17 +1,12 @@
 {
-  "generated": "2026-11-25T02:06:47.218Z",
+  "generated": "2026-11-25T02:30:39.730Z",
   "allowed": [
     "G",
     "H",
     "I"
   ],
   "deckAllowed": {
-    "giratina": [
-      "F",
-      "G",
-      "H",
-      "I"
-    ]
+    "giratina": "*"
   },
   "prints": {
     "SV7_076": [
@@ -671,6 +666,125 @@
         "jp": "SV4a-350",
         "special": true,
         "d": 21
+      },
+      {
+        "code": "MA_036",
+        "reg": null,
+        "jp": "MA-36",
+        "special": false,
+        "d": 11
+      },
+      {
+        "code": "SVEL_017",
+        "reg": null,
+        "jp": "SVEL-16",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SVEM_018",
+        "reg": null,
+        "jp": "SVEM-17",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SVF_027",
+        "reg": null,
+        "jp": "SVF-29",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SVG_040",
+        "reg": null,
+        "jp": "SVG-41",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SVHK_040",
+        "reg": null,
+        "jp": "SVHK-42",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "SVHM_040",
+        "reg": null,
+        "jp": "SVHM-41",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SVJL_017",
+        "reg": null,
+        "jp": "SVJL-17",
+        "special": false,
+        "d": 11
+      },
+      {
+        "code": "SVK_030",
+        "reg": null,
+        "jp": "SVK-34",
+        "special": false,
+        "d": 11
+      },
+      {
+        "code": "SVLN_019",
+        "reg": null,
+        "jp": "SVLN-19",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SVLS_019",
+        "reg": null,
+        "jp": "SVLS-19",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SVM_146",
+        "reg": null,
+        "jp": "SVM-160",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SVN_031",
+        "reg": null,
+        "jp": "SVN-34",
+        "special": false,
+        "d": 11
+      },
+      {
+        "code": "SVOD_015",
+        "reg": null,
+        "jp": "SVOD-14",
+        "special": false,
+        "d": 9
+      },
+      {
+        "code": "SVOM_016",
+        "reg": null,
+        "jp": "SVOM-15",
+        "special": false,
+        "d": 9
+      },
+      {
+        "code": "SV2D_090",
+        "reg": null,
+        "jp": "SV2D-91",
+        "special": true,
+        "d": 26
+      },
+      {
+        "code": "SV2D_095",
+        "reg": null,
+        "jp": "SV2D-96",
+        "special": true,
+        "d": 24
       }
     ],
     "SV8_103": [
@@ -1317,6 +1431,27 @@
         "jp": "SV8a-185",
         "special": false,
         "d": 12
+      },
+      {
+        "code": "SVK_044",
+        "reg": null,
+        "jp": "SVK-42",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "SVN_045",
+        "reg": null,
+        "jp": "SVN-42",
+        "special": false,
+        "d": 9
+      },
+      {
+        "code": "SV7a_094",
+        "reg": null,
+        "jp": "SV7a-94",
+        "special": true,
+        "d": 20
       }
     ],
     "SV3a_050": [
@@ -2856,6 +2991,34 @@
         "jp": "S9a-26",
         "special": false,
         "d": 21
+      },
+      {
+        "code": "SVF_004",
+        "reg": null,
+        "jp": "SVF-4",
+        "special": false,
+        "d": 28
+      },
+      {
+        "code": "SVHK_006",
+        "reg": null,
+        "jp": "SVHK-6",
+        "special": false,
+        "d": 24
+      },
+      {
+        "code": "SVHM_003",
+        "reg": null,
+        "jp": "SVHM-3",
+        "special": false,
+        "d": 28
+      },
+      {
+        "code": "SVK_004",
+        "reg": null,
+        "jp": "SVK-4",
+        "special": false,
+        "d": 24
       }
     ],
     "S12a_029": [
@@ -2878,6 +3041,27 @@
         "jp": "S12a-178",
         "special": true,
         "d": 21
+      },
+      {
+        "code": "SVF_003",
+        "reg": null,
+        "jp": "SVF-3",
+        "special": false,
+        "d": 28
+      },
+      {
+        "code": "SVHK_005",
+        "reg": null,
+        "jp": "SVHK-5",
+        "special": false,
+        "d": 30
+      },
+      {
+        "code": "SVK_003",
+        "reg": null,
+        "jp": "SVK-3",
+        "special": false,
+        "d": 31
       }
     ],
     "S12a_110": [
@@ -2976,10 +3160,129 @@
         "d": 16
       },
       {
+        "code": "MA_012",
+        "reg": null,
+        "jp": "MA-19",
+        "special": false,
+        "d": 12
+      },
+      {
+        "code": "SV4a_158",
+        "reg": null,
+        "jp": "SV4a-159",
+        "special": false,
+        "d": 15
+      },
+      {
         "code": "SVB_001",
         "reg": null,
         "jp": "SVB-1",
         "special": false
+      },
+      {
+        "code": "SVC_011",
+        "reg": null,
+        "jp": "SVC-13",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SVD_110",
+        "reg": null,
+        "jp": "SVD-118",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "SVEL_009",
+        "reg": null,
+        "jp": "SVEL-11",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "SVEM_010",
+        "reg": null,
+        "jp": "SVEM-12",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SVF_010",
+        "reg": null,
+        "jp": "SVF-16",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SVG_030",
+        "reg": null,
+        "jp": "SVG-33",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "SVHK_020",
+        "reg": null,
+        "jp": "SVHK-27",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SVHM_020",
+        "reg": null,
+        "jp": "SVHM-27",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SVJL_011",
+        "reg": null,
+        "jp": "SVJL-12",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "SVK_014",
+        "reg": null,
+        "jp": "SVK-19",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SVLN_011",
+        "reg": null,
+        "jp": "SVLN-13",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SVLS_011",
+        "reg": null,
+        "jp": "SVLS-13",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SVM_125",
+        "reg": null,
+        "jp": "SVM-133",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SVN_011",
+        "reg": null,
+        "jp": "SVN-17",
+        "special": false,
+        "d": 11
+      },
+      {
+        "code": "SV1S_107",
+        "reg": null,
+        "jp": "SV1S-107",
+        "special": true,
+        "d": 23
       }
     ],
     "S12a_139": [
@@ -3055,10 +3358,192 @@
         "d": 24
       },
       {
+        "code": "MA_024",
+        "reg": null,
+        "jp": "MA-23",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "MBD_014",
+        "reg": null,
+        "jp": "MBD-12",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "MBG_014",
+        "reg": null,
+        "jp": "MBG-14",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "S3a_066",
+        "reg": null,
+        "jp": "S3a-65",
+        "special": false,
+        "d": 26
+      },
+      {
+        "code": "SB_007",
+        "reg": null,
+        "jp": "SB-7",
+        "special": false,
+        "d": 28
+      },
+      {
+        "code": "SGG_011",
+        "reg": null,
+        "jp": "SGG-12",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "SI_378",
+        "reg": null,
+        "jp": "SI-377",
+        "special": false,
+        "d": 26
+      },
+      {
+        "code": "SJ_022",
+        "reg": null,
+        "jp": "SJ-22",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "SN_017",
+        "reg": null,
+        "jp": "SN-17",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "SO_021",
+        "reg": null,
+        "jp": "SO-21",
+        "special": false,
+        "d": 25
+      },
+      {
         "code": "SVB_004",
         "reg": null,
         "jp": "SVB-5",
         "special": false
+      },
+      {
+        "code": "SVC_015",
+        "reg": null,
+        "jp": "SVC-16",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SVD_121",
+        "reg": null,
+        "jp": "SVD-122",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SVEL_014",
+        "reg": null,
+        "jp": "SVEL-15",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SVEM_014",
+        "reg": null,
+        "jp": "SVEM-15",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SVF_021",
+        "reg": null,
+        "jp": "SVF-21",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SVG_035",
+        "reg": null,
+        "jp": "SVG-36",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SVHK_031",
+        "reg": null,
+        "jp": "SVHK-31",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SVHM_031",
+        "reg": null,
+        "jp": "SVHM-31",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "SVJL_014",
+        "reg": null,
+        "jp": "SVJL-15",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SVK_023",
+        "reg": null,
+        "jp": "SVK-22",
+        "special": false,
+        "d": 12
+      },
+      {
+        "code": "SVLN_015",
+        "reg": null,
+        "jp": "SVLN-17",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SVLS_016",
+        "reg": null,
+        "jp": "SVLS-17",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SVM_136",
+        "reg": null,
+        "jp": "SVM-136",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SVN_021",
+        "reg": null,
+        "jp": "SVN-21",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SVOD_012",
+        "reg": null,
+        "jp": "SVOD-13",
+        "special": false,
+        "d": 10
+      },
+      {
+        "code": "SVOM_013",
+        "reg": null,
+        "jp": "SVOM-14",
+        "special": false,
+        "d": 11
       }
     ],
     "SVB_014": [
@@ -3088,6 +3573,34 @@
         "reg": null,
         "jp": "SVB-16",
         "special": false
+      },
+      {
+        "code": "SVF_015",
+        "reg": null,
+        "jp": "SVF-23",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SVHK_024",
+        "reg": null,
+        "jp": "SVHK-33",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SVHM_023",
+        "reg": null,
+        "jp": "SVHM-33",
+        "special": false,
+        "d": 12
+      },
+      {
+        "code": "SVK_018",
+        "reg": null,
+        "jp": "SVK-24",
+        "special": false,
+        "d": 10
       }
     ],
     "SVB_016": [
@@ -3103,6 +3616,27 @@
         "reg": null,
         "jp": "SVB-14",
         "special": false
+      },
+      {
+        "code": "SVF_023",
+        "reg": null,
+        "jp": "SVF-19",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SVHK_033",
+        "reg": null,
+        "jp": "SVHK-29",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SVHM_033",
+        "reg": null,
+        "jp": "SVHM-29",
+        "special": false,
+        "d": 14
       }
     ],
     "SVB_003": [
@@ -3121,10 +3655,59 @@
         "d": 18
       },
       {
+        "code": "SJ_023",
+        "reg": null,
+        "jp": "SJ-21",
+        "special": false,
+        "d": 27
+      },
+      {
         "code": "SVB_003",
         "reg": null,
         "jp": "SVB-4",
         "special": false
+      },
+      {
+        "code": "SVC_014",
+        "reg": null,
+        "jp": "SVC-15",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SVD_120",
+        "reg": null,
+        "jp": "SVD-121",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SVEL_013",
+        "reg": null,
+        "jp": "SVEL-14",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "SVEM_013",
+        "reg": null,
+        "jp": "SVEM-14",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SVLN_014",
+        "reg": null,
+        "jp": "SVLN-16",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SVLS_015",
+        "reg": null,
+        "jp": "SVLS-16",
+        "special": false,
+        "d": 14
       }
     ],
     "S12a_155": [
@@ -3161,6 +3744,13 @@
         "jp": "S12a-235",
         "special": true,
         "d": 17
+      },
+      {
+        "code": "SVK_035",
+        "reg": null,
+        "jp": "SVK-31",
+        "special": false,
+        "d": 19
       }
     ],
     "SVB_020": [
@@ -3214,10 +3804,227 @@
         "d": 19
       },
       {
+        "code": "S8b_158",
+        "reg": "D",
+        "jp": "S8b-158",
+        "special": false,
+        "d": 30
+      },
+      {
+        "code": "S8b_266",
+        "reg": "D",
+        "jp": "S8b-268",
+        "special": true,
+        "d": 21
+      },
+      {
+        "code": "MA_039",
+        "reg": null,
+        "jp": "MA-39",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "MBD_019",
+        "reg": null,
+        "jp": "MBD-19",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "MBG_020",
+        "reg": null,
+        "jp": "MBG-20",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "MEE_017",
+        "reg": null,
+        "jp": "MEE-18",
+        "special": false,
+        "d": 26
+      },
+      {
+        "code": "MEM_016",
+        "reg": null,
+        "jp": "MEM-16",
+        "special": false,
+        "d": 27
+      },
+      {
+        "code": "MEZ_017",
+        "reg": null,
+        "jp": "MEZ-18",
+        "special": false,
+        "d": 27
+      },
+      {
+        "code": "S2_091",
+        "reg": null,
+        "jp": "S2-92",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "S2_105",
+        "reg": null,
+        "jp": "S2-106",
+        "special": false,
+        "d": 29
+      },
+      {
+        "code": "SGI_019",
+        "reg": null,
+        "jp": "SGI-19",
+        "special": false,
+        "d": 34
+      },
+      {
+        "code": "SI_396",
+        "reg": null,
+        "jp": "SI-406",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SJ_026",
+        "reg": null,
+        "jp": "SJ-26",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "SN_021",
+        "reg": null,
+        "jp": "SN-24",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SO_024",
+        "reg": null,
+        "jp": "SO-28",
+        "special": false,
+        "d": 16
+      },
+      {
         "code": "SVB_020",
         "reg": null,
         "jp": "SVB-24",
         "special": false
+      },
+      {
+        "code": "SVD_132",
+        "reg": null,
+        "jp": "SVD-138",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SVEL_019",
+        "reg": null,
+        "jp": "SVEL-19",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "SVEM_020",
+        "reg": null,
+        "jp": "SVEM-20",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "SVF_030",
+        "reg": null,
+        "jp": "SVF-32",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SVG_043",
+        "reg": null,
+        "jp": "SVG-46",
+        "special": false,
+        "d": 20
+      },
+      {
+        "code": "SVHK_042",
+        "reg": null,
+        "jp": "SVHK-46",
+        "special": false,
+        "d": 24
+      },
+      {
+        "code": "SVHM_042",
+        "reg": null,
+        "jp": "SVHM-46",
+        "special": false,
+        "d": 22
+      },
+      {
+        "code": "SVJL_019",
+        "reg": null,
+        "jp": "SVJL-19",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SVK_033",
+        "reg": null,
+        "jp": "SVK-39",
+        "special": false,
+        "d": 20
+      },
+      {
+        "code": "SVLN_021",
+        "reg": null,
+        "jp": "SVLN-22",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "SVLS_021",
+        "reg": null,
+        "jp": "SVLS-22",
+        "special": false,
+        "d": 20
+      },
+      {
+        "code": "SVN_033",
+        "reg": null,
+        "jp": "SVN-38",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "SVOD_017",
+        "reg": null,
+        "jp": "SVOD-17",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SVOM_018",
+        "reg": null,
+        "jp": "SVOM-18",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SV1a_092",
+        "reg": null,
+        "jp": "SV1a-95",
+        "special": true,
+        "d": 33
+      },
+      {
+        "code": "SV1a_099",
+        "reg": null,
+        "jp": "SV1a-100",
+        "special": true,
+        "d": 13
       }
     ],
     "SVB_022": [
@@ -3247,6 +4054,228 @@
         "reg": null,
         "jp": "SVB-21",
         "special": false
+      },
+      {
+        "code": "S9a_081",
+        "reg": null,
+        "jp": "S9a-81",
+        "special": true,
+        "d": 24
+      },
+      {
+        "code": "S9a_089",
+        "reg": null,
+        "jp": "S9a-89",
+        "special": true,
+        "d": 18
+      }
+    ],
+    "S8_089": [
+      {
+        "code": "S8_089",
+        "reg": "E",
+        "jp": "S8-91",
+        "special": false
+      },
+      {
+        "code": "SVF_016",
+        "reg": null,
+        "jp": "SVF-18",
+        "special": false,
+        "d": 14
+      }
+    ],
+    "S10D_060": [
+      {
+        "code": "S10D_060",
+        "reg": null,
+        "jp": "S10D-60",
+        "special": false
+      },
+      {
+        "code": "SVHK_018",
+        "reg": null,
+        "jp": "SVHK-18",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SVHM_018",
+        "reg": null,
+        "jp": "SVHM-18",
+        "special": false,
+        "d": 16
+      }
+    ],
+    "SVB_027": [
+      {
+        "code": "S12a_167",
+        "reg": "E",
+        "jp": "S12a-165",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "S8b_169",
+        "reg": "E",
+        "jp": "S8b-167",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "SVB_027",
+        "reg": null,
+        "jp": "SVB-26",
+        "special": false
+      },
+      {
+        "code": "SVF_037",
+        "reg": null,
+        "jp": "SVF-34",
+        "special": false,
+        "d": 24
+      }
+    ],
+    "SV2P_066": [
+      {
+        "code": "SV2P_066",
+        "reg": "G",
+        "jp": "SV2P-66",
+        "special": false
+      },
+      {
+        "code": "MA_013",
+        "reg": null,
+        "jp": "MA-15",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SV4a_159",
+        "reg": null,
+        "jp": "SV4a-158",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SVEL_010",
+        "reg": null,
+        "jp": "SVEL-10",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SVEM_011",
+        "reg": null,
+        "jp": "SVEM-11",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SVF_012",
+        "reg": null,
+        "jp": "SVF-13",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SVG_031",
+        "reg": null,
+        "jp": "SVG-32",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SVHK_022",
+        "reg": null,
+        "jp": "SVHK-23",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "SVHM_022",
+        "reg": null,
+        "jp": "SVHM-23",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SVJL_012",
+        "reg": null,
+        "jp": "SVJL-11",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SVK_016",
+        "reg": null,
+        "jp": "SVK-15",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SVLN_012",
+        "reg": null,
+        "jp": "SVLN-11",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "SVLS_012",
+        "reg": null,
+        "jp": "SVLS-11",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SVN_012",
+        "reg": null,
+        "jp": "SVN-13",
+        "special": false,
+        "d": 15
+      },
+      {
+        "code": "SVOD_008",
+        "reg": null,
+        "jp": "SVOD-9",
+        "special": false,
+        "d": 8
+      },
+      {
+        "code": "SVOM_009",
+        "reg": null,
+        "jp": "SVOM-10",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "SV2P_098",
+        "reg": null,
+        "jp": "SV2P-98",
+        "special": true,
+        "d": 14
+      }
+    ],
+    "SI_364": [
+      {
+        "code": "S8b_132",
+        "reg": "E",
+        "jp": "S8b-130",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "SI_364",
+        "reg": null,
+        "jp": "SI-364",
+        "special": false
+      },
+      {
+        "code": "SVF_013",
+        "reg": null,
+        "jp": "SVF-10",
+        "special": false,
+        "d": 22
       }
     ]
   }

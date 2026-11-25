@@ -55,6 +55,24 @@ static func run(host: Node, tag: String) -> void:
 	await _wait(0.6)
 	await _shot("card_prints")
 	await _root()
+	# 인쇄가 가장 많은 카드 (썸네일 줄이 넘쳐 좌우로 밀어 보는 경우)
+	var best_deck: Dictionary = {}
+	var best_code := ""
+	var best_n := 0
+	for deck in DeckData.decks:
+		for c in deck["cards"]:
+			if DeckData.has_prints(c) and c["prints"].size() > best_n:
+				best_n = c["prints"].size()
+				best_deck = deck
+				best_code = c["code"]
+	if best_n > 0:
+		var dm := DeckDetailScreen.new(best_deck)
+		await _push(dm)
+		await _wait(0.6)
+		dm.open_card(best_code)
+		await _wait(0.9)
+		await _shot("card_prints_many")
+		await _root()
 	var dd2 := DeckDetailScreen.new(DeckData.decks[1] if DeckData.decks.size() > 1 else d)
 	dd2._guide_expanded = true
 	await _push(dd2)
