@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated": "2026-11-23T22:08:15.134Z",
+  "generated": "2026-11-25T02:07:13.489Z",
   "decks": [
     {
       "guide": {
@@ -5634,7 +5634,30 @@
           "kind": "pokemon",
           "basic": true,
           "full": "res://cards/full/S12a_064.webp",
-          "thumb": "res://cards/thumb/S12a_064.webp"
+          "thumb": "res://cards/thumb/S12a_064.webp",
+          "prints": [
+            {
+              "code": "S11_049",
+              "reg": "F",
+              "special": false,
+              "full": "res://cards/full/S11_049.webp",
+              "thumb": "res://cards/thumb/S11_049.webp"
+            },
+            {
+              "code": "S12a_064",
+              "reg": "F",
+              "special": false,
+              "full": "res://cards/full/S12a_064.webp",
+              "thumb": "res://cards/thumb/S12a_064.webp"
+            },
+            {
+              "code": "S12a_187",
+              "reg": "F",
+              "special": true,
+              "full": "res://cards/full/S12a_187.webp",
+              "thumb": "res://cards/thumb/S12a_187.webp"
+            }
+          ]
         },
         {
           "id": "S11_033",
@@ -5674,7 +5697,23 @@
           "kind": "pokemon",
           "basic": true,
           "full": "res://cards/full/S12a_029.webp",
-          "thumb": "res://cards/thumb/S12a_029.webp"
+          "thumb": "res://cards/thumb/S12a_029.webp",
+          "prints": [
+            {
+              "code": "S12a_029",
+              "reg": "F",
+              "special": false,
+              "full": "res://cards/full/S12a_029.webp",
+              "thumb": "res://cards/thumb/S12a_029.webp"
+            },
+            {
+              "code": "S12a_178",
+              "reg": "F",
+              "special": true,
+              "full": "res://cards/full/S12a_178.webp",
+              "thumb": "res://cards/thumb/S12a_178.webp"
+            }
+          ]
         },
         {
           "id": "S12a_110",
@@ -5684,7 +5723,37 @@
           "kind": "pokemon",
           "basic": true,
           "full": "res://cards/full/S12a_110.webp",
-          "thumb": "res://cards/thumb/S12a_110.webp"
+          "thumb": "res://cards/thumb/S12a_110.webp",
+          "prints": [
+            {
+              "code": "S11_080",
+              "reg": "F",
+              "special": false,
+              "full": "res://cards/full/S11_080.webp",
+              "thumb": "res://cards/thumb/S11_080.webp"
+            },
+            {
+              "code": "S12a_110",
+              "reg": "F",
+              "special": false,
+              "full": "res://cards/full/S12a_110.webp",
+              "thumb": "res://cards/thumb/S12a_110.webp"
+            },
+            {
+              "code": "S11_110",
+              "reg": "F",
+              "special": true,
+              "full": "res://cards/full/S11_110.webp",
+              "thumb": "res://cards/thumb/S11_110.webp"
+            },
+            {
+              "code": "S11_111",
+              "reg": "F",
+              "special": true,
+              "full": "res://cards/full/S11_111.webp",
+              "thumb": "res://cards/thumb/S11_111.webp"
+            }
+          ]
         },
         {
           "id": "S12a_085",
@@ -5694,7 +5763,30 @@
           "kind": "pokemon",
           "basic": true,
           "full": "res://cards/full/S12a_085.webp",
-          "thumb": "res://cards/thumb/S12a_085.webp"
+          "thumb": "res://cards/thumb/S12a_085.webp",
+          "prints": [
+            {
+              "code": "S12a_085",
+              "reg": "F",
+              "special": false,
+              "full": "res://cards/full/S12a_085.webp",
+              "thumb": "res://cards/thumb/S12a_085.webp"
+            },
+            {
+              "code": "S11_107",
+              "reg": "F",
+              "special": true,
+              "full": "res://cards/full/S11_107.webp",
+              "thumb": "res://cards/thumb/S11_107.webp"
+            },
+            {
+              "code": "S12a_227",
+              "reg": "F",
+              "special": true,
+              "full": "res://cards/full/S12a_227.webp",
+              "thumb": "res://cards/thumb/S12a_227.webp"
+            }
+          ]
         },
         {
           "id": "S12a_111",
@@ -5704,7 +5796,30 @@
           "kind": "pokemon",
           "basic": false,
           "full": "res://cards/full/S12a_111.webp",
-          "thumb": "res://cards/thumb/S12a_111.webp"
+          "thumb": "res://cards/thumb/S12a_111.webp",
+          "prints": [
+            {
+              "code": "S12a_111",
+              "reg": "F",
+              "special": false,
+              "full": "res://cards/full/S12a_111.webp",
+              "thumb": "res://cards/thumb/S12a_111.webp"
+            },
+            {
+              "code": "S11_120",
+              "reg": "F",
+              "special": true,
+              "full": "res://cards/full/S11_120.webp",
+              "thumb": "res://cards/thumb/S11_120.webp"
+            },
+            {
+              "code": "S11_125",
+              "reg": "F",
+              "special": true,
+              "full": "res://cards/full/S11_125.webp",
+              "thumb": "res://cards/thumb/S11_125.webp"
+            }
+          ]
         },
         {
           "id": "S8_089",
@@ -5774,7 +5889,44 @@
           "kind": "trainer",
           "basic": false,
           "full": "res://cards/full/SVB_004.webp",
-          "thumb": "res://cards/thumb/SVB_004.webp"
+          "thumb": "res://cards/thumb/SVB_004.webp",
+          "prints": [
+            {
+              "code": "M6a_101",
+              "reg": "I",
+              "special": false,
+              "full": "res://cards/full/M6a_101.webp",
+              "thumb": "res://cards/thumb/M6a_101.webp"
+            },
+            {
+              "code": "M2_101",
+              "reg": "I",
+              "special": true,
+              "full": "res://cards/full/M2_101.webp",
+              "thumb": "res://cards/thumb/M2_101.webp"
+            },
+            {
+              "code": "SV2a_209",
+              "reg": "G",
+              "special": true,
+              "full": "res://cards/full/SV2a_209.webp",
+              "thumb": "res://cards/thumb/SV2a_209.webp"
+            },
+            {
+              "code": "S11a_061",
+              "reg": "F",
+              "special": false,
+              "full": "res://cards/full/S11a_061.webp",
+              "thumb": "res://cards/thumb/S11a_061.webp"
+            },
+            {
+              "code": "SVB_004",
+              "reg": "",
+              "special": false,
+              "full": "res://cards/full/SVB_004.webp",
+              "thumb": "res://cards/thumb/SVB_004.webp"
+            }
+          ]
         },
         {
           "id": "SVB_014",
@@ -5784,7 +5936,30 @@
           "kind": "trainer",
           "basic": false,
           "full": "res://cards/full/SVB_014.webp",
-          "thumb": "res://cards/thumb/SVB_014.webp"
+          "thumb": "res://cards/thumb/SVB_014.webp",
+          "prints": [
+            {
+              "code": "S12a_138",
+              "reg": "F",
+              "special": false,
+              "full": "res://cards/full/S12a_138.webp",
+              "thumb": "res://cards/thumb/S12a_138.webp"
+            },
+            {
+              "code": "S11_126",
+              "reg": "F",
+              "special": true,
+              "full": "res://cards/full/S11_126.webp",
+              "thumb": "res://cards/thumb/S11_126.webp"
+            },
+            {
+              "code": "SVB_014",
+              "reg": "",
+              "special": false,
+              "full": "res://cards/full/SVB_014.webp",
+              "thumb": "res://cards/thumb/SVB_014.webp"
+            }
+          ]
         },
         {
           "id": "SVB_016",
@@ -5814,7 +5989,37 @@
           "kind": "trainer",
           "basic": false,
           "full": "res://cards/full/S12a_155.webp",
-          "thumb": "res://cards/thumb/S12a_155.webp"
+          "thumb": "res://cards/thumb/S12a_155.webp",
+          "prints": [
+            {
+              "code": "S12a_155",
+              "reg": "F",
+              "special": false,
+              "full": "res://cards/full/S12a_155.webp",
+              "thumb": "res://cards/thumb/S12a_155.webp"
+            },
+            {
+              "code": "S11_116",
+              "reg": "F",
+              "special": true,
+              "full": "res://cards/full/S11_116.webp",
+              "thumb": "res://cards/thumb/S11_116.webp"
+            },
+            {
+              "code": "S11_124",
+              "reg": "F",
+              "special": true,
+              "full": "res://cards/full/S11_124.webp",
+              "thumb": "res://cards/thumb/S11_124.webp"
+            },
+            {
+              "code": "S12a_238",
+              "reg": "F",
+              "special": true,
+              "full": "res://cards/full/S12a_238.webp",
+              "thumb": "res://cards/thumb/S12a_238.webp"
+            }
+          ]
         },
         {
           "id": "SVB_020",
@@ -5824,7 +6029,51 @@
           "kind": "trainer",
           "basic": false,
           "full": "res://cards/full/SVB_020.webp",
-          "thumb": "res://cards/thumb/SVB_020.webp"
+          "thumb": "res://cards/thumb/SVB_020.webp",
+          "prints": [
+            {
+              "code": "MC_709",
+              "reg": "I",
+              "special": false,
+              "full": "res://cards/full/MC_709.webp",
+              "thumb": "res://cards/thumb/MC_709.webp"
+            },
+            {
+              "code": "MC_760",
+              "reg": "I",
+              "special": true,
+              "full": "res://cards/full/MC_760.webp",
+              "thumb": "res://cards/thumb/MC_760.webp"
+            },
+            {
+              "code": "SV1a_066",
+              "reg": "G",
+              "special": false,
+              "full": "res://cards/full/SV1a_066.webp",
+              "thumb": "res://cards/thumb/SV1a_066.webp"
+            },
+            {
+              "code": "S12a_153",
+              "reg": "F",
+              "special": false,
+              "full": "res://cards/full/S12a_153.webp",
+              "thumb": "res://cards/thumb/S12a_153.webp"
+            },
+            {
+              "code": "S12a_246",
+              "reg": "F",
+              "special": true,
+              "full": "res://cards/full/S12a_246.webp",
+              "thumb": "res://cards/thumb/S12a_246.webp"
+            },
+            {
+              "code": "SVB_020",
+              "reg": "",
+              "special": false,
+              "full": "res://cards/full/SVB_020.webp",
+              "thumb": "res://cards/thumb/SVB_020.webp"
+            }
+          ]
         },
         {
           "id": "SV2D_068",
@@ -5860,7 +6109,23 @@
           "kind": "trainer",
           "basic": false,
           "full": "res://cards/full/SVB_022.webp",
-          "thumb": "res://cards/thumb/SVB_022.webp"
+          "thumb": "res://cards/thumb/SVB_022.webp",
+          "prints": [
+            {
+              "code": "S12a_239",
+              "reg": "F",
+              "special": true,
+              "full": "res://cards/full/S12a_239.webp",
+              "thumb": "res://cards/thumb/S12a_239.webp"
+            },
+            {
+              "code": "SVB_022",
+              "reg": "",
+              "special": false,
+              "full": "res://cards/full/SVB_022.webp",
+              "thumb": "res://cards/thumb/SVB_022.webp"
+            }
+          ]
         },
         {
           "id": "SVB_027",
@@ -6264,7 +6529,37 @@
           "kind": "trainer",
           "basic": false,
           "full": "res://cards/full/SVB_020.webp",
-          "thumb": "res://cards/thumb/SVB_020.webp"
+          "thumb": "res://cards/thumb/SVB_020.webp",
+          "prints": [
+            {
+              "code": "MC_709",
+              "reg": "I",
+              "special": false,
+              "full": "res://cards/full/MC_709.webp",
+              "thumb": "res://cards/thumb/MC_709.webp"
+            },
+            {
+              "code": "MC_760",
+              "reg": "I",
+              "special": true,
+              "full": "res://cards/full/MC_760.webp",
+              "thumb": "res://cards/thumb/MC_760.webp"
+            },
+            {
+              "code": "SV1a_066",
+              "reg": "G",
+              "special": false,
+              "full": "res://cards/full/SV1a_066.webp",
+              "thumb": "res://cards/thumb/SV1a_066.webp"
+            },
+            {
+              "code": "SVB_020",
+              "reg": "",
+              "special": false,
+              "full": "res://cards/full/SVB_020.webp",
+              "thumb": "res://cards/thumb/SVB_020.webp"
+            }
+          ]
         },
         {
           "id": "SVB_021",
@@ -6319,5 +6614,5 @@
       ]
     }
   ],
-  "dataVersion": "55c2ae8975ce25b4"
+  "dataVersion": "94443fda59ac7521"
 }

@@ -8,7 +8,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { hashOf, dist } from './print-lib.mjs';
+import { hashOf, dist, allowedFor, RANK as REG_RANK } from './print-lib.mjs';
 import { buildCatalog } from '../src/game/catalog.ts';
 
 const ROOT = new URL('../', import.meta.url);
@@ -107,7 +107,6 @@ let printCount = 0, sameArt = 0;
 // 그림이 같은 인쇄(세트 번호·마크만 다른 재판)는 하나만 남긴다. 이미지 파일은 지우지 않고 목록에서만 뺀다.
 // 남기는 순서: 덱에 원래 들어간 인쇄 → 최근 레귤레이션 → 일반 레어도 → prints.json 순서
 const SAME_ART = 30;   // 그림 해시 차이 이 이하이면 같은 그림 (같은 그림 0~25, 다른 그림 40 이상)
-const REG_RANK = { G: 1, H: 2, I: 3 };
 async function distinctPrints(deckCode, list) {
   const hs = await Promise.all(list.map((p) => { const [s, n] = p.code.split('_'); return hashOf('ko', s, +n); }));
   const order = list.map((p, i) => i).sort((a, b) =>
@@ -158,7 +157,10 @@ for (const deckId of APP_DECKS) {
     // 다른 인쇄: 이미지가 있는 것만 (덱 카드 자신 포함)
     if (PRINTS[code]) {
       const prints = [];
-      for (const p of await distinctPrints(code, PRINTS[code])) {
+      // 덱마다 허용 레귤레이션이 다르다 (옛 레시피 덱은 그 시절 인쇄도)
+      const allowed = allowedFor(deckId);
+      const cand = PRINTS[code].filter((p) => p.code === code || allowed.includes(p.reg));
+      for (const p of await distinctPrints(code, cand)) {
         const pi = p.code === code ? img : await exportImage(p.code);
         if (pi) prints.push({ code: p.code, reg: p.reg ?? '', special: !!p.special, ...pi });
         else warnings.push(`${deckId}: 다른 인쇄 이미지 없음 ${p.code} (${card.name})`);

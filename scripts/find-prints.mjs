@@ -2,23 +2,33 @@
 // 앱의 카드 크게 보기 화면 위쪽 썸네일 → 눌러서 덱의 인쇄를 바꾸는 기능에 쓰인다.
 // 결과: src/data/prints.json  { prints: { 덱카드코드: [{code, reg, jp, special}] } }  (인쇄가 2종 이상인 카드만)
 // 새로 찾은 인쇄의 한글 이미지는 public/cards/ko/ 에 내려받는다(기존 이미지는 지우지 않음).
-// 사용: npm run find-prints
-import { readFileSync, writeFileSync } from 'node:fs';
+// 사용: npm run find-prints            (모든 앱 덱, prints.json 새로 씀)
+//       npm run find-prints -- giratina (그 덱 카드만 다시 찾아 prints.json 에 합침)
+// 덱마다 허용 레귤레이션이 다르면(print-lib DECK_ALLOWED) 카드별로 덱들의 합집합을 쓴다.
+// 앱으로 내보낼 때(export-godot) 덱별 허용 레귤레이션으로 다시 거른다.
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { P, ALLOWED, RANK, APP_DECKS, jpInfo, reprints, isPromo, jpOf, koOf } from './print-lib.mjs';
+import { P, ALLOWED, allowedFor, RANK, APP_DECKS, jpInfo, reprints, isPromo, jpOf, koOf } from './print-lib.mjs';
 import { koUrl, download, ensureDirs, KO_DIR } from './ko-source.mjs';
 
 const resolved = JSON.parse(readFileSync(P('src/data/resolved.json'), 'utf8'));
+const only = process.argv[2] ?? null;
+if (only && !APP_DECKS.includes(only)) throw new Error(`앱 덱이 아님: ${only}`);
 const codes = new Map(); // code -> 이름(영문)
+const regsOf = new Map(); // code -> 허용 레귤레이션 (그 카드를 쓰는 덱들의 합집합)
 for (const d of resolved.decks.filter((x) => APP_DECKS.includes(x.id))) {
   for (const c of d.cards) {
     const code = resolved.cards[c.ref]?.ko;
-    if (code && !codes.has(code)) codes.set(code, c.nameEn);
+    if (!code) continue;
+    if (!regsOf.has(code)) regsOf.set(code, new Set());
+    for (const r of allowedFor(d.id)) regsOf.get(code).add(r);
+    if (!codes.has(code) && (!only || d.id === only)) codes.set(code, c.nameEn);
   }
 }
 
 await ensureDirs();
-const out = {};
+const prev = existsSync(P('src/data/prints.json')) ? JSON.parse(readFileSync(P('src/data/prints.json'), 'utf8')).prints ?? {} : {};
+const out = only ? { ...prev } : {};
 const notes = [];
 let i = 0, downloaded = 0;
 for (const [code, name] of codes) {
@@ -31,7 +41,7 @@ for (const [code, name] of codes) {
     for (const p of await reprints(jm.set, jm.num)) {
       if (isPromo(p.set) || (p.set === jm.set && p.num === jm.num)) continue;
       const inf = await jpInfo(p.set, p.num);
-      if (!inf || !ALLOWED.includes(inf.reg)) continue;
+      if (!inf || !regsOf.get(code).has(inf.reg)) continue;
       const ko = await koOf(p.set, p.num);
       if (!ko || list.some((x) => x.code === ko.code)) continue;
       const st = await download(koUrl(ko.code), fileURLToPath(new URL(`${ko.code}.webp`, KO_DIR)));
@@ -41,13 +51,13 @@ for (const [code, name] of codes) {
     }
     // 최근 레귤레이션 → 일반 인쇄 → 코드 순
     list.sort((a, b) => (RANK[b.reg] ?? 0) - (RANK[a.reg] ?? 0) || a.special - b.special || a.code.localeCompare(b.code));
-    if (list.length > 1) out[code] = list;
+    if (list.length > 1) out[code] = list; else delete out[code];
     console.log(`[${i}/${codes.size}] ${code} ${name}: ${list.map((x) => `${x.code}(${x.reg ?? '-'}${x.special ? '★' : ''})`).join(' ')}`);
   } catch (e) {
     notes.push(`${code} ${name}: 오류 ${e.message ?? e}`);
   }
 }
 
-writeFileSync(P('src/data/prints.json'), JSON.stringify({ generated: new Date().toISOString(), allowed: ALLOWED, prints: out }, null, 2) + '\n');
+writeFileSync(P('src/data/prints.json'), JSON.stringify({ generated: new Date().toISOString(), allowed: ALLOWED, deckAllowed: Object.fromEntries(APP_DECKS.filter((d) => allowedFor(d) !== ALLOWED).map((d) => [d, allowedFor(d)])), prints: out }, null, 2) + '\n');
 console.log(`\n다른 인쇄가 있는 카드 ${Object.keys(out).length}종, 인쇄 ${Object.values(out).reduce((a, l) => a + l.length, 0)}개, 새 이미지 ${downloaded}장`);
 if (notes.length) console.log('참고:\n  ' + notes.join('\n  '));

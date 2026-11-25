@@ -1,10 +1,18 @@
 {
-  "generated": "2026-11-16T21:56:35.725Z",
+  "generated": "2026-11-25T02:06:47.218Z",
   "allowed": [
     "G",
     "H",
     "I"
   ],
+  "deckAllowed": {
+    "giratina": [
+      "F",
+      "G",
+      "H",
+      "I"
+    ]
+  },
   "prints": {
     "SV7_076": [
       {
@@ -2811,6 +2819,434 @@
         "jp": "SV8a-227",
         "special": true,
         "d": 22
+      }
+    ],
+    "S12a_064": [
+      {
+        "code": "S11_049",
+        "reg": "F",
+        "jp": "S11-49",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "S12a_064",
+        "reg": "F",
+        "jp": "S12a-64",
+        "special": false
+      },
+      {
+        "code": "S12a_187",
+        "reg": "F",
+        "jp": "S12a-187",
+        "special": true,
+        "d": 14
+      }
+    ],
+    "S12a_033": [
+      {
+        "code": "S12a_033",
+        "reg": "F",
+        "jp": "S12a-33",
+        "special": false
+      },
+      {
+        "code": "S9a_026",
+        "reg": "F",
+        "jp": "S9a-26",
+        "special": false,
+        "d": 21
+      }
+    ],
+    "S12a_029": [
+      {
+        "code": "S12a_029",
+        "reg": "F",
+        "jp": "S12a-29",
+        "special": false
+      },
+      {
+        "code": "S9_031",
+        "reg": "F",
+        "jp": "S9-31",
+        "special": false,
+        "d": 29
+      },
+      {
+        "code": "S12a_178",
+        "reg": "F",
+        "jp": "S12a-178",
+        "special": true,
+        "d": 21
+      }
+    ],
+    "S12a_110": [
+      {
+        "code": "S11_080",
+        "reg": "F",
+        "jp": "S11-80",
+        "special": false,
+        "d": 28
+      },
+      {
+        "code": "S12a_110",
+        "reg": "F",
+        "jp": "S12a-110",
+        "special": false
+      },
+      {
+        "code": "S11_110",
+        "reg": "F",
+        "jp": "S11-110",
+        "special": true,
+        "d": 30
+      },
+      {
+        "code": "S11_111",
+        "reg": "F",
+        "jp": "S11-111",
+        "special": true,
+        "d": 26
+      }
+    ],
+    "S12a_085": [
+      {
+        "code": "S11_066",
+        "reg": "F",
+        "jp": "S11-66",
+        "special": false,
+        "d": 33
+      },
+      {
+        "code": "S12a_085",
+        "reg": "F",
+        "jp": "S12a-85",
+        "special": false
+      },
+      {
+        "code": "S11_107",
+        "reg": "F",
+        "jp": "S11-107",
+        "special": true,
+        "d": 29
+      },
+      {
+        "code": "S12a_227",
+        "reg": "F",
+        "jp": "S12a-227",
+        "special": true,
+        "d": 20
+      }
+    ],
+    "S12a_111": [
+      {
+        "code": "S11_081",
+        "reg": "F",
+        "jp": "S11-81",
+        "special": false,
+        "d": 17
+      },
+      {
+        "code": "S12a_111",
+        "reg": "F",
+        "jp": "S12a-111",
+        "special": false
+      },
+      {
+        "code": "S11_120",
+        "reg": "F",
+        "jp": "S11-120",
+        "special": true,
+        "d": 29
+      },
+      {
+        "code": "S11_125",
+        "reg": "F",
+        "jp": "S11-125",
+        "special": true,
+        "d": 24
+      }
+    ],
+    "SVB_001": [
+      {
+        "code": "SV1S_069",
+        "reg": "G",
+        "jp": "SV1S-70",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SVB_001",
+        "reg": null,
+        "jp": "SVB-1",
+        "special": false
+      }
+    ],
+    "S12a_139": [
+      {
+        "code": "S11_092",
+        "reg": "F",
+        "jp": "S11-92",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "S12a_139",
+        "reg": "F",
+        "jp": "S12a-141",
+        "special": false
+      }
+    ],
+    "SVB_004": [
+      {
+        "code": "M6a_101",
+        "reg": "I",
+        "jp": "M6a-103",
+        "special": false,
+        "d": 29
+      },
+      {
+        "code": "MC_665",
+        "reg": "I",
+        "jp": "MC-663",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "M2_101",
+        "reg": "I",
+        "jp": "M2-102",
+        "special": true,
+        "d": 33
+      },
+      {
+        "code": "SV3a_054",
+        "reg": "G",
+        "jp": "SV3a-54",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SV5a_056",
+        "reg": "G",
+        "jp": "SV5a-56",
+        "special": false,
+        "d": 20
+      },
+      {
+        "code": "SV9a_058",
+        "reg": "G",
+        "jp": "SV9a-58",
+        "special": false,
+        "d": 16
+      },
+      {
+        "code": "SV2a_209",
+        "reg": "G",
+        "jp": "SV2a-209",
+        "special": true,
+        "d": 32
+      },
+      {
+        "code": "S11a_061",
+        "reg": "F",
+        "jp": "S11a-61",
+        "special": false,
+        "d": 24
+      },
+      {
+        "code": "SVB_004",
+        "reg": null,
+        "jp": "SVB-5",
+        "special": false
+      }
+    ],
+    "SVB_014": [
+      {
+        "code": "S11_091",
+        "reg": "F",
+        "jp": "S11-93",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "S12a_138",
+        "reg": "F",
+        "jp": "S12a-144",
+        "special": false,
+        "d": 13
+      },
+      {
+        "code": "S11_126",
+        "reg": "F",
+        "jp": "S11-126",
+        "special": true,
+        "d": 19
+      },
+      {
+        "code": "SVB_014",
+        "reg": null,
+        "jp": "SVB-16",
+        "special": false
+      }
+    ],
+    "SVB_016": [
+      {
+        "code": "S12a_144",
+        "reg": "F",
+        "jp": "S12a-140",
+        "special": false,
+        "d": 14
+      },
+      {
+        "code": "SVB_016",
+        "reg": null,
+        "jp": "SVB-14",
+        "special": false
+      }
+    ],
+    "SVB_003": [
+      {
+        "code": "MC_664",
+        "reg": "I",
+        "jp": "MC-660",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "SV11B_081",
+        "reg": "I",
+        "jp": "SV11B-81",
+        "special": false,
+        "d": 18
+      },
+      {
+        "code": "SVB_003",
+        "reg": null,
+        "jp": "SVB-4",
+        "special": false
+      }
+    ],
+    "S12a_155": [
+      {
+        "code": "S11_098",
+        "reg": "F",
+        "jp": "S11-95",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "S12a_155",
+        "reg": "F",
+        "jp": "S12a-148",
+        "special": false
+      },
+      {
+        "code": "S11_116",
+        "reg": "F",
+        "jp": "S11-113",
+        "special": true,
+        "d": 20
+      },
+      {
+        "code": "S11_124",
+        "reg": "F",
+        "jp": "S11-121",
+        "special": true,
+        "d": 32
+      },
+      {
+        "code": "S12a_238",
+        "reg": "F",
+        "jp": "S12a-235",
+        "special": true,
+        "d": 17
+      }
+    ],
+    "SVB_020": [
+      {
+        "code": "MC_709",
+        "reg": "I",
+        "jp": "MC-724",
+        "special": false,
+        "d": 25
+      },
+      {
+        "code": "MC_760",
+        "reg": "I",
+        "jp": "MC-760",
+        "special": true,
+        "d": 18
+      },
+      {
+        "code": "SV1a_066",
+        "reg": "G",
+        "jp": "SV1a-69",
+        "special": false,
+        "d": 21
+      },
+      {
+        "code": "SV4a_176",
+        "reg": "G",
+        "jp": "SV4a-181",
+        "special": false,
+        "d": 23
+      },
+      {
+        "code": "S12a_153",
+        "reg": "F",
+        "jp": "S12a-161",
+        "special": false,
+        "d": 34
+      },
+      {
+        "code": "S9_094",
+        "reg": "F",
+        "jp": "S9-97",
+        "special": false,
+        "d": 22
+      },
+      {
+        "code": "S12a_246",
+        "reg": "F",
+        "jp": "S12a-250",
+        "special": true,
+        "d": 19
+      },
+      {
+        "code": "SVB_020",
+        "reg": null,
+        "jp": "SVB-24",
+        "special": false
+      }
+    ],
+    "SVB_022": [
+      {
+        "code": "S12a_156",
+        "reg": "F",
+        "jp": "S12a-157",
+        "special": false,
+        "d": 20
+      },
+      {
+        "code": "S9a_065",
+        "reg": "F",
+        "jp": "S9a-65",
+        "special": false,
+        "d": 19
+      },
+      {
+        "code": "S12a_239",
+        "reg": "F",
+        "jp": "S12a-242",
+        "special": true,
+        "d": 24
+      },
+      {
+        "code": "SVB_022",
+        "reg": null,
+        "jp": "SVB-21",
+        "special": false
       }
     ]
   }
