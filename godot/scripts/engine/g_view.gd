@@ -23,8 +23,8 @@ static func slotView(s: Dictionary, slot: Dictionary, owner: int, viewer, info: 
 		"retreat": null if (hide or not known) else GCore.retreatCost(ctx, slot, owner),
 	}
 
-## viewer: 0 / 1 / "board"
-static func viewFor(s: Dictionary, viewer, info: Dictionary) -> Dictionary:
+## viewer: 0 / 1 / "board". copy = false 면 마지막 깊은 복사를 건너뛴다 (상태와 일부 공유 — 읽기만 하는 어려움 AI 시뮬레이션용, Godot 전용)
+static func viewFor(s: Dictionary, viewer, info: Dictionary, copy := true) -> Dictionary:
 	var players: Array = []
 	var is_seat := typeof(viewer) == TYPE_INT
 	for seat in [0, 1]:
@@ -59,7 +59,7 @@ static func viewFor(s: Dictionary, viewer, info: Dictionary) -> Dictionary:
 		"result": s.result,
 		"actions": GEngine.legalMoves(s, viewer, info) if is_seat else null,
 	}
-	return v.duplicate(true)
+	return v.duplicate(true) if copy else v
 
 ## 이 구역의 카드를 viewer 가 볼 수 있는가
 static func zoneVisible(ref: Dictionary, viewer, face_down := false) -> bool:

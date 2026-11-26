@@ -38,6 +38,13 @@ func _ready() -> void:
 	var pi := args.find("--p2ptest")
 	if pi >= 0 and args.size() > pi + 1:
 		_p2ptest.call_deferred(args[pi + 1])
+	if "--ai-bench" in args:
+		(func(): AiBench.run(); get_tree().quit()).call_deferred()
+	if "--offline-hard-test" in args:
+		(func(): get_tree().quit(await AiDuel.offline_test(self))).call_deferred()
+	var di := args.find("--ai-duel")
+	if di >= 0:
+		_ai_duel.call_deferred(int(args[di + 1]) if args.size() > di + 1 else 10, int(args[di + 2]) if args.size() > di + 2 else 0)
 	var si := args.find("--solotest")
 	if si >= 0 and args.size() > si + 1:
 		_solotest.call_deferred(args[si + 1])
@@ -498,7 +505,14 @@ func _gesture_check(gs: GameScreen) -> void:
 			ov2.queue_free()
 		await get_tree().process_frame
 	else:
-		print("[solotest] 동작: 붙은 카드가 있는 포켓몬 없음")## 엔진 비교 (TS ↔ GDScript): scripts/engine-compare.ts 가 부른다
+		print("[solotest] 동작: 붙은 카드가 있는 포켓몬 없음")
+
+## AI 끼리 대전 (어려움 대 보통): scripts/ai_duel.gd
+func _ai_duel(games: int, start: int) -> void:
+	AiDuel.run(games, start)
+	get_tree().quit()
+
+## 엔진 비교 (TS ↔ GDScript): scripts/engine-compare.ts 가 부른다
 func _engine_compare(path: String) -> void:
 	var code := GCompare.run(path)
 	get_tree().quit(code)

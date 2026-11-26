@@ -51,6 +51,12 @@ func cycle_ai_speed() -> void:
 			i = k
 	send({ "t": "aiSpeed", "ms": AI_SPEEDS[(i + 1) % AI_SPEEDS.size()][1] })
 
+## AI 난이도 (서버 없는 AI 연습만)
+const AI_LEVELS := [["보통", "normal"], ["어려움", "hard"]]
+
+func ai_level() -> String:
+	return str(lobby.get("aiLevel", "normal"))
+
 const FATAL := ["protocol", "data_version", "bad_code", "full", "in_game"]
 
 func _ready() -> void:

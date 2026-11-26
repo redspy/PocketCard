@@ -14,6 +14,8 @@ var _built_ready := false
 var _ai_box: HFlowContainer      # AI 연습: 상대(AI) 덱 고르기
 var _built_ai := "?"
 var _speed_box: HFlowContainer   # AI 연습: AI 속도
+var _level_box: HFlowContainer   # AI 연습(서버 없이): AI 난이도
+var _built_level := "?"
 var _built_speed := -1
 
 func _ready() -> void:
@@ -62,6 +64,12 @@ func _ready() -> void:
 		_ai_box.add_theme_constant_override("h_separation", 10)
 		_ai_box.add_theme_constant_override("v_separation", 10)
 		col.add_child(_ai_box)
+		if Net.offline:
+			col.add_child(UI.label("AI 난이도", 26, UI.ACCENT))
+			_level_box = HFlowContainer.new()
+			_level_box.add_theme_constant_override("h_separation", 10)
+			_level_box.add_theme_constant_override("v_separation", 10)
+			col.add_child(_level_box)
 		col.add_child(UI.label("AI 속도 (게임 중에도 바꿀 수 있음)", 26, UI.ACCENT))
 		_speed_box = HFlowContainer.new()
 		_speed_box.add_theme_constant_override("h_separation", 10)
@@ -128,6 +136,16 @@ func _refresh() -> void:
 			if ai_deck != _built_ai:
 				_built_ai = ai_deck
 				_build_ai(ai_deck)
+			if _level_box != null and Net.ai_level() != _built_level:
+				_built_level = Net.ai_level()
+				for c in _level_box.get_children():
+					c.queue_free()
+				for lv in Net.AI_LEVELS:
+					var key: String = lv[1]
+					var on := key == _built_level
+					var b := UI.button(str(lv[0]) + (" (미리 수를 읽음)" if key == "hard" else ""), 24, on, on)
+					b.tapped.connect(func(): Net.send({ "t": "aiLevel", "level": key }))
+					_level_box.add_child(b)
 			if Net.ai_delay() != _built_speed:
 				_built_speed = Net.ai_delay()
 				for c in _speed_box.get_children():

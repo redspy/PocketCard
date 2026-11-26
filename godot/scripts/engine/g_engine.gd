@@ -592,7 +592,8 @@ static func sameInput(a: Dictionary, b: Dictionary) -> bool:
 	return canon(a) == canon(b)
 
 ## 반환: { ok: true, state, events } 또는 { ok: false, error: { code, message } } (오류면 원래 상태는 그대로)
-static func applyInput(state: Dictionary, input: Dictionary, info: Dictionary) -> Dictionary:
+## trusted = true: 방금 legalMoves 에서 고른 입력이라 합법 검사를 건너뜀 (어려움 AI 시뮬레이션용, Godot 전용)
+static func applyInput(state: Dictionary, input: Dictionary, info: Dictionary, trusted := false) -> Dictionary:
 	ensure()
 	var s: Dictionary = state.duplicate(true)
 	var ctx := { "s": s, "ev": [], "info": info }
@@ -604,12 +605,13 @@ static func applyInput(state: Dictionary, input: Dictionary, info: Dictionary) -
 	if input.type == "choice":
 		resolveChoice(ctx, player, str(input.requestId), input.picks)
 	else:
-		var moves := legalMoves(s, player, info)
 		var norm := input.duplicate()
 		if norm.has("target") and norm.target == null:
 			norm.erase("target")
-		if not moves.any(func(m): return GEngine.sameInput(m.input, norm)):
-			return _err("illegal", illegalReason(s, player))
+		if not trusted:
+			var moves := legalMoves(s, player, info)
+			if not moves.any(func(m): return GEngine.sameInput(m.input, norm)):
+				return _err("illegal", illegalReason(s, player))
 		doMove(ctx, player, norm)
 	if not ctx.has("err"):
 		run(ctx)
