@@ -1089,7 +1089,7 @@ func _build_request() -> void:
 			(func(): if is_inside_tree() and not Net.view.is_empty(): _place_hand(_me())).call_deferred()
 	var key := ""
 	if req != null:
-		key = "%s|%s|%s" % [str(req.id), JSON.stringify(picks.get(str(req.id), [])), only_usable]
+		key = "%s|%s|%s|%s" % [str(req.id), JSON.stringify(picks.get(str(req.id), [])), only_usable, size]   # 화면 크기가 바뀌면(폴드 접기·펴기) 다시 그림
 	if key == sheet_key:
 		return
 	sheet_key = key
@@ -1122,8 +1122,8 @@ func _build_request() -> void:
 		return
 	sheet = BRequest.build(self, req)
 	sheet_layer.add_child(sheet)
-	if kind == "values" or kind == "reveal":
-		# 작은 선택(예·아니오·확인 등)은 가운데 대화상자
+	if kind == "values":
+		# 작은 선택(예·아니오·선공/후공 등)은 가운데 대화상자. 카드를 보여주는 창(고르기·공개 확인)은 모두 아래 창
 		await get_tree().process_frame
 		if not is_instance_valid(sheet):
 			return
@@ -1141,13 +1141,21 @@ func _build_request() -> void:
 		return
 	sheet.set_meta("covers_hand", true)
 	hand.visible = false
-	sheet.position = Vector2(0, maxf(top_y + 70, size.y * 0.42))
-	sheet.size = Vector2(size.x, size.y - sheet.position.y)
+	# 같은 요청을 다시 그릴 때(카드를 고를 때마다)는 맞춰 둔 높이에서 바로 시작 — 한 프레임 다른 자리에 그려졌다 튀지 않게.
+	# 처음 뜰 때는 높이를 맞출 때까지 투명하게
+	var refit: bool = _sheet_fit.get("id") == str(req.id) and _sheet_fit.get("size") == size
+	var fit_y: float = _sheet_fit.y if refit else maxf(top_y + 70, size.y * 0.42)
+	if not refit:
+		sheet.modulate.a = 0.0
+	sheet.position = Vector2(0, fit_y)
+	sheet.size = Vector2(size.x, size.y - fit_y)
 	_show_peek_btn()
-	_fit_sheet(sheet, top_y)
+	_fit_sheet(sheet, top_y, str(req.id))
 
-## 아래 선택 창 높이를 내용에 맞춘다 (내용이 짧으면 판이 더 보이게, 길면 위로 늘림)
-func _fit_sheet(sh: Control, top_y: float) -> void:
+var _sheet_fit := {}   # 아래 창을 마지막으로 맞춘 요청·위치·화면 크기 { id, y, size }
+
+## 아래 선택 창 높이를 내용에 맞춘다 (내용이 짧으면 판이 더 보이게, 길면 위로 늘림). 아래 끝은 늘 화면 아래
+func _fit_sheet(sh: Control, top_y: float, rid: String) -> void:
 	await get_tree().process_frame
 	if not is_instance_valid(sh) or sh != sheet:
 		return
@@ -1155,6 +1163,8 @@ func _fit_sheet(sh: Control, top_y: float) -> void:
 	var y := clampf(size.y - h, top_y + 70, size.y - 160)
 	sh.position = Vector2(0, y)
 	sh.size = Vector2(size.x, size.y - y)
+	sh.modulate.a = 1.0
+	_sheet_fit = { "id": rid, "y": y, "size": size }
 	_show_peek_btn()
 
 ## 탁자 고르기 안내 띠가 고를 대상(상대 벤치 등)을 가리면 가운데 띠(스타디움 줄) 위로 옮긴다

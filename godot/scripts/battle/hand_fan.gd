@@ -1,7 +1,7 @@
 class_name BHand
 extends Control
 ## 손패 부채: 화면 아래에 겹친 카드를 부채꼴로. iid 로 카드 노드를 유지.
-## - 탭: 고르기 (고른 카드는 위로 올라오고 똑바로 섬)  - 길게: 크게 보기  - 옆으로 밀기: 패 넘기기(카드가 많을 때)
+## - 탭: 고르기 (고른 카드는 위로 올라오고 똑바로 섬)  - 길게: 크게 보기  - 옆으로 끌기: 패 넘기기(카드가 많을 때, 손가락을 따라감)
 ## - 위로 밀기(swipe_up 신호): 화면이 "바로 사용" 처리 (3단계에서 끌어 놓기로 확장)
 
 signal card_tapped(iid: String)
@@ -18,6 +18,7 @@ var usable: Dictionary = {}     # iid -> bool
 var selected := ""
 var card_size := Vector2(188, 262)
 var offset := 0.0               # 패 넘기기 (카드가 화면보다 많을 때 가로 이동)
+var _pan_from = null            # 옆으로 끄는 중이면 시작할 때의 offset, 아니면 null
 
 func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -40,6 +41,7 @@ func set_hand(hand: Array, use: Dictionary, sel: String, csize: Vector2) -> void
 			c.tapped.connect(func(): card_tapped.emit(iid))
 			c.long_pressed.connect(func(): card_long.emit(iid))
 			c.swiped.connect(func(d: Vector2): _on_swipe(iid, d))
+			c.panned.connect(_on_pan)
 			c.draggable = true
 			c.drag_started.connect(func(pos: Vector2): card_drag_start.emit(iid, pos))
 			c.dragged.connect(func(pos: Vector2): card_drag.emit(iid, pos))
@@ -52,11 +54,22 @@ func set_hand(hand: Array, use: Dictionary, sel: String, csize: Vector2) -> void
 			cards.erase(iid)
 	_place(false)
 
-func _on_swipe(iid: String, d: Vector2) -> void:
+func _on_swipe(_iid: String, d: Vector2) -> void:
 	# 위로 밀기는 끌어 놓기가 맡는다 (밀어서 바로 쓰기는 잘못 놓았을 때 엉뚱하게 쓰여서 없앰)
-	if absf(d.x) > absf(d.y):
+	# 옆으로 끌며 이미 넘겼으면(_on_pan) 또 넘기지 않는다
+	if _pan_from == null and absf(d.x) > absf(d.y):
 		offset = clampf(offset + d.x, -_overflow(), 0.0)
 		_place(true)
+
+## 옆으로 끌기: 카드가 화면보다 많으면 손가락을 따라 패를 넘긴다 (천천히 끌어도)
+func _on_pan(d: Vector2, done: bool) -> void:
+	if _pan_from == null and not done and _overflow() > 0.0 and absf(d.x) > 18.0 and absf(d.x) > absf(d.y):
+		_pan_from = offset - d.x
+	if _pan_from != null:
+		offset = clampf(_pan_from + d.x, -_overflow(), 0.0)
+		_place(false)
+	if done:
+		_pan_from = null
 
 func _step() -> float:
 	var n := order.size()

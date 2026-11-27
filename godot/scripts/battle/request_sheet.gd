@@ -15,7 +15,8 @@ static func kind_of(screen, req: Dictionary) -> String:
 		return "handpick"
 	var opts: Array = req.options
 	if opts.is_empty():
-		return "values"
+		# 고를 카드가 없어도 본 카드(예: 덱 위 몇 장)가 실려 있으면 카드 창으로 보여준다 (아래 창 — 다른 카드 고르기와 같은 자리)
+		return "cards" if req.get("cards") is Array and (req.cards as Array).size() > 0 else "values"
 	if opts.all(func(o): return screen._slot_data(str(o)) != null):
 		return "slots"
 	var known := code_map(screen, req)
@@ -79,7 +80,7 @@ static func build(screen, req: Dictionary) -> Control:
 			else:
 				shown = opts.map(func(o): return str(o))
 			var usable: Array = shown.filter(func(x): return opts.has(x))
-			if usable.size() < shown.size():
+			if usable.size() < shown.size() and not usable.is_empty():
 				var tb := UI.button(("✔ 고를 수 있는 카드만 %d/%d" if screen.only_usable else "고를 수 있는 카드만 보기 %d/%d") % [usable.size(), shown.size()], 20, screen.only_usable, screen.only_usable)
 				tb.tapped.connect(func():
 					screen.only_usable = not screen.only_usable

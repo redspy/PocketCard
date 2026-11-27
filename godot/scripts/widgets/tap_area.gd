@@ -13,6 +13,8 @@ signal swiped(delta: Vector2)
 signal drag_started(pos: Vector2)
 signal dragged(pos: Vector2)
 signal drag_ended(pos: Vector2)
+## 누른 채 움직이는 중 (누른 곳에서 얼마나 움직였나), 뗄 때 done = true — 손패 넘기기처럼 손가락을 따라가는 데 씀
+signal panned(delta: Vector2, done: bool)
 
 const MOVE_TOLERANCE := 18.0
 const PRESS_SCALE := 0.96
@@ -86,6 +88,8 @@ func _gui_input(event: InputEvent) -> void:
 				tapped.emit()
 			elif _tracking and delta.length() >= SWIPE_MIN and Time.get_ticks_msec() / 1000.0 - _press_time <= SWIPE_MAX_TIME:
 				swiped.emit(delta)
+			if _tracking:
+				panned.emit(delta, true)
 			_tracking = false
 	elif event is InputEventMouseMotion and dragging:
 		dragged.emit(event.global_position)
@@ -105,6 +109,9 @@ func _gui_input(event: InputEvent) -> void:
 			_pressing = false
 			_press_token += 1
 			_animate(1.0, 0.16)
+			panned.emit(event.global_position - _press_pos, false)
+	elif event is InputEventMouseMotion and _tracking:
+		panned.emit(event.global_position - _press_pos, false)
 
 func _wait_long_press() -> void:
 	_press_token += 1
