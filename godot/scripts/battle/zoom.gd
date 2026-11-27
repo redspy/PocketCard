@@ -26,7 +26,7 @@ static func open(parent: Control, codes: Array, idx := 0, tg: Array = []) -> BZo
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.93)
+	dim.color = UI.SCRIM
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(dim)

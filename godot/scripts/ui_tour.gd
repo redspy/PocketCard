@@ -37,6 +37,15 @@ static func run(host: Node, tag: String) -> void:
 	_n = 0
 	await _wait(1.0)
 	await _shot("home")
+	# 아래 탭: 덱 · 대전
+	Lay.open_tab("덱")
+	await _wait(0.9)
+	await _shot("tab_decks")
+	Lay.open_tab("대전")
+	await _wait(0.5)
+	await _shot("tab_battle")
+	Lay.open_tab("홈")
+	await _wait(0.4)
 	# 덱 화면 · 카드 크게 보기 · 덱 설명 펼침
 	var d: Dictionary = DeckData.decks[0]
 	var dd := DeckDetailScreen.new(d)
@@ -96,6 +105,9 @@ static func run(host: Node, tag: String) -> void:
 	await _push(LobbyScreen.new())
 	Net.send({ "t": "chooseDeck", "deckId": d["id"], "prints": {} })
 	await _shot("lobby_ai")
+	(Nav.current() as LobbyScreen)._pick_deck(true, "")
+	await _wait(0.9)
+	await _shot("lobby_pick_ai")
 	await _root()
 	Net.leave()
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(PhoneHost.SAVE_PATH))

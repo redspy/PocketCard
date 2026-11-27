@@ -1,19 +1,19 @@
 extends Control
-## 앱 진입점: 화면 스택을 준비하고 덱 선택 화면을 띄운다.
+## 앱 진입점: 화면 테마를 정하고, 화면 스택을 준비해 첫 화면(홈)을 띄운다.
 ## 실행 인자 --selftest : 화면 이동을 자동으로 한 번 돌려 보고 종료 (PC/CI 확인용)
 
 func _ready() -> void:
-	var bg := ColorRect.new()
-	bg.color = UI.BG
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
+	# 화면 테마 (저장된 설정, 실행 인자 --theme light|dark 로 강제 — 스크린샷용)
+	var targs := OS.get_cmdline_user_args()
+	var thi := targs.find("--theme")
+	UI.load_theme(targs[thi + 1] if thi >= 0 and targs.size() > thi + 1 else "")
 
 	var stack := Control.new()
 	stack.set_anchors_preset(Control.PRESET_FULL_RECT)
 	stack.clip_contents = true
 	add_child(stack)
 	Nav.setup(stack)
-	Nav.push(DeckSelectScreen.new(), false)
+	Nav.push(HomeScreen.new(), false)
 
 	if "--selftest" in OS.get_cmdline_user_args():
 		_selftest.call_deferred()
@@ -183,9 +183,9 @@ func _nettest(addr: String, code: String) -> void:
 	Net.send({ "t": "ready", "ready": true })
 	for i in 150:
 		await get_tree().create_timer(0.1).timeout
-		if Nav.current() is GameScreen:
+		if Nav.current() is BattleScreen:
 			break
-	print("[nettest] 게임 화면: %s" % (Nav.current() is GameScreen))
+	print("[nettest] 게임 화면: %s" % (Nav.current() is BattleScreen))
 	var ended_turn := false
 	var did_action := false
 	for i in 200:
@@ -218,7 +218,6 @@ func _nettest(addr: String, code: String) -> void:
 			break
 	var me: Dictionary = Net.view["players"][Net.seat]
 	print("[nettest] 단계 %s, 턴 %d, 내 패 %d장, 사이드 %d칸, 오류 %s" % [Net.view["phase"], int(Net.view["turnNumber"]), (me["hand"] as Array).size(), (me["prizes"] as Array).size(), Net.last_error])
-	await _nettest_screen_check()
 	if DisplayServer.get_name() != "headless":
 		get_viewport().get_texture().get_image().save_png("user://nettest.png")
 	get_tree().quit()
@@ -270,18 +269,6 @@ func _selftest() -> void:
 	print("[selftest] 화면 스택 깊이 %d (1이면 정상)" % Nav.depth())
 	get_tree().quit()
 
-## 게임 화면의 탭을 모두 한 번씩 그려 본다 (스크립트 오류 확인)
-func _nettest_screen_check() -> void:
-	var gs := Nav.current() as GameScreen
-	if gs == null:
-		print("[nettest] 게임 화면 없음")
-		return
-	for t in ["field", "discard", "log", "hand"]:
-		gs._tab = t
-		gs._refresh()
-		await get_tree().process_frame
-	print("[nettest] 탭 그리기 정상")
-
 ## AI 연습 자가 테스트: 덱 화면의 [AI와 연습] → 서버 주소로 연습 세션 → AI 덱·내 덱 → 시작
 ## → (선택 요청은 첫 선택지, 기술이 있으면 기술, 없으면 턴 종료) 6턴까지 → 화면 저장 → 항복 → 다시 하기 → 대전 준비 화면
 ## 실행: Godot --path godot -- --solotest 127.0.0.1:8787
@@ -310,9 +297,9 @@ func _solotest(addr: String) -> void:
 	Net.send({ "t": "ready", "ready": true })
 	for i in 100:
 		await get_tree().create_timer(0.1).timeout
-		if Nav.current() is GameScreen:
+		if Nav.current() is BattleScreen:
 			break
-	print("[solotest] 게임 화면: %s" % (Nav.current() is GameScreen))
+	print("[solotest] 게임 화면: %s" % (Nav.current() is BattleScreen))
 	Net.send({ "t": "aiSpeed", "ms": 250 })
 	await get_tree().create_timer(0.3).timeout
 	print("[solotest] AI 속도: %s" % Net.ai_speed_name())
@@ -353,22 +340,8 @@ func _solotest(addr: String) -> void:
 				acted = true
 		if acted:
 			last_ver = int(v["version"])
-	var gs := Nav.current() as GameScreen
-	# 가로 스크롤 유지: 패를 오른쪽으로 넘긴 뒤 카드를 고르면 (다시 그려도) 그 자리 그대로
-	if gs and gs._content.get_child_count() > 0 and gs._content.get_child(0) is ScrollContainer:
-		var hs := gs._content.get_child(0) as ScrollContainer
-		hs.scroll_horizontal = 160
-		await get_tree().process_frame
-		var before := hs.scroll_horizontal
-		var hand: Array = Net.view["players"][Net.seat]["hand"]
-		gs._selected = str(hand[hand.size() - 1]["iid"]) if hand.size() > 0 else ""
-		gs._refresh()
-		await get_tree().create_timer(0.4).timeout
-		var hs2 := gs._content.get_child(0) as ScrollContainer
-		print("[solotest] 가로 스크롤 유지: 전 %d → 다시 그린 뒤 %d" % [before, hs2.scroll_horizontal])
-	if gs:
-		await _gesture_check(gs)
-	print("[solotest] 턴 %s, 필드 표시 %d개, 오류 %s" % [Net.view.get("turnNumber"), gs._field_box.get_child_count() if gs else -1, Net.last_error])
+	var bs := Nav.current() as BattleScreen
+	print("[solotest] 턴 %s, 포켓몬 칸 %d개, 오류 %s" % [Net.view.get("turnNumber"), bs.slots.size() if bs else -1, Net.last_error])
 	if DisplayServer.get_name() != "headless":
 		await get_tree().create_timer(0.5).timeout
 		get_viewport().get_texture().get_image().save_png("user://solotest_game.png")
@@ -378,7 +351,7 @@ func _solotest(addr: String) -> void:
 		if Net.view.get("result") != null:
 			break
 	await get_tree().create_timer(0.3).timeout
-	print("[solotest] 결과: %s, 다시 하기 버튼 %s" % [Net.view.get("result"), gs._btn_again.visible if gs else false])
+	print("[solotest] 결과: %s, 다시 하기 버튼 %s" % [Net.view.get("result"), (bs.end_btn.get_meta("label") as Label).text == "다시 하기" if bs else false])
 	if DisplayServer.get_name() != "headless":
 		get_viewport().get_texture().get_image().save_png("user://solotest_end.png")
 	Net.send({ "t": "rematch" })
@@ -389,124 +362,6 @@ func _solotest(addr: String) -> void:
 	await get_tree().create_timer(0.5).timeout
 	print("[solotest] 다시 하기 → 대전 준비 화면: %s" % (Nav.current() is LobbyScreen))
 	get_tree().quit()
-## 터치 동작 확인: 패 카드 길게 누르기 → 크게 보기, 좌우로 밀어 넘기기, 누르면 닫기
-func _press(pos: Vector2, down: bool) -> void:
-	var e := InputEventMouseButton.new()
-	e.button_index = MOUSE_BUTTON_LEFT
-	e.pressed = down
-	e.position = pos
-	e.global_position = pos
-	Input.parse_input_event(e)
-
-func _move(pos: Vector2) -> void:
-	var e := InputEventMouseMotion.new()
-	e.position = pos
-	e.global_position = pos
-	e.button_mask = MOUSE_BUTTON_MASK_LEFT
-	Input.parse_input_event(e)
-
-func _overlay_of(gs: GameScreen) -> TapArea:
-	for c in gs.get_children():
-		if c is TapArea and c.get_child_count() > 0 and c.get_child(0) is ColorRect:
-			return c
-	return null
-
-func _gesture_check(gs: GameScreen) -> void:
-	# 내 차례(AI 가 두지 않아 화면이 멈춘 때)까지 기다린다
-	for k in 100:
-		var v: Dictionary = Net.view
-		var mine_req = null
-		for r in v.get("requests", []):
-			if r.player == Net.seat and r.has("options"):
-				mine_req = r
-		if mine_req != null:
-			var opts: Array = mine_req.options
-			Net.input({ "type": "choice", "requestId": mine_req.id, "picks": opts.slice(0, maxi(int(mine_req.min), 1) if int(mine_req.max) > 0 else 0) })
-			await get_tree().create_timer(0.3).timeout
-			continue
-		if v.get("turnPlayer") == Net.seat:
-			break
-		await get_tree().create_timer(0.1).timeout
-	gs._tab = "hand"
-	gs._selected = ""
-	gs._refresh()
-	await get_tree().create_timer(0.4).timeout
-	var strip: ScrollContainer = null
-	for c in gs._content.get_children():
-		if c is ScrollContainer:
-			strip = c
-	if strip == null:
-		print("[solotest] 동작: 패 줄 없음")
-		return
-	var cell := (strip.get_child(0) as Control).get_child(0) as Control
-	var p := cell.get_global_rect().get_center() - Vector2(cell.size.x * 0.3, 0)
-	_press(p, true)
-	await get_tree().create_timer(0.2).timeout
-	await get_tree().create_timer(0.5).timeout
-	_press(p, false)
-	await get_tree().create_timer(0.2).timeout
-	var ov := _overlay_of(gs)
-	var info_before := ""
-	if ov:
-		info_before = (ov.get_child(2) as Label).text
-	print("[solotest] 동작: 길게 누르기 → 크게 보기 %s (선택 안 됨: %s) [%s]" % [ov != null, gs._selected == "", info_before])
-	if ov:
-		var c0 := ov.get_global_rect().get_center()
-		_press(c0, true)
-		for k in 6:
-			await get_tree().process_frame
-			_move(c0 - Vector2(40.0 * (k + 1), 0))
-		_press(c0 - Vector2(240, 0), false)
-		await get_tree().create_timer(0.2).timeout
-		print("[solotest] 동작: 왼쪽으로 밀기 → %s" % (ov.get_child(2) as Label).text)
-		_press(c0, true)
-		await get_tree().create_timer(0.1).timeout
-		_press(c0, false)
-		await get_tree().create_timer(0.2).timeout
-		print("[solotest] 동작: 누르기 → 닫힘 %s" % (not is_instance_valid(ov) or ov.is_queued_for_deletion()))
-	# 짧게 누르기 = 고르기
-	_press(p, true)
-	await get_tree().create_timer(0.1).timeout
-	_press(p, false)
-	await get_tree().create_timer(0.3).timeout
-	print("[solotest] 동작: 짧게 누르기 → 고름 %s, 크게 보기 안 열림 %s" % [gs._selected != "", _overlay_of(gs) == null])
-	gs._selected = ""
-	gs._refresh()
-	# 쓸 수 있는 카드만 보기 전환
-	var count_cells := func() -> int:
-		for c in gs._content.get_children():
-			if c is ScrollContainer:
-				return (c as ScrollContainer).get_child(0).get_child_count()
-		return 0
-	var all_n: int = count_cells.call()
-	gs._only_usable = true
-	gs._refresh()
-	await get_tree().create_timer(0.3).timeout
-	var use_n: int = count_cells.call()
-	if DisplayServer.get_name() != "headless":
-		get_viewport().get_texture().get_image().save_png("user://solotest_usable.png")
-	gs._only_usable = false
-	gs._refresh()
-	await get_tree().create_timer(0.2).timeout
-	print("[solotest] 동작: 쓸 수 있는 카드만 — 전체 %d장 → %d장 → 다시 전체 %d장" % [all_n, use_n, count_cells.call()])	# 붙은 카드가 있는 포켓몬 크게 보기 (아래에 작은 카드 줄)
-	var best = null
-	for pl in Net.view.players:
-		for sl in ([pl.active] if pl.active != null else []) + (pl.bench as Array):
-			if sl != null and sl.get("attached") is Array and (sl.attached as Array).size() > 0 and (best == null or (sl.attached as Array).size() > (best.attached as Array).size()):
-				best = sl
-	if best != null:
-		gs._zoom_list(gs._slot_codes(best), 0, gs._slot_tags(best))
-		await get_tree().create_timer(0.6).timeout
-		var ov2 := _overlay_of(gs)
-		print("[solotest] 동작: 붙은 카드 보기 — %s" % ((ov2.get_child(2) as Label).text if ov2 else "열리지 않음"))
-		if DisplayServer.get_name() != "headless":
-			get_viewport().get_texture().get_image().save_png("user://solotest_attached.png")
-		if ov2:
-			ov2.queue_free()
-		await get_tree().process_frame
-	else:
-		print("[solotest] 동작: 붙은 카드가 있는 포켓몬 없음")
-
 ## AI 끼리 대전 (어려움 대 보통): scripts/ai_duel.gd
 func _ai_duel(games: int, start: int) -> void:
 	AiDuel.run(games, start)

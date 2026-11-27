@@ -1,103 +1,47 @@
 class_name LobbyScreen
 extends Control
-## 로비: 내 자리·상대 상태, 덱 선택(덱 뷰어에서 고른 인쇄 그대로), 준비 완료
-## 두 사람 모두 준비되면 게임판에서 카운트다운 → 게임 화면으로 넘어간다.
+## 대전 준비: [내 덱] 카드 · [상대] 카드 (AI 연습이면 AI 덱·난이도·속도) · 아래 [준비 완료]
+## 덱은 고르기 화면(DeckListScreen picker)에서 — 덱 뷰어에서 고른 인쇄 그대로.
+## 두 사람 모두 준비되면 게임판에서 카운트다운 → 대전 화면으로 넘어간다.
 
-var _info: Label
-var _opp: Label
-var _where: Label                # 폰끼리 대전 방장: 상대가 들어올 주소·방 코드 안내
-var _decks: GridContainer        # 덱 목록 (넓은 화면은 2~3열)
-var _ready_btn: TapArea
 var _err: Label
-var _built_deck := "?"
-var _built_ready := false
-var _ai_box: HFlowContainer      # AI 연습: 상대(AI) 덱 고르기
-var _built_ai := "?"
-var _speed_box: HFlowContainer   # AI 연습: AI 속도
-var _level_box: HFlowContainer   # AI 연습(서버 없이): AI 난이도
-var _built_level := "?"
-var _built_speed := -1
+var _opp: Label                  # 상대 상태 한 줄 (테스트가 읽음)
+var _where: Label                # 폰끼리 대전 방장: 상대가 들어올 주소·방 코드 안내
+var _cards: VBoxContainer        # 내 덱·상대 카드 (상태가 바뀌면 다시 그림)
+var _ready_btn: TapArea
+var _built := ""
 
 func _ready() -> void:
-	var bg := ColorRect.new()
-	bg.color = UI.BG
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(bg)
-
-	var layout := VBoxContainer.new()
-	layout.set_anchors_preset(Control.PRESET_FULL_RECT)
-	layout.add_theme_constant_override("separation", 0)
-	add_child(layout)
+	var col: VBoxContainer
 	if Net.p2p():
-		layout.add_child(UI.top_bar(self, "폰끼리 대전", "%s · 방 코드 %s" % ["내가 방장" if Net.offline else "참가", Net.lobby.get("code", "")]))
+		col = Lay.page(self, "폰끼리 대전", "%s · 방 코드 %s" % ["내가 방장" if Net.offline else "참가", Net.lobby.get("code", "")])
 	else:
-		layout.add_child(UI.top_bar(self, "AI와 연습" if Net.solo else "대전 준비", ("서버 없이 이 폰에서" if Net.offline else "게임판 없이 폰 한 대로") if Net.solo else "세션 %s" % Net.code))
-
-	var scroll := ScrollContainer.new()
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
-	scroll.scroll_deadzone = 12
-	layout.add_child(scroll)
-	var m := UI.margin(26)
-	m.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.add_child(m)
-	var col := VBoxContainer.new()
-	col.add_theme_constant_override("separation", 18)
-	m.add_child(col)
-
-	_info = UI.label("", 30, UI.TEXT)
-	col.add_child(_info)
-	_opp = UI.label("", 24, UI.TEXT_DIM)
-	col.add_child(_opp)
-	_where = UI.label("", 24, UI.ACCENT, HORIZONTAL_ALIGNMENT_LEFT, true)
-	_where.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_where.visible = false
-	col.add_child(_where)
-	_err = UI.label("", 24, Color(1, 0.55, 0.5), HORIZONTAL_ALIGNMENT_LEFT, true)
-	_err.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		col = Lay.page(self, "AI와 연습" if Net.solo else "대전 준비", ("서버 없이 이 폰에서" if Net.offline else "게임판 없이 폰 한 대로") if Net.solo else "세션 %s" % Net.code)
+	_err = Lay.wrap("", 22, UI.BAD)
+	_err.visible = false
 	col.add_child(_err)
-	if Net.solo:
-		col.add_child(UI.label("상대(AI) 덱", 30, UI.ACCENT))
-		_ai_box = HFlowContainer.new()
-		_ai_box.add_theme_constant_override("h_separation", 10)
-		_ai_box.add_theme_constant_override("v_separation", 10)
-		col.add_child(_ai_box)
-		if Net.offline:
-			col.add_child(UI.label("AI 난이도", 26, UI.ACCENT))
-			_level_box = HFlowContainer.new()
-			_level_box.add_theme_constant_override("h_separation", 10)
-			_level_box.add_theme_constant_override("v_separation", 10)
-			col.add_child(_level_box)
-		col.add_child(UI.label("AI 속도 (게임 중에도 바꿀 수 있음)", 26, UI.ACCENT))
-		_speed_box = HFlowContainer.new()
-		_speed_box.add_theme_constant_override("h_separation", 10)
-		_speed_box.add_theme_constant_override("v_separation", 10)
-		col.add_child(_speed_box)
-	col.add_child(UI.label("내 덱" if Net.solo else "덱 선택", 30, UI.ACCENT))
-	_decks = GridContainer.new()
-	_decks.add_theme_constant_override("h_separation", 12)
-	_decks.add_theme_constant_override("v_separation", 12)
-	_decks.columns = clampi(int(get_viewport_rect().size.x / 480.0), 1, 3)
-	col.add_child(_decks)
-
+	_cards = VBoxContainer.new()
+	_cards.add_theme_constant_override("separation", 18)
+	col.add_child(_cards)
+	_opp = Lay.wrap("", 22, UI.TEXT_DIM)
+	_where = Lay.wrap("", 22, UI.TEXT)
 	# 아래 고정: 준비 완료
-	var foot := UI.margin(20)
-	foot.add_theme_constant_override("margin_bottom", int(UI.safe_bottom(self)) + 20)
-	layout.add_child(foot)
-	_ready_btn = UI.wide(UI.button("AI와 대전 시작" if Net.solo else "준비 완료", 34, true, true))
+	_ready_btn = UI.button("AI와 대전 시작" if Net.solo else "준비 완료", 32, true, true)
+	(_ready_btn.get_meta("panel") as Control).set_anchors_preset(Control.PRESET_FULL_RECT)
 	_ready_btn.tapped.connect(_toggle_ready)
-	foot.add_child(_ready_btn)
-
+	UI.footer(self).add_child(_ready_btn)
 	Net.changed.connect(_refresh)
 	_refresh()
 
 func _exit_tree() -> void:
 	if Net.changed.is_connected(_refresh):
 		Net.changed.disconnect(_refresh)
+	for n in [_opp, _where]:
+		if is_instance_valid(n) and n.get_parent() == null:
+			n.queue_free()
 
 func on_shown() -> void:
+	_built = ""
 	_refresh()
 
 ## 뒤로 가기: 게임에서 나감 (토큰 삭제)
@@ -109,144 +53,190 @@ func _me() -> Dictionary:
 	var seats: Array = Net.lobby.get("seats", [])
 	return seats[Net.seat] if Net.seat >= 0 and Net.seat < seats.size() else {}
 
+func _other() -> Dictionary:
+	var seats: Array = Net.lobby.get("seats", [])
+	return seats[1 - Net.seat] if seats.size() == 2 and Net.seat >= 0 else {}
+
+static func _deck(id: String) -> Dictionary:
+	for d in DeckData.decks:
+		if str(d["id"]) == id:
+			return d
+	return {}
+
 func _refresh() -> void:
 	if not is_inside_tree():
 		return
 	var me := _me()
-	var seats: Array = Net.lobby.get("seats", [])
+	var o := _other()
 	var my_deck := str(me.get("deckId", "")) if me.get("deckId") != null else ""
 	var ready := bool(me.get("ready", false))
-	var who := ("나 (방장)" if Net.offline else "나 (참가)") if Net.p2p() else "플레이어 %d" % (Net.seat + 1)
-	_info.text = "%s%s" % [who, "" if Net.status == "open" else " · 재접속 중…"]
-	if seats.size() == 2 and Net.seat >= 0:
-		var o: Dictionary = seats[1 - Net.seat]
-		var st := "대기 중" if not bool(o["taken"]) else ("준비 완료" if bool(o["ready"]) else ("덱: %s" % o["deckName"] if o.get("deckName") != null else "덱 고르는 중"))
-		_opp.text = "상대: %s" % st
-		if Net.p2p() and bool(o["taken"]):
-			_opp.text = "상대 (%s): %s" % [o.get("device", ""), st if bool(o.get("connected", true)) else "연결 끊김 — 재접속 기다리는 중"]
-		# 폰끼리 대전 방장: 상대가 아직 없으면 들어올 방법 안내
-		_where.visible = Net.p2p() and Net.offline and not bool(o.get("connected", false))
-		if _where.visible:
-			var ips: Array = (Net.lobby.get("addresses", []) as Array).map(func(a): return str(a.address))
-			_where.text = "상대 폰: [폰끼리 대전] → 목록에서 이 방을 누르세요.
-목록에 없으면 주소 %s · 방 코드 %s 입력" % [" / ".join(PackedStringArray(ips)) if not ips.is_empty() else "(Wi-Fi 연결 없음)", Net.lobby.get("code", "")]
-		if Net.solo:
-			_opp.text = "상대: AI · %s" % (str(o["deckName"]) if o.get("deckName") != null else "덱 무작위")
-			var ai_deck := str(o["deckId"]) if o.get("deckId") != null else ""
-			if ai_deck != _built_ai:
-				_built_ai = ai_deck
-				_build_ai(ai_deck)
-			if _level_box != null and Net.ai_level() != _built_level:
-				_built_level = Net.ai_level()
-				for c in _level_box.get_children():
-					c.queue_free()
-				for lv in Net.AI_LEVELS:
-					var key: String = lv[1]
-					var on := key == _built_level
-					var b := UI.button(str(lv[0]) + (" (미리 수를 읽음)" if key == "hard" else ""), 24, on, on)
-					b.tapped.connect(func(): Net.send({ "t": "aiLevel", "level": key }))
-					_level_box.add_child(b)
-			if Net.ai_delay() != _built_speed:
-				_built_speed = Net.ai_delay()
-				for c in _speed_box.get_children():
-					c.queue_free()
-				for sp in Net.AI_SPEEDS:
-					var ms: int = sp[1]
-					var on := ms == _built_speed
-					var b := UI.button("%s (%s)" % [sp[0], "바로" if ms == 0 else "%.1f초" % (ms / 1000.0)], 24, on, on)
-					b.tapped.connect(func(): Net.send({ "t": "aiSpeed", "ms": ms }))
-					_speed_box.add_child(b)
-	var phase := str(Net.lobby.get("phase", ""))
-	if phase == "countdown":
+	_opp.text = _opp_line(o)
+	if str(Net.lobby.get("phase", "")) == "countdown":
 		_opp.text += " · 곧 시작!"
+	# 폰끼리 대전 방장: 상대가 아직 없으면 들어올 방법 안내
+	var waiting: bool = Net.p2p() and Net.offline and not o.is_empty() and not bool(o.get("connected", false))
+	if waiting:
+		var ips: Array = (Net.lobby.get("addresses", []) as Array).map(func(a): return str(a.address))
+		_where.text = "상대 폰: [폰끼리 대전] → 목록에서 이 방을 누르세요.
+목록에 없으면 주소 %s · 방 코드 %s 입력" % [" / ".join(PackedStringArray(ips)) if not ips.is_empty() else "(Wi-Fi 연결 없음)", Net.lobby.get("code", "")]
 	_err.text = str(Net.last_error.get("message", "")) if not Net.last_error.is_empty() else ""
+	_err.visible = _err.text != ""
 	if not Net.solo:
-		(_ready_btn.get_meta("label") as Label).text = "✔ 준비 완료 (누르면 해제)" if ready else "준비 완료"
+		(_ready_btn.get_meta("label") as Label).text = "준비 취소" if ready else "준비 완료"
+		UI.restyle(_ready_btn, true, not ready)
 	UI.set_enabled(_ready_btn, my_deck != "")
-	if my_deck != _built_deck or ready != _built_ready:
-		_built_deck = my_deck
-		_built_ready = ready
-		_build_decks(my_deck, ready)
-	# 게임 시작 → 게임 화면
+	# 다시 그릴 필요가 있을 때만 (고르는 중 깜빡이지 않게)
+	var sig := JSON.stringify([my_deck, ready, DeckData.choices_for(my_deck).size() if my_deck != "" else 0, o, Net.ai_level(), Net.ai_delay(), Net.status, waiting, _where.text])
+	if sig != _built:
+		_built = sig
+		_build(my_deck, ready, o, waiting)
+	# 게임 시작 → 대전 화면
 	if Net.in_game() and Nav.current() == self:
-		# 새 대전 화면: AI 연습 = 탁자, 서버 대전 = 손패 (게임판은 웹). 예전 화면은 classic_ui 설정일 때만
-		Nav.push(GameScreen.new() if LobbyScreen.classic_ui() else BattleScreen.new())
+		Nav.push(BattleScreen.new())
 
-func _build_decks(selected: String, locked: bool) -> void:
-	for c in _decks.get_children():
+func _opp_line(o: Dictionary) -> String:
+	if o.is_empty():
+		return ""
+	if Net.solo:
+		return "AI · %s" % (str(o["deckName"]) if o.get("deckName") != null else "덱 무작위")
+	var st := "기다리는 중" if not bool(o["taken"]) else ("준비 완료" if bool(o["ready"]) else ("덱: %s" % o["deckName"] if o.get("deckName") != null else "덱 고르는 중"))
+	if Net.p2p() and bool(o["taken"]):
+		return "%s · %s" % [o.get("device", ""), st if bool(o.get("connected", true)) else "연결 끊김 — 재접속 기다리는 중"]
+	return st
+
+func _build(my_deck: String, ready: bool, o: Dictionary, waiting: bool) -> void:
+	# 계속 쓰는 글자(_opp·_where)는 떼어 두고 나머지 칸은 버린다
+	for n in [_opp, _where]:
+		if n.get_parent():
+			n.get_parent().remove_child(n)
+	for c in _cards.get_children():
+		_cards.remove_child(c)
 		c.queue_free()
-	for d in DeckData.decks:
-		if d.get("playable", true) == false:
-			continue   # 덱 뷰어 전용 (대전 규칙 준비 중)
-		var id: String = d["id"]
-		var tap := TapArea.new()
-		tap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		var p := PanelContainer.new()
-		p.add_theme_stylebox_override("panel", UI.box(UI.PANEL, 18, 4 if id == selected else 0, UI.ACCENT))
-		p.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		tap.add_child(p)
-		p.set_anchors_preset(Control.PRESET_FULL_RECT)
-		tap.press_target = p
-		var row := HBoxContainer.new()
-		row.add_theme_constant_override("separation", 18)
-		row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var mm := UI.margin(14)
-		mm.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		mm.add_child(row)
-		p.add_child(mm)
-		var img := TextureRect.new()
-		img.custom_minimum_size = Vector2(96, 134)
-		img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		img.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var cover := DeckData.card_by_code(d, d["cover"])
-		if not cover.is_empty():
-			var ref: WeakRef = weakref(img)
-			ImageCache.request(cover["thumb"], func(t):
-				var r = ref.get_ref()
-				if r:
-					r.texture = t)
-		row.add_child(img)
-		var names := VBoxContainer.new()
-		names.alignment = BoxContainer.ALIGNMENT_CENTER
-		names.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		names.add_child(UI.label(d["name"], 32, UI.ACCENT if id == selected else UI.TEXT))
-		var printed := DeckData.choices_for(id).size()
-		names.add_child(UI.label("60장%s · 길게 눌러 카드 보기" % ("" if printed == 0 else " · 인쇄 %d종 변경" % printed), 22, UI.TEXT_DIM))
-		row.add_child(names)
-		if locked and id != selected:
-			tap.modulate.a = 0.45
-		# 길게 누르기: 덱의 카드 보기 (앱 전체에서 길게 누르기 = 크게 보기)
-		var deck_dict: Dictionary = d
-		tap.long_pressed.connect(func(): Nav.push(DeckDetailScreen.new(deck_dict)))
-		tap.tapped.connect(func():
-			if bool(_me().get("ready", false)):
-				return
+	if waiting:
+		_cards.add_child(_where_card())
+	_cards.add_child(_my_card(my_deck, ready))
+	_cards.add_child(_opp_card(o))
+
+## 내 덱: 고른 덱 (누르면 카드 목록) + [덱 고르기/바꾸기]
+func _my_card(my_deck: String, ready: bool) -> Control:
+	var c := Lay.card(UI.PANEL_HI, 20)
+	var col: VBoxContainer = c[1]
+	col.add_theme_constant_override("separation", 12)
+	var head := HBoxContainer.new()
+	head.add_theme_constant_override("separation", 10)
+	var who := "내 덱"
+	if Net.p2p():
+		who = "내 덱 · %s" % ("방장" if Net.offline else "참가")
+	elif not Net.solo:
+		who = "내 덱 · 플레이어 %d" % (Net.seat + 1)
+	head.add_child(UI.label(who, 28, UI.ACCENT))
+	if not Net.solo and my_deck != "":
+		head.add_child(UI.chip("준비 완료" if ready else "준비 중", UI.GOOD if ready else UI.TEXT_DIM))
+	col.add_child(head)
+	if Net.status != "open" and not Net.offline:
+		col.add_child(UI.label("재접속 중…", 22, UI.WARN))
+	var d := _deck(my_deck)
+	if d.is_empty():
+		col.add_child(Lay.wrap("덱을 고르지 않았습니다. 아래 [덱 고르기]를 누르세요.", 22, UI.TEXT_DIM))
+	else:
+		col.add_child(_deck_row(d))
+	var choose := UI.button("덱 고르기" if d.is_empty() else "덱 바꾸기", 24, true, d.is_empty())
+	(choose.get_meta("panel") as Control).set_anchors_preset(Control.PRESET_FULL_RECT)
+	choose.set_meta("choose", "mine")
+	UI.set_enabled(choose, Net.solo or not ready)
+	choose.tapped.connect(func():
+		if UI.is_enabled(choose):
+			_pick_deck(false, my_deck))
+	col.add_child(choose)
+	return c[0]
+
+## 상대: 상태 한 줄. AI 연습이면 AI 덱 + 난이도 + 속도
+func _opp_card(o: Dictionary) -> Control:
+	var c := Lay.card(UI.PANEL, 20)
+	var col: VBoxContainer = c[1]
+	col.add_theme_constant_override("separation", 12)
+	var head := HBoxContainer.new()
+	head.add_theme_constant_override("separation", 10)
+	head.add_child(UI.label("상대 (AI)" if Net.solo else "상대", 28, UI.ACCENT))
+	if not Net.solo and not o.is_empty() and bool(o["taken"]):
+		head.add_child(UI.chip("준비 완료" if bool(o["ready"]) else "준비 중", UI.GOOD if bool(o["ready"]) else UI.TEXT_DIM))
+	col.add_child(head)
+	col.add_child(_opp)
+	if not Net.solo:
+		var od := _deck(str(o.get("deckId", "")) if o.get("deckId") != null else "")
+		if not od.is_empty():
+			col.add_child(_deck_row(od))
+		return c[0]
+	var ai_deck := str(o.get("deckId", "")) if o.get("deckId") != null else ""
+	var ad := _deck(ai_deck)
+	if not ad.is_empty():
+		col.add_child(_deck_row(ad))
+	var ch := UI.button("AI 덱 바꾸기", 24, true)
+	(ch.get_meta("panel") as Control).set_anchors_preset(Control.PRESET_FULL_RECT)
+	ch.set_meta("choose", "ai")
+	ch.tapped.connect(func(): _pick_deck(true, ai_deck))
+	col.add_child(ch)
+	if Net.offline:
+		col.add_child(UI.label("AI 난이도", 24, UI.TEXT))
+		var lv: Array = Net.AI_LEVELS.map(func(l): return [l[1], str(l[0]) + (" (미리 수를 읽음)" if l[1] == "hard" else "")])
+		var lrow := Lay.segmented(lv, Net.ai_level(), func(key): Net.send({ "t": "aiLevel", "level": key }))
+		lrow.set_meta("seg", "level")
+		col.add_child(lrow)
+	col.add_child(UI.label("AI 속도 (게임 중에도 바꿀 수 있음)", 24, UI.TEXT))
+	var sp: Array = Net.AI_SPEEDS.map(func(s): return [s[1], "%s (%s)" % [s[0], "바로" if int(s[1]) == 0 else "%.1f초" % (int(s[1]) / 1000.0)]])
+	var srow := Lay.segmented(sp, Net.ai_delay(), func(ms): Net.send({ "t": "aiSpeed", "ms": ms }))
+	srow.set_meta("seg", "speed")
+	col.add_child(srow)
+	return c[0]
+
+## 폰끼리 대전 방장: 상대가 들어올 방법 (주소·방 코드 크게)
+func _where_card() -> Control:
+	var c := Lay.card(UI.PANEL, 20)
+	var col: VBoxContainer = c[1]
+	col.add_child(UI.label("상대를 기다리는 중", 28, UI.ACCENT))
+	col.add_child(_where)
+	var ips: Array = (Net.lobby.get("addresses", []) as Array).map(func(a): return str(a.address))
+	for ip in ips:
+		col.add_child(UI.label(str(ip), 34, UI.ACCENT))
+	col.add_child(UI.label("방 코드 %s" % Net.lobby.get("code", ""), 34, UI.TEXT))
+	return c[0]
+
+## 덱 한 줄: 대표 카드 + 이름 + 장수. 누르거나 길게 누르면 덱의 카드 보기
+func _deck_row(d: Dictionary) -> Control:
+	var tap := TapArea.new()
+	tap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 16)
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.set_anchors_preset(Control.PRESET_FULL_RECT)
+	tap.add_child(row)
+	row.add_child(Lay.cover(d, 96, -3))
+	var info := VBoxContainer.new()
+	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info.alignment = BoxContainer.ALIGNMENT_CENTER
+	info.add_theme_constant_override("separation", 6)
+	info.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(info)
+	info.add_child(Lay.wrap(str(d["name"]), 32, UI.TEXT))
+	var printed := DeckData.choices_for(str(d["id"])).size()
+	info.add_child(Lay.wrap("%d장%s · 누르면 카드 보기" % [int(d["total"]), "" if printed == 0 else " · 인쇄 %d종 바꿈" % printed], 20, UI.TEXT_DIM))
+	info.add_child(Lay.kind_chips(d))
+	var dd: Dictionary = d
+	tap.tapped.connect(func(): Nav.push(DeckDetailScreen.new(dd, false)))
+	tap.long_pressed.connect(func(): Nav.push(DeckDetailScreen.new(dd, false)))
+	return tap
+
+## 덱 고르기 화면 (내 덱 / AI 덱)
+func _pick_deck(ai: bool, current: String) -> void:
+	var p := DeckListScreen.new(true, "AI 덱 고르기" if ai else "내 덱 고르기", current, ai)
+	p.picked.connect(func(id: String):
+		if ai:
+			Net.send({ "t": "aiDeck", "deckId": id if id != "" else null })
+		else:
 			Net.send({ "t": "chooseDeck", "deckId": id, "prints": DeckData.choices_for(id) }))
-		_decks.add_child(tap)
-
-func _build_ai(selected: String) -> void:
-	for c in _ai_box.get_children():
-		c.queue_free()
-	var opts: Array = [["", "무작위"]]
-	for d in DeckData.decks:
-		if d.get("playable", true) != false:
-			opts.append([str(d["id"]), str(d["name"])])
-	for o in opts:
-		var id: String = o[0]
-		var b := UI.button(o[1], 24, id == selected, id == selected)
-		b.tapped.connect(func(): Net.send({ "t": "aiDeck", "deckId": id if id != "" else null }))
-		_ai_box.add_child(b)
+	Nav.push(p)
 
 func _toggle_ready() -> void:
 	if not UI.is_enabled(_ready_btn):
 		return
 	Net.send({ "t": "ready", "ready": not bool(_me().get("ready", false)) })
-
-## 예전 대전 화면을 쓰는가 (user://ui.json {"classic": true}) — 문제가 생겼을 때 되돌리는 용도
-static func classic_ui() -> bool:
-	if not FileAccess.file_exists("user://ui.json"):
-		return false
-	var f := FileAccess.open("user://ui.json", FileAccess.READ)
-	var d = JSON.parse_string(f.get_as_text()) if f else null
-	return d is Dictionary and bool(d.get("classic", false))

@@ -289,8 +289,8 @@ func _big_card(code: String, caption: String, sec: float) -> void:
 	c.position = Vector2((W - w) / 2, screen.size.y * 0.5 - c.size.y * 0.62)
 	c.pivot_offset = c.size / 2
 	box.add_child(c)
-	var lab := UI.label(caption, 26, Color.WHITE, HORIZONTAL_ALIGNMENT_CENTER, true)
-	lab.add_theme_stylebox_override("normal", UI.box(Color(0, 0, 0, 0.82), 12))
+	var lab := UI.label(caption, 26, UI.ON_INVERSE, HORIZONTAL_ALIGNMENT_CENTER, true)
+	lab.add_theme_stylebox_override("normal", UI.inverse_box(12))
 	lab.size = Vector2(W * 0.86, 0)
 	lab.position = Vector2(W * 0.07, c.position.y + c.size.y + 10)
 	box.add_child(lab)
@@ -311,7 +311,12 @@ func _banner(text: String, sub: String, sec: float, color := UI.ACCENT) -> void:
 	var W: float = screen.size.x
 	var p := PanelContainer.new()
 	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	p.add_theme_stylebox_override("panel", UI.box(Color(0.05, 0.08, 0.07, 0.94), 20, 3, color))
+	var bsb := UI.float_box(22, color, 3)
+	bsb.content_margin_left = 18
+	bsb.content_margin_right = 18
+	bsb.content_margin_top = 12
+	bsb.content_margin_bottom = 12
+	p.add_theme_stylebox_override("panel", bsb)
 	var col := VBoxContainer.new()
 	col.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	p.add_child(col)
@@ -489,7 +494,7 @@ func _attack(e: Dictionary, mine: bool) -> void:
 	for h in hits:
 		top = maxi(top, tier_of(h, _kos_after(str(h.sid))))
 	var stop: float = HIT_STOP[top]
-	var color: Color = UI.ACCENT if mine else Color(0.95, 0.45, 0.4)
+	var color: Color = UI.GOLD if mine else Color(0.95, 0.45, 0.4)   # 카드 위 꼬리표라 테마와 무관한 색
 	_tag(n, ("" if mine else BattleScreen.opp_name() + " · ") + "기술 [%s]" % str(e.get("name", "")), color, 0.9)
 	var state := { "hit": hits.is_empty() }
 	var hit_now := func():
@@ -659,7 +664,7 @@ func _coin(e: Dictionary) -> void:
 	var d := 150.0
 	var disc := Panel.new()
 	var sb := StyleBoxFlat.new()
-	sb.bg_color = UI.ACCENT
+	sb.bg_color = UI.GOLD
 	sb.set_corner_radius_all(int(d / 2))
 	sb.set_border_width_all(6)
 	sb.border_color = Color(0.55, 0.4, 0.1)
@@ -673,8 +678,8 @@ func _coin(e: Dictionary) -> void:
 	face.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	face.size = disc.size
 	disc.add_child(face)
-	var cap := UI.label(str(e.get("reason", "")), 24, Color.WHITE, HORIZONTAL_ALIGNMENT_CENTER, true)
-	cap.add_theme_stylebox_override("normal", UI.box(Color(0, 0, 0, 0.8), 12))
+	var cap := UI.label(str(e.get("reason", "")), 24, UI.ON_INVERSE, HORIZONTAL_ALIGNMENT_CENTER, true)
+	cap.add_theme_stylebox_override("normal", UI.inverse_box(12))
 	cap.size = Vector2(W * 0.8, 0)
 	cap.position = Vector2(W * 0.1, disc.position.y + d + 16)
 	root.add_child(cap)
@@ -685,7 +690,7 @@ func _coin(e: Dictionary) -> void:
 			tw.tween_property(disc, "scale:x", 1.0, 0.08 / speed())
 		await _wait(0.5)
 	face.text = "앞" if heads else "뒤"
-	sb.bg_color = UI.ACCENT if heads else Color(0.7, 0.72, 0.76)
+	sb.bg_color = UI.GOLD if heads else Color(0.7, 0.72, 0.76)
 	cap.text = "%s — %s" % ["앞면" if heads else "뒷면", str(e.get("reason", ""))]
 	await _wait(0.6)
 	root.queue_free()

@@ -109,7 +109,7 @@ TCG Pocket 대전 화면을 웹으로 조사하고(Claude), 같은 지시를 Fab
 ## 6. 구현 구조
 
 ```
-BattleScreen (screens/battle_screen.gd)   — Net.changed 수신, 조립만. 기존 game_screen.gd 는 LAN 대전용으로 유지
+BattleScreen (screens/battle_screen.gd)   — Net.changed 수신, 조립만. (예전 game_screen.gd 는 2026-11 화면 개편 때 삭제)
 ├─ Board        battle/board.gd           — 칸·더미 배치
 │   ├─ SlotView × N   battle/slot_view.gd — sid 로 유지 (다시 만들지 않음 → 카드가 "이동"함)
 │   ├─ PileView (덱·트래쉬·사이드) × 6
@@ -184,7 +184,7 @@ battle/fx_queue.gd  사건 순서 재생, 배속, 건너뛰기
 | 트래쉬·로그·항복 | ☰ 메뉴 / 더미 탭 | ☰ 메뉴 (내·상대 트래쉬 시트, 로그, 항복) |
 
 구현은 한 화면(`BattleScreen`)에 `mode = "table" | "hand"` 를 두고 부품(손패 부채, 포켓몬 칸, 말풍선, 시트, 연출 큐)을 함께 쓴다.
-`Net.solo` 이면 탁자, 아니면 손패. 기존 `game_screen.gd` 는 설정 토글로 남겨 두는 대체 화면.
+`Net.solo` 이면 탁자, 아니면 손패. (예전 `game_screen.gd` 대체 화면은 2026-11 화면 개편 때 삭제)
 
 ### 단계 (v2, 각 단계 = 테스트 통과 → 커밋·푸시)
 1. 배치 계산(`layout.gd`, 두 모드) + 탁자 그리기(포켓몬 칸·더미·상대 패·스타디움·상단 바) — 배치 단언 테스트, 실제 게임 화면 그리기 테스트

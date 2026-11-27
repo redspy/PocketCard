@@ -33,13 +33,13 @@ func _init(card_data: Dictionary, width: float) -> void:
 
 	# 매수 배지 (오른쪽 아래)
 	var badge := PanelContainer.new()
-	var sb := UI.box(Color(0, 0, 0, 0.78), 14, 2, UI.ACCENT)
+	var sb := UI.box(UI.ON_CARD, 14, 2, UI.GOLD)
 	sb.content_margin_left = 10
 	sb.content_margin_right = 10
 	sb.content_margin_top = 2
 	sb.content_margin_bottom = 2
 	badge.add_theme_stylebox_override("panel", sb)
-	badge.add_child(UI.label("×%d" % int(card["count"]), 24, UI.ACCENT, HORIZONTAL_ALIGNMENT_CENTER))
+	badge.add_child(UI.label("×%d" % int(card["count"]), 24, UI.GOLD, HORIZONTAL_ALIGNMENT_CENTER))
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	frame.add_child(badge)
 	badge.ready.connect(func(): badge.position = Vector2(width - badge.size.x - 6, img_h - badge.size.y - 6), CONNECT_ONE_SHOT)

@@ -1,52 +1,33 @@
 class_name DeckDetailScreen
 extends Control
-## 덱 카드 목록 화면: 상단 바 + 종류별 섹션 + 썸네일 격자(매수 배지)
+## 덱 카드 목록 화면: 상단 바 + 덱 설명 + 종류별 섹션 + 썸네일 격자(매수 배지) + 아래 [이 덱으로 AI와 연습]
 
 signal card_tapped(card: Dictionary)
 
 const GAP := 14
-const SIDE := 22
 const MIN_THUMB_W := 190.0
 
 var deck: Dictionary
+var show_play := true          # 아래 [이 덱으로 AI와 연습] (대전 준비에서 길게 눌러 연 경우는 없음)
 var _scroll: ScrollContainer
 var _content: VBoxContainer
 var _thumbs: Array[CardThumb] = []
 var _guide_expanded := false
 
-func _init(deck_data: Dictionary) -> void:
+func _init(deck_data: Dictionary, p_show_play := true) -> void:
 	deck = deck_data
+	show_play = p_show_play and deck_data.get("playable", true) != false
 
 func _ready() -> void:
-	var bg := ColorRect.new()
-	bg.color = UI.BG
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(bg)
-
-	var layout := VBoxContainer.new()
-	layout.set_anchors_preset(Control.PRESET_FULL_RECT)
-	layout.add_theme_constant_override("separation", 0)
-	add_child(layout)
-
-	layout.add_child(_top_bar())
-
-	_scroll = ScrollContainer.new()
-	_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER  # 스크롤은 되지만 막대는 숨김(폭 계산 안정)
-	_scroll.scroll_deadzone = 12
-	layout.add_child(_scroll)
-
-	var m := UI.margin(SIDE)
-	m.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	m.add_theme_constant_override("margin_bottom", int(UI.safe_bottom(self)) + 40)
-	_scroll.add_child(m)
-
-	_content = VBoxContainer.new()
-	_content.add_theme_constant_override("separation", 18)
-	m.add_child(_content)
-
+	_content = Lay.page(self, str(deck["name"]), "%d장 · %d종" % [int(deck["total"]), deck["cards"].size()])
+	_scroll = get_meta("scroll")
+	# 주 행동: 이 덱으로 바로 AI와 연습 (화면 아래, 엄지가 닿는 곳)
+	if show_play:
+		var play := UI.button("이 덱으로 AI와 연습", 30, true, true)
+		(play.get_meta("panel") as Control).set_anchors_preset(Control.PRESET_FULL_RECT)
+		play.set_meta("play", true)
+		play.tapped.connect(func(): HomeScreen.start_solo(str(deck["id"])))
+		UI.footer(self).add_child(play)
 	# 폭이 정해진 뒤 격자를 만든다 (폴드 화면 펼침/접힘에도 다시 배치)
 	_scroll.resized.connect(_rebuild)
 
@@ -55,40 +36,9 @@ func _exit_tree() -> void:
 	ImageCache.trim_thumbs()
 	ImageCache.trim(0)
 
-func _top_bar() -> Control:
-	var bar := PanelContainer.new()
-	var sb := UI.box(UI.BG_DEEP, 0)
-	sb.content_margin_top = UI.safe_top(self) + 10
-	sb.content_margin_bottom = 14
-	sb.content_margin_left = 10
-	sb.content_margin_right = 22
-	bar.add_theme_stylebox_override("panel", sb)
-
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 6)
-	bar.add_child(row)
-
-	var back := TapArea.new()
-	back.custom_minimum_size = Vector2(84, 84)
-	var arrow := UI.label("‹", 64, UI.TEXT, HORIZONTAL_ALIGNMENT_CENTER)
-	arrow.set_anchors_preset(Control.PRESET_FULL_RECT)
-	arrow.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	arrow.position.y = -6
-	back.add_child(arrow)
-	back.tapped.connect(Nav.back)
-	row.add_child(back)
-
-	var titles := VBoxContainer.new()
-	titles.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	titles.alignment = BoxContainer.ALIGNMENT_CENTER
-	titles.add_theme_constant_override("separation", 0)
-	titles.add_child(UI.label(deck["name"], 36, UI.ACCENT))
-	titles.add_child(UI.label("%d장 · %d종" % [int(deck["total"]), deck["cards"].size()], 22, UI.TEXT_DIM))
-	row.add_child(titles)
-	return bar
-
 func _rebuild() -> void:
-	var width := _scroll.size.x - SIDE * 2 - 2
+	var side := maxi(24, int((_scroll.size.x - Lay.MAX_CONTENT_WIDTH) * 0.5))
+	var width := _scroll.size.x - side * 2 - 2
 	if width <= 0:
 		return
 	var cols := maxi(3, int((width + GAP) / (MIN_THUMB_W + GAP)))
@@ -117,7 +67,7 @@ func _rebuild() -> void:
 		dot.color = UI.KIND_COLOR[s["kind"]]
 		dot.custom_minimum_size = Vector2(8, 34)
 		header.add_child(dot)
-		header.add_child(UI.label("%s" % s["label"], 30, UI.TEXT))
+		header.add_child(UI.label("%s" % s["label"], 30, UI.ACCENT))
 		var cnt := UI.label("%d장" % s["count"], 24, UI.TEXT_DIM)
 		cnt.size_flags_vertical = Control.SIZE_SHRINK_END
 		header.add_child(cnt)

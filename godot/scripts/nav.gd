@@ -105,3 +105,34 @@ func _unhandled_input(event: InputEvent) -> void:
 	# PC 테스트용: Esc / Backspace = 뒤로
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_ESCAPE, KEY_BACKSPACE]:
 		back()
+
+## 아래 탭: 첫 화면(홈) 위에 탭 화면 하나만 (null = 홈). 사이 화면은 모두 닫고 애니메이션 없이 바꾼다
+func open_tab(screen: Control) -> void:
+	if _busy:
+		if screen:
+			screen.free()
+		return
+	while _stack.size() > 1:
+		var old: Control = _stack.pop_back()
+		old.hide()
+		old.queue_free()
+	var home := current()
+	home.position.x = 0.0
+	home.modulate = Color.WHITE
+	home.visible = screen == null
+	if screen:
+		push(screen, false)
+	else:
+		_shown(home)
+
+## 화면을 모두 닫고 새 첫 화면으로 (테마를 바꿨을 때 — 모든 화면을 새 색으로 다시 만든다)
+func restart(screen: Control, then: Control = null) -> void:
+	while not _stack.is_empty():
+		var old: Control = _stack.pop_back()
+		old.hide()
+		old.queue_free()
+	_busy = false
+	push(screen, false)
+	if then:
+		screen.visible = false
+		push(then, false)

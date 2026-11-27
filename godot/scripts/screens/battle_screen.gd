@@ -25,6 +25,7 @@ var recent_tiles: Array = []        # 탁자: 가운데 띠 왼쪽 최근 행동
 var recent_evs: Array = []          # 타일에 보이는 사건 (최근 것부터)
 var hand: BHand
 var mid: Panel
+var arena: Panel                    # 탁자: 포켓몬 칸들 뒤 둥근 경기장 판
 var opp_hand: Label
 var bar_title: Label
 var status_label: Label
@@ -118,12 +119,17 @@ func on_back() -> bool:
 	return true
 
 func _build_static() -> void:
+	arena = Panel.new()
+	arena.name = "Arena"
+	arena.add_theme_stylebox_override("panel", UI.box(UI.FIELD, 26))
+	arena.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	board.add_child(arena)
 	mid = Panel.new()
 	mid.name = "Mid"
 	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color(1, 1, 1, 0.035)
+	sb.bg_color = Color(UI.PANEL, 0.6)
 	sb.set_corner_radius_all(14)
-	sb.border_color = UI.ACCENT
+	sb.border_color = UI.HILITE
 	mid.add_theme_stylebox_override("panel", sb)
 	mid.mouse_filter = Control.MOUSE_FILTER_STOP
 	mid.gui_input.connect(func(e):
@@ -136,6 +142,8 @@ func _build_static() -> void:
 	stadium.long_pressed.connect(func(): if stadium.code != "": BZoom.open(sheet_layer, [stadium.code]))
 	board.add_child(stadium)
 	stadium_name = UI.label("", 20, UI.TEXT_DIM)
+	stadium_name.clip_text = true
+	stadium_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	board.add_child(stadium_name)
 	for i in RECENT_MAX:
 		var t := BCard.new()
@@ -167,7 +175,7 @@ func _build_static() -> void:
 		lt.visible = false
 		board.add_child(lt)
 		lost_tags[side] = lt
-		var mk := UI.label("", 16, Color(0.95, 0.8, 0.45), HORIZONTAL_ALIGNMENT_LEFT)
+		var mk := UI.label("", 16, UI.WARN, HORIZONTAL_ALIGNMENT_LEFT)
 		mk.visible = false
 		board.add_child(mk)
 		marker_tags[side] = mk
@@ -195,12 +203,14 @@ func _build_static() -> void:
 	# 상단 바
 	var bar := Panel.new()
 	bar.name = "Bar"
-	bar.add_theme_stylebox_override("panel", UI.box(UI.BG_DEEP, 0))
+	bar.add_theme_stylebox_override("panel", UI.box(UI.BG, 0))
 	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hud.add_child(bar)
-	bar_title = UI.label("", 26, UI.TEXT)
+	bar_title = UI.label("", 28, UI.ACCENT)
+	bar_title.clip_text = true
+	bar_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	hud.add_child(bar_title)
-	menu_btn = UI.button("☰", 30)
+	menu_btn = UI.button("메뉴", 20)
 	menu_btn.tapped.connect(open_menu)
 	hud.add_child(menu_btn)
 	speed_btn = UI.button("AI", 20)
@@ -218,7 +228,13 @@ func _build_static() -> void:
 	notice_label.gui_input.connect(func(e):
 		if e is InputEventMouseButton and not e.pressed and e.button_index == MOUSE_BUTTON_LEFT and notice_label.text != "":
 			open_log())
-	chips = UI.label("", 20, UI.TEXT_DIM)
+	chips = UI.label("", 20, UI.TEXT)
+	var csb := UI.box(Color(UI.PANEL, 0.85), 14, 2, UI.LINE)
+	csb.content_margin_left = 14
+	csb.content_margin_right = 14
+	csb.content_margin_top = 6
+	csb.content_margin_bottom = 6
+	chips.add_theme_stylebox_override("normal", csb)
 	hud.add_child(chips)
 	end_btn = UI.button("턴 종료", 26, true, true)
 	end_btn.tapped.connect(tap_end_turn)
@@ -239,13 +255,8 @@ func _build_static() -> void:
 	peek_back.tapped.connect(func(): set_peek(false))
 	peek_back.visible = false
 	sheet_layer.add_child(peek_back)
-	toast = UI.label("", 24, Color.WHITE, HORIZONTAL_ALIGNMENT_CENTER, true)
-	var tsb := UI.box(Color(0.02, 0.04, 0.03, 0.94), 14, 2, Color(1, 1, 1, 0.18))
-	tsb.content_margin_left = 14
-	tsb.content_margin_right = 14
-	tsb.content_margin_top = 8
-	tsb.content_margin_bottom = 8
-	toast.add_theme_stylebox_override("normal", tsb)
+	toast = UI.label("", 24, UI.ON_INVERSE, HORIZONTAL_ALIGNMENT_CENTER, true)
+	toast.add_theme_stylebox_override("normal", UI.inverse_box(16))
 	toast.modulate.a = 0.0
 	hud.add_child(toast)
 
@@ -379,8 +390,6 @@ func _place_side(p: Dictionary, side: String, seen: Dictionary) -> void:
 # ───────────────────────── 최근 행동 타일 (탁자) ─────────────────────────
 
 const RECENT_MAX := 5
-const RECENT_MINE := Color(0.96, 0.77, 0.26)
-const RECENT_OPP := Color(0.95, 0.45, 0.4)
 
 ## 연출까지 끝난 카드 사용·기술·특성 (최근 것부터, 에너지 붙이기는 제외 — 매 턴 있어 정보가 적음)
 func recent_events() -> Array:
@@ -419,7 +428,7 @@ func _place_recent() -> void:
 		t.set_card(str(e.code))
 		var sb := StyleBoxFlat.new()
 		sb.bg_color = Color(0, 0, 0, 0)
-		sb.border_color = RECENT_MINE if int(e.get("player", -1)) == Net.seat else RECENT_OPP
+		sb.border_color = UI.ACCENT if int(e.get("player", -1)) == Net.seat else UI.BAD   # 내 행동 / 상대 행동
 		sb.set_border_width_all(3)
 		sb.set_corner_radius_all(6)
 		(t.get_node("frame") as Panel).add_theme_stylebox_override("panel", sb)
@@ -436,6 +445,7 @@ func open_recent(i: int) -> BZoom:
 func _place_board(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	_place_recent()
 	var table := mode == "table"
+	_place_arena()
 	mid.visible = table
 	if table:
 		mid.position = L.mid.position
@@ -454,6 +464,7 @@ func _place_board(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 		stadium_name.visible = true
 		stadium_name.text = "스타디움: %s" % BData.name_of(str(st.code))
 		stadium_name.position = Vector2(r.position.x + r.size.x + 14, r.position.y + r.size.y / 2 - 14)
+		stadium_name.size = Vector2(maxf(40.0, (L.mid as Rect2).end.x - stadium_name.position.x - 10), 0)
 	for side in ["my", "opp"]:
 		var p := me if side == "my" else opp
 		for k in ["deck", "discard"]:
@@ -502,6 +513,20 @@ func _place_board(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 		opp_hand.position = L.opp_hand.position
 		opp_hand.text = "%s  패 %d장 · 사이드 %d" % [opp_name(), int(opp.handCount), _count_true(opp.prizes)]
 
+## 경기장 판: 탁자 = 상대 정보 줄 ~ 내 벤치, 손패 화면 = 내 포켓몬 줄
+func _place_arena() -> void:
+	var top: float
+	var bottom := 0.0
+	if mode == "table":
+		top = (L.opp_hand as Rect2).position.y - 6
+	else:
+		top = (L.my_active as Rect2).position.y - 10
+		bottom = (L.my_active as Rect2).end.y
+	for r in L.my_bench:
+		bottom = maxf(bottom, (r as Rect2).end.y)
+	arena.position = Vector2(6, top)
+	arena.size = Vector2(size.x - 12, bottom + 10 - top)
+
 func _place_hand(me: Dictionary) -> void:
 	hand.position = L.hand.position
 	hand.size = L.hand.size
@@ -543,20 +568,26 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 		elif bool(Net.lobby.get("paused", false)):
 			t += " · 상대 재접속 대기"
 	bar_title.text = t
+	# 상단: 제목(턴·차례) 왼쪽, 작은 버튼은 오른쪽 끝부터 [메뉴] [자동] [AI 속도] (battleTest 대전 화면과 같은 짜임)
 	var by: float = L.bar.position.y
-	menu_btn.position = Vector2(8, by + 4)
-	bar_title.position = Vector2(84, by + 14)
+	var right := size.x - 12.0
+	var mw: float = menu_btn.get_combined_minimum_size().x
+	menu_btn.position = Vector2(right - mw, by + 6)
+	right = menu_btn.position.x - 8
 	var solo := Net.solo
 	speed_btn.visible = solo
 	auto_btn.visible = solo
 	if solo:
 		(speed_btn.get_meta("label") as Label).text = "AI %s" % Net.ai_speed_name()
 		(auto_btn.get_meta("label") as Label).text = "자동 켜짐" if auto_play else "자동"
-		(auto_btn.get_meta("panel") as PanelContainer).add_theme_stylebox_override("panel", _btn_box(auto_play))
+		UI.restyle(auto_btn, auto_play, auto_play)
 		var aw: float = auto_btn.get_combined_minimum_size().x
 		var sw: float = speed_btn.get_combined_minimum_size().x
-		auto_btn.position = Vector2(size.x - aw - 10, by + 6)
+		auto_btn.position = Vector2(right - aw, by + 6)
 		speed_btn.position = Vector2(auto_btn.position.x - sw - 8, by + 6)
+		right = speed_btn.position.x - 8
+	bar_title.position = Vector2(18, by + 12)
+	bar_title.size = Vector2(maxf(80.0, right - 18 - 4), 0)
 	status_label.visible = mode == "hand"
 	notice_label.visible = mode == "hand"
 	if mode == "hand":
@@ -582,6 +613,7 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 		chips.text = "에너지 %s  서포트 %s  후퇴 %s" % ["✔" if fl.energy else "○", "✔" if fl.supporter else "○", "✔" if fl.retreat else "○"]
 	else:
 		chips.text = thinking_text()
+	chips.visible = chips.text != ""
 	end_btn.position = L.end_turn.position
 	var can_end := actions().any(func(m): return m.kind == "endTurn")
 	var ended := phase == "ended"
@@ -591,7 +623,13 @@ func _place_hud(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	_set_end_hint(can_end and _my_turn() and my_request() == null and BHint.only_end_left(actions()))
 	var st_move := actions().any(func(m): return m.kind == "stadium")
 	stadium_btn.visible = st_move
-	if st_move:
+	if st_move and mode == "table" and mid.visible:
+		# 탁자: 스타디움 줄 오른쪽 끝 (효과를 쓰는 대상 옆). 스타디움 이름은 버튼 앞까지만
+		var ms := stadium_btn.get_combined_minimum_size()
+		stadium_btn.position = Vector2(mid.position.x + mid.size.x - ms.x - 8, mid.position.y + (mid.size.y - ms.y) / 2)
+		if stadium_name.visible:
+			stadium_name.size = Vector2(maxf(40.0, stadium_btn.position.x - stadium_name.position.x - 8), 0)
+	elif st_move:
 		stadium_btn.position = L.end_turn.position - Vector2(220, 0)
 		var chips_end: float = chips.position.x + chips.get_combined_minimum_size().x + 12
 		if stadium_btn.position.x < chips_end + 12:
@@ -632,14 +670,6 @@ func _set_end_hint(on: bool) -> void:
 		_end_tw.parallel().tween_property(p, "self_modulate", Color(1.25, 1.25, 1.1), 0.55)
 		_end_tw.tween_property(p, "scale", Vector2.ONE, 0.55)
 		_end_tw.parallel().tween_property(p, "self_modulate", Color.WHITE, 0.55)
-
-func _btn_box(on: bool) -> StyleBoxFlat:
-	var sb := UI.box(UI.ACCENT if on else UI.PANEL_HI, 16, 0)
-	sb.content_margin_left = 22
-	sb.content_margin_right = 22
-	sb.content_margin_top = 14
-	sb.content_margin_bottom = 14
-	return sb
 
 ## 칸의 위치 이동은 한 번에 하나만 (흔들기·돌진·자리 이동이 겹쳐 엉뚱한 곳에 멈추지 않게). 목표 위치를 meta 로 기억
 static func move_node(node: Control, pos: Vector2, dur: float) -> void:
@@ -905,7 +935,7 @@ func open_popover(sid: String) -> void:
 	var is_active: bool = me.get("active") != null and str(me.active.sid) == sid
 	var moves := _slot_moves(sid)
 	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", UI.box(Color(0.05, 0.08, 0.07, 0.96), 16, 3, UI.ACCENT))
+	panel.add_theme_stylebox_override("panel", UI.float_box(22))
 	var mm := UI.margin(12)
 	panel.add_child(mm)
 	var col := VBoxContainer.new()
@@ -1390,7 +1420,7 @@ var _concede_armed := 0
 func _sheet_panel(title: String) -> VBoxContainer:
 	close_menu()
 	var root := PanelContainer.new()
-	root.add_theme_stylebox_override("panel", UI.box(Color(0.04, 0.09, 0.07, 0.97), 22, 3, UI.ACCENT))
+	root.add_theme_stylebox_override("panel", UI.float_box(24))
 	var mm := UI.margin(18)
 	root.add_child(mm)
 	var col := VBoxContainer.new()
@@ -1428,7 +1458,7 @@ func open_menu() -> void:
 			open_discard("opp")],
 	]
 	for it in items:
-		var b := UI.button(it[0], 26)
+		var b := UI.wide(UI.button(it[0], 26), HORIZONTAL_ALIGNMENT_LEFT)
 		b.set_meta("item", it[0])
 		b.tapped.connect(it[1])
 		col.add_child(b)
@@ -1437,7 +1467,7 @@ func open_menu() -> void:
 	for st in [["shake", "화면 흔들림"], ["vibrate", "진동"]]:
 		var key: String = st[0]
 		var on: bool = BFx.shake_on if key == "shake" else BFx.vibrate_on
-		var sb := UI.button("%s: %s" % [st[1], "켜짐" if on else "꺼짐"], 26)
+		var sb := UI.wide(UI.button("%s: %s" % [st[1], "켜짐" if on else "꺼짐"], 26), HORIZONTAL_ALIGNMENT_LEFT)
 		sb.set_meta("item", key)
 		sb.tapped.connect(func():
 			if key == "shake":
@@ -1449,7 +1479,7 @@ func open_menu() -> void:
 			(sb.get_meta("label") as Label).text = "%s: %s" % [st[1], "켜짐" if now_on else "꺼짐"])
 		col.add_child(sb)
 	if actions().any(func(m): return m.kind == "concede"):
-		var cb := UI.button("항복", 26)
+		var cb := UI.wide(UI.button("항복", 26), HORIZONTAL_ALIGNMENT_LEFT)
 		cb.set_meta("item", "항복")
 		cb.tapped.connect(func(): tap_concede(cb))
 		col.add_child(cb)
@@ -1460,7 +1490,10 @@ func tap_concede(b: TapArea) -> void:
 	if now - _concede_armed > 3000:
 		_concede_armed = now
 		(b.get_meta("label") as Label).text = "정말 항복할까요? 한 번 더 누르세요"
-		(b.get_meta("panel") as PanelContainer).add_theme_stylebox_override("panel", UI.box(Color(0.75, 0.22, 0.2), 16))
+		var dsb := UI.button_box(false, true)
+		dsb.bg_color = UI.BAD
+		(b.get_meta("panel") as PanelContainer).add_theme_stylebox_override("panel", dsb)
+		(b.get_meta("label") as Label).add_theme_color_override("font_color", Color.WHITE)
 		return
 	_concede_armed = 0
 	close_menu()
@@ -1537,9 +1570,9 @@ func _update_result() -> void:
 	var me := _me()
 	var opp := _opp()
 	var title := "무승부" if win == null else ("승리!" if int(win) == Net.seat else "패배")
-	var color := UI.TEXT if win == null else (UI.ACCENT if int(win) == Net.seat else Color(0.95, 0.5, 0.45))
+	var color := UI.TEXT if win == null else (UI.ACCENT if int(win) == Net.seat else UI.BAD)
 	var root := PanelContainer.new()
-	root.add_theme_stylebox_override("panel", UI.box(Color(0.04, 0.08, 0.06, 0.97), 26, 4, color))
+	root.add_theme_stylebox_override("panel", UI.float_box(28, color, 4))
 	var mm := UI.margin(26)
 	root.add_child(mm)
 	var col := VBoxContainer.new()

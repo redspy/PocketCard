@@ -23,10 +23,10 @@ func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_PASS
 	_empty = Panel.new()
 	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color(1, 1, 1, 0.03)
+	sb.bg_color = Color(UI.TEXT, 0.035)
 	sb.set_corner_radius_all(10)
 	sb.set_border_width_all(2)
-	sb.border_color = Color(1, 1, 1, 0.16)
+	sb.border_color = Color(UI.TEXT, 0.16)
 	_empty.add_theme_stylebox_override("panel", sb)
 	_empty.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_empty.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -227,10 +227,10 @@ func set_mark(kind: String) -> void:
 	if card.visible:
 		card.set_mark(kind)
 		var esb := _empty.get_theme_stylebox("panel") as StyleBoxFlat
-		esb.border_color = Color(1, 1, 1, 0.16)
+		esb.border_color = Color(UI.TEXT, 0.16)
 	else:
 		var sb := _empty.get_theme_stylebox("panel") as StyleBoxFlat
-		sb.border_color = UI.ACCENT if kind == "target" else Color(1, 1, 1, 0.16)
+		sb.border_color = UI.HILITE if kind == "target" else Color(UI.TEXT, 0.16)
 		sb.set_border_width_all(5 if kind == "target" else 2)
 		_empty_mark = kind
 

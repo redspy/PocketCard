@@ -63,7 +63,7 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP   # 아래 화면으로 터치가 새지 않게
 
 	_bg = ColorRect.new()
-	_bg.color = Color(0.02, 0.05, 0.04, 0.99)   # 뒤 덱 화면 제목이 비치지 않게
+	_bg.color = UI.BG   # 뒤 덱 화면 제목이 비치지 않게
 	_bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_bg.modulate.a = 0.0
@@ -222,7 +222,12 @@ func _build_prints() -> void:
 			sel = item
 	_prints_scroll.scroll_horizontal = 0
 	if sel:
-		_prints_scroll.ensure_control_visible.call_deferred(sel)
+		_show_print.call_deferred(sel)
+
+## 고른 인쇄가 보이게 줄을 민다 (그 사이 줄을 다시 만들었으면 건너뜀)
+func _show_print(sel) -> void:
+	if is_instance_valid(sel) and not sel.is_queued_for_deletion() and _prints_scroll.is_ancestor_of(sel):
+		_prints_scroll.ensure_control_visible(sel)
 
 func _print_item(card: Dictionary, p: Dictionary, w: float) -> TapArea:
 	var selected: bool = p["code"] == card["code"]
@@ -234,7 +239,7 @@ func _print_item(card: Dictionary, p: Dictionary, w: float) -> TapArea:
 	item.add_child(col)
 
 	var frame := PanelContainer.new()
-	var sb := UI.box(Color(0, 0, 0, 0.3), 8, 3 if selected else 1, UI.ACCENT if selected else Color(1, 1, 1, 0.25))
+	var sb := UI.box(UI.PANEL, 8, 3 if selected else 1, UI.ACCENT if selected else UI.LINE)
 	sb.set_content_margin_all(3)
 	frame.add_theme_stylebox_override("panel", sb)
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE

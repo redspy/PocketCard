@@ -61,7 +61,7 @@ static func _apply(t: Texture2D, ref: WeakRef, want: String, only_if_empty: bool
 		return
 	me._img.texture = t
 
-## 강조: "target" = 놓을 수 있는 곳(금색 틀 맥동), "pick" = 고른 것(굵은 틀), "ready" = 지금 쓸 수 있음(가는 초록 틀),
+## 강조: "target" = 놓을 수 있는 곳(HILITE 틀 맥동), "pick" = 고른 것(굵은 틀), "ready" = 지금 쓸 수 있음(가는 초록 틀),
 ## "dim" = 흐리게, "" = 보통
 var _mark_kind := ""
 
@@ -87,8 +87,8 @@ func set_mark(kind: String) -> void:
 			sb.border_color = READY_COLOR
 			sb.set_border_width_all(3)
 		else:
-			sb.bg_color = Color(0.96, 0.77, 0.26, 0.12 if kind == "target" else 0.18)
-			sb.border_color = UI.ACCENT
+			sb.bg_color = Color(UI.HILITE, 0.12 if kind == "target" else 0.18)
+			sb.border_color = UI.HILITE
 			sb.set_border_width_all(5 if kind == "target" else 8)
 		sb.set_corner_radius_all(12)
 		_frame.add_theme_stylebox_override("panel", sb)
@@ -101,7 +101,7 @@ func set_mark(kind: String) -> void:
 	elif _frame:
 		_frame.visible = false
 
-const READY_COLOR := Color(0.38, 0.86, 0.5)
+const READY_COLOR := Color(0.2, 0.74, 0.4)
 
 func mark() -> String:
 	if _frame and _frame.visible:

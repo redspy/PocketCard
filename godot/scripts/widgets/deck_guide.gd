@@ -24,7 +24,7 @@ func _init(guide_data: Dictionary, start_expanded := false) -> void:
 	expanded = start_expanded
 	# PanelContainer 는 기본으로 터치를 가로채므로, 스크롤이 되도록 통과시킨다
 	mouse_filter = Control.MOUSE_FILTER_PASS
-	var sb := UI.box(UI.PANEL, 22)
+	var sb := UI.box(UI.PANEL, 22, 2, UI.LINE)
 	sb.content_margin_left = 24
 	sb.content_margin_right = 24
 	sb.content_margin_top = 20
@@ -77,10 +77,11 @@ func _apply(animate: bool) -> void:
 func _build_details() -> void:
 	_details.add_child(_wrap(guide.get("concept", ""), 22, UI.TEXT_DIM))
 	if guide.has("caution"):
-		var warn := UI.panel(Color(0.98, 0.70, 0.36, 0.14), 12)
+		var warn := PanelContainer.new()
+		warn.add_theme_stylebox_override("panel", UI.box(Color(UI.WARN, 0.12), 12))
 		warn.mouse_filter = Control.MOUSE_FILTER_PASS
 		var wm := UI.margin(12)
-		wm.add_child(_wrap("⚠ " + str(guide["caution"]), 21, Color(0.98, 0.78, 0.48)))
+		wm.add_child(_wrap("⚠ " + str(guide["caution"]), 21, UI.WARN))
 		warn.add_child(wm)
 		_details.add_child(warn)
 
@@ -100,10 +101,10 @@ func _build_details() -> void:
 
 	_section("강점")
 	for s in guide.get("strengths", []):
-		_details.add_child(_bullet("＋", str(s), Color(0.45, 0.85, 0.55)))
+		_details.add_child(_bullet("＋", str(s), UI.GOOD))
 	_section("약점")
 	for s in guide.get("weaknesses", []):
-		_details.add_child(_bullet("－", str(s), Color(0.96, 0.5, 0.45)))
+		_details.add_child(_bullet("－", str(s), UI.BAD))
 
 	_section("상성 (참고용)")
 	for m in guide.get("matchups", []):
@@ -142,7 +143,7 @@ func _bullet(mark: String, text: String, mark_color := UI.ACCENT) -> Control:
 func _labeled(label: String, text: String) -> Control:
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 2)
-	box.add_child(UI.label(label, 22, Color(0.62, 0.82, 1.0)))
+	box.add_child(UI.label(label, 22, UI.LINK))
 	box.add_child(_wrap(text, 22, UI.TEXT))
 	return box
 
@@ -204,7 +205,7 @@ func _matchup(m: Dictionary) -> Control:
 func _source(s: Dictionary) -> Control:
 	var tap := TapArea.new()
 	tap.custom_minimum_size = Vector2(0, 44)
-	var l := UI.label("🔗 " + str(s.get("title", s.get("url", ""))), 21, Color(0.55, 0.78, 1.0), HORIZONTAL_ALIGNMENT_LEFT, true)
+	var l := UI.label("🔗 " + str(s.get("title", s.get("url", ""))), 21, UI.LINK, HORIZONTAL_ALIGNMENT_LEFT, true)
 	l.set_anchors_preset(Control.PRESET_FULL_RECT)
 	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	tap.add_child(l)
