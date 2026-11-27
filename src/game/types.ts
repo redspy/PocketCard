@@ -132,7 +132,7 @@ export type GameState = {
   inCheckup: boolean;
   using: string[];       // 사용 중인 트레이너스 (효과가 끝나면 트래쉬)
   /** 기술 처리 중: 이 기술로 상대 포켓몬이 기절하면 추가로 가져가는 사이드 (무쇠손 ex, 브라이어) */
-  attackCtx: { seat: Seat; sid: string; extraPrizes: number } | null;
+  attackCtx: { seat: Seat; sid: string; extraPrizes: number; damaged: string[] } | null;   // damaged = 이 기술의 데미지를 받은 포켓몬 sid
 };
 
 export type SetupState = {

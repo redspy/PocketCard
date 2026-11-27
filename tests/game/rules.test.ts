@@ -274,6 +274,9 @@ test('하솔: 서로 다른 타입 기본 에너지 2장 → 1장은 패, 1장�
   const types = new Map<string, string>();
   for (const o of req.options) { const t = info.db[st.cards[o].ruleId].energy!.type!; if (!types.has(t)) types.set(t, o); }
   st = pick(st, () => [...types.values()].slice(0, 2));
+  // 고른 에너지를 상대에게 보여줌 (카드 문구 "상대에게 보여주고") → 상대 확인
+  assert.equal(st.requests[0].kind, 'ackReveal');
+  st = pick(st, () => ['ok']);
   const handBefore = st.players[0].hand.length;
   st = pick(st, (r) => [r.options[0]]);
   st = pick(st, () => [st.players[0].active!.sid]);
@@ -305,5 +308,76 @@ test('기술머신 에볼루션: 진화할 카드가 없는 대상은 건너뛰�
   const names = st.players[0].bench.map((b) => info.db[st.cards[b.stack.at(-1)!].ruleId].name);
   assert.ok(names.includes('킬리아'), names.join(','));
   assert.ok(st.players[0].discard.some((i) => info.db[st.cards[i].ruleId].name === '기술머신 에볼루션'), '차례가 끝나면 트래쉬');
+  checkInvariants(st, [60, 60]);
+});
+
+// ── 공식 규칙서(Advanced Player's Rulebook 3.4)와 대조해 고친 것들
+
+test('기절 확인: 스타디움으로 HP 가 0 이 되면 바로 기절 (기술을 기다리지 않음)', () => {
+  // 그래비티 마운틴: 2진화 포켓몬의 최대 HP −30 → 남은 HP 20 인 가디안 ex 는 내자마자 기절
+  const s = scenario(['flareon', 'gardevoir'], { active: 'SV7_130', hand: ['SV8_105'] }, { active: 'SV1S_028', damage: 290 });
+  const play = legalMoves(s, 0, info).find((m) => m.label.includes('그래비티 마운틴'))!;
+  const r = applyInput(s, play.input, info);
+  assert.ok(r.events.some((e) => e.type === 'ko'), '스타디움을 내자마자 기절');
+  const st = settle(r.state);
+  assert.equal(st.result?.winner, 0, '상대 필드에 포켓몬이 없어 승리');
+});
+
+test('학습장치: 상대 기술 데미지로 기절하면 기본 에너지를 옮길지 고른다 (선택)', () => {
+  const mk = () => {
+    const s = scenario(['charizard', 'pachirisu'], { active: 'SV2a_168', energy: ['SV3_141', 'SV3_141'] }, { active: 'SV7_032', energy: ['SV1V_108'], bench: ['SV1V_037'] });
+    const p = s.players[1];
+    const i = p.deck.findIndex((iid) => s.cards[iid].ruleId === 'SV1S_073');
+    p.bench[0].attached.push(p.deck.splice(i, 1)[0]);
+    return act(s, 0, { type: 'attack', index: attackIndex(s, 0, 'ひをはく') }).state;
+  };
+  let st = mk();
+  const req = st.requests.find((r) => r.player === 1 && r.prompt.includes('학습장치'));
+  assert.ok(req && req.min === 0 && req.max === 1, '옮길지 고르는 요청 (0~1장)');
+  st = applyInput(st, { type: 'choice', player: 1, requestId: req!.id, picks: [req!.options[0]] }, info).state;
+  assert.ok(st.players[1].bench[0].attached.some((x) => st.cards[x].ruleId === 'SV1V_108'), '고르면 장치를 단 포켓몬으로');
+  checkInvariants(settle(st), [60, 60]);
+  // 고르지 않으면 트래쉬에 그대로
+  let st2 = mk();
+  const req2 = st2.requests.find((r) => r.player === 1 && r.prompt.includes('학습장치'))!;
+  st2 = applyInput(st2, { type: 'choice', player: 1, requestId: req2.id, picks: [] }, info).state;
+  assert.ok(!st2.players[1].bench[0].attached.some((x) => st2.cards[x].ruleId === 'SV1V_108'));
+  assert.ok(st2.players[1].discard.some((x) => st2.cards[x].ruleId === 'SV1V_108'));
+});
+
+test('후퇴: 후퇴 비용만큼만 트래쉬 (더 많이 고르면 다시 고름)', () => {
+  const s = scenario(['charizard', 'gardevoir'], { active: 'SV2a_168', energy: ['SV3_141', 'SV3_141', 'SV3_141'], bench: ['SV3_118'] }, { active: 'SV1S_028' });
+  const mv = legalMoves(s, 0, info).find((m) => m.kind === 'retreat')!;
+  let st = applyInput(s, mv.input, info).state;
+  const all = st.requests[0].options;
+  st = pick(st, () => all);
+  assert.ok(st.requests[0]?.prompt.includes('많이'), '3장을 고르면 다시 묻는다 (비용 1)');
+  st = pick(st, (r) => [r.options[0]]);
+  assert.equal(st.players[0].bench[0].attached.length + st.players[0].active!.attached.length, 2, '1장만 트래쉬');
+  assert.equal(st.players[0].discard.length, 1);
+});
+
+test('트래쉬에서 덱으로 되돌릴 카드가 없으면 덱을 섞지 않는다 (미모사)', () => {
+  const s = scenario(['gardevoir23', 'gardevoir'], { active: 'S10D_028', hand: ['SV1V_075'] }, { active: 'SV1S_028' });
+  const before = [...s.players[0].deck];
+  const play = legalMoves(s, 0, info).find((m) => m.label.includes('미모사'))!;
+  const st = settle(applyInput(s, play.input, info).state);
+  assert.deepEqual(st.players[0].deck, before.slice(3), '덱 순서 그대로, 위에서 3장 드로우');
+});
+
+test('덱에서 찾을 카드가 없어도 덱을 본다 (네스트볼)', () => {
+  const s = scenario(['flareon', 'gardevoir'], { active: 'SV7_130', hand: ['SV1S_069'] }, { active: 'SV1S_028' });
+  const p = s.players[0];
+  const basics = p.deck.filter((iid) => { const d = info.db[s.cards[iid].ruleId]; return d.kind === 'pokemon' && d.pokemon!.stage === 0; });
+  p.deck = p.deck.filter((iid) => !basics.includes(iid));
+  p.discard.push(...basics);
+  const play = legalMoves(s, 0, info).find((m) => m.label.includes('네스트볼'))!;
+  let st = applyInput(s, play.input, info).state;
+  const r = st.requests[0];
+  assert.equal(r.kind, 'pickCards');
+  assert.equal(r.options.length, 0);
+  assert.equal(r.cards?.length, st.players[0].deck.length, '덱 전체를 보여줌');
+  st = pick(st, () => []);
+  assert.equal(st.requests.length, 0);
   checkInvariants(st, [60, 60]);
 });

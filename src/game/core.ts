@@ -390,11 +390,12 @@ export function dealAttackDamage(ctx: Ctx, seat: Seat, atk: PokemonSlot, target:
     if (td.resist && td.resist === ad.type) { dmg -= td.resistValue ?? 30; rHit = true; }
     if (dmg <= 0) return 0;
   }
-  // 5) 받는 쪽 효과 ("상대 배틀 포켓몬에게 걸려 있는 효과를 계산하지 않는" 기술은 건너뜀)
-  if (tOwner !== seat && !(opts.ignoreEffects && tActive)) {
+  // 5) 받는 쪽 효과 ("상대 배틀 포켓몬에게 걸려 있는 효과를 계산하지 않는" 기술은 건너뜀).
+  //    자기 기술로 자기 포켓몬이 받는 데미지에도 적용 — "상대 포켓몬으로부터 받는"이라고 적힌 효과만 빠짐 (규칙서 II-B-09)
+  if (!(opts.ignoreEffects && tActive && tOwner !== seat)) {
     if (slotHasEffect(target, 'reduce30')) dmg -= 30;
     if (hasAbility(ctx, target, 'ダイヤコート')) dmg -= 30;
-    if (slotHasEffect(target, 'immuneBasicNonC') && ad.stage === 0 && ad.type !== 'C') { note(ctx, `${slotName(ctx, target)}: 기본 포켓몬의 기술 데미지를 받지 않음`); return 0; }
+    if (tOwner !== seat && slotHasEffect(target, 'immuneBasicNonC') && ad.stage === 0 && ad.type !== 'C') { note(ctx, `${slotName(ctx, target)}: 기본 포켓몬의 기술 데미지를 받지 않음`); return 0; }
   }
   if (dmg <= 0) return 0;
   // 피카츄 ex "버티는 하트": HP 만땅에서 기술 데미지로 기절할 때 HP 10 으로 남음
@@ -404,6 +405,7 @@ export function dealAttackDamage(ctx: Ctx, seat: Seat, atk: PokemonSlot, target:
     note(ctx, `${slotName(ctx, target)}: 버티는 하트 — HP 10 으로 남음`);
   }
   target.damage += dmg;
+  if (s.attackCtx && !s.attackCtx.damaged.includes(target.sid)) s.attackCtx.damaged.push(target.sid);
   const ev: { type: 'damage'; player: Seat; sid: string; amount: number; weak?: boolean; resist?: boolean } = { type: 'damage', player: tOwner, sid: target.sid, amount: dmg };
   if (wHit) ev.weak = true;
   if (rHit) ev.resist = true;

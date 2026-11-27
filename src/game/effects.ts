@@ -129,7 +129,7 @@ function revealReason(ctx: Ctx, d: { from: string; to: string; prompt?: string; 
 }
 
 FRAMES.search = (ctx, f) => {
-  const d = f.data as { from: 'deck' | 'discard' | 'hand'; filter: Filter; min?: number; max: number; to: string; reveal?: boolean; shuffle?: boolean; prompt?: string; distinct?: 'type'; look?: number; exclude?: string[]; save?: string; attachTo?: string; attachWho?: 'own' };
+  const d = f.data as { from: 'deck' | 'discard' | 'hand'; filter: Filter; min?: number; max: number; to: string; reveal?: boolean; shuffle?: boolean; shuffleIfAny?: boolean; prompt?: string; distinct?: 'type'; look?: number; exclude?: string[]; save?: string; attachTo?: string; attachWho?: 'own' };
   const p = ctx.s.players[f.player];
   if (f.step === 0) {
     const zone = d.from === 'deck' ? p.deck : d.from === 'discard' ? p.discard : p.hand;
@@ -137,8 +137,12 @@ FRAMES.search = (ctx, f) => {
     const opts = cardsMatching(ctx, pool, d.filter).filter((i) => !(d.exclude ?? []).includes(i));
     let max = d.max;
     if (d.to === 'bench') max = Math.min(max, p.benchMax - p.bench.length);
+    // 덱을 보는 효과는 고를 카드가 없어도 덱을 본다 (규칙서 II-E-19): 덱을 보여주고 확인만 받는다
+    if (max > 0 && opts.length === 0 && d.from === 'deck' && pool.length) {
+      note(ctx, '조건에 맞는 카드가 없습니다.');
+      return ask(ctx, f, 1, f.player, 'pickCards', [], 0, 0, `${d.prompt ?? '카드를 고르세요.'}\n조건에 맞는 카드가 없습니다. 덱을 확인하고 [결정]을 누르세요.`, { cards: cardsOf(ctx, pool) });
+    }
     if (max <= 0 || opts.length === 0) {
-      if (d.from === 'deck' && pool.length && opts.length === 0) note(ctx, '조건에 맞는 카드가 없습니다.');
       f.step = 2;
       if (d.from === 'deck' && d.shuffle !== false) shuffleDeck(ctx, f.player);
       return done(ctx, f);
@@ -174,6 +178,8 @@ FRAMES.search = (ctx, f) => {
     if (d.to === 'save') { const par = parentOf(ctx, f); if (par) par.data[d.save!] = picks; }
     if (d.save && d.to !== 'save') { const par = parentOf(ctx, f); if (par) par.data[d.save] = moved; }
     if (d.from === 'deck' && d.shuffle !== false) shuffleDeck(ctx, f.player);
+    // 트래쉬에서 덱으로 되돌리고 섞는 효과: 되돌린 카드가 없으면 섞지 않음 (규칙서 II-E-36)
+    if (d.shuffleIfAny && picks.length) shuffleDeck(ctx, f.player);
     return done(ctx, f);
   }
   if (f.step === 3 || f.step === 4) {
@@ -194,6 +200,20 @@ FRAMES.search = (ctx, f) => {
 };
 
 FRAMES.shuffle = (ctx, f) => { shuffleDeck(ctx, f.player); done(ctx, f); };
+
+/** 보통낚싯대: 포켓몬 2장까지 + 기본 에너지 2장까지 (합쳐서 1장 이상), 되돌린 게 있으면 덱을 섞음 */
+FRAMES.ordinaryRod = (ctx, f) => {
+  const p = ctx.s.players[f.player];
+  if (f.step === 0) {
+    const hasEnergy = cardsMatching(ctx, p.discard, BASIC_ENERGY).length > 0;
+    return seq(ctx, f, 1, [search('discard', POKEMON, 2, 'deck', { min: hasEnergy ? 0 : 1, reveal: true, save: 'mons', prompt: hasEnergy ? '덱으로 되돌릴 포켓몬을 2장까지 고르세요 (기본 에너지만 되돌리려면 고르지 않고 결정).' : '덱으로 되돌릴 포켓몬을 2장까지 고르세요.' })]);
+  }
+  const mons = (f.data.mons as string[] | undefined) ?? [];
+  if (f.step === 1) return seq(ctx, f, 2, [search('discard', BASIC_ENERGY, 2, 'deck', { min: mons.length ? 0 : 1, reveal: true, save: 'ens', prompt: '덱으로 되돌릴 기본 에너지를 2장까지 고르세요.' })]);
+  const ens = (f.data.ens as string[] | undefined) ?? [];
+  if (mons.length + ens.length) shuffleDeck(ctx, f.player);
+  done(ctx, f);
+};
 FRAMES.draw = (ctx, f) => { drawN(ctx, f.player, Number(f.data.n)); done(ctx, f); };
 
 /** 패에서 n장 버리기 (비용) — data { n, exclude? , save? } */
@@ -280,7 +300,9 @@ export const TRAINERS: Record<string, TrainerDef> = {
   '모야모': { run: (c, f) => {
     for (const seat of [f.player, other(f.player)] as Seat[]) {
       const p = c.s.players[seat];
-      for (const iid of [...p.hand]) moveCard(c, iid, { zone: 'deck', player: seat, position: 'bottom' });
+      const hand = [...p.hand];
+      shuffleInPlace(c.s.rng, hand);   // 뒷면으로 섞어서 덱 아래로
+      for (const iid of hand) moveCard(c, iid, { zone: 'deck', player: seat, position: 'bottom' });
     }
     for (const seat of [f.player, other(f.player)] as Seat[]) drawN(c, seat, prizesLeft(c.s, seat));
     done(c, f);
@@ -336,8 +358,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
   '활력의 항아리': { can: (c, s) => (discardHas(c, s, { name: '일격 에너지' }) ? null : '트래쉬에 일격 에너지가 없습니다.'),
     run: (c, f) => then(c, f, [search('discard', { name: '일격 에너지' }, 2, 'deck', { min: 1, reveal: true, prompt: '덱으로 되돌릴 일격 에너지를 2장까지 고르세요.' }), ['shuffle', {}]]) },
   '보통낚싯대': { can: (c, s) => (discardHas(c, s, { or: [POKEMON, BASIC_ENERGY] }) ? null : '트래쉬에 포켓몬·기본 에너지가 없습니다.'),
-    run: (c, f) => then(c, f, [search('discard', POKEMON, 2, 'deck', { reveal: true, prompt: '덱으로 되돌릴 포켓몬을 2장까지 고르세요.' }),
-      search('discard', BASIC_ENERGY, 2, 'deck', { reveal: true, prompt: '덱으로 되돌릴 기본 에너지를 2장까지 고르세요.' }), ['shuffle', {}]]) },
+    run: (c, f) => then(c, f, [['ordinaryRod', {}]]) },
   '박사의 연구': { run: (c, f) => {
     const p = c.s.players[f.player];
     for (const iid of [...p.hand]) moveCard(c, iid, { zone: 'discard', player: f.player });
@@ -401,7 +422,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
     if (c.s.stadium) { moveCard(c, c.s.stadium, { zone: 'discard', player: c.s.cards[c.s.stadium].owner }); updateBench(c); }
     done(c, f);
   } },
-  '미모사': { run: (c, f) => then(c, f, [search('discard', POKEMON, 5, 'deck', { reveal: true, prompt: '덱으로 되돌릴 포켓몬을 5장까지 고르세요.' }), ['shuffle', {}], ['draw', { n: 3 }]]) },
+  '미모사': { run: (c, f) => then(c, f, [search('discard', POKEMON, 5, 'deck', { min: 1, reveal: true, shuffleIfAny: true, prompt: '덱으로 되돌릴 포켓몬을 5장까지 고르세요.' }), ['draw', { n: 3 }]]) },
   '세레나': { can: (c, s, self) => (handOthers(c, s, self) >= 1 || vBenchOf(c, other(s)).length ? null : '트래쉬할 패도, 끌어낼 상대 벤치의 포켓몬 V 도 없습니다.'),
     run: (c, f) => then(c, f, [['serena', {}]]) },
   '모란': { can: (c, s) => (peonyTargets(c, s).length ? null : '패로 되돌릴 기본 포켓몬이 없습니다 (필드에 포켓몬이 2마리 이상 있어야 합니다).'),
@@ -588,12 +609,15 @@ FRAMES.glassTrumpet = (ctx, f) => {
     if (f.step === 2 && !f.picks?.length) return done(ctx, f);
     const opts = p.bench.map((b) => b.sid).filter((sid) => !chosen.includes(sid));
     if (chosen.length >= 2 || !opts.length || !cardsMatching(ctx, p.discard, BASIC_ENERGY).length) return done(ctx, f);
-    return ask(ctx, f, 2, f.player, 'pickSlot', opts, 0, 1, `트래쉬의 기본 에너지를 붙일 벤치 포켓몬 (${chosen.length + 1}/2, 그만하려면 고르지 않고 결정)`);
+    // 트레이너스의 "~까지"는 1장 이상 (규칙서 II-D-05): 첫 번째는 꼭 고르고, 두 번째부터 그만둘 수 있음
+    return chosen.length === 0
+      ? ask(ctx, f, 2, f.player, 'pickSlot', opts, 1, 1, '트래쉬의 기본 에너지를 붙일 벤치 포켓몬 (1/2)')
+      : ask(ctx, f, 2, f.player, 'pickSlot', opts, 0, 1, `트래쉬의 기본 에너지를 붙일 벤치 포켓몬 (${chosen.length + 1}/2, 그만하려면 고르지 않고 결정)`);
   }
 };
 
 FRAMES.crispin = (ctx, f) => {
-  if (f.step === 0) return seq(ctx, f, 1, [search('deck', BASIC_ENERGY, 2, 'save', { save: 'picked', distinct: 'type', shuffle: false, prompt: '서로 다른 타입의 기본 에너지를 2장까지 고르세요.' })]);
+  if (f.step === 0) return seq(ctx, f, 1, [search('deck', BASIC_ENERGY, 2, 'save', { save: 'picked', distinct: 'type', shuffle: false, reveal: true, prompt: '서로 다른 타입의 기본 에너지를 2장까지 고르세요.' })]);
   const picked = (f.data.picked as string[] | undefined) ?? [];
   if (f.step === 1) {
     if (picked.length === 0) { shuffleDeck(ctx, f.player); return done(ctx, f); }
@@ -978,7 +1002,7 @@ const pickOppAny = (dmgOf: (c: Ctx, f: Frame) => number): AttackDef => ({ run: (
 export const ATTACKS: Record<string, AttackDef> = {
   'さんどづき': { run: (c, f) => { let n = 0; for (let i = 0; i < 3; i++) if (flip(c, f.player, '삼단 찌르기')) n++; hit(c, f, 10 * n); done(c, f); } },
   'とつげきランディング': { run: (c, f) => { if (!c.s.stadium) { note(c, '스타디움이 없어 기술 실패'); return done(c, f); } hit(c, f, base(f)); done(c, f); } },
-  'とつげき': { run: (c, f) => { hit(c, f, base(f)); const a = atkSlot(c, f); if (a) { a.damage += 10; emit(c, { type: 'damage', player: f.player, sid: a.sid, amount: 10 }); } done(c, f); } },
+  'とつげき': { run: (c, f) => { hit(c, f, base(f)); const a = atkSlot(c, f); if (a) dealAttackDamage(c, f.player, a, a, 10, true); done(c, f); } },
   'カラフルフレンズ': { run: (c, f) => then(c, f, [search('deck', POKEMON, 3, 'hand', { reveal: true, distinct: 'type', prompt: '서로 다른 타입의 포켓몬을 3장까지' })]) },
   'バーニングチャージ': { run: (c, f) => {
     if (f.step === 0) { hit(c, f, base(f)); if (!c.s.players[f.player].deck.length) return done(c, f); return ask(c, f, 1, f.player, 'pickSlot', slotsOf(c.s, f.player).map((s) => s.sid), 1, 1, '기본 에너지를 붙일 포켓몬 1마리'); }
@@ -1197,7 +1221,7 @@ export const ATTACKS: Record<string, AttackDef> = {
   } },
   '스톰슬래시': psyBonus,
   '브레인웨이브': psyBonus,
-  '아쿠아리턴': { can: (c, s) => (c.s.players[s].bench.length ? null : '벤치 포켓몬이 없으면 쓸 수 없습니다 (필드에 포켓몬이 남지 않음).'),
+  '아쿠아리턴': {
     run: (c, f) => {
       hit(c, f, base(f));
       const a = atkSlot(c, f);

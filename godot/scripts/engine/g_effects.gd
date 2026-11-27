@@ -241,9 +241,13 @@ static func _initFrames() -> void:
 			var mx: int = d["max"]
 			if d["to"] == "bench":
 				mx = mini(mx, p.benchMax - p.bench.size())
+			# 덱을 보는 효과는 고를 카드가 없어도 덱을 본다 (규칙서 II-E-19): 덱을 보여주고 확인만 받는다
+			if mx > 0 and opts.size() == 0 and d["from"] == "deck" and pool.size() > 0:
+				GCore.note(ctx, "조건에 맞는 카드가 없습니다.")
+				var pr0: String = d.prompt if d.get("prompt") != null else "카드를 고르세요."
+				GCore.ask(ctx, f, 1, f.player, "pickCards", [], 0, 0, pr0 + "\n조건에 맞는 카드가 없습니다. 덱을 확인하고 [결정]을 누르세요.", { "cards": GEffects.cardsOf(ctx, pool) })
+				return
 			if mx <= 0 or opts.size() == 0:
-				if d["from"] == "deck" and pool.size() > 0 and opts.size() == 0:
-					GCore.note(ctx, "조건에 맞는 카드가 없습니다.")
 				f.step = 2
 				if d["from"] == "deck" and GEffects._shuffles(d):
 					GCore.shuffleDeck(ctx, f.player)
@@ -304,6 +308,9 @@ static func _initFrames() -> void:
 					par2.data[d.save] = moved
 			if d["from"] == "deck" and GEffects._shuffles(d):
 				GCore.shuffleDeck(ctx, f.player)
+			# 트래쉬에서 덱으로 되돌리고 섞는 효과: 되돌린 카드가 없으면 섞지 않음 (규칙서 II-E-36)
+			if GCore.truthy(d.get("shuffleIfAny")) and picks.size() > 0:
+				GCore.shuffleDeck(ctx, f.player)
 			GEffects.done(ctx, f)
 			return
 		if f.step == 3 or f.step == 4:
@@ -328,6 +335,23 @@ static func _initFrames() -> void:
 
 	FRAMES["shuffle"] = func(ctx: Dictionary, f: Dictionary) -> void:
 		GCore.shuffleDeck(ctx, f.player)
+		GEffects.done(ctx, f)
+
+	# 보통낚싯대: 포켓몬 2장까지 + 기본 에너지 2장까지 (합쳐서 1장 이상), 되돌린 게 있으면 덱을 섞음
+	FRAMES["ordinaryRod"] = func(ctx: Dictionary, f: Dictionary) -> void:
+		var p: Dictionary = ctx.s.players[f.player]
+		if f.step == 0:
+			var has_e: bool = GEffects.cardsMatching(ctx, p.discard, GEffects.BASIC_ENERGY).size() > 0
+			GEffects.seq(ctx, f, 1, [GEffects.search("discard", GEffects.POKEMON, 2, "deck", { "min": 0 if has_e else 1, "reveal": true, "save": "mons",
+				"prompt": "덱으로 되돌릴 포켓몬을 2장까지 고르세요 (기본 에너지만 되돌리려면 고르지 않고 결정)." if has_e else "덱으로 되돌릴 포켓몬을 2장까지 고르세요." })])
+			return
+		var mons: Array = f.data.mons if f.data.get("mons") != null else []
+		if f.step == 1:
+			GEffects.seq(ctx, f, 2, [GEffects.search("discard", GEffects.BASIC_ENERGY, 2, "deck", { "min": 0 if mons.size() > 0 else 1, "reveal": true, "save": "ens", "prompt": "덱으로 되돌릴 기본 에너지를 2장까지 고르세요." })])
+			return
+		var ens: Array = f.data.ens if f.data.get("ens") != null else []
+		if mons.size() + ens.size() > 0:
+			GCore.shuffleDeck(ctx, f.player)
 		GEffects.done(ctx, f)
 
 	FRAMES["draw"] = func(ctx: Dictionary, f: Dictionary) -> void:
@@ -408,12 +432,16 @@ static func _initFrames() -> void:
 			if chosen.size() >= 2 or opts.is_empty() or GEffects.cardsMatching(ctx, p.discard, GEffects.BASIC_ENERGY).is_empty():
 				GEffects.done(ctx, f)
 				return
-			GCore.ask(ctx, f, 2, f.player, "pickSlot", opts, 0, 1, "트래쉬의 기본 에너지를 붙일 벤치 포켓몬 (" + str(chosen.size() + 1) + "/2, 그만하려면 고르지 않고 결정)")
+			# 트레이너스의 "~까지"는 1장 이상 (규칙서 II-D-05): 첫 번째는 꼭 고르고, 두 번째부터 그만둘 수 있음
+			if chosen.size() == 0:
+				GCore.ask(ctx, f, 2, f.player, "pickSlot", opts, 1, 1, "트래쉬의 기본 에너지를 붙일 벤치 포켓몬 (1/2)")
+			else:
+				GCore.ask(ctx, f, 2, f.player, "pickSlot", opts, 0, 1, "트래쉬의 기본 에너지를 붙일 벤치 포켓몬 (" + str(chosen.size() + 1) + "/2, 그만하려면 고르지 않고 결정)")
 			return
 
 	FRAMES["crispin"] = func(ctx: Dictionary, f: Dictionary) -> void:
 		if f.step == 0:
-			GEffects.seq(ctx, f, 1, [GEffects.search("deck", GEffects.BASIC_ENERGY, 2, "save", { "save": "picked", "distinct": "type", "shuffle": false, "prompt": "서로 다른 타입의 기본 에너지를 2장까지 고르세요." })])
+			GEffects.seq(ctx, f, 1, [GEffects.search("deck", GEffects.BASIC_ENERGY, 2, "save", { "save": "picked", "distinct": "type", "shuffle": false, "reveal": true, "prompt": "서로 다른 타입의 기본 에너지를 2장까지 고르세요." })])
 			return
 		var picked: Array = f.data.picked if f.data.get("picked") != null else []
 		if f.step == 1:
@@ -788,7 +816,9 @@ static func _initTrainers() -> void:
 	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
 		for seat in [f.player, GCore.other(f.player)]:
 			var p: Dictionary = c.s.players[seat]
-			for iid in p.hand.duplicate():
+			var hand: Array = p.hand.duplicate()
+			GRng.shuffleInPlace(c.s.rng, hand)  # 뒷면으로 섞어서 덱 아래로
+			for iid in hand:
 				GCore.moveCard(c, iid, { "zone": "deck", "player": seat, "position": "bottom" })
 		for seat in [f.player, GCore.other(f.player)]:
 			GCore.drawN(c, seat, GCore.prizesLeft(c.s, seat))
@@ -975,8 +1005,7 @@ static func _initTrainers() -> void:
 	t["can"] = func(c: Dictionary, s: int, _me):
 		return null if GEffects.discardHas(c, s, { "or": [GEffects.POKEMON, GEffects.BASIC_ENERGY] }) else "트래쉬에 포켓몬·기본 에너지가 없습니다."
 	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
-		GEffects.then(c, f, [GEffects.search("discard", GEffects.POKEMON, 2, "deck", { "reveal": true, "prompt": "덱으로 되돌릴 포켓몬을 2장까지 고르세요." }),
-			GEffects.search("discard", GEffects.BASIC_ENERGY, 2, "deck", { "reveal": true, "prompt": "덱으로 되돌릴 기본 에너지를 2장까지 고르세요." }), ["shuffle", {}]])
+		GEffects.then(c, f, [["ordinaryRod", {}]])
 	TRAINERS["보통낚싯대"] = t
 
 	t = {}
@@ -1126,7 +1155,7 @@ static func _initTrainers() -> void:
 
 	t = {}
 	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
-		GEffects.then(c, f, [GEffects.search("discard", GEffects.POKEMON, 5, "deck", { "reveal": true, "prompt": "덱으로 되돌릴 포켓몬을 5장까지 고르세요." }), ["shuffle", {}], ["draw", { "n": 3 }]])
+		GEffects.then(c, f, [GEffects.search("discard", GEffects.POKEMON, 5, "deck", { "min": 1, "reveal": true, "shuffleIfAny": true, "prompt": "덱으로 되돌릴 포켓몬을 5장까지 고르세요." }), ["draw", { "n": 3 }]])
 	TRAINERS["미모사"] = t
 
 	t = {}
@@ -1484,8 +1513,7 @@ static func _initAttacks() -> void:
 		GEffects.hit(c, f, GEffects.base(f))
 		var a = GEffects.atkSlot(c, f)
 		if a != null:
-			a.damage += 10
-			GCore.emit(c, { "type": "damage", "player": f.player, "sid": a.sid, "amount": 10 })
+			GCore.dealAttackDamage(c, f.player, a, a, 10, true)
 		GEffects.done(c, f)
 	ATTACKS["とつげき"] = t
 
@@ -2075,8 +2103,6 @@ static func _initAttacks() -> void:
 	ATTACKS["브레인웨이브"] = psyBonus
 
 	t = {}
-	t["can"] = func(c: Dictionary, s: int, _sl):
-		return null if c.s.players[s].bench.size() > 0 else "벤치 포켓몬이 없으면 쓸 수 없습니다 (필드에 포켓몬이 남지 않음)."
 	t["run"] = func(c: Dictionary, f: Dictionary) -> void:
 		GEffects.hit(c, f, GEffects.base(f))
 		var a = GEffects.atkSlot(c, f)

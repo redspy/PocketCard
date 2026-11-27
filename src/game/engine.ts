@@ -4,7 +4,7 @@
 // - 효과·절차는 프레임 스택(state.stack)에서 실행. 선택이 필요하면 멈추고 요청을 보낸 뒤 답이 오면 이어서 실행
 import { prizeValue } from './cardData.ts';
 import {
-  BENCH_MAX, abilityActive, attackCost, canPay, clearSlot, dataOf, drawOne, emit, energiesOf, findSlot, flip, hasAbility, inst, maxHp, moveCard,
+  BENCH_MAX, abilityActive, ask, attackCost, canPay, clearSlot, dataOf, drawOne, emit, energiesOf, findSlot, flip, hasAbility, inst, maxHp, moveCard,
   nameOf, newId, note, other, playerHasEffect, prizesLeft, provided, putCounters, remainingHp, request, retreatCost, shuffleDeck,
   slotData, slotHasEffect, slotName, slotsOf, specialEnergyOff, stadiumName, switchActive, toolName, toolOf, topOf,
 } from './core.ts';
@@ -200,6 +200,7 @@ FRAMES.endTurn = (ctx, f) => {
       if (t && nameOf(ctx, t) === '기술머신 에볼루션') moveCard(ctx, t, { zone: 'discard', player: f.player });
     }
     s.inCheckup = true;
+    s.attackCtx = null;   // 이 차례의 기술은 끝남 (포켓몬 체크의 기절은 기술로 인한 것이 아님)
     return seq(ctx, f, 1, [['checkup', {}], ['koCheck', {}]]);
   }
   s.inCheckup = false;
@@ -233,6 +234,7 @@ FRAMES.koCheck = (ctx, f) => {
   if (f.step === 0) {
     const takes: [number, number] = [0, 0];
     let any = false;
+    let exp: { seat: Seat; energies: string[] } | null = null;
     for (const seat of [0, 1] as Seat[]) {
       for (const slot of slotsOf(s, seat)) {
         if (slot.faceDown || remainingHp(ctx, slot) > 0) continue;
@@ -240,10 +242,12 @@ FRAMES.koCheck = (ctx, f) => {
         const d = slotData(ctx, slot);
         let n = prizeValue(d);
         const wasActive = s.players[seat].active === slot;
+        // 상대 기술의 데미지로 기절했는가 (데미지 카운터·효과로 기절한 것은 아님)
+        const byAttack = wasActive && !!s.attackCtx && s.attackCtx.seat !== seat && s.attackCtx.damaged.includes(slot.sid);
         // 이 기술로 상대 배틀 포켓몬을 기절시켰을 때의 추가 사이드 (무쇠손 ex, 브라이어)
-        if (s.attackCtx && s.attackCtx.seat !== seat && wasActive) n += s.attackCtx.extraPrizes;
+        if (byAttack) n += s.attackCtx!.extraPrizes;
         // 하늘의 봉인석 [스타오더]: 기본 포켓몬 V 의 기술로 VSTAR·VMAX 를 기절시키면 +1
-        if (s.attackCtx && s.attackCtx.seat !== seat && wasActive && !s.inCheckup && playerHasEffect(s, s.attackCtx.seat, 'starOrder')
+        if (byAttack && s.attackCtx && !s.inCheckup && playerHasEffect(s, s.attackCtx.seat, 'starOrder')
           && (d.pokemon?.rule === 'VSTAR' || d.pokemon?.rule === 'VMAX')) {
           const atk = findSlot(s, s.attackCtx.sid)?.slot;
           const ap = atk ? slotData(ctx, atk).pokemon : undefined;
@@ -252,22 +256,53 @@ FRAMES.koCheck = (ctx, f) => {
         takes[other(seat)] += n;
         if (!s.inCheckup && s.turnPlayer !== seat) s.players[seat].koTurn = s.turnNumber;
         emit(ctx, { type: 'ko', player: seat, sid: slot.sid, code: inst(ctx, topOf(slot)).code, prizes: n });
-        // 학습장치: 상대 기술로 내 배틀 포켓몬이 기절하면 기본 에너지 1장을 장치를 단 포켓몬으로 옮김
-        if (wasActive && s.attackCtx && s.attackCtx.seat !== seat) {
-          const holder = s.players[seat].bench.find((b) => toolName(ctx, b) === '학습장치');
-          const e = energiesOf(ctx, slot).find((x) => dataOf(ctx, x).energy?.basic);
-          if (holder && e) { moveCard(ctx, e, { zone: 'attach', sid: holder.sid }); note(ctx, '학습장치: 기본 에너지를 옮김'); }
+        // 학습장치: 상대 기술의 데미지로 내 배틀 포켓몬이 기절하면 붙어 있던 기본 에너지 1장을 장치를 단 포켓몬으로 옮길 수 있음 (선택).
+        // 기본 에너지를 먼저 트래쉬로 보내 두고(새 iid 를 기억), 사이드를 가져가기 전에 물어본다
+        let keep: string[] = [];
+        if (byAttack && s.players[seat].bench.some((b) => toolName(ctx, b) === '학습장치')) {
+          keep = energiesOf(ctx, slot).filter((x) => dataOf(ctx, x).energy?.basic).map((x) => moveCard(ctx, x, { zone: 'discard', player: seat }));
         }
         clearSlot(ctx, slot, seat, 'discard');
+        if (keep.length) exp = { seat, energies: keep };
       }
     }
     if (s.attackCtx) s.attackCtx.extraPrizes = 0;
-    if (!any) return done(ctx, f);
+    // 기절이 없어도 필드에 포켓몬이 하나도 없으면 승패 확인 (아쿠아리턴 등으로 마지막 포켓몬이 필드를 떠남)
+    if (!any && !noMonOf(s, 0) && !noMonOf(s, 1)) return done(ctx, f);
     updateBench(ctx);
     f.data.takes = takes;
     f.data.order = [s.turnPlayer ?? 0, other(s.turnPlayer ?? 0)];
     f.data.i = 0;
     f.step = 1;
+    if (exp) {
+      const holders = s.players[exp.seat].bench.filter((b) => toolName(ctx, b) === '학습장치').map((b) => b.sid);
+      if (holders.length) {
+        f.data.expSeat = exp.seat;
+        f.data.expHolders = holders;
+        return ask(ctx, f, 3, exp.seat, 'pickCards', exp.energies, 0, 1, '학습장치: 기절한 배틀 포켓몬에 붙어 있던 기본 에너지 1장을 옮길 수 있습니다 (옮기지 않으려면 고르지 않고 결정)', { cards: exp.energies.map((iid) => ({ iid, code: inst(ctx, iid).code })) });
+      }
+    }
+  }
+  // 학습장치: 옮길 에너지 → (장치를 단 포켓몬이 여럿이면) 어느 포켓몬에
+  if (f.step === 3 || f.step === 4) {
+    const seat = Number(f.data.expSeat) as Seat;
+    const holders = f.data.expHolders as string[];
+    if (f.step === 3) {
+      const e = f.picks?.[0];
+      if (e && s.players[seat].discard.includes(e)) {
+        f.data.expEnergy = e;
+        if (holders.length > 1) return ask(ctx, f, 4, seat, 'pickSlot', holders, 1, 1, '학습장치: 에너지를 붙일 포켓몬을 고르세요.');
+        f.picks = [holders[0]];
+        f.step = 4;
+      } else f.step = 1;
+    }
+    if (f.step === 4) {
+      const e = String(f.data.expEnergy);
+      const to = f.picks?.[0];
+      if (to && findSlot(s, to) && s.players[seat].discard.includes(e)) { moveCard(ctx, e, { zone: 'attach', sid: to }); note(ctx, '학습장치: 기본 에너지를 옮김'); }
+      f.step = 1;
+      f.picks = undefined;
+    }
   }
   if (f.step === 1 || f.step === 2) {
     const takes = f.data.takes as [number, number];
@@ -291,8 +326,7 @@ FRAMES.koCheck = (ctx, f) => {
     }
     // 승패 확인 (공식 표: 조건을 더 많이 만족한 쪽 승리, 같으면 무승부)
     const tookAll = (p: Seat) => prizesLeft(s, p) === 0;
-    const noMon = (p: Seat) => !s.players[p].active && s.players[p].bench.length === 0;
-    const score = (p: Seat) => Number(tookAll(p)) + Number(noMon(other(p)));
+    const score = (p: Seat) => Number(tookAll(p)) + Number(noMonOf(s, other(p)));
     const a = score(0), b = score(1);
     if (a || b) {
       if (a === b) endGame(ctx, null, '양쪽이 동시에 승리 조건을 만족 — 무승부');
@@ -302,11 +336,14 @@ FRAMES.koCheck = (ctx, f) => {
       }
       return;
     }
-    // 새 배틀 포켓몬: 다음 차례 플레이어 먼저
-    const next = s.inCheckup ? other(s.turnPlayer!) : s.turnPlayer!;
+    // 새 배틀 포켓몬: 다음 차례 플레이어 먼저 (차례 중이든 포켓몬 체크 중이든 다음 차례는 상대)
+    const next = other(s.turnPlayer!);
     then2(ctx, f, [next, other(next)].filter((p) => !s.players[p].active).map((p) => ['promote', p] as [string, Seat]));
   }
 };
+function noMonOf(s: GameState, p: Seat): boolean {
+  return !s.players[p].active && s.players[p].bench.length === 0;
+}
 function then2(ctx: Ctx, f: Frame, children: [string, Seat][]) {
   done(ctx, f);
   for (let i = children.length - 1; i >= 0; i--) ctx.s.stack.push({ id: newId(ctx.s, 'f'), kind: children[i][0], step: 0, player: children[i][1], data: {} });
@@ -329,7 +366,7 @@ FRAMES.attack = (ctx, f) => {
     note(ctx, '혼란으로 기술 실패 — 자신에게 데미지 카운터 3개');
     return done(ctx, f);
   }
-  s.attackCtx = { seat: f.player, sid: a.sid, extraPrizes: 0 };
+  s.attackCtx = { seat: f.player, sid: a.sid, extraPrizes: 0, damaged: [] };
   if (playerHasEffect(s, f.player, 'brier') && slotData(ctx, a).pokemon?.tera) s.attackCtx.extraPrizes += 1;
   done(ctx, f);
   s.stack.push({ id: newId(s, 'f'), kind: 'attackEffect', step: 0, player: f.player, data: { sid: a.sid, base: f.data.base, attackJa: f.data.attackJa } });
@@ -574,6 +611,8 @@ function doMove(ctx: Ctx, seat: Seat, input: GameInput) {
     }
     case 'stadium': {
       p.flags.stadiumUsed = true;
+      // 효과로 벤치에 낸 포켓몬의 특성(카운터 올리기 등)으로 HP 가 0 이 되면 바로 기절
+      s.stack.push({ id: newId(s, 'f'), kind: 'koCheck', step: 0, player: seat, data: {} });
       emit(ctx, { type: 'play', player: seat, code: inst(ctx, s.stadium!).code, what: '스타디움 효과' });
       if (stadiumName(ctx) === '악의 탑') { s.stack.push({ id: newId(s, 'f'), kind: 'darkTower', step: 0, player: seat, data: {} }); return; }
       s.stack.push({ id: newId(s, 'f'), kind: 'search', step: 0, player: seat, data: { from: 'deck', filter: { kind: 'pokemon', stage: 0, noRule: true }, max: 1, to: 'bench', prompt: '벤치에 낼 룰 없는 기본 포켓몬' } });
@@ -613,6 +652,12 @@ FRAMES.retreat = (ctx, f) => {
       request(ctx, f.player, 'pickCards', ens, 1, ens.length, `에너지가 부족합니다. ${cost}개 분량을 고르세요.`, { frame: f.id, cards: ens.map((iid) => ({ iid, code: inst(ctx, iid).code })) });
       return;
     }
+    // 후퇴 비용만큼만 트래쉬 (한 장을 빼도 비용이 채워지면 너무 많이 고른 것)
+    if (picks.some((x) => provided(ctx, { ...act, attached: picks.filter((y) => y !== x) }).length >= cost)) {
+      f.picks = undefined;
+      request(ctx, f.player, 'pickCards', ens, 1, ens.length, `후퇴 비용보다 많이 골랐습니다. ${cost}개 분량만 고르세요.`, { frame: f.id, cards: ens.map((iid) => ({ iid, code: inst(ctx, iid).code })) });
+      return;
+    }
     for (const e of picks) moveCard(ctx, e, { zone: 'discard', player: f.player });
   }
   p.flags.retreat = true;
@@ -625,6 +670,9 @@ function playCard(ctx: Ctx, seat: Seat, iid: string, target?: string) {
   const p = s.players[seat];
   const d = dataOf(ctx, iid);
   const code = inst(ctx, iid).code;
+  // 포켓몬·에너지·도구·스타디움: 낸 뒤 HP 가 0 이 된 포켓몬은 바로 기절 (스타디움의 HP 감소, 진화로 도구의 HP 증가가 사라짐, 벤치에 낼 때 특성으로 카운터 등).
+  // 아이템·서포트는 아래에서 효과 뒤에 확인
+  if (d.trainer !== 'item' && d.trainer !== 'supporter') s.stack.push({ id: newId(s, 'f'), kind: 'koCheck', step: 0, player: seat, data: {} });
   if (d.kind === 'pokemon') {
     if (d.pokemon!.stage === 0) {
       const nid = moveCard(ctx, iid, { zone: 'bench', player: seat });
@@ -659,6 +707,7 @@ function playCard(ctx: Ctx, seat: Seat, iid: string, target?: string) {
   }
   if (sub === 'stadium') {
     p.flags.stadium = true;
+    p.flags.stadiumUsed = false;   // 새 스타디움의 효과는 이번 차례에 다시 쓸 수 있음
     if (s.stadium) moveCard(ctx, s.stadium, { zone: 'discard', player: s.cards[s.stadium].owner });
     moveCard(ctx, iid, { zone: 'stadium' });
     emit(ctx, { type: 'play', player: seat, code, what: '스타디움' });

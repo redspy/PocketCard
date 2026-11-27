@@ -615,13 +615,14 @@ static func dealAttackDamage(ctx: Dictionary, seat: int, atk: Dictionary, target
 			r_hit = true
 		if dmg <= 0:
 			return 0
-	# 5) 받는 쪽 효과 ("상대 배틀 포켓몬에게 걸려 있는 효과를 계산하지 않는" 기술은 건너뜀)
-	if t_owner != seat and not (truthy(opts.get("ignoreEffects")) and t_active):
+	# 5) 받는 쪽 효과 ("상대 배틀 포켓몬에게 걸려 있는 효과를 계산하지 않는" 기술은 건너뜀).
+	#    자기 기술로 자기 포켓몬이 받는 데미지에도 적용 — "상대 포켓몬으로부터 받는"이라고 적힌 효과만 빠짐 (규칙서 II-B-09)
+	if not (truthy(opts.get("ignoreEffects")) and t_active and t_owner != seat):
 		if slotHasEffect(target, "reduce30"):
 			dmg -= 30
 		if hasAbility(ctx, target, "ダイヤコート"):
 			dmg -= 30
-		if slotHasEffect(target, "immuneBasicNonC") and ad.stage == 0 and ad.type != "C":
+		if t_owner != seat and slotHasEffect(target, "immuneBasicNonC") and ad.stage == 0 and ad.type != "C":
 			note(ctx, "%s: 기본 포켓몬의 기술 데미지를 받지 않음" % slotName(ctx, target))
 			return 0
 	if dmg <= 0:
@@ -632,6 +633,8 @@ static func dealAttackDamage(ctx: Dictionary, seat: int, atk: Dictionary, target
 		dmg = hp - 10
 		note(ctx, "%s: 버티는 하트 — HP 10 으로 남음" % slotName(ctx, target))
 	target.damage += dmg
+	if ctx.s.attackCtx != null and not (ctx.s.attackCtx.damaged as Array).has(target.sid):
+		ctx.s.attackCtx.damaged.append(target.sid)
 	var ev := { "type": "damage", "player": t_owner, "sid": target.sid, "amount": dmg }
 	if w_hit:
 		ev["weak"] = true

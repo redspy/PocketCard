@@ -217,6 +217,7 @@ static func _frame_endTurn(ctx: Dictionary, f: Dictionary) -> void:
 			if t != null and GCore.nameOf(ctx, t) == "기술머신 에볼루션":
 				GCore.moveCard(ctx, t, { "zone": "discard", "player": f.player })
 		s.inCheckup = true
+		s.attackCtx = null   # 이 차례의 기술은 끝남 (포켓몬 체크의 기절은 기술로 인한 것이 아님)
 		GEffects.seq(ctx, f, 1, [["checkup", {}], ["koCheck", {}]])
 		return
 	s.inCheckup = false
@@ -258,6 +259,7 @@ static func _frame_koCheck(ctx: Dictionary, f: Dictionary) -> void:
 	if f.step == 0:
 		var takes := [0, 0]
 		var any := false
+		var exp = null
 		for seat in [0, 1]:
 			for slot in GCore.slotsOf(s, seat):
 				if slot.faceDown or GCore.remainingHp(ctx, slot) > 0:
@@ -266,11 +268,13 @@ static func _frame_koCheck(ctx: Dictionary, f: Dictionary) -> void:
 				var d := GCore.slotData(ctx, slot)
 				var n := GCore.prizeValue(d)
 				var was_active := is_same(s.players[seat].active, slot)
+				# 상대 기술의 데미지로 기절했는가 (데미지 카운터·효과로 기절한 것은 아님)
+				var by_attack: bool = was_active and s.attackCtx != null and s.attackCtx.seat != seat and (s.attackCtx.damaged as Array).has(slot.sid)
 				# 이 기술로 상대 배틀 포켓몬을 기절시켰을 때의 추가 사이드 (무쇠손 ex, 브라이어)
-				if s.attackCtx != null and s.attackCtx.seat != seat and was_active:
+				if by_attack:
 					n += s.attackCtx.extraPrizes
 				# 하늘의 봉인석 [스타오더]: 기본 포켓몬 V 의 기술로 VSTAR·VMAX 를 기절시키면 +1
-				if s.attackCtx != null and s.attackCtx.seat != seat and was_active and not s.inCheckup and GCore.playerHasEffect(s, s.attackCtx.seat, "starOrder") 						and d.has("pokemon") and (d.pokemon.get("rule") == "VSTAR" or d.pokemon.get("rule") == "VMAX"):
+				if by_attack and not s.inCheckup and GCore.playerHasEffect(s, s.attackCtx.seat, "starOrder") 						and d.has("pokemon") and (d.pokemon.get("rule") == "VSTAR" or d.pokemon.get("rule") == "VMAX"):
 					var atk_f = GCore.findSlot(s, str(s.attackCtx.sid))
 					var ap = GCore.slotData(ctx, atk_f.slot).get("pokemon") if atk_f != null else null
 					if ap != null and ap.stage == 0 and ap.get("rule") == "V":
@@ -279,19 +283,21 @@ static func _frame_koCheck(ctx: Dictionary, f: Dictionary) -> void:
 				if not s.inCheckup and s.turnPlayer != seat:
 					s.players[seat].koTurn = s.turnNumber
 				GCore.emit(ctx, { "type": "ko", "player": seat, "sid": slot.sid, "code": GCore.inst(ctx, GCore.topOf(slot)).code, "prizes": n })
-				# 학습장치: 상대 기술로 내 배틀 포켓몬이 기절하면 기본 에너지 1장을 장치를 단 포켓몬으로 옮김
-				if was_active and s.attackCtx != null and s.attackCtx.seat != seat:
-					var holder = GCore.find_first(s.players[seat].bench, func(b): return GCore.toolName(ctx, b) == "학습장치")
-					var e = GCore.find_first(GCore.energiesOf(ctx, slot), func(x):
+				# 학습장치: 상대 기술의 데미지로 내 배틀 포켓몬이 기절하면 붙어 있던 기본 에너지 1장을 장치를 단 포켓몬으로 옮길 수 있음 (선택).
+				# 기본 에너지를 먼저 트래쉬로 보내 두고(새 iid 를 기억), 사이드를 가져가기 전에 물어본다
+				var keep: Array = []
+				if by_attack and (s.players[seat].bench as Array).any(func(b): return GCore.toolName(ctx, b) == "학습장치"):
+					for x in GCore.energiesOf(ctx, slot):
 						var xd := GCore.dataOf(ctx, x)
-						return xd.has("energy") and bool(xd.energy.basic))
-					if holder != null and e != null:
-						GCore.moveCard(ctx, e, { "zone": "attach", "sid": holder.sid })
-						GCore.note(ctx, "학습장치: 기본 에너지를 옮김")
+						if xd.has("energy") and bool(xd.energy.basic):
+							keep.append(GCore.moveCard(ctx, x, { "zone": "discard", "player": seat }))
 				GCore.clearSlot(ctx, slot, seat, "discard")
+				if keep.size() > 0:
+					exp = { "seat": seat, "energies": keep }
 		if s.attackCtx != null:
 			s.attackCtx.extraPrizes = 0
-		if not any:
+		# 기절이 없어도 필드에 포켓몬이 하나도 없으면 승패 확인 (아쿠아리턴 등으로 마지막 포켓몬이 필드를 떠남)
+		if not any and not _no_mon(s, 0) and not _no_mon(s, 1):
 			GEffects.done(ctx, f)
 			return
 		GEffects.updateBench(ctx)
@@ -300,6 +306,36 @@ static func _frame_koCheck(ctx: Dictionary, f: Dictionary) -> void:
 		f.data["order"] = [tp, GCore.other(tp)]
 		f.data["i"] = 0
 		f.step = 1
+		if exp != null:
+			var holders: Array = (s.players[exp.seat].bench as Array).filter(func(b): return GCore.toolName(ctx, b) == "학습장치").map(func(b): return b.sid)
+			if holders.size() > 0:
+				f.data["expSeat"] = exp.seat
+				f.data["expHolders"] = holders
+				GCore.ask(ctx, f, 3, exp.seat, "pickCards", exp.energies, 0, 1, "학습장치: 기절한 배틀 포켓몬에 붙어 있던 기본 에너지 1장을 옮길 수 있습니다 (옮기지 않으려면 고르지 않고 결정)", { "cards": _cards(ctx, exp.energies) })
+				return
+	# 학습장치: 옮길 에너지 → (장치를 단 포켓몬이 여럿이면) 어느 포켓몬에
+	if f.step == 3 or f.step == 4:
+		var eseat: int = int(f.data.expSeat)
+		var holders2: Array = f.data.expHolders
+		if f.step == 3:
+			var pk: Array = f.get("picks") if f.get("picks") != null else []
+			if pk.size() > 0 and (s.players[eseat].discard as Array).has(pk[0]):
+				f.data["expEnergy"] = pk[0]
+				if holders2.size() > 1:
+					GCore.ask(ctx, f, 4, eseat, "pickSlot", holders2, 1, 1, "학습장치: 에너지를 붙일 포켓몬을 고르세요.")
+					return
+				f["picks"] = [holders2[0]]
+				f.step = 4
+			else:
+				f.step = 1
+		if f.step == 4:
+			var e := str(f.data.expEnergy)
+			var pk2: Array = f.get("picks") if f.get("picks") != null else []
+			if pk2.size() > 0 and GCore.findSlot(s, str(pk2[0])) != null and (s.players[eseat].discard as Array).has(e):
+				GCore.moveCard(ctx, e, { "zone": "attach", "sid": str(pk2[0]) })
+				GCore.note(ctx, "학습장치: 기본 에너지를 옮김")
+			f.step = 1
+			f.erase("picks")
 	if f.step == 1 or f.step == 2:
 		var takes: Array = f.data.takes
 		var order: Array = f.data.order
@@ -334,8 +370,8 @@ static func _frame_koCheck(ctx: Dictionary, f: Dictionary) -> void:
 				var w := 0 if a > b else 1
 				endGame(ctx, w, "사이드를 모두 가져갔습니다." if GCore.prizesLeft(s, w) == 0 else "상대 필드에 포켓몬이 없습니다.")
 			return
-		# 새 배틀 포켓몬: 다음 차례 플레이어 먼저
-		var nxt: int = GCore.other(s.turnPlayer) if s.inCheckup else s.turnPlayer
+		# 새 배틀 포켓몬: 다음 차례 플레이어 먼저 (차례 중이든 포켓몬 체크 중이든 다음 차례는 상대)
+		var nxt: int = GCore.other(s.turnPlayer)
 		var children: Array = []
 		for p in [nxt, GCore.other(nxt)]:
 			if s.players[p].active == null:
@@ -344,9 +380,11 @@ static func _frame_koCheck(ctx: Dictionary, f: Dictionary) -> void:
 
 static func _score(s: Dictionary, p: int) -> int:
 	var took_all := 1 if GCore.prizesLeft(s, p) == 0 else 0
-	var op: Dictionary = s.players[GCore.other(p)]
-	var no_mon := 1 if (op.active == null and op.bench.size() == 0) else 0
+	var no_mon := 1 if _no_mon(s, GCore.other(p)) else 0
 	return took_all + no_mon
+
+static func _no_mon(s: Dictionary, p: int) -> bool:
+	return s.players[p].active == null and s.players[p].bench.size() == 0
 
 static func then2(ctx: Dictionary, f: Dictionary, children: Array) -> void:
 	GEffects.done(ctx, f)
@@ -373,7 +411,7 @@ static func _frame_attack(ctx: Dictionary, f: Dictionary) -> void:
 		GCore.note(ctx, "혼란으로 기술 실패 — 자신에게 데미지 카운터 3개")
 		GEffects.done(ctx, f)
 		return
-	s.attackCtx = { "seat": f.player, "sid": a.sid, "extraPrizes": 0 }
+	s.attackCtx = { "seat": f.player, "sid": a.sid, "extraPrizes": 0, "damaged": [] }
 	var ad := GCore.slotData(ctx, a)
 	if GCore.playerHasEffect(s, f.player, "brier") and ad.has("pokemon") and ad.pokemon.tera:
 		s.attackCtx.extraPrizes += 1
@@ -679,6 +717,8 @@ static func doMove(ctx: Dictionary, seat: int, input: Dictionary) -> void:
 			_push(s, "abilityRun", seat, { "sid": slot.sid, "ab": ab.nameJa })
 		"stadium":
 			p.flags.stadiumUsed = true
+			# 효과로 벤치에 낸 포켓몬의 특성(카운터 올리기 등)으로 HP 가 0 이 되면 바로 기절
+			_push(s, "koCheck", seat, {})
 			GCore.emit(ctx, { "type": "play", "player": seat, "code": GCore.inst(ctx, s.stadium).code, "what": "스타디움 효과" })
 			if GCore.stadiumName(ctx) == "악의 탑":
 				_push(s, "darkTower", seat, {})
@@ -720,6 +760,14 @@ static func _frame_retreat(ctx: Dictionary, f: Dictionary) -> void:
 			f.erase("picks")
 			GCore.request(ctx, f.player, "pickCards", ens, 1, ens.size(), "에너지가 부족합니다. %d개 분량을 고르세요." % cost, { "frame": f.id, "cards": _cards(ctx, ens) })
 			return
+		# 후퇴 비용만큼만 트래쉬 (한 장을 빼도 비용이 채워지면 너무 많이 고른 것)
+		for x in picks:
+			var tmp2 := act.duplicate()
+			tmp2["attached"] = picks.filter(func(y): return y != x)
+			if GCore.provided(ctx, tmp2).size() >= cost:
+				f.erase("picks")
+				GCore.request(ctx, f.player, "pickCards", ens, 1, ens.size(), "후퇴 비용보다 많이 골랐습니다. %d개 분량만 고르세요." % cost, { "frame": f.id, "cards": _cards(ctx, ens) })
+				return
 		for e in picks:
 			GCore.moveCard(ctx, e, { "zone": "discard", "player": f.player })
 	p.flags.retreat = true
@@ -737,6 +785,10 @@ static func playCard(ctx: Dictionary, seat: int, iid: String, target) -> void:
 	var p: Dictionary = s.players[seat]
 	var d := GCore.dataOf(ctx, iid)
 	var code: String = GCore.inst(ctx, iid).code
+	# 포켓몬·에너지·도구·스타디움: 낸 뒤 HP 가 0 이 된 포켓몬은 바로 기절 (스타디움의 HP 감소, 진화로 도구의 HP 증가가 사라짐, 벤치에 낼 때 특성으로 카운터 등).
+	# 아이템·서포트는 아래에서 효과 뒤에 확인
+	if d.get("trainer") != "item" and d.get("trainer") != "supporter":
+		_push(s, "koCheck", seat, {})
 	if d.kind == "pokemon":
 		if d.pokemon.stage == 0:
 			var nid := GCore.moveCard(ctx, iid, { "zone": "bench", "player": seat })
@@ -768,6 +820,7 @@ static func playCard(ctx: Dictionary, seat: int, iid: String, target) -> void:
 		return
 	if sub == "stadium":
 		p.flags.stadium = true
+		p.flags.stadiumUsed = false   # 새 스타디움의 효과는 이번 차례에 다시 쓸 수 있음
 		if s.stadium != null:
 			GCore.moveCard(ctx, s.stadium, { "zone": "discard", "player": s.cards[s.stadium].owner })
 		GCore.moveCard(ctx, iid, { "zone": "stadium" })
