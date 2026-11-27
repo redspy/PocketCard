@@ -1149,7 +1149,13 @@ func _build_request() -> void:
 	if key == sheet_key:
 		return
 	sheet_key = key
+	# 같은 선택 창을 다시 그릴 때(카드를 고를 때마다)는 카드 줄의 스크롤 위치를 이어받는다 (맨 앞으로 돌아가지 않게)
+	var keep_scroll := -1
 	if sheet:
+		if sheet.get_meta("rid", "") == rid and sheet.get_meta("usable", false) == only_usable:
+			var old_strip := _strip_of(sheet)
+			if old_strip:
+				keep_scroll = old_strip.scroll_horizontal
 		sheet.queue_free()
 		sheet = null
 	board_pick = {}
@@ -1178,8 +1184,12 @@ func _build_request() -> void:
 		_keep_bar_off_targets(sheet, req)
 		return
 	sheet = BRequest.build(self, req)
+	sheet.set_meta("rid", rid)
+	sheet.set_meta("usable", only_usable)
 	sheet_layer.add_child(sheet)
 	_zoom_on_top()
+	if keep_scroll > 0:
+		_restore_strip_scroll(sheet, keep_scroll)
 	if kind == "values":
 		# 작은 선택(예·아니오·선공/후공 등)은 가운데 대화상자. 카드를 보여주는 창(고르기·공개 확인)은 모두 아래 창
 		await get_tree().process_frame
@@ -1212,6 +1222,26 @@ func _build_request() -> void:
 	_show_peek_btn()
 
 var _sheet_pad := {}   # 아래 창 밑 여백 { size, v } — 화면 크기가 같으면 늘 같은 값
+
+## 선택 창 안의 가로 카드 줄 (없으면 null)
+static func _strip_of(sh: Control) -> ScrollContainer:
+	for c in sh.find_children("*", "ScrollContainer", true, false):
+		return c
+	return null
+
+## 새로 그린 카드 줄을 예전 스크롤 위치로 (첫 프레임부터 — 맨 앞이 한 번 그려졌다 넘어가지 않게).
+## 줄의 폭이 아직 정해지지 않아 스크롤 막대의 최댓값이 0 이므로, 최댓값을 먼저 넉넉히 열어 두고 값을 넣는다 (배치 때 실제 폭으로 다시 맞춰짐)
+func _restore_strip_scroll(sh: Control, x: int) -> void:
+	var strip := _strip_of(sh)
+	if strip == null:
+		return
+	var bar := strip.get_h_scroll_bar()
+	bar.max_value = maxf(bar.max_value, x + 100000.0)
+	strip.scroll_horizontal = x
+	# 혹시 배치 중에 값이 잘렸으면 다음 프레임에 한 번 더
+	await get_tree().process_frame
+	if is_instance_valid(strip) and strip.scroll_horizontal != x:
+		strip.scroll_horizontal = x
 
 ## 탁자 고르기 안내 띠가 고를 대상(상대 벤치 등)을 가리면 가운데 띠(스타디움 줄) 위로 옮긴다
 func _keep_bar_off_targets(bar: Control, req: Dictionary) -> void:
