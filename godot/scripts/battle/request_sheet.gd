@@ -54,16 +54,20 @@ static func build(screen, req: Dictionary) -> Control:
 	root.set_meta("kind", kind)
 	# 고를 개수: 하나만 고르는 경우·고를 게 없는 경우(0~0)는 생략
 	var prompt := str(req.prompt) + ("" if (mn == 1 and mx == 1) or mx <= 0 else ("  (%d개)" % mx if mn == mx else "  (%d~%d개)" % [mn, mx]))
+	var w: float = screen.size.x if screen.size.x > 0 else 720.0
+	# 줄바꿈 글자의 폭을 처음부터 정해 둔다: 폭이 0인 첫 프레임에 글자가 한 글자씩 세로로 서서 창 내용이 아래로 밀렸다가 돌아오던 것 (카드를 고를 때마다 위아래로 흔들림)
+	var text_w: float = (minf(w - 40, 640) if kind == "values" else w) - 44
 	var pl := UI.label(prompt, 26, UI.TEXT, HORIZONTAL_ALIGNMENT_LEFT, true)
 	pl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pl.custom_minimum_size.x = text_w
 	col.add_child(pl)
-	var w: float = screen.size.x if screen.size.x > 0 else 720.0
 	match kind:
 		"reveal":
 			for rv in Net.view.get("reveals", []):
 				if str(rv.id) == str(req.get("revealId", "")):
 					var why := UI.label(str(rv.get("reason", "")), 22, UI.TEXT_DIM, HORIZONTAL_ALIGNMENT_LEFT, true)
 					why.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+					why.custom_minimum_size.x = text_w
 					col.add_child(why)
 					var codes: Array = (rv.cards as Array).map(func(c): return str(c.code))
 					col.add_child(_strip(screen, codes, codes.map(func(_c): return ""), w * 0.3, func(_i): pass))

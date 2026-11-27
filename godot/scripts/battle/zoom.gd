@@ -44,6 +44,7 @@ func _ready() -> void:
 	_img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_img.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_img)
+	press_target = _img   # TapArea._ready 를 덮어써서 기본값이 안 정해짐 (누를 때 오류)
 	_info = UI.label("", 22, UI.TEXT, HORIZONTAL_ALIGNMENT_CENTER, true)
 	_info.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 	_info.offset_top = -sb - 80

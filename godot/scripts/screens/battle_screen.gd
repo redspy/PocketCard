@@ -102,16 +102,20 @@ func _exit_tree() -> void:
 
 ## 게임 중 뒤로 가기: 열린 것 닫기 → 그다음은 막음(항복은 메뉴에서)
 func on_back() -> bool:
+	# 맨 위에 떠 있는 것부터: 크게 보기 → 메뉴·로그 → 판 보기 → 말풍선·고른 카드
+	for c in sheet_layer.get_children():
+		if c is BZoom and not c.is_queued_for_deletion():
+			c.queue_free()
+			return true
+	if menu:
+		close_menu()
+		return true
 	if peeking:
 		set_peek(false)
 		return true
 	if popover or sel_card != "" or retreat_mode:
 		_clear_select()
 		return true
-	for c in sheet_layer.get_children():
-		if c is BZoom:
-			c.queue_free()
-			return true
 	if Net.can_rematch() and Net.view.get("result") != null:
 		Net.send({ "t": "rematch" })
 		return true
@@ -1003,9 +1007,7 @@ func open_popover(sid: String) -> void:
 		rb.tapped.connect(start_retreat)
 		col.add_child(rb)
 	var zb := _pop_button("크게 보기", true, null)
-	zb.tapped.connect(func():
-		_close_popover()
-		zoom_slot(sid))
+	zb.tapped.connect(func(): zoom_slot(sid))
 	col.add_child(zb)
 	hud.add_child(panel)
 	popover = panel
@@ -1168,6 +1170,7 @@ func _build_request() -> void:
 			_place_hand(_me())
 		sheet = BRequest.pick_bar(self, req)
 		sheet_layer.add_child(sheet)
+		_zoom_on_top()
 		sheet.size = Vector2(size.x - 24, 0)
 		sheet.position = Vector2(12, top_y + 6)
 		hand.visible = true
@@ -1176,6 +1179,7 @@ func _build_request() -> void:
 		return
 	sheet = BRequest.build(self, req)
 	sheet_layer.add_child(sheet)
+	_zoom_on_top()
 	if kind == "values":
 		# 작은 선택(예·아니오·선공/후공 등)은 가운데 대화상자. 카드를 보여주는 창(고르기·공개 확인)은 모두 아래 창
 		await get_tree().process_frame
@@ -1210,11 +1214,21 @@ var _sheet_fit := {}   # 아래 창을 마지막으로 맞춘 요청·위치·�
 
 ## 아래 선택 창 높이를 내용에 맞춘다 (내용이 짧으면 판이 더 보이게, 길면 위로 늘림). 아래 끝은 늘 화면 아래
 func _fit_sheet(sh: Control, top_y: float, rid: String) -> void:
-	await get_tree().process_frame
-	if not is_instance_valid(sh) or sh != sheet:
-		return
-	var h := sh.get_combined_minimum_size().y + UI.safe_bottom(self) + 12
+	# 줄바꿈 글자(안내문)는 폭을 받은 뒤에야 높이가 정해진다 — 높이가 두 번 연속 같을 때까지 기다린다 (느린 폰은 한 프레임으로 모자람)
+	var h := -1.0
+	for i in 8:
+		await get_tree().process_frame
+		if not is_instance_valid(sh) or sh != sheet:
+			return
+		sh.size.x = size.x
+		var nh := sh.get_combined_minimum_size().y + UI.safe_bottom(self) + 12
+		if absf(nh - h) < 1.0:
+			break
+		h = nh
 	var y := clampf(size.y - h, top_y + 70, size.y - 160)
+	# 같은 선택을 다시 그린 것(카드를 고를 때마다)이면 높이가 거의 같을 때 제자리 — 위아래로 흔들리지 않게
+	if _sheet_fit.get("id") == rid and _sheet_fit.get("size") == size and absf(float(_sheet_fit.y) - y) < 8.0:
+		y = _sheet_fit.y
 	sh.position = Vector2(0, y)
 	sh.size = Vector2(size.x, size.y - y)
 	sh.modulate.a = 1.0
@@ -1245,6 +1259,13 @@ func _show_peek_btn() -> void:
 	peek_btn.visible = true
 	sheet_layer.move_child(peek_btn, -1)
 	sheet_layer.move_child(peek_back, -1)
+	_zoom_on_top()
+
+## 크게 보기는 늘 맨 위 (선택 창을 다시 그리거나 [판 보기]를 올려도 그 아래로)
+func _zoom_on_top() -> void:
+	for c in sheet_layer.get_children():
+		if c is BZoom:
+			sheet_layer.move_child(c, -1)
 
 ## 판 보기: 선택 창을 접어 판(과 손패)을 보이고, 아래 띠로 다시 펼친다. 선택은 그대로 남음
 func set_peek(on: bool) -> void:
@@ -1450,12 +1471,8 @@ func open_menu() -> void:
 	var col := _sheet_panel("메뉴")
 	var items := [
 		["로그 보기", open_log],
-		["내 트래쉬 (%d장)" % (_me().discard as Array).size(), func():
-			close_menu()
-			open_discard("my")],
-		["상대 트래쉬 (%d장)" % (_opp().discard as Array).size(), func():
-			close_menu()
-			open_discard("opp")],
+		["내 트래쉬 (%d장)" % (_me().discard as Array).size(), func(): open_discard("my")],
+		["상대 트래쉬 (%d장)" % (_opp().discard as Array).size(), func(): open_discard("opp")],
 	]
 	for it in items:
 		var b := UI.wide(UI.button(it[0], 26), HORIZONTAL_ALIGNMENT_LEFT)
