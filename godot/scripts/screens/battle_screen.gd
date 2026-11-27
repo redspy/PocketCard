@@ -1199,41 +1199,19 @@ func _build_request() -> void:
 		return
 	sheet.set_meta("covers_hand", true)
 	hand.visible = false
-	# 같은 요청을 다시 그릴 때(카드를 고를 때마다)는 맞춰 둔 높이에서 바로 시작 — 한 프레임 다른 자리에 그려졌다 튀지 않게.
-	# 처음 뜰 때는 높이를 맞출 때까지 투명하게
-	var refit: bool = _sheet_fit.get("id") == str(req.id) and _sheet_fit.get("size") == size
-	var fit_y: float = _sheet_fit.y if refit else maxf(top_y + 70, size.y * 0.42)
-	if not refit:
-		sheet.modulate.a = 0.0
-	sheet.position = Vector2(0, fit_y)
-	sheet.size = Vector2(size.x, size.y - fit_y)
+	# 아래 창은 화면 아래 끝에 붙여 두고 내용 높이만큼 위로 자라게 한다 (높이를 재서 옮기지 않음 → 고를 때마다 자리가 바뀌지 않음).
+	# 아래쪽 여백(제스처 막대 자리)은 화면 크기별로 한 번만 재서 고정
+	if _sheet_pad.get("size") != size:
+		_sheet_pad = { "size": size, "v": 16 + 12 + int(UI.safe_bottom(self)) }
+	(sheet.get_child(0) as MarginContainer).add_theme_constant_override("margin_bottom", int(_sheet_pad.v))
+	sheet.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE, Control.PRESET_MODE_MINSIZE)
+	sheet.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	sheet.offset_top = 0
+	sheet.offset_bottom = 0
+	sheet.item_rect_changed.connect(_show_peek_btn)
 	_show_peek_btn()
-	_fit_sheet(sheet, top_y, str(req.id))
 
-var _sheet_fit := {}   # 아래 창을 마지막으로 맞춘 요청·위치·화면 크기 { id, y, size }
-
-## 아래 선택 창 높이를 내용에 맞춘다 (내용이 짧으면 판이 더 보이게, 길면 위로 늘림). 아래 끝은 늘 화면 아래
-func _fit_sheet(sh: Control, top_y: float, rid: String) -> void:
-	# 줄바꿈 글자(안내문)는 폭을 받은 뒤에야 높이가 정해진다 — 높이가 두 번 연속 같을 때까지 기다린다 (느린 폰은 한 프레임으로 모자람)
-	var h := -1.0
-	for i in 8:
-		await get_tree().process_frame
-		if not is_instance_valid(sh) or sh != sheet:
-			return
-		sh.size.x = size.x
-		var nh := sh.get_combined_minimum_size().y + UI.safe_bottom(self) + 12
-		if absf(nh - h) < 1.0:
-			break
-		h = nh
-	var y := clampf(size.y - h, top_y + 70, size.y - 160)
-	# 같은 선택을 다시 그린 것(카드를 고를 때마다)이면 높이가 거의 같을 때 제자리 — 위아래로 흔들리지 않게
-	if _sheet_fit.get("id") == rid and _sheet_fit.get("size") == size and absf(float(_sheet_fit.y) - y) < 8.0:
-		y = _sheet_fit.y
-	sh.position = Vector2(0, y)
-	sh.size = Vector2(size.x, size.y - y)
-	sh.modulate.a = 1.0
-	_sheet_fit = { "id": rid, "y": y, "size": size }
-	_show_peek_btn()
+var _sheet_pad := {}   # 아래 창 밑 여백 { size, v } — 화면 크기가 같으면 늘 같은 값
 
 ## 탁자 고르기 안내 띠가 고를 대상(상대 벤치 등)을 가리면 가운데 띠(스타디움 줄) 위로 옮긴다
 func _keep_bar_off_targets(bar: Control, req: Dictionary) -> void:
