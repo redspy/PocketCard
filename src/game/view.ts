@@ -1,6 +1,9 @@
 // 시점별 보기: 상태와 이벤트에서 보는 사람(플레이어 1·2, 게임판)이 알 수 없는 정보를 지운다.
 // 서버는 이 함수를 거친 결과만 클라이언트에 보낸다 (비공개 정보 누출 방지의 유일한 관문).
 import { legalMoves, maxHp, retreatCost } from './engine.ts';
+import { slotData } from './core.ts';
+import type { Ctx } from './core.ts';
+import { ABILITIES } from './effects.ts';
 import type { LegalMove } from './engine.ts';
 import type { CardInfo, Conditions, GameEvent, GameState, PendingRequest, PokemonSlot, Reveal, Seat, SlotEffect, Viewer, ZoneRef } from './types.ts';
 
@@ -9,6 +12,7 @@ export type SlotView = {
   sid: string; faceDown: boolean; stack: CardView[] | null; attached: CardView[] | null;
   damage: number; hp: number | null;              // 최대 HP (뒷면이면 null)
   cond: Conditions; effects: SlotEffect[]; retreat: number | null;
+  abilityUsed: boolean;                            // 차례에 1번인 특성을 이번 차례에 이미 씀 (화면 표시용)
 };
 export type PlayerView = {
   seat: Seat;
@@ -62,7 +66,18 @@ function slotView(s: GameState, slot: PokemonSlot, owner: Seat, viewer: Viewer, 
     hp: hide || !known ? null : maxHp(ctx, slot),
     cond: slot.cond, effects: slot.effects,
     retreat: hide || !known ? null : retreatCost(ctx, slot, owner),
+    abilityUsed: !hide && known && abilityUsedNow(ctx, slot, owner),
   };
+}
+
+// 차례에 1번인 특성을 이번 차례에 이미 써서 더 쓸 수 없는가 (legalMoves 의 "1번" 조건과 같은 기준)
+function abilityUsedNow(ctx: Ctx, slot: PokemonSlot, owner: Seat): boolean {
+  const ab = slotData(ctx, slot).pokemon?.abilities[0];
+  const def = ab ? ABILITIES[ab.nameJa] : undefined;
+  if (!ab || !def) return false;
+  if (def.once === 'pokemon') return slot.abilityTurn === ctx.s.turnNumber;
+  if (def.once === 'name') return ctx.s.turnPlayer === owner && ctx.s.players[owner].flags.names.includes(ab.nameJa);
+  return false;
 }
 
 export function viewFor(s: GameState, viewer: Viewer, info: CardInfo): GameView {

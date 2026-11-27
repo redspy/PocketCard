@@ -17,6 +17,7 @@ var _weak: Label
 var _tool: Label
 var _empty: Panel
 var hit: TapArea                   # 빈 칸도 누를 수 있게 (카드가 없을 때 받음)
+var power_spent := false           # 이 칸 주인이 VSTAR 파워를 이미 씀 (대전 중 1번) — 화면이 set_slot 전에 정함
 
 func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_PASS
@@ -91,6 +92,11 @@ func set_slot(s, active := false) -> void:
 		var t = { "noAttack": "기술 불가", "noRetreat": "후퇴 불가", "reduce30": "-30", "immuneBasicNonC": "기본 무효", "lockAttack": "%s 불가" % str(e.get("name", "기술")) }.get(str(e.kind))
 		if t != null:
 			_badges.add_child(_badge(t, Color(0.25, 0.35, 0.5)))
+	# 차례에 1번인 특성을 이번 차례에 씀 / VSTAR 파워를 이번 대전에서 씀 (VSTAR 포켓몬·하늘의 봉인석을 단 포켓몬 V)
+	if bool(slot.get("abilityUsed", false)):
+		_badges.add_child(_badge("특성 사용함", Color(0.3, 0.3, 0.32, 0.95)))
+	if power_spent and top != "" and has_vstar_power(slot):
+		_badges.add_child(_badge("VSTAR 사용함", Color(0.3, 0.3, 0.32, 0.95)))
 	# 붙은 에너지 점 (6개 넘으면 ×N) + 도구
 	for c in _dots.get_children():
 		c.queue_free()
@@ -126,6 +132,23 @@ func set_slot(s, active := false) -> void:
 				_weak.visible = true
 	_update_hp()
 	_relayout()
+
+## VSTAR 파워를 가진 포켓몬인가: VSTAR 포켓몬, 또는 하늘의 봉인석을 단 포켓몬 V (V·VMAX·VSTAR)
+static func has_vstar_power(s: Dictionary) -> bool:
+	if s.get("stack") == null or (s.stack as Array).is_empty():
+		return false
+	var pk = BData.card(str(s.stack[(s.stack as Array).size() - 1].code)).get("pokemon")
+	if not (pk is Dictionary):
+		return false
+	var rule := str(pk.get("rule", ""))
+	if rule == "VSTAR":
+		return true
+	if not (rule in ["V", "VMAX"]):
+		return false
+	for a in (s.get("attached") if s.get("attached") is Array else []):
+		if BData.name_of(str(a.code)) == "하늘의 봉인석":
+			return true
+	return false
 
 func _badge(t: String, c: Color) -> Label:
 	var l := UI.label(" %s " % t, clampi(int(size.x * 0.11), 14, 30), Color.WHITE)

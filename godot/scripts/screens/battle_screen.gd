@@ -363,6 +363,7 @@ func _place_side(p: Dictionary, side: String, seen: Dictionary) -> void:
 			BattleScreen.move_node(node, rect.position, 0.0)
 		node.set_meta("placed", true)
 		node.size = rect.size
+		node.power_spent = bool(p.get("vstarUsed", false))
 		node.set_slot(s, bool(list[i][2]) and mode == "table")
 		if s != null and fx:
 			var pend := int(fx.pending_hp.get(str(s.sid), 0))
@@ -483,7 +484,7 @@ func _place_board(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 		var mk: Label = marker_tags[side]
 		mk.visible = table and not used.is_empty()
 		if mk.visible:
-			mk.text = "%s 사용함" % "·".join(used)
+			mk.text = "%s 사용함 (이번 대전 끝)" % "·".join(used)
 			var pb: Rect2 = L[side + "_prizes_box"]
 			mk.position = Vector2(pb.position.x, pb.position.y + pb.size.y + 2)
 		var pz: Array = p.prizes
@@ -823,7 +824,13 @@ func _ability_why(sid: String) -> String:
 		return ""
 	var me := _me()
 	var is_active: bool = me.get("active") != null and str(me.active.sid) == sid
+	if bool(s.get("abilityUsed", false)):
+		return "특성 [%s]: 이번 차례에 이미 사용했습니다. (차례마다 1번)" % _ability_name(pk)
 	return BHint.ability_unusable(str(pk.abilities[0].get("name", "")), is_active)
+
+static func _ability_name(pk: Dictionary) -> String:
+	var ab: Dictionary = pk.abilities[0]
+	return str(ab.name) if str(ab.get("name", "")) != "" else str(ab.get("nameJa", ""))
 
 func _is_mine(sid: String) -> bool:
 	var me := _me()
@@ -928,7 +935,15 @@ func open_popover(sid: String) -> void:
 				if pk is Dictionary and opp_weak != "" and opp_weak == str(pk.type):
 					dmg += " (약점 ×2)"
 			var cost := "".join((a.cost as Array).map(func(c): return BData.TYPE_SHORT.get(str(c), str(c)).left(1)))
-			var b := _pop_button("%s%s  %s" % [("[%s] " % cost) if cost != "" else "", str(a.name) if str(a.name) != "" else str(a.nameJa), dmg], mv != null, mv)
+			# GX 기술·VSTAR 파워: 대전 중 1번 — 이미 썼으면 그렇다고 적는다
+			var spent := ""
+			if str(a.get("kind", "")) == "vstar" and bool(me.get("vstarUsed", false)):
+				spent = "
+   VSTAR 파워 사용함 - 이번 대전에서는 더 못 씀"
+			elif str(a.get("kind", "")) == "gx" and bool(me.get("gxUsed", false)):
+				spent = "
+   GX 기술 사용함 - 이번 대전에서는 더 못 씀"
+			var b := _pop_button("%s%s  %s%s" % [("[%s] " % cost) if cost != "" else "", str(a.name) if str(a.name) != "" else str(a.nameJa), dmg, spent], mv != null, mv)
 			b.set_meta("attack_index", i)
 			col.add_child(b)
 		for m in moves:
@@ -941,6 +956,15 @@ func open_popover(sid: String) -> void:
 			var b3 := _pop_button(str(m.label), true, m)
 			b3.set_meta("ability", true)
 			col.add_child(b3)
+	# 이번 차례에 이미 쓴 특성 · 이번 대전에서 이미 쓴 VSTAR 파워 (하늘의 봉인석): 흐린 줄로 남긴다
+	var pkd = data.get("pokemon")
+	if bool(s.get("abilityUsed", false)) and pkd is Dictionary and not (pkd.get("abilities", []) as Array).is_empty():
+		var u := _pop_button("특성: %s - 이번 차례에 사용함" % _ability_name(pkd), false, null)
+		u.set_meta("ability_used", true)
+		col.add_child(u)
+	if bool(me.get("vstarUsed", false)) and str(pkd.get("rule", "") if pkd is Dictionary else "") != "VSTAR" and BSlot.has_vstar_power(s):
+		var u2 := _pop_button("VSTAR 파워: 스타오더 - 이번 대전에서 사용함", false, null)
+		col.add_child(u2)
 	var retreats := moves.filter(func(m): return m.kind == "retreat")
 	if not retreats.is_empty():
 		var cost := str(retreats[0].label).get_slice("비용 ", 1).trim_suffix(")")

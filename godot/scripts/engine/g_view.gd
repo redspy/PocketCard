@@ -21,7 +21,23 @@ static func slotView(s: Dictionary, slot: Dictionary, owner: int, viewer, info: 
 		"hp": null if (hide or not known) else GCore.maxHp(ctx, slot),
 		"cond": slot.cond, "effects": slot.effects,
 		"retreat": null if (hide or not known) else GCore.retreatCost(ctx, slot, owner),
+		"abilityUsed": not hide and known and abilityUsedNow(ctx, slot, owner),
 	}
+
+## 차례에 1번인 특성을 이번 차례에 이미 써서 더 쓸 수 없는가 (legalMoves 의 "1번" 조건과 같은 기준)
+static func abilityUsedNow(ctx: Dictionary, slot: Dictionary, owner: int) -> bool:
+	var sd := GCore.slotData(ctx, slot)
+	if not sd.has("pokemon") or (sd.pokemon.abilities as Array).is_empty():
+		return false
+	var ab: Dictionary = sd.pokemon.abilities[0]
+	var def = GEffects.ABILITIES.get(ab.nameJa)
+	if def == null:
+		return false
+	if def.get("once") == "pokemon":
+		return slot.abilityTurn == ctx.s.turnNumber
+	if def.get("once") == "name":
+		return typeof(ctx.s.turnPlayer) == TYPE_INT and ctx.s.turnPlayer == owner and (ctx.s.players[owner].flags.names as Array).has(ab.nameJa)
+	return false
 
 ## viewer: 0 / 1 / "board". copy = false 면 마지막 깊은 복사를 건너뛴다 (상태와 일부 공유 — 읽기만 하는 어려움 AI 시뮬레이션용, Godot 전용)
 static func viewFor(s: Dictionary, viewer, info: Dictionary, copy := true) -> Dictionary:
