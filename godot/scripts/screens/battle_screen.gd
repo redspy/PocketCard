@@ -331,6 +331,17 @@ func _refresh() -> void:
 	_show_error()
 	_update_result()
 
+## 드로우 연출이 한 장 끝날 때: 손패·덱 장수·상대 패 장수만 다시 (선택 창 등은 그대로)
+func refresh_draw() -> void:
+	if not is_inside_tree() or Net.view.is_empty() or Net.seat < 0 or L.is_empty():
+		return
+	_place_board(Net.view, _me(), _opp())
+	_place_hand(_me())
+
+## 아직 연출 안 한 드로우 장수 (그만큼 덱은 많게, 패는 적게 보여 준다)
+func _owed(side: String) -> int:
+	return fx.owed(Net.seat if side == "my" else 1 - Net.seat) if fx else 0
+
 func _hand_has(iid: String) -> bool:
 	var h = _me().get("hand")
 	return h is Array and (h as Array).any(func(x): return str(x.iid) == iid)
@@ -480,7 +491,7 @@ func _place_board(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 			pile.position = r.position
 			pile.size = r.size
 			var dis: Array = p.discard
-			pile.set_pile(k, int(p.deckCount) if k == "deck" else dis.size(), str(dis[dis.size() - 1].code) if (k == "discard" and dis.size() > 0) else "")
+			pile.set_pile(k, int(p.deckCount) + _owed(side) if k == "deck" else dis.size(), str(dis[dis.size() - 1].code) if (k == "discard" and dis.size() > 0) else "")
 		# 로스트존 (공개): 트래쉬 아래 장수, 누르면 크게 보기
 		var lost_n: int = (p.get("lost", []) as Array).size()
 		var lt: TapArea = lost_tags[side]
@@ -515,7 +526,7 @@ func _place_board(v: Dictionary, me: Dictionary, opp: Dictionary) -> void:
 	opp_hand.visible = table
 	if table:
 		opp_hand.position = L.opp_hand.position
-		opp_hand.text = "%s  패 %d장 · 사이드 %d" % [opp_name(), int(opp.handCount), _count_true(opp.prizes)]
+		opp_hand.text = "%s  패 %d장 · 사이드 %d" % [opp_name(), int(opp.handCount) - _owed("opp"), _count_true(opp.prizes)]
 
 ## 경기장 판: 탁자 = 상대 정보 줄 ~ 내 벤치, 손패 화면 = 내 포켓몬 줄
 func _place_arena() -> void:
@@ -535,6 +546,9 @@ func _place_hand(me: Dictionary) -> void:
 	hand.position = L.hand.position
 	hand.size = L.hand.size
 	var h: Array = me.get("hand") if me.get("hand") is Array else []
+	# 덱에서 아직 날아오지 않은 카드는 손패에 넣지 않는다 (드로우 연출이 한 장씩 넣음)
+	if fx and not fx.hand_hide.is_empty():
+		h = h.filter(func(c): return not fx.hand_hide.has(str(c.iid)))
 	var use := {}
 	var acts := actions()
 	for c in h:

@@ -16,6 +16,8 @@ var last_seq := -1
 var played_seq := -1            # 재생(또는 건너뛰기)까지 끝난 마지막 사건 — 최근 행동 타일은 여기까지만
 var pending_hp: Dictionary = {} # sid -> 아직 안 보여준 데미지(+)/회복(-)
 var hold: Dictionary = {}       # sid -> true : 기절 연출 전까지 남겨 둘 칸
+var hand_hide: Dictionary = {}  # iid -> true : 아직 덱에서 날아오지 않은 내 드로우 카드 (손패에 안 보임)
+var draw_owed: Dictionary = {}  # 자리 -> 아직 연출 안 한 드로우 장수 (그만큼 덱은 많게, 상대 패는 적게 보임)
 var counts: Dictionary = {}     # 사건 종류 -> 재생 수 (테스트용)
 var catcher: TapArea            # 재생 중 누르면 건너뛰기
 var impacts: Array = []         # 테스트용: 충돌 기록 [{ sids, tier, synced }]
@@ -88,14 +90,22 @@ static func rep_key(e: Dictionary) -> String:
 	if t == "play":
 		return "play:" + str(e.get("what", ""))
 	if t == "move":
-		var fr = e.get("from", {})
-		var to = e.get("to", {})
-		if fr is Dictionary and to is Dictionary and str(fr.get("zone", "")) == "deck" and str(to.get("zone", "")) == "hand":
-			return "draw"
-		return ""
+		return "draw" if is_draw(e) else ""
 	if t in ["attack", "ability", "damage", "heal", "condition", "ko"]:
 		return t
 	return ""
+
+## 덱 → 패 (드로우·덱에서 패로 가져오기)
+static func is_draw(e: Dictionary) -> bool:
+	if str(e.get("type", "")) != "move":
+		return false
+	var fr = e.get("from", {})
+	var to = e.get("to", {})
+	return fr is Dictionary and to is Dictionary and str(fr.get("zone", "")) == "deck" and str(to.get("zone", "")) == "hand"
+
+## 이 자리의 아직 연출 안 한 드로우 장수
+func owed(seat: int) -> int:
+	return int(draw_owed.get(seat, 0))
 
 func _set_accel(e: Dictionary) -> void:
 	var t := str(e.get("type", ""))
@@ -177,6 +187,13 @@ func feed() -> void:
 			"ko":
 				if e.get("sid") != null:
 					hold[str(e.sid)] = true
+			"move":
+				# 드로우: 카드가 덱에서 날아올 때까지 손패에 넣지 않는다 (한 장씩 늘어나 보이게)
+				if is_draw(e):
+					var seat := int(e.to.player)
+					draw_owed[seat] = owed(seat) + 1
+					if seat == Net.seat and e.get("card") is Dictionary:
+						hand_hide[str(e.card.iid)] = true
 	queue.append_array(fresh)
 	if speed() <= 0.0:
 		_flush_instant()
@@ -189,8 +206,10 @@ func _flush_instant() -> void:
 	queue.clear()
 	played_seq = last_seq
 	pending_hp.clear()
-	var had := not hold.is_empty()
+	var had := not hold.is_empty() or not draw_owed.is_empty()
 	hold.clear()
+	hand_hide.clear()
+	draw_owed.clear()
 	if had:
 		screen._refresh()
 
@@ -229,6 +248,8 @@ func _run() -> void:
 	_show_catcher(false)
 	pending_hp.clear()
 	hold.clear()
+	hand_hide.clear()
+	draw_owed.clear()
 	if is_instance_valid(screen):
 		screen._refresh()
 	idle.emit()
@@ -242,6 +263,21 @@ func _apply_now(e: Dictionary) -> void:
 			_update_hp(sid)
 		"ko":
 			_release(str(e.get("sid", "")))
+		"move":
+			if is_draw(e):
+				_land(e)
+
+## 드로우 한 장을 손패·덱 장수에 반영
+func _land(e: Dictionary) -> void:
+	var seat := int(e.to.player)
+	if owed(seat) > 1:
+		draw_owed[seat] = owed(seat) - 1
+	else:
+		draw_owed.erase(seat)
+	if e.get("card") is Dictionary:
+		hand_hide.erase(str(e.card.iid))
+	if is_instance_valid(screen):
+		screen.refresh_draw()
 
 func _show_catcher(on: bool) -> void:
 	if not is_instance_valid(screen):
@@ -601,10 +637,7 @@ func _play_table(e: Dictionary) -> void:
 			var fr: Dictionary = e.from
 			var to: Dictionary = e.to
 			if str(fr.zone) == "deck" and str(to.zone) == "hand":
-				var side := "my" if int(to.player) == Net.seat else "opp"
-				var dk: Rect2 = L[side + "_deck"]
-				var dest: Rect2 = Rect2(L.hand.position + Vector2(L.hand.size.x / 2 - 40, 20), Vector2(80, 112)) if side == "my" else Rect2(L.opp_hand.position + Vector2(60, 0), Vector2(30, 42))
-				await _fly("", dk, dest, 0.22)
+				await _draw_table(e)
 		"play":
 			if str(e.get("what", "")) == "에너지 붙이기" and mine:
 				await _wait(0.1)
@@ -653,6 +686,47 @@ func _play_table(e: Dictionary) -> void:
 			await _wait(0.05)
 		_:
 			pass
+
+## 드로우 (탁자): 덱에서 한 장이 날아가 손패에 들어간다 — 손패는 한 장씩 늘어남
+## 내 카드: 먼저 손패에 자리를 잡고(투명, 다른 카드는 옆으로 비켜남) 그 자리로 앞면 카드가 날아가 닿으면 보인다
+func _draw_table(e: Dictionary) -> void:
+	var L: Dictionary = screen.L
+	var mine := int(e.to.player) == Net.seat
+	var dk: Rect2 = L[("my" if mine else "opp") + "_deck"]
+	if not mine:
+		await _fly("", dk, Rect2(L.opp_hand.position + Vector2(60, 0), Vector2(30, 42)), 0.22)
+		_land(e)
+		return
+	var iid := str(e.card.iid) if e.get("card") is Dictionary else ""
+	var code := str(e.card.code) if e.get("card") is Dictionary else ""
+	_land(e)
+	var hand: BHand = screen.hand
+	var hc = hand.cards.get(iid)
+	var i := hand.order.find(iid)
+	if hc == null or i < 0 or not hand.is_visible_in_tree():
+		# 손패가 가려져 있거나 이미 패를 떠난 카드: 손패 쪽으로 날아가기만
+		await _fly("", dk, Rect2(L.hand.position + Vector2(L.hand.size.x / 2 - 40, 20), Vector2(80, 112)), 0.22)
+		return
+	var r := hand.card_rect(i)
+	var to_local: Transform2D = screen.fx_layer.get_global_transform().affine_inverse()
+	var dest: Vector2 = to_local * (hand.get_global_transform() * (r.pos as Vector2))
+	var c := BCard.new()
+	c.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	c.set_card(code, hand.card_size.x >= 150)
+	c.position = dk.position
+	c.size = dk.size
+	c.pivot_offset = Vector2(hand.card_size.x / 2, hand.card_size.y)
+	screen.fx_layer.add_child(c)
+	(hc as Control).modulate.a = 0.0
+	var sec := 0.24 / speed()
+	var tw := c.create_tween().set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_property(c, "position", dest, sec)
+	tw.tween_property(c, "size", hand.card_size, sec)
+	tw.tween_property(c, "rotation_degrees", float(r.rot), sec)
+	await _wait(0.24)
+	if is_instance_valid(hc):
+		(hc as Control).modulate.a = 1.0
+	c.queue_free()
 
 ## 코인 던지기: 원판이 몇 번 뒤집힌 뒤 결과
 func _coin(e: Dictionary) -> void:
@@ -713,5 +787,16 @@ func _play_hand(e: Dictionary) -> void:
 			if int(e.player) == Net.seat:
 				_vibrate(30)
 				screen.notify(BLog.line(e, Net.seat))
+		"move":
+			# 드로우: 손패에 한 장씩 톡 튀어나오며 늘어남
+			if is_draw(e):
+				_land(e)
+				var hc = screen.hand.cards.get(str(e.card.iid)) if mine and e.get("card") is Dictionary else null
+				if hc != null and screen.hand.is_visible_in_tree():
+					var c: Control = hc
+					c.scale = Vector2(0.6, 0.6)
+					var tw := c.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+					tw.tween_property(c, "scale", Vector2.ONE, 0.16 / speed())
+					await _wait(0.14)
 		_:
 			pass

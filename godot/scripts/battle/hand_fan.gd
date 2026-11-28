@@ -29,6 +29,8 @@ func set_hand(hand: Array, use: Dictionary, sel: String, csize: Vector2) -> void
 	usable = use
 	selected = sel
 	var keep := {}
+	var fresh := {}
+	var had := cards.size()
 	order = []
 	for h in hand:
 		var iid := str(h.iid)
@@ -48,11 +50,15 @@ func set_hand(hand: Array, use: Dictionary, sel: String, csize: Vector2) -> void
 			c.drag_ended.connect(func(pos: Vector2): card_drag_end.emit(iid, pos))
 			add_child(c)
 			cards[iid] = c
+			fresh[iid] = true
+	var gone := false
 	for iid in cards.keys():
 		if not keep.has(iid):
 			cards[iid].queue_free()
 			cards.erase(iid)
-	_place(false)
+			gone = true
+	# 카드가 들어오거나 나가면 남은 카드는 새 자리로 미끄러진다 (새 카드는 바로 제자리)
+	_place(had > 0 and (gone or not fresh.is_empty()) and is_visible_in_tree(), fresh)
 
 func _on_swipe(_iid: String, d: Vector2) -> void:
 	# 위로 밀기는 끌어 놓기가 맡는다 (밀어서 바로 쓰기는 잘못 놓았을 때 엉뚱하게 쓰여서 없앰)
@@ -97,7 +103,7 @@ func card_rect(i: int) -> Dictionary:
 	var rot := 0.0 if up else t * 6.0
 	return { "pos": Vector2(x0 + i * step, y), "rot": rot }
 
-func _place(anim: bool) -> void:
+func _place(anim: bool, fresh := {}) -> void:
 	for i in order.size():
 		var iid: String = order[i]
 		var c: BCard = cards[iid]
@@ -107,10 +113,14 @@ func _place(anim: bool) -> void:
 		c.set_card(codes[iid], card_size.x >= 150)
 		c.z_index = 100 if iid == selected else i
 		c.set_mark("pick" if iid == selected else ("" if usable.get(iid, false) else "dim"))
-		if anim:
+		var old = c.get_meta("place_tw") if c.has_meta("place_tw") else null
+		if old is Tween and (old as Tween).is_valid():
+			(old as Tween).kill()
+		if anim and not fresh.has(iid):
 			var tw := c.create_tween().set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 			tw.tween_property(c, "position", r.pos, 0.14)
 			tw.tween_property(c, "rotation_degrees", r.rot, 0.14)
+			c.set_meta("place_tw", tw)
 		else:
 			c.position = r.pos
 			c.rotation_degrees = r.rot
