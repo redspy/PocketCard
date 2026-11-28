@@ -381,3 +381,22 @@ test('덱에서 찾을 카드가 없어도 덱을 본다 (네스트볼)', () => 
   assert.equal(st.requests.length, 0);
   checkInvariants(st, [60, 60]);
 });
+
+test('루차불 플라잉엔트리: 패에서 벤치에 내면 상대 벤치 2마리에 카운터 1개씩, 상대 벤치가 없으면 알림', () => {
+  const s = scenario(['dragapult', 'gardevoir'], { active: 'SV7a_019', hand: ['SV8a_084'] }, { active: 'M1S_040', bench: ['M1S_040', 'SV1S_028'] });
+  const h = s.players[0].hand[0];
+  let r = act(s, 0, { type: 'play', card: h });
+  const q = r.state.requests[0];
+  assert.ok(q && q.prompt.includes('루차불 특성'), '쓸지 물어봄');
+  r = applyInput(r.state, { type: 'choice', player: 0, requestId: q.id, picks: ['yes'] }, info);
+  const q2 = r.state.requests[0];
+  assert.equal(q2.kind, 'pickSlot');
+  r = applyInput(r.state, { type: 'choice', player: 0, requestId: q2.id, picks: q2.options.slice(0, 2) }, info);
+  assert.deepEqual(r.state.players[1].bench.map((b) => b.damage), [10, 10]);
+  checkInvariants(r.state, [60, 60]);
+
+  const s2 = scenario(['dragapult', 'gardevoir'], { active: 'SV7a_019', hand: ['SV8a_084'] }, { active: 'M1S_040' });
+  const r2 = act(s2, 0, { type: 'play', card: s2.players[0].hand[0] });
+  assert.equal(r2.state.requests.length, 0);
+  assert.ok(r2.events.some((e) => e.type === 'note' && e.text.includes('플라잉엔트리')));
+});

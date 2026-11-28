@@ -1242,8 +1242,11 @@ static func onBenched(ctx: Dictionary, seat: int, sid: String) -> void:
 		return
 	var pk = GCore.slotData(ctx, slot).get("pokemon")
 	var ab = pk.abilities[0].nameJa if (pk != null and pk.abilities.size() > 0) else null
-	if ab == "フライングエントリー" and ctx.s.players[GCore.other(seat)].bench.size() > 0:
-		pushTrigger(ctx, seat, "flyingEntry", sid, "루차불 특성: 상대 벤치 포켓몬 2마리에 데미지 카운터를 1개씩 올릴까요?")
+	if ab == "フライングエントリー":
+		if ctx.s.players[GCore.other(seat)].bench.size() > 0:
+			pushTrigger(ctx, seat, "flyingEntry", sid, "루차불 특성: 상대 벤치 포켓몬 2마리에 데미지 카운터를 1개씩 올릴까요?")
+		else:
+			GCore.note(ctx, "루차불 특성 [플라잉엔트리]: 상대 벤치에 포켓몬이 없어 쓸 수 없습니다.")
 	if ab == "루미너스사인" and ctx.s.players[seat].deck.size() > 0:
 		pushTrigger(ctx, seat, "luminousSign", sid, "네오라이트 V 특성: 덱에서 서포트를 1장 가져올까요?")
 	if ab == "ラピッドバーニア" and ctx.s.players[seat].active != null:

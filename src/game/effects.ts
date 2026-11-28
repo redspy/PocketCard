@@ -771,7 +771,10 @@ export function onBenched(ctx: Ctx, seat: Seat, sid: string) {
   const slot = findSlot(ctx.s, sid)!.slot;
   if (!abilityActive(ctx, slot)) return;
   const ab = slotData(ctx, slot).pokemon?.abilities[0]?.nameJa;
-  if (ab === 'フライングエントリー' && ctx.s.players[other(seat)].bench.length) pushTrigger(ctx, seat, 'flyingEntry', sid, '루차불 특성: 상대 벤치 포켓몬 2마리에 데미지 카운터를 1개씩 올릴까요?');
+  if (ab === 'フライングエントリー') {
+    if (ctx.s.players[other(seat)].bench.length) pushTrigger(ctx, seat, 'flyingEntry', sid, '루차불 특성: 상대 벤치 포켓몬 2마리에 데미지 카운터를 1개씩 올릴까요?');
+    else note(ctx, '루차불 특성 [플라잉엔트리]: 상대 벤치에 포켓몬이 없어 쓸 수 없습니다.');
+  }
   if (ab === '루미너스사인' && ctx.s.players[seat].deck.length) pushTrigger(ctx, seat, 'luminousSign', sid, '네오라이트 V 특성: 덱에서 서포트를 1장 가져올까요?');
   if (ab === 'ラピッドバーニア' && ctx.s.players[seat].active) pushTrigger(ctx, seat, 'rapidVernier', sid, '무쇠잎새 ex 특성: 배틀 포켓몬과 바꾸고 벤치의 에너지를 옮길까요?');
 }

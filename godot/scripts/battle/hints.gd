@@ -112,4 +112,8 @@ static func ability_unusable(ability_name: String, is_active: bool) -> String:
 		"이상한 꼬리":
 			if not is_active:
 				return "특성 [이상한 꼬리]: 배틀 포켓몬일 때만 쓸 수 있습니다."
+		"플라잉엔트리", "루미너스사인", "래피드 버니어":
+			return "특성 [%s]: 버튼으로 쓰는 특성이 아닙니다. 자기 차례에 패에서 벤치로 낼 때 쓸지 물어봅니다 (덱에서 벤치로 나오면 못 씀)." % ability_name
+		"연옥 지배", "보석 찾기", "다크시그널":
+			return "특성 [%s]: 버튼으로 쓰는 특성이 아닙니다. 자기 차례에 이 포켓몬으로 진화할 때 쓸지 물어봅니다." % ability_name
 	return ""

@@ -684,6 +684,9 @@ func _play_table(e: Dictionary) -> void:
 			await _banner("내 차례" if my_turn else BattleScreen.opp_name() + " 차례", "턴 %d" % int(e.turnNumber), 0.7)
 		"shuffle":
 			await _wait(0.05)
+		"note":
+			# 효과를 못 쓴 이유 등 알림: 기록에만 남기면 안 보이므로 잠깐 띄운다
+			screen._toast(str(e.get("text", "")))
 		_:
 			pass
 
